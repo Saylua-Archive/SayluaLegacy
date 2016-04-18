@@ -1,0 +1,186 @@
+html {
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	word-wrap: break-word;
+}
+
+body {
+	color: #222;
+	background: #f9f7c8;
+	font-size: 16px;
+	line-height: 22px;
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	font-family: Arial, 'san serif';
+}
+
+img {
+	border: 0px;
+	max-width: 100%;
+}
+
+h1 {
+	display: block;
+	font-size: 2em;
+	margin: 0px;
+	padding: 0.5em 0px;
+}
+
+p {
+	display: block;
+	font-size: 1em;
+	margin: 1em 0px;
+	padding: 0px;
+}
+
+a, a:active, a:link, a:visited {
+	text-decoration: none;
+	color: #132DE5;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+
+#info button {
+	cursor: pointer;
+	border-radius: 10px;
+	border: 0px;
+	transition: background .15s ease-in-out;
+  -moz-transition: background .15s ease-in-out;
+  -webkit-transition: background .15s ease-in-out;
+}
+
+
+button:focus {
+	border: none;
+	outline:none;
+}
+
+.content {
+	background: #fff;
+	border: #99CEEF 1px solid;
+	max-width: 1000px;
+	margin: 30px auto;
+	min-height: 400px;
+	min-height: 100%;
+	overflow-y: hidden;
+}
+
+.content h2 {
+	width: 100%;
+	float: left;
+	text-align: center;
+	margin: 0;
+	line-height: 50px;
+	font-size: 30px;
+	background: #99CEEF;
+}
+
+.content .page-area {
+	padding: 5px;
+}
+
+.container {
+	width: 100%;
+	float: left;
+}
+
+#logo {
+	background: #99CEEF;
+	color: #150B81;
+	text-align:center;
+	font-size: 50px;
+	font-weight: bold;
+	line-height: 80px;
+	font-family: 'Caveat Brush', cursive;
+}
+
+#navbar {
+	background: #4F9BDE;
+	font-size: 25px;
+	line-height: 45px;
+	text-align: center;
+}
+
+#navbar a, #navbar a:link, #navbar a:active, #navbar a:visited {
+	display: inline-block;
+	padding: 0 10px;
+	transition: background-color 0.5s ease;
+	margin: 0;
+}
+
+#navbar a:hover {
+	background: #21B6FC;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+/* Total width cannot exceed 180px */
+.sidebar {
+	width: 170px;
+	height: 100%;
+	padding: 5px;
+}
+
+.footer {
+	text-align: center;
+}
+
+@media (max-width: 1024px) {
+	.sidebar {
+		display: none;
+	}
+
+	.container {
+		min-width: 640px;
+	}
+
+	.content {
+		border: 0;
+		width: 100%;
+		margin: 0;
+		min-width: 640px;
+	}
+
+	.content h2 {
+		background: none;
+	}
+
+	.footer {
+		background: #99CEEF;
+		padding: 10px 0;
+	}
+}
+
+.clearfix {
+	height: 1px;
+	float: left;
+	clear: both;
+}
+
+#dungeon {
+  background-color: #322125;
+  margin: 0 auto;
+}
+
+.dungeonTile {
+  float: left;
+	cursor: pointer;
+}
+
+.dungeonObject {
+  z-index: 1;
+  position: relative;
+}
