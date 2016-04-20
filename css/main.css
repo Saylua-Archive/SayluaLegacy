@@ -8,7 +8,7 @@ html {
 
 body {
 	color: #222;
-	background: #2F336A;
+	background: #f4debf;
 	font-size: 16px;
 	line-height: 22px;
 	width: 100%;
@@ -39,7 +39,7 @@ p {
 
 a, a:active, a:link, a:visited {
 	text-decoration: none;
-	color: #132DE5;
+	color: #e45f56;
 }
 
 a:hover {
@@ -69,6 +69,7 @@ button:focus {
 	min-height: 400px;
 	min-height: 100%;
 	overflow-y: hidden;
+	border: #a3d39c 1px solid;
 }
 
 .content h2 {
@@ -78,6 +79,8 @@ button:focus {
 	margin: 0;
 	line-height: 50px;
 	font-size: 30px;
+	background: #c8eac3;
+	color: #425540;
 }
 
 .content .page-area {
@@ -90,7 +93,7 @@ button:focus {
 }
 
 #logo {
-	background: #050D45;
+	background: #c8eac3;
 	color: #fff;
 	text-align:center;
 	font-size: 50px;
@@ -100,7 +103,7 @@ button:focus {
 }
 
 #logo a, #logo a:link, #logo a:active {
-	color: #fff;
+	color: #4fa76a;
 	text-shadow: none;
 outline: 0 none;
 -webkit-transition: 500ms linear 0s;
@@ -109,73 +112,15 @@ outline: 0 none;
 transition: 500ms linear 0s;
 }
 
-@-moz-keyframes glowpulse {
-  0% {
-    text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff; }
-  50% {
-    text-shadow: -1px 1px 1px #ECEB72, 1px -1px 1px #fff; }
-  100% {
-    text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff; } }
-
-@-webkit-keyframes glowpulse {
-  0% {
-    text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff; }
-  50% {
-    text-shadow: -1px 1px 20px #ECEB72, 1px -1px 20px #fff; }
-  100% {
-    text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff; } }
-
-@keyframes glowpulse {
-  0% {
-    text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff; }
-  50% {
-    text-shadow: -1px 1px 1px #ECEB72, 1px -1px 1px #fff; }
-  100% {
-    text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff; } }
-
-		@keyframes fadein {
-		  from {
-		    opacity: 0; }
-		  to {
-		    opacity: 1; } }
-
-		@-moz-keyframes fadein {
-		  from {
-		    opacity: 0; }
-		  to {
-		    opacity: 1; } }
-
-		@-webkit-keyframes fadein {
-		  from {
-		    opacity: 0; }
-		  to {
-		    opacity: 1; } }
-
-		@-ms-keyframes fadein {
-		  from {
-		    opacity: 0; }
-		  to {
-		    opacity: 1; } }
-
-		@-o-keyframes fadein {
-		  from {
-		    opacity: 0; }
-		  to {
-		    opacity: 1; } }
-
 #logo a:hover {
 	text-decoration: none;
 	-webkit-animation-delay: 1s;
   animation-delay: 1s;
   text-decoration: none;
-  -moz-animation-name: glowpulse;
-  -webkit-animation-name: glowpulse;
-  animation-name: glowpulse;
-	text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff;
 }
 
 #navbar {
-	background: #050D45;
+	background: #339e59;
 	font-size: 25px;
 	line-height: 45px;
 	text-align: center;
@@ -187,20 +132,10 @@ transition: 500ms linear 0s;
 	transition: background-color 0.5s ease;
 	margin: 0;
 	color: #fff;
-	text-shadow: none;
-outline: 0 none;
--webkit-transition: 500ms linear 0s;
--moz-transition: 500ms linear 0s;
--o-transition: 500ms linear 0s;
-transition: 500ms linear 0s;
 }
 
 #navbar a:hover {
-	background: #21B6FC;
-	-moz-animation-name: glowpulse;
-	-webkit-animation-name: glowpulse;
-	animation-name: glowpulse;
-	text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff;
+	background: #2c874c;
 	text-decoration: none;
 }
 
@@ -221,11 +156,13 @@ transition: 500ms linear 0s;
 
 .footer {
 	text-align: center;
-	color: #fff;
-
 }
 
 @media (max-width: 1024px) {
+	body {
+		background: #c8eac3;
+	}
+
 	.sidebar {
 		display: none;
 	}
@@ -246,7 +183,6 @@ transition: 500ms linear 0s;
 	}
 
 	.footer {
-		background: #050D45;
 		padding: 10px 0;
 	}
 }
