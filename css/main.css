@@ -64,7 +64,7 @@ button:focus {
 
 .content {
 	background: #fff;
-	border: #99CEEF 1px solid;
+	border: #84d9b6 1px solid;
 	max-width: 1000px;
 	margin: 30px auto;
 	min-height: 400px;
@@ -79,7 +79,7 @@ button:focus {
 	margin: 0;
 	line-height: 50px;
 	font-size: 30px;
-	background: #99CEEF;
+	background: #d2f4f0;
 }
 
 .content .page-area {
@@ -92,8 +92,8 @@ button:focus {
 }
 
 #logo {
-	background: #99CEEF;
-	color: #150B81;
+	background: #ccf3d8;
+	color: #23663b;
 	text-align:center;
 	font-size: 50px;
 	font-weight: bold;
@@ -102,7 +102,7 @@ button:focus {
 }
 
 #navbar {
-	background: #4F9BDE;
+	background: #339e59;
 	font-size: 25px;
 	line-height: 45px;
 	text-align: center;
@@ -113,6 +113,7 @@ button:focus {
 	padding: 0 10px;
 	transition: background-color 0.5s ease;
 	margin: 0;
+	color: #fff;
 }
 
 #navbar a:hover {
@@ -159,7 +160,7 @@ button:focus {
 	}
 
 	.footer {
-		background: #99CEEF;
+		background: #5AB57B;
 		padding: 10px 0;
 	}
 }
