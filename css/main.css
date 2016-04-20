@@ -8,7 +8,7 @@ html {
 
 body {
 	color: #222;
-	background: #f9f7c8;
+	background: #2F336A;
 	font-size: 16px;
 	line-height: 22px;
 	width: 100%;
@@ -64,7 +64,6 @@ button:focus {
 
 .content {
 	background: #fff;
-	border: #84d9b6 1px solid;
 	max-width: 1000px;
 	margin: 30px auto;
 	min-height: 400px;
@@ -79,7 +78,6 @@ button:focus {
 	margin: 0;
 	line-height: 50px;
 	font-size: 30px;
-	background: #d2f4f0;
 }
 
 .content .page-area {
@@ -92,17 +90,92 @@ button:focus {
 }
 
 #logo {
-	background: #ccf3d8;
-	color: #23663b;
+	background: #050D45;
+	color: #fff;
 	text-align:center;
 	font-size: 50px;
 	font-weight: bold;
 	line-height: 80px;
-	font-family: 'Caveat Brush', cursive;
+	font-family: 'Kaushan Script', cursive;
+}
+
+#logo a, #logo a:link, #logo a:active {
+	color: #fff;
+	text-shadow: none;
+outline: 0 none;
+-webkit-transition: 500ms linear 0s;
+-moz-transition: 500ms linear 0s;
+-o-transition: 500ms linear 0s;
+transition: 500ms linear 0s;
+}
+
+@-moz-keyframes glowpulse {
+  0% {
+    text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff; }
+  50% {
+    text-shadow: -1px 1px 1px #ECEB72, 1px -1px 1px #fff; }
+  100% {
+    text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff; } }
+
+@-webkit-keyframes glowpulse {
+  0% {
+    text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff; }
+  50% {
+    text-shadow: -1px 1px 20px #ECEB72, 1px -1px 20px #fff; }
+  100% {
+    text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff; } }
+
+@keyframes glowpulse {
+  0% {
+    text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff; }
+  50% {
+    text-shadow: -1px 1px 1px #ECEB72, 1px -1px 1px #fff; }
+  100% {
+    text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff; } }
+
+		@keyframes fadein {
+		  from {
+		    opacity: 0; }
+		  to {
+		    opacity: 1; } }
+
+		@-moz-keyframes fadein {
+		  from {
+		    opacity: 0; }
+		  to {
+		    opacity: 1; } }
+
+		@-webkit-keyframes fadein {
+		  from {
+		    opacity: 0; }
+		  to {
+		    opacity: 1; } }
+
+		@-ms-keyframes fadein {
+		  from {
+		    opacity: 0; }
+		  to {
+		    opacity: 1; } }
+
+		@-o-keyframes fadein {
+		  from {
+		    opacity: 0; }
+		  to {
+		    opacity: 1; } }
+
+#logo a:hover {
+	text-decoration: none;
+	-webkit-animation-delay: 1s;
+  animation-delay: 1s;
+  text-decoration: none;
+  -moz-animation-name: glowpulse;
+  -webkit-animation-name: glowpulse;
+  animation-name: glowpulse;
+	text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff;
 }
 
 #navbar {
-	background: #339e59;
+	background: #050D45;
 	font-size: 25px;
 	line-height: 45px;
 	text-align: center;
@@ -114,10 +187,21 @@ button:focus {
 	transition: background-color 0.5s ease;
 	margin: 0;
 	color: #fff;
+	text-shadow: none;
+outline: 0 none;
+-webkit-transition: 500ms linear 0s;
+-moz-transition: 500ms linear 0s;
+-o-transition: 500ms linear 0s;
+transition: 500ms linear 0s;
 }
 
 #navbar a:hover {
 	background: #21B6FC;
+	-moz-animation-name: glowpulse;
+	-webkit-animation-name: glowpulse;
+	animation-name: glowpulse;
+	text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff;
+	text-decoration: none;
 }
 
 .left {
@@ -137,6 +221,8 @@ button:focus {
 
 .footer {
 	text-align: center;
+	color: #fff;
+
 }
 
 @media (max-width: 1024px) {
@@ -160,7 +246,7 @@ button:focus {
 	}
 
 	.footer {
-		background: #5AB57B;
+		background: #050D45;
 		padding: 10px 0;
 	}
 }
