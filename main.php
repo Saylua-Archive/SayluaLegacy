@@ -31,7 +31,7 @@
     <a href="#">Games</a>
     <a href="#">Whatever</a>
 
-    <form class="search" action="lol">
+    <form class="search" action="/search.php">
       <input type="text" placeholder="Seach Saylua">
       <button><i class="fa fa-search" aria-hidden="true"></i></button>
 
