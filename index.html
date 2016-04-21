@@ -8,6 +8,7 @@
   <meta name="description" content="A new virtual petsite. ">
   <meta name="author" content="Saylua">
 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
   <link rel="stylesheet" href="static/css/styles.min.css">
   <script src="static/js/main.min.js"></script>
   <script src="static/js/dungeon.min.js"></script>
@@ -23,35 +24,54 @@
     <a href="#">Saylua</a>
 </div>
 <div id="navbar" class="container">
-  <a href="#">Home</a>
-  <a href="#">Explore</a>
-  <a href="#">Adopt</a>
-  <a href="#">Games</a>
-  <a href="#">Whatever</a>
+  <div class="content-width">
+    <a href="#">Home</a>
+    <a href="#">Explore</a>
+    <a href="#">Adopt</a>
+    <a href="#">Games</a>
+    <a href="#">Whatever</a>
+
+    <form class="search" action="lol">
+      <input type="text" placeholder="Seach Saylua">
+      <button><i class="fa fa-search" aria-hidden="true"></i></button>
+
+    </form>
+  </div>
 </div>
 <div class="container">
   <div class="content">
-    <h2>Dungeon Demo</h2>
     <div class="sidebar left" id="left-bar">
-      HA and stuff goes here.
       <img src="static/img/ha.jpg">
     </div>
     <div class="sidebar right" id="right-bar">
      Other stuff???
     </div>
     <div class="page-area">
-      This is a place that pages may go or something.
+      <div class="notification error">Error: You are too awesome. </div>
+
+      <div class="random-event">
+        <h3>Something has happened! </h3>
+        <p>You found some gum on the bottom of your shoe. </p>
+      </div>
+
   	  <div id="dungeon"></div>
     </div>
   </div>
 </div>
 
 <div class="container footer">
-  <p>
-    <a href="#">Back to Top</a> &bull;
-    <a href="#">About</a> &bull;
-    <a href="#">Terms of Service</a>
-  </p>
+  <div class="content-width">
+    <p>
+      <a href="#">Back to Top</a> &bull;
+      <a href="#">About</a> &bull;
+      <a href="#">Terms of Service</a> &bull;
+      <a href="#">Contact Us</a> &bull;
+      <a href="#">Staff</a>
+    </p>
+    <p>
+      &copy; 2016 Saylua
+    </p>
+  </div>
 </div>
 <div class="clearfix"></div>
 </body>
