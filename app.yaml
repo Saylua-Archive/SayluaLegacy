@@ -4,6 +4,10 @@ runtime: php55
 api_version: 1
 threadsafe: yes
 
+skip_files:
+- /?node_modules/*.*
+- /?static/source/*.*
+
 handlers:
 - url: /favicon\.ico
   static_files: favicon.ico
