@@ -1,0 +1,14 @@
+#dungeon {
+  background-color: #322125;
+  margin: 0 auto;
+}
+
+.dungeonTile {
+  float: left;
+	cursor: pointer;
+}
+
+.dungeonObject {
+  z-index: 1;
+  position: relative;
+}

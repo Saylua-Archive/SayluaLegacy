@@ -7,7 +7,7 @@ function init() {
 
 const T_WIDTH = 64;
 const T_COUNT = 8;
-const TILE_LOC = "img/tiles/"
+const TILE_LOC = "static/img/tiles/"
 const PLAYER_OFFSET = 20;
 
 var map = {
@@ -75,7 +75,7 @@ function fillMap(map) {
        newDiv.style.width = T_WIDTH + "px";
        newDiv.style.height = T_WIDTH + "px";
        if (map.getTile(j, i) > 0) {
-         newDiv.style.backgroundImage = "url('img/tiles/" + getMask(j, i) + ".png')";
+         newDiv.style.backgroundImage = "url('static/img/tiles/" + getMask(j, i) + ".png')";
        }
        newDiv.addEventListener("click", moveHere);
        newDiv.dataset.x = j;
@@ -93,7 +93,7 @@ function addPlayer() {
   playerDiv.className = 'dungeonObject';
   playerDiv.style.width = T_WIDTH + "px";
   playerDiv.style.height = T_WIDTH + "px";
-  playerDiv.style.backgroundImage = "url('img/SHC.png')";
+  playerDiv.style.backgroundImage = "url('static/img/SHC.png')";
   playerDiv.style.backgroundSize =  T_WIDTH + "px " + T_WIDTH + "px ";
   dungeon.appendChild(playerDiv);
 }
