@@ -11,7 +11,7 @@ $dir = 'static/img/ha/';
 $files = scandir($dir);
 foreach ($files as $f) {
   if ($f != "." && $f != "..") {
-    echo '<a href="javascript:addItem(\'' . $dir. $f . '\');">' . $f . '</a> ';
+    echo '<a href="javascript:addItem(\'' . $dir. $f . '\');">' . $f . '</a> &bull; ';
   }
 }
 ?>
