@@ -16,5 +16,8 @@ handlers:
 - url: /static
   static_dir: static
 
+- url: /(.+\.php)$
+  script: \1
+
 - url: .*
   script: main.php

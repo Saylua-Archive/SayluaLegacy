@@ -53,3 +53,21 @@ a:hover {
 	float: left;
 	clear: both;
 }
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+table {
+	text-align: left;
+}
+
+th {
+	text-align: center;
+	font-weight: normal;
+	background: $softcolor;
+}

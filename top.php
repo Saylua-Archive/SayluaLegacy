@@ -21,18 +21,18 @@
 
 <body>
 <div id="logo" class="container">
-    <a href="#">Saylua</a>
+    <a href="/">Saylua</a>
 </div>
 <div id="navbar" class="container">
   <div class="content-width">
-    <a href="#">Home</a>
-    <a href="#">Explore</a>
-    <a href="#">Adopt</a>
-    <a href="#">Games</a>
-    <a href="#">Whatever</a>
+    <a href="/">Home</a>
+    <a href="/">Explore</a>
+    <a href="/">Adopt</a>
+    <a href="/">Games</a>
+    <a href="/">Whatever</a>
 
     <form class="search" action="/search.php">
-      <input type="text" placeholder="Seach Saylua">
+      <input type="text" placeholder="Seach Saylua" name="q">
       <button><i class="fa fa-search" aria-hidden="true"></i></button>
 
     </form>
@@ -41,12 +41,14 @@
 <div class="container">
   <div class="content">
     <div class="sidebar left" id="left-bar">
-      <img src="static/img/ha.png">
+      <div id="ha-panel">
+        <a href="/ha.php"><img src="static/img/ha.png"></a>
+      </div>
     </div>
     <div class="sidebar right" id="right-bar">
       Your Party
-      <img src="static/img/SHC.png" class="left">
-      <img src="static/img/SHC.png" style="width: 50%;" class="left">
-      <img src="static/img/SHC.png" style="width: 50%;" class="left">
+      <a href="/pet.php"><img src="static/img/SHC.png" class="left"></a>
+      <a href="/pet.php"><img src="static/img/SHC.png" style="width: 50%;" class="left"></a>
+      <a href="/pet.php"><img src="static/img/SHC.png" style="width: 50%;" class="left"></a>
     </div>
     <div class="page-area">

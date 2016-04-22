@@ -41,10 +41,10 @@ button:focus {
 	float: left;
 	text-align: center;
 	margin: 0;
-	line-height: 50px;
-	font-size: 30px;
+	line-height: 35px;
+	font-size: 23px;
 	background: $softcolor;
-	color: #425540;
+	color: $darkcolor;
 }
 
 .content .page-area {
@@ -156,19 +156,16 @@ button:focus {
 	width: 25px;
 }
 
-.left {
-	float: left;
-}
-
-.right {
-	float: right;
-}
-
-/* Total width cannot exceed 180px */
+// Total width should not exceed 180px
 .sidebar {
-	width: 170px;
+	box-sizing: border-box;
+	width: 180px;
 	height: 100%;
 	padding: 5px;
+}
+
+#ha-panel {
+	background: url('../img/habg.jpg');
 }
 
 .footer {
