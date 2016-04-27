@@ -31,7 +31,7 @@
     <a href="/">Games</a>
     <a href="/">Whatever</a>
 
-    <form class="search" action="/search.php">
+    <form class="search" action="/search">
       <input type="text" placeholder="Seach Saylua" name="q">
       <button><i class="fa fa-search" aria-hidden="true"></i></button>
 
@@ -42,13 +42,13 @@
   <div class="content">
     <div class="sidebar left" id="left-bar">
       <div id="ha-panel">
-        <a href="/ha.php"><img src="static/img/ha.png"></a>
+        <a href="/ha"><img src="static/img/ha.png"></a>
       </div>
     </div>
     <div class="sidebar right" id="right-bar">
       Your Party
-      <a href="/pet.php"><img src="static/img/SHC.png" class="left"></a>
-      <a href="/pet.php"><img src="static/img/SHC.png" style="width: 50%;" class="left"></a>
-      <a href="/pet.php"><img src="static/img/SHC.png" style="width: 50%;" class="left"></a>
+      <a href="/pet"><img src="static/img/SHC.png" class="left"></a>
+      <a href="/pet"><img src="static/img/SHC.png" style="width: 50%;" class="left"></a>
+      <a href="/pet"><img src="static/img/SHC.png" style="width: 50%;" class="left"></a>
     </div>
     <div class="page-area">

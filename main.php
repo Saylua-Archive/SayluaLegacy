@@ -1,12 +1,13 @@
-<?php include('top.php'); ?>
+<?php
 
-<div class="notification error">Error: You are too awesome. </div>
+define('PET_SITE', true);
+session_start();
+$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-<div class="random-event">
-  <h3>Woah, a thing is happening! </h3>
-  <p>You found some gum on the bottom of your shoe. </p>
-</div>
-
-<div id="dungeon"></div>
-
-<?php include('bottom.php'); ?>
+if ($path == '/') {
+  require_once('./modules/home/index.php');
+} else if (file_exists('./modules'.$path."/index.php")) {
+  require_once('./modules'.$path."/index.php");
+} else {
+  echo "I can't find the file ".'./modules'.$path."/index.php";
+}

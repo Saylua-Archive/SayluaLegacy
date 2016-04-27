@@ -15,10 +15,7 @@ handlers:
 
 - url: /static
   static_dir: static
-  application_readable: true 
+  application_readable: true
 
-- url: /(.+\.php)$
-  script: \1
-
-- url: .*
+- url: /.*
   script: main.php
