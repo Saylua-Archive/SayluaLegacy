@@ -5,11 +5,11 @@
 </div>
 <div>
 <?php
-$dir = '/static/img/ha/';
+$dir = 'static/img/ha/';
 $files = scandir($dir);
 foreach ($files as $f) {
   if ($f != "." && $f != "..") {
-    echo '<a href="javascript:addItem(\'' . $dir. $f . '\');">' . $f . '</a> &bull; ';
+    echo '<a href="javascript:addItem(\'/' . $dir. $f . '\');">' . $f . '</a> &bull; ';
   }
 }
 ?>
