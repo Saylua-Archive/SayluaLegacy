@@ -12,3 +12,34 @@
   z-index: 1;
   position: relative;
 }
+
+.battler {
+  width: 200px;
+}
+
+#battle-screen {
+  width: 100%;
+  height: 400px;
+  background: url('/static/img/battle.jpg') no-repeat center;
+  text-align: center;
+}
+
+#battle-screen .side {
+  width: 200px;
+}
+
+#battle-screen .enemy {
+  cursor: pointer;
+}
+
+#battle-screen .enemy:hover {
+  opacity: .8;
+}
+
+#battle-screen .battler {
+  display: inline-block;
+}
+
+#battle-screen .battler.enemy {
+
+}
