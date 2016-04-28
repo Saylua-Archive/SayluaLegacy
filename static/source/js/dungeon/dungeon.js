@@ -158,11 +158,10 @@ function moveHere () {
 
 function setButton() {
   tButton = document.getElementById("tButton");
-  but.onclick = demoAjax;
+  tButton.onclick = demoAjax;
 }
 
 function demoAjax() {
-  alert("demo");
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
