@@ -3,6 +3,7 @@ window.onload = init;
 function init() {
   fillMap(map);
   addPlayer();
+  setButton();
 }
 
 const T_WIDTH = 64;
@@ -153,4 +154,21 @@ function moveHere () {
       movePlayer(0, -1);
     }
   }
+}
+
+function setButton() {
+  tButton = document.getElementById("tButton");
+  but.onclick = demoAjax;
+}
+
+function demoAjax() {
+  alert("demo");
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      document.getElementById("demo").innerHTML = xhttp.responseText;
+    }
+  };
+  xhttp.open("GET", "api/test", true);
+  xhttp.send();
 }

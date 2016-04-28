@@ -17,5 +17,8 @@ handlers:
   static_dir: static
   application_readable: true
 
+- url: /api/(.*)
+  script: api/\1.php
+
 - url: /.*
   script: main.php
