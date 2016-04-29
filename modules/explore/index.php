@@ -1,2 +1,2 @@
 <?php
-include_once('battle.php');
+include('./views/pages/explore-battle.php');

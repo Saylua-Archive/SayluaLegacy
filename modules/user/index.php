@@ -1,1 +1,2 @@
-<h2>Your profile</h2>
+<?php
+include_once('./views/pages/user.php');

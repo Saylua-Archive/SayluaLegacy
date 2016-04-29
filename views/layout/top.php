@@ -29,7 +29,7 @@
     <a href="/explore">Explore</a>
     <a href="/forums">Community</a>
     <a href="/games">Games</a>
-    <a href="/">Whatever</a>
+    <a href="/shops">Shops</a>
 
     <form class="search" action="/search">
       <input type="text" placeholder="Seach Saylua" name="q">
@@ -40,17 +40,15 @@
 </div>
 <div class="container">
   <div class="content">
-    <div class="sidebar left" id="left-bar">
-      <div id="ha-panel">
-        <a href="/ha"><img src="/static/img/ha.png"></a>
-      </div>
-      <p>You are <a href="/user">User</a></p>
-    </div>
-    <div class="sidebar right" id="right-bar">
-      Your Party
-      <a href="/pet"><img src="/static/img/SHC.png" class="left"></a>
-      <a href="/pet"><img src="/static/img/SHC.png" style="width: 50%;" class="left"></a>
-      <a href="/pet"><img src="/static/img/SHC.png" style="width: 50%;" class="left"></a>
-      <p>Smoking Hot Chick is hungry! <a href="/pet">Feed them?</a> </p>
-    </div>
+<?php
+if (!$fullscreen) {
+  include('sidebars.php');
+}
+?>
     <div class="page-area">
+<?php
+if ($_SESSION['random_event']) {
+  include('random-event.php');
+  unset($_SESSION['random_event']);
+}
+?>

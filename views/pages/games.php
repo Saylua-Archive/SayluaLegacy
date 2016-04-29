@@ -1,5 +1,4 @@
 <?php include('./views/layout/top.php'); ?>
-<div class="notification error">Error: You are too awesome. </div>
+<h2>Games</h2>
 
-<div id="dungeon"></div>
 <?php include('./views/layout/bottom.php'); ?>

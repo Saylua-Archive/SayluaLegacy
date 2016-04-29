@@ -1,5 +1,12 @@
 @import "assets/variables";
 
+@mixin content-width {
+  box-sizing: border-box;
+	max-width: 1200px;
+	width: 85%;
+	min-width: 1002px;
+}
+
 #info button {
 	cursor: pointer;
 	border-radius: 10px;
@@ -15,19 +22,15 @@ button:focus {
 	outline:none;
 }
 
-#navbar .content-width {
-	// background: $mainlight;
-}
-
 .content-width {
-	width: 1002px;
+	@include content-width;
 	margin: auto;
 	height: 100%;
 }
 
 .content {
 	background: $white;
-	max-width: 1000px;
+	@include content-width;
 	margin: auto;
 	padding: 5px 0;
 	min-height: 400px;
