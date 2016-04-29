@@ -5,9 +5,9 @@ include('./views/layout/top.php');
 <h2>You are in a battle! </h2>
 <div id="battle-screen">
   <div class="side left">
-    <img src="/static/img/SHC.png" class="battler left bounce flipped">
-    <img src="/static/img/SHC.png" class="battler left bounce flipped">
-    <img src="/static/img/SHC.png" class="battler left bounce flipped">
+    <img src="/static/img/SHC.png" class="battler player left bounce flipped">
+    <img src="/static/img/SHC.png" class="battler player left bounce flipped">
+    <img src="/static/img/SHC.png" class="battler player left bounce flipped">
   </div>
 
   <div class="side right">
