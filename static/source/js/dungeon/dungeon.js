@@ -1,29 +1,30 @@
 window.onload = init;
 
 function init() {
-  fillMap(map);
-  addPlayer();
+  getMap();
   setButton();
 }
 
 const T_WIDTH = 64;
-const T_COUNT = 8;
+const T_COUNTX = 10;
+const T_COUNTY = 8;
 const TILE_LOC = "static/img/tiles/"
 const PLAYER_OFFSET = 20;
 
+
 var map = {
-  cols: T_COUNT,
-  rows: T_COUNT,
+  cols: T_COUNTX,
+  rows: T_COUNTY,
   tsize: T_WIDTH,
   tiles: [
-    1, 1, 0, 0, 0, 1, 1, 1,
-    1, 1, 1, 1, 1, 0, 0, 1,
-    0, 1, 1, 0, 1, 0, 1, 1,
-    1, 0, 1, 0, 1, 1, 1, 0,
-    0, 0, 1, 1, 0, 1, 1, 1,
-    0, 1, 1, 1, 1, 1, 1, 0,
-    1, 1, 1, 0, 0, 1, 1, 0,
-    0, 1, 0, 0, 0, 0, 0, 0
+    1, 1, 0, 0, 0, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 0, 0, 1, 0, 1,
+    0, 1, 1, 0, 1, 0, 1, 1, 0, 1,
+    1, 0, 1, 0, 1, 1, 1, 1, 0, 1,
+    0, 0, 1, 1, 0, 1, 0, 1, 1, 1,
+    0, 1, 1, 1, 1, 1, 1, 0, 0, 1,
+    1, 1, 1, 0, 0, 1, 1, 0, 0, 1,
+    0, 1, 0, 0, 0, 0, 0, 0, 0, 1
   ],
   getTile: function(col, row) {
     if (col > map.cols - 1 || row > map.rows - 1 || row < 0 || col < 0) {
@@ -32,6 +33,20 @@ var map = {
     return this.tiles[row * map.cols + col];
   }
 };
+
+function getMap () {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      var jsonData = JSON.parse(xhttp.responseText);
+      map.tiles = jsonData.map;
+      fillMap(map);
+      addPlayer(jsonData.player.x, jsonData.player.y);
+    }
+  };
+  xhttp.open("GET", "api/dungeon", true);
+  xhttp.send();
+}
 
 var player = {
   x: 0,
@@ -64,12 +79,12 @@ function getMask(x, y) {
 
 function fillMap(map) {
   dungeon = document.getElementById('dungeon');
-  dungeon.style.width = (T_WIDTH * T_COUNT) + "px";
-  dungeon.style.height = (T_WIDTH * T_COUNT) + "px";
+  dungeon.style.width = (T_WIDTH * T_COUNTX) + "px";
+  dungeon.style.height = (T_WIDTH * T_COUNTY) + "px";
 
   var toAdd = document.createDocumentFragment();
-  for (var i = 0; i < T_COUNT; i++) {
-    for (var j = 0; j < T_COUNT; j++) {
+  for (var i = 0; i < T_COUNTY; i++) {
+    for (var j = 0; j < T_COUNTX; j++) {
        var newDiv = document.createElement('div');
        newDiv.id = j + "_" + i;
        newDiv.className = 'dungeonTile';
@@ -87,7 +102,7 @@ function fillMap(map) {
   dungeon.appendChild(toAdd);
 }
 
-function addPlayer() {
+function addPlayer(x, y) {
   dungeon = document.getElementById('dungeon');
   var playerDiv = document.createElement('div');
   playerDiv.id = 'player';
@@ -97,6 +112,7 @@ function addPlayer() {
   playerDiv.style.backgroundImage = "url('static/img/SHC.png')";
   playerDiv.style.backgroundSize =  T_WIDTH + "px " + T_WIDTH + "px ";
   dungeon.appendChild(playerDiv);
+  movePlayer(x, y);
 }
 
 function movePlayer(x, y) {
