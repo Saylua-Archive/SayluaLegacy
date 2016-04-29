@@ -1,2 +1,2 @@
 <?php
-include_once('./views/pages/search.php');
+render_template('pages/search.php');

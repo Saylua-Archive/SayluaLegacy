@@ -1,2 +1,2 @@
 <?php
-include_once('./views/main.php');
+render_template('main.php');

@@ -1,2 +1,2 @@
 <?php
-include('./views/pages/shops.php');
+render_template('pages/shops.php');

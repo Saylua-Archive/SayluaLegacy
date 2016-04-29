@@ -1,2 +1,2 @@
 <?php
-include_once('./views/pages/pet.php');
+render_template('pages/pet.php');
