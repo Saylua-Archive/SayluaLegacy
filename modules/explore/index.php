@@ -1,2 +1,2 @@
 <?php
-include('./views/pages/explore-battle.php');
+include('./views/main.php');
