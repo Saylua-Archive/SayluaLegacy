@@ -1,2 +1,2 @@
 <?php
-include('./views/pages/ha.php');
+render_template('pages/ha.php');

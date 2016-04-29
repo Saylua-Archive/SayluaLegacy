@@ -1,2 +1,2 @@
 <?php
-include('./views/pages/forums.php');
+render_template('pages/forums.php');

@@ -1,6 +1,8 @@
 <?php
 define('PET_SITE', true);
 session_start();
+require_once("core/functions.php");
+
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 $_SERVER['PARAMS'] = preg_split('@/@', $path, NULL, PREG_SPLIT_NO_EMPTY);
@@ -23,5 +25,6 @@ if ($path == '/') {
 } else if (file_exists($module)) {
   require_once($module);
 } else {
-  echo "I can't find the file " . $module;
+  http_response_code(404);
+  require_once("./views/error/404.php");
 }
