@@ -17,7 +17,7 @@ $map = array(
 function fillMap($oldmap) {
   $current = rand(0, 80);
   for ($i=0; $i < 80; $i++) {
-    if (rand(0, 3) > 0) {
+    if (rand(0, 2) > 0) {
       $oldmap[$i] = 1;
     }
   }
@@ -74,6 +74,28 @@ while ($oldmap[$current] == 0) {
 floodErase($current);
 for ($i=0; $i < 80; $i++) {
   $map[$i] = $map[$i] - $oldmap[$i];
+}
+while (array_sum($map) < 30) {
+  $map = array(
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  );
+  $map = fillMap($map);
+  $oldmap = $map;
+  $current = rand(0, 79);
+  while ($oldmap[$current] == 0) {
+    $current = rand(0, 79);
+  }
+  floodErase($current);
+  for ($i=0; $i < 80; $i++) {
+    $map[$i] = $map[$i] - $oldmap[$i];
+  }
 }
 
 
