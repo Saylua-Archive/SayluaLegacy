@@ -73,7 +73,7 @@ floodErase($current);
 for ($i=0; $i < 80; $i++) {
   $map[$i] = $map[$i] - $oldmap[$i];
 }
-while (array_sum($map) < 30) {
+while (array_sum($map) < 40) {
   $map = array(
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
