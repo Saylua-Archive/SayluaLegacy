@@ -17,9 +17,7 @@ $map = array(
 function fillMap($oldmap) {
   $current = rand(0, 80);
   for ($i=0; $i < 80; $i++) {
-    if (rand(0, 2) > 0) {
-      $oldmap[$i] = 1;
-    }
+    $oldmap[$i] = rand(0, 1);
   }
   return $oldmap;
 }
