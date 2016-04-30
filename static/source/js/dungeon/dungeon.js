@@ -93,7 +93,7 @@ function fillMap(map) {
        if (map.getTile(j, i) > 0) {
          newDiv.style.backgroundImage = "url('static/img/tiles/" + getMask(j, i) + ".png')";
        }
-       newDiv.addEventListener("click", moveHere);
+       newDiv.addEventListener("click", findPath);
        newDiv.dataset.x = j;
        newDiv.dataset.y = i;
        toAdd.appendChild(newDiv);
@@ -168,6 +168,44 @@ function moveHere () {
       movePlayer(0, 1);
     } else {
       movePlayer(0, -1);
+    }
+  }
+}
+
+function findPath() {
+  if (player.x == this.dataset.x && player.y == this.dataset.y) {
+    return;
+  }
+  var queue = [{x : this.dataset.x, y : this.dataset.y}];
+  var checked = [];
+  var found = false;
+  while (queue.length > 0) {
+    var currentLocation = queue.shift();
+    checked.push(1 * currentLocation.x + 10 * currentLocation.y);
+    if (player.x == currentLocation.x - 1 && player.y == currentLocation.y) {
+      movePlayer(1, 0);
+      return;
+    } else if (player.x == 1 * currentLocation.x + 1 && player.y == currentLocation.y) {
+      movePlayer(-1, 0);
+      return;
+    } else if (player.x == 1 * currentLocation.x && player.y == currentLocation.y - 1) {
+      movePlayer(0, 1);
+      return;
+    } else if (player.x == 1 * currentLocation.x && player.y == 1 * currentLocation.y + 1) {
+      movePlayer(0, -1);
+      return;
+    }
+    if ((map.getTile(1 * currentLocation.x - 1, 1 * currentLocation.y) != 0) && checked.indexOf(1 * currentLocation.x - 1 + 10 * currentLocation.y) == -1) {
+        queue.push({x : 1 * currentLocation.x - 1, y : 1 * currentLocation.y});
+    }
+    if ((map.getTile(1 * currentLocation.x + 1, 1 * currentLocation.y) != 0) && checked.indexOf(1 * currentLocation.x + 1 + 10 * currentLocation.y) == -1) {
+        queue.push({x : 1 * currentLocation.x + 1, y : 1 * currentLocation.y});
+    }
+    if ((map.getTile(1 * currentLocation.x, 1 * currentLocation.y - 1) != 0) && checked.indexOf(1 * currentLocation.x + 10 * (1 * currentLocation.y - 1)) == -1) {
+        queue.push({x : 1 * currentLocation.x, y : 1 * currentLocation.y - 1});
+    }
+    if ((map.getTile(1 * currentLocation.x, 1 * currentLocation.y + 1) != 0) && checked.indexOf(1 * currentLocation.x + 10 * (1 * currentLocation.y + 1)) == -1) {
+        queue.push({x : 1 * currentLocation.x, y : 1 * currentLocation.y + 1});
     }
   }
 }
