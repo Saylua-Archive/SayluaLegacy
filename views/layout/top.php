@@ -11,7 +11,12 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
   <link rel="stylesheet" href="/static/css/styles.min.css">
   <script src="/static/js/main.min.js"></script>
-  <script src="/static/js/dungeon.min.js"></script>
+
+<?php if (isset($header_scripts)): ?>
+<?php foreach ($header_scripts as $script): ?>
+  <script src="/static/js/<?=$script?>"></script>
+<?php endforeach ?>
+<?php endif ?>
 
   <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
@@ -31,6 +36,7 @@
     <a href="/forums">Community</a>
     <a href="/games">Games</a>
     <a href="/shops">Shops</a>
+    <a href="/quests">Quests</a>
 
     <form class="search" action="/search">
       <input type="text" placeholder="Seach Saylua" name="q">

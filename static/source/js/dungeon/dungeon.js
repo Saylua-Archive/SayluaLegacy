@@ -125,17 +125,19 @@ function movePlayer(x, y) {
   }
 }
 
-document.onkeydown = checkKey;
-
 window.addEventListener("keydown", function(e) {
+    if (document.activeElement && document.activeElement != document.body) {
+      return;
+    }
     // space and arrow keys
-    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+    if([37, 38, 39, 40].indexOf(e.keyCode) > -1) {
         e.preventDefault();
     }
+
+    checkKey();
 }, false);
 
 function checkKey(e) {
-
     e = e || window.event;
 
     if (e.keyCode == '38' || e.keyCode == '87') {
