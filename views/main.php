@@ -1,4 +1,7 @@
-<?php include('./views/layout/top.php'); ?>
+<?php
+$header_scripts[] = "dungeon.min.js";
+include('./views/layout/top.php');
+?>
 <div class="notification error">Error: You are too awesome. </div>
 
 <div id="dungeon"></div>
