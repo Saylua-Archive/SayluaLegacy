@@ -206,7 +206,7 @@ $obj_book_store->fetchOne("SELECT * FROM Book WHERE isbn = '1853260304'");
 
 And with support for named parameter binding (strings, integers) (*this is recommended*)
 
- ```php
+```php
 $obj_book_store->fetchOne("SELECT * FROM Book WHERE isbn = @isbnNumber", [
     'isbnNumber' => '1853260304'
 ]);
@@ -214,7 +214,7 @@ $obj_book_store->fetchOne("SELECT * FROM Book WHERE isbn = @isbnNumber", [
 
 Support for DateTime object binding
 
- ```php
+```php
 $obj_book_store->fetchOne("SELECT * FROM Task WHERE date_date < @now", [
     'now' => new DateTime()
 ]);
