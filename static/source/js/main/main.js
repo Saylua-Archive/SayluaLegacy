@@ -1,11 +1,13 @@
-Element.prototype.remove = function() {
-    this.parentElement.removeChild(this);
-}
+window.addEventListener("load", function () {
+  window.addEventListener("scroll", fixNavbar);
+});
 
-NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
-    for(var i = this.length - 1; i >= 0; i--) {
-        if(this[i] && this[i].parentElement) {
-            this[i].parentElement.removeChild(this[i]);
-        }
-    }
+function fixNavbar () {
+  var top = document.getElementById("banner").offsetHeight;
+  if (document.body.scrollTop > top ||
+    document.documentElement.scrollTop > top) {
+    addClass(document.getElementById("navbar"), "fixed");
+  } else {
+    removeClass(document.getElementById("navbar"), "fixed");
+  }
 }
