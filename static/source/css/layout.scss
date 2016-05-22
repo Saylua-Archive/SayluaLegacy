@@ -70,8 +70,11 @@ button:focus {
 	clear: both;
 }
 
+#banner {
+  background: $softcolor;
+}
+
 #logo {
-	background: $softcolor;
 	color: $white;
 	text-align:center;
 	font-size: 50px;
@@ -104,10 +107,22 @@ button:focus {
   text-decoration: none;
 }
 
+#nav-container {
+  height: 40px;
+}
+
 #navbar {
 	background: $maincolor;
 	text-align: center;
 	height: 40px;
+  width: 100%;
+}
+
+#navbar.fixed {
+  top: 0;
+  left: 0;
+  position: fixed;
+  z-index: 9999;
 }
 
 #navbar a, #navbar a:link, #navbar a:active, #navbar a:visited {

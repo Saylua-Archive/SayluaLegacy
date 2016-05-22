@@ -26,23 +26,27 @@
 </head>
 
 <body>
-<div id="logo" class="container">
+<div id="banner" class="container">
+  <div id="logo">
     <a href="/">Saylua</a>
+  </div>
 </div>
-<div id="navbar" class="container">
-  <div class="content-width">
-    <a href="/">Home</a>
-    <a href="/explore">Explore</a>
-    <a href="/forums">Community</a>
-    <a href="/games">Games</a>
-    <a href="/shops">Shops</a>
-    <a href="/quests">Quests</a>
+<div class="container" id="nav-container">
+  <div id="navbar">
+    <div class="content-width">
+      <a href="/">Home</a>
+      <a href="/explore">Explore</a>
+      <a href="/forums">Community</a>
+      <a href="/games">Games</a>
+      <a href="/shops">Shops</a>
+      <a href="/quests">Quests</a>
 
-    <form class="search" action="/search">
-      <input type="text" placeholder="Seach Saylua" name="q">
-      <button><i class="fa fa-search" aria-hidden="true"></i></button>
+      <form class="search" action="/search">
+        <input type="text" placeholder="Seach Saylua" name="q">
+        <button><i class="fa fa-search" aria-hidden="true"></i></button>
 
-    </form>
+      </form>
+    </div>
   </div>
 </div>
 <div class="container">

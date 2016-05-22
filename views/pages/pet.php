@@ -1,7 +1,15 @@
 <?php include('./views/layout/top.php'); ?>
 
 <h2>Smoking Hot Chick's Profile</h2>
-<center><img src="/static/img/SHC.png" style="width: 350px; text-align: center"></center>
+<center>
+  <img src="/static/img/SHC.png" style="width: 350px; text-align: center">
+  <br />
+  <a href="#">Feed</a>
+  <a href="#">Play</a>
+  <a href="#">Edit</a>
+
+</center>
+
 <table style="width: 50%; float: left;">
   <tr>
     <th>
@@ -35,7 +43,7 @@
   </tr>
 
   <tr>
-    <td>Owner</td>
+    <td>Companion</td>
     <td><a href="/user/">User</a></td>
   </tr>
   <tr>

@@ -1,25 +1,14 @@
 <?php
 define('PET_SITE', true);
 session_start();
-require_once("core/functions.php");
+require("core/functions.php");
+require("core/App.class.php");
 
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$app = new App();
 
-$_SERVER['PARAMS'] = preg_split('@/@', $path, NULL, PREG_SPLIT_NO_EMPTY);
+$app->randomEvent();
 
-$module = './modules/home/index.php';
-if (count($_SERVER['PARAMS']) > 0) {
-  $module = './modules/' . $_SERVER['PARAMS'][0]. "/index.php";
-}
-
-if (rand(0, 5) > 4) {
-  $_SESSION['random_event']['title'] = "Woah, a thing is happening. ";
-  $_SESSION['random_event']['body'] = "You found gum on the bottom of your shoe. ";
-} else if (rand(0, 10) > 7) {
-  $_SESSION['random_event']['title'] = "Hahaha, things are happening. ";
-  $_SESSION['random_event']['body'] = "A wild raccoon dropped a bunch of gold in front of you. ";
-}
-
+$module = $app->getRequest()->getModulePath();
 if ($path == '/') {
   require_once($module);
 } else if (file_exists($module)) {
