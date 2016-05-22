@@ -1,2 +1,2 @@
 <?php
-render_template('pages/shops.php');
+$app->renderTemplate('pages/shops.php');

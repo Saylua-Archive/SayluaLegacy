@@ -1,2 +1,2 @@
 <?php
-render_template('pages/habitats/main.php');
+$app->renderTemplate('pages/habitats/main.php');

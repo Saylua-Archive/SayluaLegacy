@@ -1,6 +1,6 @@
 <?php
 if ($app->getRequest()->getParam(1) == "sudoku") {
-  render_template('pages/games/sudoku.php');
+  $app->renderTemplate('pages/games/sudoku.php');
 } else {
-  render_template('pages/games/games.php');
+  $app->renderTemplate('pages/games/games.php');
 }

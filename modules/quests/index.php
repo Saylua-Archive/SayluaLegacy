@@ -1,2 +1,2 @@
 <?php
-render_template('pages/quests.php');
+$app->renderTemplate('pages/quests.php');

@@ -22,6 +22,9 @@ class Request {
   }
 
   function getParam($number) {
+    if ($number >= $this->getParamCount()) {
+      return "";
+    }
     return $this->params[$number];
   }
 }

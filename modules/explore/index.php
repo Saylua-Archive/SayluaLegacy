@@ -1,2 +1,2 @@
 <?php
-include('./views/main.php');
+$app->renderTemplate('main.php');

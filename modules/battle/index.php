@@ -1,2 +1,2 @@
 <?php
-render_template('pages/battle.php');
+$app->renderTemplate('pages/battle.php');

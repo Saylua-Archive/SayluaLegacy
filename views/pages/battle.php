@@ -1,5 +1,5 @@
 <?php
-$fullscreen = true;
+$this->fullscreen = true;
 include('./views/layout/top.php');
 ?>
 <h2>You are in a battle! </h2>

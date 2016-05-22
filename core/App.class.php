@@ -1,11 +1,18 @@
 <?php
 include ("Request.class.php");
+include ("View.class.php");
+
 class App {
   var $request;
   var $user;
 
   function __construct() {
     $this->request = new Request();
+  }
+
+  function renderTemplate($name, array $vars = null) {
+    $view = new View($name, $vars);
+    $view->render();
   }
 
   function throw404() {

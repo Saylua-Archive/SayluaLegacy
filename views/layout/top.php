@@ -12,8 +12,8 @@
   <link rel="stylesheet" href="/static/css/styles.min.css">
   <script src="/static/js/main.min.js"></script>
 
-<?php if (isset($header_scripts)): ?>
-<?php foreach ($header_scripts as $script): ?>
+<?php if (isset($this->header_scripts)): ?>
+<?php foreach ($this->header_scripts as $script): ?>
   <script src="/static/js/<?=$script?>"></script>
 <?php endforeach ?>
 <?php endif ?>
@@ -52,7 +52,7 @@
 <div class="container">
   <div class="content">
 <?php
-if (!$fullscreen) {
+if (!$this->fullscreen) {
   include('sidebars.php');
 }
 ?>

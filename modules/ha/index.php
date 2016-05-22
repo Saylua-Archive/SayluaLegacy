@@ -1,2 +1,2 @@
 <?php
-render_template('pages/ha.php');
+$app->renderTemplate('pages/ha.php');

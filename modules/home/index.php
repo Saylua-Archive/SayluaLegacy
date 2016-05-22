@@ -1,2 +1,2 @@
 <?php
-render_template('main.php');
+$app->renderTemplate('main.php');

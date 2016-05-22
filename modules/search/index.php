@@ -1,2 +1,2 @@
 <?php
-render_template('pages/search.php');
+$app->renderTemplate('pages/search.php');
