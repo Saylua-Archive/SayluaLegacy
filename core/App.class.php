@@ -8,6 +8,11 @@ class App {
     $this->request = new Request();
   }
 
+  function throw404() {
+    http_response_code(404);
+    include("./views/error/404.php");
+  }
+
   function randomEvent() {
     if (rand(0, 5) > 4) {
       $_SESSION['random_event']['title'] = "Woah, a thing is happening. ";

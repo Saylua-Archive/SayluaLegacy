@@ -17,6 +17,10 @@ class Request {
     return $this::$default_module;
   }
 
+  function getParamCount() {
+    return count($this->params);
+  }
+
   function getParam($number) {
     return $this->params[$number];
   }
