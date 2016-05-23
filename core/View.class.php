@@ -9,8 +9,8 @@ class View {
 
   function __construct($view_name, array $vars = null) {
     $this->name = $view_name;
-    if ($vars) {
-      # Mapes the vars parameter into the object namespace.
+    if ($vars != null) {
+      # Maps the vars parameter into the object namespace.
       foreach ($vars as $key => $value) {
         $this->{$key} = $value;
       }

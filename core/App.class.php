@@ -3,8 +3,8 @@ include ("Request.class.php");
 include ("View.class.php");
 
 class App {
-  var $request;
-  var $user;
+  private $request;
+  private $user;
 
   function __construct() {
     $this->request = new Request();
@@ -17,7 +17,7 @@ class App {
 
   function throw404() {
     http_response_code(404);
-    include("./views/error/404.php");
+    $this->renderTemplate("error/404.php");
   }
 
   function randomEvent() {

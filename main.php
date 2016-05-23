@@ -9,9 +9,10 @@ $app = new App();
 
 $app->randomEvent();
 
+# Loads the proper PHP script based on the current URL
 $module = $app->getRequest()->getModulePath();
 if (file_exists($module)) {
   require($module);
 } else {
-  $app->throw404();
+  $this->throw404();
 }

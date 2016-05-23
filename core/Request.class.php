@@ -11,8 +11,10 @@ class Request {
   }
 
   function getModulePath() {
-    if (count($this->params) > 0) {
-      return './modules/' . $this->params[0]. "/index.php";
+    if (count($this->params) == 2 && $this->params[0] == "api") {
+      return './api/' . $this->params[1] . '.php';
+    } else if (count($this->params) > 0) {
+      return './modules/' . $this->params[0] . '/index.php';
     }
     return $this::$default_module;
   }

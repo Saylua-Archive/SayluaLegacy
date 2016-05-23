@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -41,7 +40,7 @@
       <a href="/shops">Shops</a>
       <a href="/quests">Quests</a>
 
-      <form class="search" action="/search">
+      <form class="search" action="/search/">
         <input type="text" placeholder="Seach Saylua" name="q">
         <button><i class="fa fa-search" aria-hidden="true"></i></button>
 
@@ -58,8 +57,10 @@ if (!$this->fullscreen) {
 ?>
     <div class="page-area">
 <?php
+/*
 if ($_SESSION['random_event']) {
   include('random-event.php');
   unset($_SESSION['random_event']);
 }
+*/
 ?>

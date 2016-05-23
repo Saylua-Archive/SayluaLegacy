@@ -1,0 +1,50 @@
+@import "assets/variables";
+
+table.forum-boards {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.forum-boards td, table.forum-boards th {
+  padding: 4px;
+}
+
+table.forum-boards th.category-header {
+  background: none;
+  border-bottom: 1px $bordercolor solid;
+  text-align: left;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+table.forum-boards th {
+  background: none;
+  text-align: left;
+  font-size: 12px;
+}
+
+table.forum-boards .forum-board-row td {
+  border-bottom: 1px $softcolor solid;
+  vertical-align: center;
+  font-size: 14px;
+}
+
+table.forum-boards .forum-board-row:hover {
+  background-color: $accentsoft;
+}
+
+table.forum-boards .forum-board-icon {
+  width: 60px;
+}
+
+table.forum-boards .forum-board-info {
+  width: 54%;
+}
+
+table.forum-boards .forum-board-info p {
+  margin: 0;
+}
+
+table.forum-boards .forum-latest-post {
+  font-size: 12px;
+}

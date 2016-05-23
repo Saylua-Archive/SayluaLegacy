@@ -1,5 +1,4 @@
 <?php
-
 $toReturn = array();
 $player = array();
 
@@ -16,7 +15,7 @@ $map = array(
 
 function fillMap($oldmap) {
   $current = rand(0, 80);
-  for ($i=0; $i < 80; $i++) {
+  for ($i = 0; $i < 80; $i++) {
     $oldmap[$i] = rand(0, 1);
   }
   return $oldmap;
@@ -69,10 +68,12 @@ $current = rand(0, 79);
 while ($oldmap[$current] == 0) {
   $current = rand(0, 79);
 }
+
 floodErase($current);
-for ($i=0; $i < 80; $i++) {
+for ($i = 0; $i < 80; $i++) {
   $map[$i] = $map[$i] - $oldmap[$i];
 }
+
 while (array_sum($map) < 40) {
   $map = array(
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -91,30 +92,22 @@ while (array_sum($map) < 40) {
     $current = rand(0, 79);
   }
   floodErase($current);
-  for ($i=0; $i < 80; $i++) {
+  for ($i = 0; $i < 80; $i++) {
     $map[$i] = $map[$i] - $oldmap[$i];
   }
 }
 
-
-
-
-
-
-$player[x] = -1;
-$player[y] = -1;
-while($player[x] == -1) {
+$player['x'] = -1;
+$player['y'] = -1;
+while($player['x'] == -1) {
   $i = rand(0, 79);
   if ($map[$i] === 1) {
-    $player[x] = $i % 10;
-    $player[y] = floor($i / 10);
+    $player['x'] = $i % 10;
+    $player['y'] = floor($i / 10);
   }
 }
 
-
-
-
-$toReturn[player] = $player;
-$toReturn[map] = $map;
+$toReturn['player'] = $player;
+$toReturn['map'] = $map;
 
 echo json_encode($toReturn);

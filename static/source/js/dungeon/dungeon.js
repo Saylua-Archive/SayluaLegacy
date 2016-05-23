@@ -141,18 +141,15 @@ function checkKey(e) {
     e = e || window.event;
 
     if (e.keyCode == '38' || e.keyCode == '87') {
-        // up arrow
-        movePlayer(0, -1);
-    }
-    else if (e.keyCode == '40' || e.keyCode == '83') {
-        // down arrow
-        movePlayer(0, 1);
-    }
-    else if (e.keyCode == '37' || e.keyCode == '65') {
+      // up arrow
+      movePlayer(0, -1);
+    } else if (e.keyCode == '40' || e.keyCode == '83') {
+      // down arrow
+      movePlayer(0, 1);
+    } else if (e.keyCode == '37' || e.keyCode == '65') {
        // left arrow
        movePlayer(-1, 0);
-    }
-    else if (e.keyCode == '39' || e.keyCode == '68') {
+    } else if (e.keyCode == '39' || e.keyCode == '68') {
        // right arrow
        movePlayer(1, 0);
     }
