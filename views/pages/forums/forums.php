@@ -1,6 +1,7 @@
 <?php include('./views/layout/top.php'); ?>
 <h2>Forums</h2>
 <table class="forum-boards">
+<? for ($j = 0; $j < 3; $j++): ?>
   <tr>
     <th colspan="5" class="category-header">Category Name</th>
   </tr>
@@ -19,16 +20,19 @@
       Latest Post
     </th>
   </tr>
-<? for ($i = 0; $i < 10; $i++): ?>
+<? for ($i = 0; $i < 5; $i++): ?>
   <tr class="forum-board-row">
     <td class="forum-board-icon">
       <img src="/static/img/SHC.png">
     </td>
     <td class="forum-board-info">
-      <a href="/forums/board">Sample Board</a>
-      <p>
-        Sample board is the best place to table about anything.
-      </p>
+      <a href="/forums/board">
+        <span class="forum-board-link">Sample Board</span>
+        <p>
+          Sample board is the best place to talk about anything. You can make
+          sample threads and keep on posting on other people's threads.
+        </p>
+      </a>
     </td>
     <td>
       5
@@ -42,6 +46,7 @@
       on 5 May 2016 21:05 SST
     </td>
   </tr>
+<? endfor; ?>
 <? endfor; ?>
 </table>
 <?php include('./views/layout/bottom.php'); ?>

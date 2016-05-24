@@ -55,6 +55,13 @@ button:focus {
 	overflow: hidden;
 }
 
+.breadcrumb {
+  display: block;
+  font-size: 14px;
+  width: 100%;
+  padding: 5px 10px;
+}
+
 .container {
 	width: 100%;
 	float: left;
@@ -108,13 +115,13 @@ button:focus {
 }
 
 #nav-container {
-  height: 40px;
+  height: $navheight;
 }
 
 #navbar {
 	background: $maincolor;
 	text-align: center;
-	height: 40px;
+	height: $navheight;
   width: 100%;
 }
 
@@ -131,9 +138,9 @@ button:focus {
 	transition: background-color 0.5s ease;
 	margin: 0 -2px;
 	color: $white;
-	font-size: 20px;
-	line-height: 40px;
-	height: 40px;
+	font-size: 19px;
+	line-height: $navheight;
+	height: $navheight;
 }
 
 #navbar a:hover {
@@ -143,7 +150,7 @@ button:focus {
 
 #navbar form.search {
 	display: inline-block;
-	height: 40px;
+	height: $navheight;
 	padding: 0 7px;
 }
 
@@ -156,7 +163,7 @@ button:focus {
 	border: 0;
 	margin: 0;
 	float: left;
-	margin-top: -3px;
+	margin-top: -2px;
 	transition: background-color 0.5s ease;
 }
 
