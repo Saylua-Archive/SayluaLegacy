@@ -41,7 +41,7 @@
       <a href="/quests">Quests</a>
 
       <form class="search" action="/search/">
-        <input type="text" placeholder="Seach Saylua" name="q">
+        <input type="text" placeholder="Search Saylua" name="q">
         <button><i class="fa fa-search" aria-hidden="true"></i></button>
 
       </form>

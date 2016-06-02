@@ -1,48 +1,50 @@
 @import "assets/variables";
 
-table.forum-boards {
+table.forum-table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 40px;
 }
 
-table.forum-boards td, table.forum-boards th {
+table.forum-table td, table.forum-table th {
   padding: 4px;
 }
 
-table.forum-boards th.category-header {
-  padding-top: 50px;
-  background: none;
-  border-bottom: 1px $bordercolor solid;
-  text-align: left;
-  font-size: 20px;
-  line-height: 25px;
+table.forum-table th.section-header {
+  padding-top: 20px;
 }
 
-table.forum-boards th {
+table.forum-table th {
   background: none;
   text-align: left;
   font-size: 12px;
 }
 
-table.forum-boards .forum-board-row td {
+table.forum-table .forum-board-row td {
   border-bottom: 1px $softcolor solid;
   vertical-align: center;
   font-size: 14px;
 }
 
-table.forum-boards .forum-board-row:hover {
+table.forum-table .forum-board-row:hover,
+table.forum-table .forum-thread-row:nth-child(n):hover {
   background-color: $accentsoft;
 }
 
-table.forum-boards .forum-board-icon {
-  width: 60px;
+table.forum-table .forum-thread-row:nth-child(odd) {
+  background: $neutralcolor;
 }
 
-table.forum-boards .forum-board-info {
+table.forum-table td.forum-board-icon {
+  width: 60px!important;
+  min-width: 60px;
+}
+
+table.forum-table td.forum-board-info {
   width: 54%;
 }
 
-table.forum-boards .forum-board-info a {
+table.forum-table td.forum-board-info a {
   display: block;
   overflow: auto;
   width: 100%;
@@ -51,12 +53,12 @@ table.forum-boards .forum-board-info a {
   text-decoration: none;
 }
 
-table.forum-boards .forum-board-info a:hover .forum-board-link {
+table.forum-table td.forum-board-info a:hover .forum-board-link {
   text-decoration: underline;
 }
 
-table.forum-boards .forum-board-info a p,
-table.forum-boards .forum-board-info a:hover p {
+table.forum-table td.forum-board-info a p,
+table.forum-table td.forum-board-info a:hover p {
   margin: 0;
   line-height: 18px;
   text-decoration: none;
@@ -64,6 +66,17 @@ table.forum-boards .forum-board-info a:hover p {
   border: 0;
 }
 
-table.forum-boards .forum-latest-post {
+table.forum-table td.forum-thread-info {
+  width: 50%;
+}
+
+table.forum-table td.forum-thread-info a {
+  display: block;
+  width: 100%;
+  line-height: normal;
+}
+
+table.forum-table td.forum-latest-post {
   font-size: 12px;
+  width: 25%;
 }

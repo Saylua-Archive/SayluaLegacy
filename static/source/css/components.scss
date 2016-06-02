@@ -1,0 +1,17 @@
+@import "assets/variables";
+
+.pagination a, .pagination span {
+  display: inline-block;
+  padding: 0 10px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+}
+
+.pagination a:hover {
+  background-color: $accentsoft;
+}
+
+.pagination span.active {
+  background-color: $softcolor;
+}

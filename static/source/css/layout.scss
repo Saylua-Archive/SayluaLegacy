@@ -16,7 +16,6 @@
   -webkit-transition: background .15s ease-in-out;
 }
 
-
 button:focus {
 	border: none;
 	outline:none;
@@ -75,6 +74,15 @@ button:focus {
 	margin: 5px 0;
 	border-radius: 5px;
 	clear: both;
+}
+
+h3, table th.section-header {
+  background: none;
+  border-bottom: 1px $bordercolor solid;
+  text-align: left;
+  font-size: 20px;
+  line-height: 25px;
+  width: 100%;
 }
 
 #banner {
@@ -162,8 +170,9 @@ button:focus {
 	width: 200px;
 	border: 0;
 	margin: 0;
+  font-size: 14px;
 	float: left;
-	margin-top: -2px;
+  margin-top: -1px;
 	transition: background-color 0.5s ease;
 }
 
@@ -176,7 +185,6 @@ button:focus {
 
 #navbar .search button {
 	position: relative;
-	top: -2px;
 	margin-left: -26px;
 	cursor: pointer;
 	border: 0;
@@ -185,6 +193,7 @@ button:focus {
 	border-radius: 0;
 	height: 25px;
 	width: 25px;
+  padding: 5px;
 }
 
 // Total width should not exceed 180px

@@ -62,6 +62,11 @@ a:hover {
 	float: right;
 }
 
+.center {
+	margin: auto;
+	text-align: center;
+}
+
 .flipped {
 	-moz-transform: scaleX(-1);
 	-o-transform: scaleX(-1);
@@ -69,6 +74,18 @@ a:hover {
 	transform: scaleX(-1);
 	filter: FlipH;
 	-ms-filter: "FlipH";
+}
+
+.faded {
+	opacity: 0.5;
+}
+
+.small {
+	font-size: 12px;
+}
+
+.normal {
+	font-size: 14px;
 }
 
 table {
@@ -79,4 +96,49 @@ th {
 	text-align: center;
 	font-weight: normal;
 	background: $softcolor;
+}
+
+table.form-table td.label, table.form-table th.label {
+	vertical-align: top;
+	text-align: right;
+	width: 20%;
+}
+
+table.form-table td, table.form-table th {
+	padding: 5px;
+}
+
+table.form-table td input, table.form-table td textarea {
+	width: 90%;
+}
+
+table.form-table td input[type="submit"] {
+	width: auto;
+}
+
+table.form-table td textarea {
+	height: 200px;
+}
+
+input, textarea {
+	font-size: 16px;
+	line-height: 24px;
+	padding: 2px 8px;
+}
+
+input[type="submit"], button, a.button {
+	border: none;
+	background-color: $maincolor;
+	background-color: $accent;
+	color: $white;
+	cursor: pointer;
+	border-radius: 12px;
+	padding: 6px 15px;
+	-webkit-transition: background-color 0.5s;
+	transition: background-color 0.5s;
+}
+
+input[type="submit"]:hover, button:hover, a.button:hover {
+	background-color: $maincolor;
+	text-decoration: none;
 }

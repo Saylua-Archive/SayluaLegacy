@@ -1,9 +1,9 @@
 <?php include('./views/layout/top.php'); ?>
 <h2>Forums</h2>
-<table class="forum-boards">
 <? for ($j = 0; $j < 3; $j++): ?>
+<table class="forum-table">
   <tr>
-    <th colspan="5" class="category-header">Category Name</th>
+    <th colspan="5" class="section-header">Category Name</th>
   </tr>
   <tr>
     <td></td>
@@ -47,6 +47,6 @@
     </td>
   </tr>
 <? endfor; ?>
-<? endfor; ?>
 </table>
+<? endfor; ?>
 <?php include('./views/layout/bottom.php'); ?>
