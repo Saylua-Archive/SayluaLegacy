@@ -23,7 +23,7 @@
 <? for ($i = 0; $i < 5; $i++): ?>
   <tr class="forum-board-row">
     <td class="forum-board-icon">
-      <img src="/static/img/SHC.png">
+      <img src="/static/img/items/orange.png" class="faded">
     </td>
     <td class="forum-board-info">
       <a href="/forums/board">

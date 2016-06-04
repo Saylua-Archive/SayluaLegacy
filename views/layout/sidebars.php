@@ -6,13 +6,13 @@
     <div class="sidebar-section">
       <p>You are <a href="/user">User</a></p>
       <p>
-        20 Common Currency
+        <img src="/static/img/icons/coins.png"> 20 Common Bars
       </p>
       <p>
-        76 Premium Currency
+        <img src="/static/img/icons/ruby.png"> 76 Premium $
       </p>
       <p>
-        50 Event Curency
+        <img src="/static/img/icons/ticket.png"> 50 Event Curency
       </p>
     </div>
   </div>

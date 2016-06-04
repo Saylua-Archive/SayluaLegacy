@@ -36,12 +36,16 @@
 
   <? for ($i = 0; $i < 5; $i++): ?>
     <tr class="forum-thread-row">
-      <td>
-        <img src="/static/img/icons/book_open.png" class="faded">
+      <td class="forum-thread-icon">
+        <? if ($i == 3): ?>
+        <img src="/static/img/icons/lock.png">
+        <? endif ?>
       </td>
       <td class="forum-thread-info">
-        <a href="/forums/thread">Sample Thread</a>
-        <span class="small">Created on May 5, 2016 at 6:21 PM</span>
+        <a href="/forums/thread">
+          <span class="forum-thread-link">Sample Thread</span>
+          <p class="small">Created on May 5, 2016 at 6:21 PM</p>
+        </a>
       </td>
       <td>
         5

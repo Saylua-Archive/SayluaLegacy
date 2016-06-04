@@ -6,7 +6,7 @@ class Request {
 
   function __construct() {
     $this->path = $_SERVER['REQUEST_URI'];
-    $this->params = preg_split('@/@', $this->path, NULL,
+    $this->params = preg_split('@[/?]@', $this->path, NULL,
       PREG_SPLIT_NO_EMPTY);
   }
 
