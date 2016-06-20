@@ -1,6 +1,7 @@
 <?php
 include ("Request.class.php");
 include ("View.class.php");
+include ("User.class.php");
 
 class App {
   private $request;
@@ -8,9 +9,13 @@ class App {
 
   function __construct() {
     $this->request = new Request();
+    $this->user = new User();
   }
 
-  function renderTemplate($name, array $vars = null) {
+  function renderTemplate($name, array $vars = []) {
+    $vars['user'] = $this->user;
+    $vars['is_logged_in'] = $this->isLoggedIn();
+
     $view = new View($name, $vars);
     $view->render();
   }
@@ -32,5 +37,13 @@ class App {
 
   function getRequest() {
     return $this->request;
+  }
+
+  function isLoggedIn() {
+    return true;
+  }
+
+  function getUser() {
+    return $this->user;
   }
 }

@@ -1,10 +1,10 @@
 <div class="sidebar-container">
   <div class="sidebar left" id="left-bar">
     <div class="sidebar-section" id="ha-panel">
-      <a href="/ha"><img src="/static/img/ha.png"></a>
+      <a href="/ha"><img src="<?=$this->user->getHA() ?>"></a>
     </div>
     <div class="sidebar-section">
-      <p>You are <a href="/user">User</a></p>
+      <p>You are <?=$this->user->getLink() ?></p>
       <p>
         <img src="/static/img/icons/coins.png"> 20 Common Bars
       </p>

@@ -84,6 +84,12 @@ h3, table th.section-header {
   font-size: 20px;
   line-height: 25px;
   width: 100%;
+  font-weight: normal;
+}
+
+h3 {
+  padding: 4px;
+  box-sizing: border-box;
 }
 
 #banner {

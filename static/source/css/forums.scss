@@ -100,3 +100,31 @@ table.forum-table td.forum-latest-post {
   font-size: 12px;
   width: 25%;
 }
+
+table.forum-post {
+  width: 98%;
+  border: 1px $softcolor solid;
+  margin: 20px 1%;
+  padding: 0px;
+  box-sizing: border-box;
+  border-collapse: collapse;
+}
+
+.forum-post th {
+  font-weight: normal;
+  background: $softcolor;
+  padding: 3px 8px;
+  font-size: 14px;
+  text-align: left;
+}
+
+.forum-post .forum-post-info {
+  width: 150px;
+  padding: 5px;
+  text-align: center;
+  height: 100%;
+}
+
+.forum-post .forum-post-body {
+  padding: 5px;
+}

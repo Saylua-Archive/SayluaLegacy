@@ -51,7 +51,6 @@ gulp.task('scripts', ['clean'], function() {
 // Rerun the task when a file changes
 gulp.task('watch', function() {
   gulp.watch(paths.scripts, ['scripts']);
-  gulp.watch(paths.images, ['images']);
   gulp.watch(paths.sass, ['sass']);
 });
 

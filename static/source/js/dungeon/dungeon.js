@@ -213,14 +213,3 @@ function setButton() {
   tButton = document.getElementById("tButton");
   tButton.onclick = demoAjax;
 }
-
-function demoAjax() {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
-      document.getElementById("demo").innerHTML = xhttp.responseText;
-    }
-  };
-  xhttp.open("GET", "api/test", true);
-  xhttp.send();
-}

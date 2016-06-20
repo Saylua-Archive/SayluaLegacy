@@ -76,6 +76,11 @@ a:hover {
 	-ms-filter: "FlipH";
 }
 
+.full {
+	width: 100%;
+	float: left;
+}
+
 .faded {
 	opacity: 0.5;
 }
@@ -141,4 +146,21 @@ input[type="submit"], button, a.button {
 input[type="submit"]:hover, button:hover, a.button:hover {
 	background-color: $maincolor;
 	text-decoration: none;
+}
+
+a.tiny-button {
+	background-color: $white;
+	padding: 4px 8px;
+	margin: 2px;
+	border-radius: 5px;
+}
+
+a.tiny-button:hover {
+	background-color: $neutralcolor;
+}
+
+.divider {
+	border-bottom: 1px $softcolor solid;
+	width: 100%;
+	margin-bottom: 16px;
 }

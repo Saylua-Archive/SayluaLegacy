@@ -65,7 +65,7 @@ if ($endPageRange > $this->totalPages) {
 
 <? if ($this->currentPage < $this->totalPages): ?>
 
-  <a href="<?=$this->pageUrlBase . $this->totalPages
+  <a href="<?=$this->pageUrlBase . ($this->currentPage + 1)
   . $this->pageUrlEnd ?>">Next &#8594;</a>
 <? else: ?>
   <span>Next &#8594;</span>

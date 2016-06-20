@@ -1,5 +1,7 @@
 <?php
 class View {
+  public $user;
+  public $is_logged_in;
   public $page_title = "";
   public $fullscreen = false;
   public $header_scripts = array();
