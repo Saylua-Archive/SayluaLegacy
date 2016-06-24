@@ -33,10 +33,10 @@
 <table class="forum-post" id="forum-post-<?=$i ?>">
   <tr>
     <th colspan="2">
-      Sample Thread | 4 June 2016 5:21 SST
+      <a href="#forum-post-<?=$i ?>">Post in Really Long Sample...</a> |
+      4 June 2016 5:21 SST
       <span class="right">
         <a href="#">Quote</a>  |
-        <a href="#forum-post-<?=$i ?>">Link</a> |
         <a href="#">Modify</a>
       </span>
     </th>

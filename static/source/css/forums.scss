@@ -1,4 +1,5 @@
 @import "assets/variables";
+@import "assets/transitions";
 
 table.forum-table {
   width: 100%;
@@ -20,8 +21,13 @@ table.forum-table th {
   font-size: 12px;
 }
 
+table.forum-table .forum-board-row,
+table.forum-table .forum-thread-row {
+  @include fast-color-trans;
+}
+
 table.forum-table .forum-board-row td {
-  border-bottom: 1px $softcolor solid;
+  border-bottom: 1px $mainsoftcolor solid;
   vertical-align: center;
   font-size: 14px;
 }
@@ -103,7 +109,7 @@ table.forum-table td.forum-latest-post {
 
 table.forum-post {
   width: 98%;
-  border: 1px $softcolor solid;
+  border: 1px $mainsoftcolor solid;
   margin: 20px 1%;
   padding: 0px;
   box-sizing: border-box;
@@ -112,7 +118,7 @@ table.forum-post {
 
 .forum-post th {
   font-weight: normal;
-  background: $softcolor;
+  background: $mainsoftcolor;
   padding: 3px 8px;
   font-size: 14px;
   text-align: left;

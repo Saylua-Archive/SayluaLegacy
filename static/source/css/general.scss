@@ -1,4 +1,5 @@
 @import "assets/variables";
+@import "assets/transitions";
 
 html {
 	width: 100%;
@@ -79,6 +80,7 @@ a:hover {
 .full {
 	width: 100%;
 	float: left;
+	padding: 8px 0;
 }
 
 .faded {
@@ -100,7 +102,7 @@ table {
 th {
 	text-align: center;
 	font-weight: normal;
-	background: $softcolor;
+	background: $mainsoftcolor;
 }
 
 table.form-table td.label, table.form-table th.label {
@@ -149,18 +151,19 @@ input[type="submit"]:hover, button:hover, a.button:hover {
 }
 
 a.tiny-button {
+	@include fast-color-trans;
 	background-color: $white;
-	padding: 4px 8px;
-	margin: 2px;
-	border-radius: 5px;
+	padding: 6px 10px;
+	margin: 3px;
+	border-radius: 7px;
 }
 
 a.tiny-button:hover {
-	background-color: $neutralcolor;
+	background-color: $mainsoftcolor;
 }
 
 .divider {
-	border-bottom: 1px $softcolor solid;
+	border-bottom: 1px $mainsoftcolor solid;
 	width: 100%;
 	margin-bottom: 16px;
 }
