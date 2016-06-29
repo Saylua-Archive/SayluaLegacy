@@ -1,2 +1,2 @@
 <?php
-$app->renderTemplate('pages/quests.php');
+$req->renderTemplate('pages/quests.php');

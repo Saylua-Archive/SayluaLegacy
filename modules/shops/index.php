@@ -1,2 +1,2 @@
 <?php
-$app->renderTemplate('pages/shops.php');
+$req->renderTemplate('pages/shops.php');

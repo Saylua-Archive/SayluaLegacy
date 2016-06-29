@@ -1,2 +1,2 @@
 <?php
-$app->renderTemplate('main.php');
+$req->renderTemplate('main.php');

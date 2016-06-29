@@ -1,2 +1,2 @@
 <?php
-$app->renderTemplate('pages/battle.php');
+$req->renderTemplate('pages/battle.php');

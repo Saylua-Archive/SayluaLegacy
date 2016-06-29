@@ -1,2 +1,2 @@
 <?php
-$app->renderTemplate('pages/ha.php');
+$req->renderTemplate('pages/ha.php');

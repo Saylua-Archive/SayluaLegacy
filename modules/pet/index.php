@@ -1,2 +1,2 @@
 <?php
-$app->renderTemplate('pages/pet.php');
+$req->renderTemplate('pages/pet.php');

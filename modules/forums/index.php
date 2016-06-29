@@ -1,10 +1,10 @@
 <?php
-if ($app->getRequest()->getParam(1) == "thread") {
-  $app->renderTemplate('pages/forums/thread.php');
-} else if ($app->getRequest()->getParam(1) == "board") {
-  $app->renderTemplate('pages/forums/board.php');
-} else if ($app->getRequest()->getParamCount() == 1){
-  $app->renderTemplate('pages/forums/forums.php');
+if ($req->getParam(1) == "thread") {
+  $req->renderTemplate('pages/forums/thread.php');
+} else if ($req->getParam(1) == "board") {
+  $req->renderTemplate('pages/forums/board.php');
+} else if ($req->getParamCount() == 1){
+  $req->renderTemplate('pages/forums/forums.php');
 } else {
-  $app->throw404();
+  $req->throw404();
 }

@@ -10,7 +10,7 @@ class User {
       $files = scandir($dir);
       foreach ($files as $f) {
         if ($f != "." && $f != "..") {
-          
+
         }
       }
     }
