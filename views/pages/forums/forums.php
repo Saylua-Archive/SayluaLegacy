@@ -26,7 +26,7 @@
       <img src="/static/img/items/orange.png" class="faded">
     </td>
     <td class="forum-board-info">
-      <a href="/forums/board">
+      <a href="/forums/board/1">
         <span class="forum-board-link">Sample Board</span>
         <p>
           Sample board is the best place to talk about anything. You can make

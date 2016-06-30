@@ -42,7 +42,7 @@
         <? endif ?>
       </td>
       <td class="forum-thread-info">
-        <a href="/forums/thread">
+        <a href="/forums/thread/1">
           <span class="forum-thread-link">Sample Thread</span>
           <p class="small">Created on May 5, 2016 at 6:21 PM</p>
         </a>

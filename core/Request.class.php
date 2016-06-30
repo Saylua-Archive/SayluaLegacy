@@ -56,6 +56,10 @@ class Request {
     return preg_match($regex, $this->subpath);
   }
 
+  function subpathEquals($string) {
+    return $this->subpath == $string;
+  }
+
   function getParamCount() {
     return count($this->params);
   }

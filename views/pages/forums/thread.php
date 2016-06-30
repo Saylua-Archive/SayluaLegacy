@@ -2,7 +2,7 @@
 <h2>Viewing Sample Thread</h2>
 <span class="breadcrumb">
   <a href="/forums">Forums</a> &#187;
-  <a href="/forums/board/">Sample Board</a> &#187;
+  <a href="/forums/board/1">Sample Board</a> &#187;
   Sample Thread
 </span>
 
