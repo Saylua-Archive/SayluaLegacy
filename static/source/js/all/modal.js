@@ -1,5 +1,6 @@
 (function (g) {
   g.Modal = function (modalSettings) {
+    //test
     // A reference to the modal in the dom
     this.modal = null;
     this.overlay = null;
