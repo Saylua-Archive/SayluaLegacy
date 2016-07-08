@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="row">
+  <div class="col-2 right">
+  {% if not username %}
+    <div class="box fixed">
+      Lyrefly loves all artists
+      {% include "forms/login.html" %}
+    </div>
+  {% endif %}
+  </div>
+
+  <div class="col-2 art-col">
+  {% for image in images.even %}
+    <div class="art box">
+      <img src="{{ url_for('static', filename='uploads/650/' + image) }}" />
+    </div>
+  {% endfor %}
+  </div>
+
+  <div class="col-2 art-col">
+  {% for image in images.odd %}
+    <div class="art box">
+      <img src="{{ url_for('static', filename='uploads/650/' + image) }}" />
+    </div>
+  {% endfor %}
+  </div>
+</div>
+{% endblock %}

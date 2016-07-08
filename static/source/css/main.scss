@@ -1,0 +1,168 @@
+.fixed {
+	position: fixed;
+	width: inherit;
+	box-sizing: border-box;
+}
+
+.box.fixed {
+	width: inherit;
+}
+
+.fadein {
+	-webkit-animation: fadein 1s;
+	-moz-animation: fadein 1s;
+	-ms-animation: fadein 1s;
+	-o-animation: fadein 1s;
+	animation: fadein 1s;
+}
+
+.invisible {
+	display: none;
+	visibility: hidden;
+}
+
+.left {
+	float: left;
+	text-align: left;
+}
+
+.right {
+	float: right;
+	text-align: right;
+}
+
+#header {
+	top: 0;
+	position: fixed;
+	width: 100%;
+	background: #050D45;
+	height: 50px;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	color: #fff;
+	line-height: 50px;
+}
+
+#header input.search {
+	-webkit-transition: 200ms linear 0s;
+	-moz-transition: 200ms linear 0s;
+	-o-transition: 200ms linear 0s;
+	transition: 200ms linear 0s;
+	background: #63668F;
+	border: 0px;
+	margin-left: 10px;
+	padding-right: 25px;
+	height: 25px;
+	width: 300px;
+}
+
+#header input.search:focus {
+	background: #fff;
+	outline: none;
+	box-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff;
+}
+
+#header button.search {
+	background: none;
+	border: 0;
+	border-radius: 0;
+	height: 25px;
+	width: 25px;
+	padding: 0;
+	margin: 0;
+	margin-left: -31px;
+}
+
+#header > a, #header .drop_down > a {
+	padding: 0 8px;
+	display: block;
+	height: 100%;
+}
+
+#header h1 {
+	font-weight: normal;
+	display: block;
+	height: 50px;
+	float: left;
+	color: #fff;
+	font-family: Allerta;
+	text-transform: lowercase;
+	margin: 0;
+	padding: 0;
+	font-size: 25px;
+	letter-spacing: 0.5px;
+}
+
+#header h1 strong {
+	font-weight: bold;
+}
+
+#header a, #header a:active, #header a:link, #header a:visited {
+	text-decoration: none;
+	color: #fff;
+	text-shadow: none;
+	outline: 0 none;
+	-webkit-transition: 500ms linear 0s;
+	-moz-transition: 500ms linear 0s;
+	-o-transition: 500ms linear 0s;
+	transition: 500ms linear 0s;
+}
+
+#header a:hover {
+	-webkit-animation-delay: 1s;
+	animation-delay: 1s;
+	text-decoration: none;
+	-moz-animation-name: glowpulse;
+	-webkit-animation-name: glowpulse;
+	animation-name: glowpulse;
+	/*
+	-moz-animation-duration: 3s;
+	-webkit-animation-duration: 3s;
+	animation-duration: 3s;
+	-moz-animation-iteration-count: infinite;
+	-webkit-animation-iteration-count: infinite;
+	animation-iteration-count: infinite;
+	*/
+	text-shadow: -1px 1px 8px #ECEB72, 1px -1px 8px #fff;
+}
+
+.box {
+	background: #fff;
+	width: 100%;
+	float: left;
+	padding: 5px;
+	min-height: 150px;
+
+	margin-bottom: 5px;
+	text-align: center;
+}
+
+.box img {
+	max-width: 100%;
+	margin: 0;
+	display: block;
+}
+
+.col {
+	padding: 0 1%;
+	width: 31%;
+	float: left;
+}
+
+.clearfix {
+	height: 1px;
+	float: left;
+	clear: both;
+}
+
+@media all and (max-width:800px) {
+	.fixed, .box.fixed {
+		position: relative;
+	}
+}
+
+@media all and (max-width:650px) {
+	#header input.search {
+		width: 250px;
+	}
+}

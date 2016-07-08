@@ -1,118 +1,79 @@
-gae-init
-========
+## Python Flask Skeleton for Google App Engine
 
-[![Slack Status](https://gae-init-slack.herokuapp.com/badge.svg)](https://gae-init-slack.herokuapp.com)
+A skeleton for building Python applications on Google App Engine with the
+[Flask micro framework](http://flask.pocoo.org).
 
-> **gae-init** is the easiest boilerplate to kick start new applications on Google
-App Engine using Python, Flask, RESTful, Bootstrap and tons of other cool features.
+See our other [Google Cloud Platform github
+repos](https://github.com/GoogleCloudPlatform) for sample applications and
+scaffolding for other python frameworks and use cases.
 
-Read the [documentation][], where you can find a complete [feature list][],
-a detailed [tutorial][], the [how to][] section and more..
+## Run Locally
+1. Install the [App Engine Python SDK](https://developers.google.com/appengine/downloads).
+See the README file for directions. You'll need python 2.7 and [pip 1.4 or later](http://www.pip-installer.org/en/latest/installing.html) installed too.
 
-The latest version is always accessible from
-[https://gae-init.appspot.com](https://gae-init.appspot.com)
+2. Clone this repo with
 
-Requirements
-------------
+   ```
+   git clone https://github.com/GoogleCloudPlatform/appengine-python-flask-skeleton.git
+   ```
+3. Install dependencies in the project's lib directory.
+   Note: App Engine can only import libraries from inside your project directory.
 
-  - [Google App Engine SDK for Python][]
-  - [Node.js][], [pip][], [virtualenv][]
-  - [OS X][] or [Linux][] or [Windows][]
+   ```
+   cd appengine-python-flask-skeleton
+   pip install -r requirements.txt -t lib
+   ```
+4. Run this project locally from the command line:
 
-Make sure you have all of the above or refer to the docs on how to
-[install the requirements](http://docs.gae-init.appspot.com/requirement/).
+   ```
+   dev_appserver.py .
+   ```
 
-Running the Development Environment
------------------------------------
+Visit the application [http://localhost:8080](http://localhost:8080)
 
-```bash
-$ cd /path/to/project-name
-$ gulp
-```
+See [the development server documentation](https://developers.google.com/appengine/docs/python/tools/devserver)
+for options when running dev_appserver.
 
-To test it visit `http://localhost:8080/` in your browser.
+## Deploy
+To deploy the application:
 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+1. Use the [Admin Console](https://appengine.google.com) to create a
+   project/app id. (App id and project id are identical)
+1. [Deploy the
+   application](https://developers.google.com/appengine/docs/python/tools/uploadinganapp) with
 
-For a complete list of commands:
+   ```
+   appcfg.py -A <your-project-id> --oauth2 update .
+   ```
+1. Congratulations!  Your application is now live at your-app-id.appspot.com
 
-```bash
-$ gulp help
-```
+## Next Steps
+This skeleton includes `TODO` markers to help you find basic areas you will want
+to customize.
 
-Initializing or Resetting the project
-------------------------------------
+### Relational Databases and Datastore
+To add persistence to your models, use
+[NDB](https://developers.google.com/appengine/docs/python/ndb/) for
+scale.  Consider
+[CloudSQL](https://developers.google.com/appengine/docs/python/cloud-sql)
+if you need a relational database.
 
-```bash
-$ cd /path/to/project-name
-$ npm install
-$ gulp
-```
+### Installing Libraries
+See the [Third party
+libraries](https://developers.google.com/appengine/docs/python/tools/libraries27)
+page for libraries that are already included in the SDK.  To include SDK
+libraries, add them in your app.yaml file. Other than libraries included in
+the SDK, only pure python libraries may be added to an App Engine project.
 
-If something goes wrong you can always do:
+### Feedback
+Star this repo if you found it useful. Use the github issue tracker to give
+feedback on this repo.
 
-```bash
-$ gulp reset
-$ npm install
-$ gulp
-```
+## Contributing changes
+See [CONTRIB.md](CONTRIB.md)
 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+## Licensing
+See [LICENSE](LICENSE)
 
-To install [Gulp][] as a global package:
-
-```bash
-$ npm install -g gulp
-```
-
-Deploying on Google App Engine
-------------------------------
-
-```bash
-$ gulp deploy
-$ gulp deploy --project=foo
-$ gulp deploy --project=foo --version=bar
-$ gulp deploy --project=foo --version=bar --no-promote
-```
-
-Tech Stack
-----------
-
-  - [Google App Engine][], [NDB][]
-  - [Jinja2][], [Flask][], [Flask-RESTful][], [Flask-WTF][]
-  - [CoffeeScript][], [Less][]
-  - [Bootstrap][], [Font Awesome][], [Social Buttons][]
-  - [jQuery][], [Moment.js][]
-  - [OpenID][] sign in (Google, Facebook, Twitter and more)
-  - [Python 2.7][], [pip][], [virtualenv][]
-  - [Gulp][], [Bower][]
-
-[bootstrap]: http://getbootstrap.com/
-[bower]: http://bower.io/
-[coffeescript]: http://coffeescript.org/
-[documentation]: http://docs.gae-init.appspot.com
-[feature list]: http://docs.gae-init.appspot.com/features/
-[flask-restful]: https://flask-restful.readthedocs.org
-[flask-wtf]: https://flask-wtf.readthedocs.org
-[flask]: http://flask.pocoo.org/
-[font awesome]: http://fortawesome.github.com/Font-Awesome/
-[google app engine sdk for python]: https://developers.google.com/appengine/downloads
-[google app engine]: https://developers.google.com/appengine/
-[gulp]: http://gulpjs.com
-[how to]: http://docs.gae-init.appspot.com/howto/
-[jinja2]: http://jinja.pocoo.org/docs/
-[jquery]: https://jquery.com/
-[less]: http://lesscss.org/
-[lesscss]: http://lesscss.org/
-[linux]: http://www.ubuntu.com
-[moment.js]: http://momentjs.com/
-[ndb]: https://developers.google.com/appengine/docs/python/ndb/
-[node.js]: http://nodejs.org/
-[openid]: http://en.wikipedia.org/wiki/OpenID
-[os x]: http://www.apple.com/osx/
-[pip]: http://www.pip-installer.org/
-[python 2.7]: https://developers.google.com/appengine/docs/python/python27/using27
-[social buttons]: http://lipis.github.io/bootstrap-social/
-[tutorial]: http://docs.gae-init.appspot.com/tutorial/
-[virtualenv]: http://www.virtualenv.org/
-[windows]: http://windows.microsoft.com/
+## Author
+Logan Henriquez and Johan Euphrosine

@@ -1,0 +1,40 @@
+.drop_down {
+  cursor: pointer;
+  display: block;
+  position: inline;
+  float: left;
+  padding: 0 6px;
+  transition: background 0.5s ease-in-out;
+  -moz-transition: background 0.5s ease-in-out;
+  -webkit-transition: background 0.5s ease-in-out;
+}
+
+.drop_down.right {
+  float: right;
+}
+
+.drop_down .drop_down_menu {
+  display: none;
+  position: absolute;
+  margin-top: -5px;
+  margin-left: -8px;
+  width: 200px;
+  min-height: 50px;
+  background: #fff;
+  opacity: 0;
+  padding: 5px;
+}
+
+.drop_down:hover {
+  background: #010419;
+}
+
+.drop_down:hover .drop_down_menu {
+  display: block;
+  opacity: 1;
+  -webkit-animation: fadein 1s;
+  -moz-animation: fadein 1s;
+  -ms-animation: fadein 1s;
+  -o-animation: fadein 1s;
+  animation: fadein 1s;
+}

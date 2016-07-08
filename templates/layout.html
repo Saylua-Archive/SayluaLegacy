@@ -1,0 +1,72 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="description" content="Tiff's Template" />
+  <meta name="author" content="Tiff Zhang" />
+
+  <title>Lyrefly - A place for artists</title>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+  <link href='//fonts.googleapis.com/css?family=Allerta' rel='stylesheet' type='text/css' />
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.min.css') }}" />
+
+  <script src="{{ url_for('static', filename='js/all.min.js') }}"></script>
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+<div id="header">
+  <div class="container">
+    <h1><a href="/">Lyre<strong>fly</strong></a></h1>
+    <form action="/search" method="get" class="left">
+      <input type="text" name="q" placeholder="Search..." class="search" />
+      <button class="search"><i class="fa fa-search"></i></button>
+    </form>
+    <div class="right">
+      <a href="/submit">
+        <i class="fa fa-key"></i> Upload
+      </a>
+    </div>
+    {% if not username %}
+    <div class="drop_down right">
+      <a href="/register" class="trigger-register">
+        <i class="fa fa-key"></i> Register
+      </a>
+      <div class="drop_down_menu" id="register_menu">
+        {% include "forms/register.html" %}
+      </div>
+    </div>
+    {% endif %}
+    <div class="drop_down right">
+      {% if username %}
+      <a href="/logout">
+        <i class="fa fa-user"></i> {{ username }}
+      </a>
+      <div class="drop_down_menu" id="user_menu"></div>
+      </div>
+      {% else %}
+      <a href="/login" class="trigger-login">
+        <i class="fa fa-user"></i> Login
+      </a>
+      <div class="drop_down_menu" id="login_menu">
+        {% include "forms/login.html" %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+<div class="container">
+  {% for message in get_flashed_messages() %}
+    <div class=flash>{{ message }}</div>
+  {% endfor %}
+  {% block body %}{% endblock %}
+</div>
+<div class="clearfix"></div>
+</body>
+</html>

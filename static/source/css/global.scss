@@ -1,0 +1,98 @@
+* {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  word-wrap: break-word;
+}
+
+body {
+  color: #222;
+  font-size: 16px;
+  line-height: 22px;
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  font-family: Arial, 'san serif';
+  background: #2F336A;
+  padding-top: 50px;
+}
+
+img {
+  border: 0px;
+}
+
+p {
+  display: block;
+  font-size: 1em;
+  margin: 1em 0px;
+  padding: 0px;
+}
+
+a, a:active, a:link, a:visited {
+  text-decoration: none;
+  color: #132DE5;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+input {
+  border: 1px solid #bbb;
+  box-shadow: none;
+  background: #fff;
+  padding: 3px 5px;
+}
+
+input:focus {
+  outline-color: #FF9900;
+}
+
+button, input[type="submit"] {
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 1em;
+  padding: 5px 10px;
+  background: #DADAE6;
+  border: 1px solid #DADAE6;
+  transition: .3s ease-in-out;
+  -moz-transition: .3s ease-in-out;
+  -webkit-transition: .3s ease-in-out;
+}
+
+button:hover, input[type="submit"]:hover {
+  background: #7070B8;
+  border: 1px solid #7070B8;
+}
+
+button:focus, input[type="submit"]:focus {
+  border: 1px solid #FF9900;
+  outline: none;
+}
+
+
+*::-webkit-input-placeholder {
+  color: #B0B0BB;
+}
+
+*:-moz-placeholder {
+  /* FF 4-18 */
+  color: #B0B0BB;
+}
+
+*::-moz-placeholder {
+  /* FF 19+ */
+  color: #B0B0BB;
+}
+
+*:-ms-input-placeholder {
+  /* IE 10+ */
+  color: #B0B0BB;
+}
