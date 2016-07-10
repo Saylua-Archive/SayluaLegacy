@@ -1,7 +1,0 @@
-{% extends "layout.html" %}
-{% block body %}
-<form action="{{ url_for('submit_module.submit_post') }}" method="post" enctype="multipart/form-data">
-  <input type="file" name="file" placeholder="Art" />
-  <button>Upload Art</button>
-</form>
-{% endblock %}

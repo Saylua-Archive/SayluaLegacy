@@ -1,0 +1,39 @@
+{% macro pagination(current_page=5, page_count=10, url_base="?page=", url_end="", page_buffer=2) -%}
+
+{% set start_page_range = current_page - page_buffer %}
+
+{% set end_page_range = current_page + page_buffer %}
+
+<div class="pagination">
+
+{% if current_page > 1 %}
+  <a href="{{ url_base }}{{ current_page - 1 }}{{ url_end }}">&#8592; Prev</a>
+{% else %}
+  <span>&#8592; Prev</span>
+{% endif %}
+
+{% if start_page_range > 1 %}
+  <a href="{{ url_base }}1{{ url_end }}">1</a>
+  <span>...</span>
+{% endif %}
+
+{% for i in range(start_page_range, end_page_range) %}
+  {% if i == current_page %}
+  <span class="active">{{ i }}</span>
+  {% else %}
+  <a href="{{ url_base }}{{ i }}{{ url_end }}">{{ i }}</a>
+  {% endif %}
+{% endfor %}
+
+{% if end_page_range < page_count %}
+  <span>...</span>
+  <a href="{{ url_base }}{{ page_count }}{{ url_end }}">{{ page_count }}</a>
+{% endif %}
+
+{% if current_page < page_count %}
+  <a href="{{ url_base }}{{ current_page + 1 }}{{ url_end }}">Next &#8594;</a>
+{% else %}
+  <span>Next &#8594;</span>
+{% endif %}
+</div>
+{%- endmacro %}

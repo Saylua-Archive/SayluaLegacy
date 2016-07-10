@@ -1,0 +1,169 @@
+@import "assets/variables";
+@import "assets/transitions";
+
+html {
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	word-wrap: break-word;
+}
+
+body {
+	color: $black;
+	background: $bgcolor;
+	font-size: 16px;
+	line-height: 22px;
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	font-family: Arial, 'san serif';
+}
+
+img {
+	border: 0px;
+	max-width: 100%;
+}
+
+h1 {
+	display: block;
+	font-size: 2em;
+	margin: 0px;
+	padding: 0.5em 0px;
+}
+
+p {
+	display: block;
+	font-size: 1em;
+	margin: 1em 0px;
+	padding: 0px;
+}
+
+a, a:active, a:link, a:visited {
+	text-decoration: none;
+	color: $accent;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.clearfix {
+	height: 1px;
+	float: left;
+	clear: both;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.center {
+	margin: auto;
+	text-align: center;
+}
+
+.flipped {
+	-moz-transform: scaleX(-1);
+	-o-transform: scaleX(-1);
+	-webkit-transform: scaleX(-1);
+	transform: scaleX(-1);
+	filter: FlipH;
+	-ms-filter: "FlipH";
+}
+
+.full {
+	width: 100%;
+	float: left;
+	padding: 8px 0;
+}
+
+.faded {
+	opacity: 0.5;
+}
+
+.small {
+	font-size: 12px;
+}
+
+.normal {
+	font-size: 14px;
+}
+
+table {
+	text-align: left;
+}
+
+th {
+	text-align: center;
+	font-weight: normal;
+	background: $mainsoftcolor;
+}
+
+table.form-table td.label, table.form-table th.label {
+	vertical-align: top;
+	text-align: right;
+	width: 20%;
+}
+
+table.form-table td, table.form-table th {
+	padding: 5px;
+}
+
+table.form-table td input, table.form-table td textarea {
+	width: 90%;
+}
+
+table.form-table td input[type="submit"] {
+	width: auto;
+}
+
+table.form-table td textarea {
+	height: 200px;
+}
+
+input, textarea {
+	font-size: 16px;
+	line-height: 24px;
+	padding: 2px 8px;
+}
+
+input[type="submit"], button, a.button {
+	border: none;
+	background-color: $maincolor;
+	background-color: $accent;
+	color: $white;
+	cursor: pointer;
+	border-radius: 12px;
+	padding: 6px 15px;
+	-webkit-transition: background-color 0.5s;
+	transition: background-color 0.5s;
+}
+
+input[type="submit"]:hover, button:hover, a.button:hover {
+	background-color: $maincolor;
+	text-decoration: none;
+}
+
+a.tiny-button {
+	@include fast-color-trans;
+	background-color: $white;
+	padding: 6px 10px;
+	margin: 3px;
+	border-radius: 7px;
+}
+
+a.tiny-button:hover {
+	background-color: $mainsoftcolor;
+}
+
+.divider {
+	border-bottom: 1px $mainsoftcolor solid;
+	width: 100%;
+	margin-bottom: 16px;
+}

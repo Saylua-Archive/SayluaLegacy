@@ -1,0 +1,19 @@
+@import "assets/variables";
+@import "assets/transitions";
+
+.pagination a, .pagination span {
+  @include fast-color-trans;
+  display: inline-block;
+  padding: 0 10px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+}
+
+.pagination a:hover {
+  background-color: $accentsoft;
+}
+
+.pagination span.active {
+  background-color: $mainsoftcolor;
+}

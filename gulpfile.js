@@ -8,13 +8,13 @@ var cleanCSS = require('gulp-clean-css');
 var glob = require('glob');
 
 var paths = {
-  scripts: 'static/source/js/*/',
-  sass: 'static/source/css/**/*.scss'
+  scripts: 'saylua/static/source/js/*/',
+  sass: 'saylua/static/source/css/**/*.scss'
 };
 
 var dests = {
-  scripts: 'static/js/',
-  sass: 'static/css/'
+  scripts: 'saylua/static/js/',
+  sass: 'saylua/static/css/'
 };
 
 gulp.task('clean', function() {
