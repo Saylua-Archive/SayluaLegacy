@@ -2,30 +2,20 @@ window.addEventListener("load", init);
 
 function init() {
   getMap();
-  setButton();
 }
 
 const T_WIDTH = 64;
 const T_COUNTX = 10;
 const T_COUNTY = 8;
-const TILE_LOC = "static/img/tiles/"
-const PLAYER_OFFSET = 20;
+const TILE_LOC = "/static/img/tiles/"
+const PLAYER_OFFSET = 0;
 
 
 var map = {
   cols: T_COUNTX,
   rows: T_COUNTY,
   tsize: T_WIDTH,
-  tiles: [
-    1, 1, 0, 0, 0, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 0, 0, 1, 0, 1,
-    0, 1, 1, 0, 1, 0, 1, 1, 0, 1,
-    1, 0, 1, 0, 1, 1, 1, 1, 0, 1,
-    0, 0, 1, 1, 0, 1, 0, 1, 1, 1,
-    0, 1, 1, 1, 1, 1, 1, 0, 0, 1,
-    1, 1, 1, 0, 0, 1, 1, 0, 0, 1,
-    0, 1, 0, 0, 0, 0, 0, 0, 0, 1
-  ],
+  tiles: new Array(T_COUNTY * T_COUNTX),
   getTile: function(col, row) {
     if (col > map.cols - 1 || row > map.rows - 1 || row < 0 || col < 0) {
       return 0;
@@ -44,7 +34,7 @@ function getMap () {
       addPlayer(jsonData.player.x, jsonData.player.y);
     }
   };
-  xhttp.open("GET", "api/dungeon", true);
+  xhttp.open("GET", "/api/explore/map/", true);
   xhttp.send();
 }
 
@@ -52,30 +42,6 @@ var player = {
   x: 0,
   y: 0
 };
-
-
-function getMask(x, y) {
-  var total = 0;
-  var north =  2 * (map.getTile(x, y - 1) || 0);
-  var west = 8 * (map.getTile(x - 1, y) || 0);
-  var east = 16 * (map.getTile(x + 1, y) || 0);
-  var south = 64 * (map.getTile(x, y + 1) || 0);
-  total += north + west + east + south;
-  if (north > 0 && west > 0) {
-    total += (map.getTile(x - 1, y - 1) || 0);
-  }
-  if (north > 0 && east > 0) {
-    total += 4 * (map.getTile(x + 1, y - 1) || 0);
-  }
-  if (south > 0 && west > 0) {
-    total += 32 * (map.getTile(x - 1, y + 1) || 0);
-  }
-  if (south > 0 && east > 0) {
-    total += 128 * (map.getTile(x + 1, y + 1) || 0);
-  }
-  var converter = { "2" : 1, "8" : 2, "10" : 3, "11" : 4, "16" : 5, "18" : 6, "22" : 7, "24" : 8, "26" : 9, "27" : 10, "30" : 11, "31" : 12, "64" : 13, "66" : 14, "72" : 15, "74" : 16, "75" : 17, "80" : 18, "82" : 19, "86" : 20, "88" : 21, "90" : 22, "91" : 23, "94" : 24, "95" : 25, "104" : 26, "106" : 27, "107" : 28, "120" : 29, "122" : 30, "123" : 31, "126" : 32, "127" : 33, "208" : 34, "210" : 35, "214" : 36, "216" : 37, "218" : 38, "219" : 39, "222" : 40, "223" : 41, "248" : 42, "250" : 43, "251" : 44, "254" : 45, "255" : 46, "0" : 47 };
-  return converter[total + ""];
-}
 
 function fillMap(map) {
   dungeon = document.getElementById('dungeon');
@@ -91,7 +57,7 @@ function fillMap(map) {
        newDiv.style.width = T_WIDTH + "px";
        newDiv.style.height = T_WIDTH + "px";
        if (map.getTile(j, i) > 0) {
-         newDiv.style.backgroundImage = "url('static/img/tiles/" + getMask(j, i) + ".png')";
+         newDiv.style.backgroundColor = "#DEB887";
        }
        newDiv.addEventListener("click", findPath);
        newDiv.dataset.x = j;
@@ -109,7 +75,7 @@ function addPlayer(x, y) {
   playerDiv.className = 'dungeonObject';
   playerDiv.style.width = T_WIDTH + "px";
   playerDiv.style.height = T_WIDTH + "px";
-  playerDiv.style.backgroundImage = "url('static/img/SHC.png')";
+  playerDiv.style.backgroundImage = "url('/static/img/SHC.png')";
   playerDiv.style.backgroundSize =  T_WIDTH + "px " + T_WIDTH + "px ";
   dungeon.appendChild(playerDiv);
   movePlayer(x, y);
@@ -207,9 +173,4 @@ function findPath() {
         queue.push({x : 1 * currentLocation.x, y : 1 * currentLocation.y + 1});
     }
   }
-}
-
-function setButton() {
-  tButton = document.getElementById("tButton");
-  tButton.onclick = demoAjax;
 }

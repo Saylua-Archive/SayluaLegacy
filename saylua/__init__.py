@@ -20,7 +20,6 @@ def application_error(e):
     return render_template("500.html"), 500
 
 # Make sure imports for other modules are at the bottom of the file
-import modules.home
-import modules.explore
-import modules.forums
-import modules.login
+import api
+
+import modules

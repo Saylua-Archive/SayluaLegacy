@@ -3,13 +3,20 @@
 <head>
   <meta charset="utf-8">
 
-  <title>Saylua</title>
+  <title>
+    {% if page_title %}
+      {{ page_title }} || Saylua
+    {% else %}
+      Saylua
+    {% endif %}
+  </title>
   <meta name="description" content="A new virtual petsite. ">
   <meta name="author" content="Saylua">
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
   <link rel="stylesheet" href="/static/css/styles.min.css">
   <script src="/static/js/main.min.js"></script>
+  {% block header_scripts %}{% endblock %}
 
   <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
   <!--[if lt IE 9]>
@@ -43,8 +50,17 @@
 </div>
 <div class="container">
   <div class="content">
-    {% include "sidebars.html" %}
+    {% if not fullscreen %}
+      {% include "sidebars.html" %}
+    {% endif %}
     <div class="page-area">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="notification error">Error: {{ message }} </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
       {% block body %}{% endblock %}
     </div>
   </div>

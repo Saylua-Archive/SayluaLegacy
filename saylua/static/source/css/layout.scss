@@ -5,7 +5,7 @@
   box-sizing: border-box;
 	width: 95%;
   min-width: 640px;
-  max-width: 1900px;
+  max-width: 1700px;
 }
 
 #info button {
@@ -39,6 +39,7 @@ button:focus {
 	width: 100%;
 	text-align: center;
 	margin: 0;
+  margin-bottom: 5px;
 	line-height: 35px;
   height: 35px;
 	font-size: 23px;
