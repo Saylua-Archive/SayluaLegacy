@@ -1,4 +1,52 @@
 {% extends "layout.html" %}
 {% block body %}
+<h2>Register a New Account on Saylua</h2>
 
+<table class="form-table center">
+  <tr>
+    <th class="label">
+      <label for="username-field">Username</label>
+    </th>
+    <td>
+      <input type="text" placeholder="Username" name="username" id="username-field">
+    </td>
+  </tr>
+  <tr>
+    <th class="label">
+      <label for="password-field">Password</label>
+    </th>
+    <td>
+      <input type="password" placeholder="Password" name="password" id="password-field">
+    </td>
+  </tr>
+  <tr>
+    <th class="label">
+      <label for="password-field-2">Confirm Password</label>
+    </th>
+    <td>
+      <input type="password" placeholder="Confirm Password" name="password" id="password-field-2">
+    </td>
+  </tr>
+  <tr>
+    <th class="label">
+      <label for="Email-field">Email</label>
+    </th>
+    <td>
+      <input type="text" placeholder="Email" name="email" id="email-field">
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>
+      <input type="submit" value="Login" name="login">
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td class="left">
+      <p><a href="/login/recover/">Lost username or password?</a></p>
+      <p><a href="/login/">Login to an existing account!</a></p>
+    </td>
+  </tr>
+</table>
 {% endblock %}

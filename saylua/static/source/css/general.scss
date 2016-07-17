@@ -99,6 +99,10 @@ table {
 	text-align: left;
 }
 
+table.center {
+	text-align: left;
+}
+
 th {
 	text-align: center;
 	font-weight: normal;
@@ -108,10 +112,11 @@ th {
 table.form-table td.label, table.form-table th.label {
 	vertical-align: top;
 	text-align: right;
-	width: 20%;
+	min-width: 20%;
 }
 
 table.form-table td, table.form-table th {
+	background: none;
 	padding: 5px;
 }
 
