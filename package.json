@@ -1,21 +1,21 @@
 {
-  "name": "lyrefly",
+  "name": "saylua",
   "version": "1.0.0",
-  "description": "lyrefly",
+  "description": "saylua",
   "main": "gulpfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lyrefly/lyrefly.git"
+    "url": "git+https://bitbucket.org/saylua/saylua.git"
   },
   "author": "Tiff and Mike",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/lyrefly/lyrefly/issues"
+    "url": "https://bitbucket.org/saylua/saylua/issues"
   },
-  "homepage": "https://github.com/lyrefly/lyrefly#readme",
+  "homepage": "https://bitbucket.org/saylua/saylua/",
   "devDependencies": {
     "gulp": "~3.9.0",
     "del": "~2.1.0",

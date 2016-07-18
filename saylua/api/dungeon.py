@@ -6,9 +6,19 @@ import json, random
 
 @app.route('/api/explore/map/')
 def api_map_generation():
+    # TODO: Make sure to authorize player for viewing map
     explore_map = ExploreMap(10, 8)
     return explore_map.json()
 
+@app.route('/api/explore/move/', methods=['POST'])
+def api_map_move():
+    if not (request.form and request.form["x"] and request.form["y"]):
+        return json.dumps({'Error' : 'Bad API Usage. '}), 400
+
+    explore_map = ExploreMap(10, 8)
+    return explore_map.json()
+
+# Class to represent the map that the player is currently exploring on
 class ExploreMap:
     def __init__(self, x_count, y_count):
         self.x_count = x_count
@@ -19,6 +29,12 @@ class ExploreMap:
         while self.count_valid_squres() < x_count * y_count / 2:
             self.generate_map()
         self.player_location = self.get_valid_square()
+
+        exit = self.get_valid_square()
+        while exit == self.player_location:
+            exit = self.get_valid_square()
+
+        self.set_square(exit['x'], exit['y'], 2)
 
     def is_valid_square(self, x, y):
         return x >= 0 and x < self.x_count and y >= 0 and y < self.y_count

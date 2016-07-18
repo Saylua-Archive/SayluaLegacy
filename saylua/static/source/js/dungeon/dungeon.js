@@ -1,15 +1,18 @@
-window.addEventListener("load", init);
+window.addEventListener("load", init_map);
 
-function init() {
+function init_map() {
+  var dungeon = document.getElementById('dungeon');
+  dungeon.innerHTML = "";
   getMap();
 }
 
 const T_WIDTH = 64;
 const T_COUNTX = 10;
 const T_COUNTY = 8;
-const TILE_LOC = "/static/img/tiles/"
+const TILE_LOC = "/static/img/tiles/";
+const API_MAP_ENDPOINT = "/api/explore/map/";
+const API_MOVE_ENDPOINT = "/api/explore/move/";
 const PLAYER_OFFSET = 0;
-
 
 var map = {
   cols: T_COUNTX,
@@ -24,27 +27,28 @@ var map = {
   }
 };
 
-function getMap () {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
-      var jsonData = JSON.parse(xhttp.responseText);
-      map.tiles = jsonData.map;
-      fillMap(map);
-      addPlayer(jsonData.player.x, jsonData.player.y);
-    }
-  };
-  xhttp.open("GET", "/api/explore/map/", true);
-  xhttp.send();
-}
-
 var player = {
   x: 0,
   y: 0
 };
 
-function fillMap(map) {
-  dungeon = document.getElementById('dungeon');
+
+function getMap() {
+  reqwest({
+    url: API_MAP_ENDPOINT,
+    method: 'GET',
+    type: 'json',
+    success: function (resp) {
+      var jsonData = resp;
+      map.tiles = jsonData.map;
+      renderMap(map);
+      addPlayer(jsonData.player.x, jsonData.player.y);
+    }
+  });
+}
+
+function renderMap(map) {
+  var dungeon = document.getElementById('dungeon');
   dungeon.style.width = (T_WIDTH * T_COUNTX) + "px";
   dungeon.style.height = (T_WIDTH * T_COUNTY) + "px";
 
@@ -56,7 +60,9 @@ function fillMap(map) {
        newDiv.className = 'dungeonTile';
        newDiv.style.width = T_WIDTH + "px";
        newDiv.style.height = T_WIDTH + "px";
-       if (map.getTile(j, i) > 0) {
+       if (map.getTile(j, i) == 2) {
+         newDiv.style.backgroundColor = "#FF0000";
+       } else if (map.getTile(j, i) > 0) {
          newDiv.style.backgroundColor = "#DEB887";
        }
        newDiv.addEventListener("click", findPath);
@@ -69,8 +75,12 @@ function fillMap(map) {
 }
 
 function addPlayer(x, y) {
-  dungeon = document.getElementById('dungeon');
+  var dungeon = document.getElementById('dungeon');
   var playerDiv = document.createElement('div');
+  player = {
+    x: 0,
+    y: 0
+  };
   playerDiv.id = 'player';
   playerDiv.className = 'dungeonObject';
   playerDiv.style.width = T_WIDTH + "px";
@@ -83,21 +93,36 @@ function addPlayer(x, y) {
 
 function movePlayer(x, y) {
   var playerDiv = document.getElementById('player');
-  if (map.getTile(player.x + x, player.y + y) == 1) {
-    player.x += x;
-    player.y += y;
-    playerDiv.style.left =  (player.x * T_WIDTH) + "px";
-    playerDiv.style.top =  (player.y * T_WIDTH - PLAYER_OFFSET) + "px";
+  var target = map.getTile(player.x + x, player.y + y);
+  if (target > 0) {
+    reqwest({
+      url: API_MOVE_ENDPOINT,
+      method: 'POST',
+      data: player,
+      type: 'json',
+      success: function (resp) {
+        if (target == 2) {
+          // Player has found an exit
+          init_map();
+        } else {
+          player.x += x;
+          player.y += y;
+          playerDiv.style.left =  (player.x * T_WIDTH) + "px";
+          playerDiv.style.top =  (player.y * T_WIDTH - PLAYER_OFFSET) + "px";
+        }
+      }
+    });
   }
 }
 
+// Allow player to use arrow keys to move
 window.addEventListener("keydown", function(e) {
     if (document.activeElement && document.activeElement != document.body) {
       return;
     }
     // space and arrow keys
     if([37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-        e.preventDefault();
+      e.preventDefault();
     }
 
     checkKey();
@@ -113,11 +138,11 @@ function checkKey(e) {
       // down arrow
       movePlayer(0, 1);
     } else if (e.keyCode == '37' || e.keyCode == '65') {
-       // left arrow
-       movePlayer(-1, 0);
+      // left arrow
+      movePlayer(-1, 0);
     } else if (e.keyCode == '39' || e.keyCode == '68') {
-       // right arrow
-       movePlayer(1, 0);
+      // right arrow
+      movePlayer(1, 0);
     }
 }
 
