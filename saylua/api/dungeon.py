@@ -15,8 +15,9 @@ def api_map_move():
     if not (request.form and request.form["x"] and request.form["y"]):
         return json.dumps({'Error' : 'Bad API Usage. '}), 400
 
-    explore_map = ExploreMap(10, 8)
-    return explore_map.json()
+    result = {}
+
+    return json.dumps(result)
 
 # Class to represent the map that the player is currently exploring on
 class ExploreMap:

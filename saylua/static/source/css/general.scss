@@ -109,15 +109,19 @@ th {
 	background: $mainsoftcolor;
 }
 
+table.form-table {
+	min-width: 60%;
+}
+
 table.form-table td.label, table.form-table th.label {
-	vertical-align: top;
 	text-align: right;
-	min-width: 20%;
+	min-width: 30%;
 }
 
 table.form-table td, table.form-table th {
 	background: none;
 	padding: 5px;
+	vertical-align: top;
 }
 
 table.form-table td input, table.form-table td textarea {
@@ -132,10 +136,21 @@ table.form-table td textarea {
 	height: 200px;
 }
 
+table.form-table small.form-tip {
+	width: 90%;
+	display: block;
+	font-size: 0.8em;
+}
+
 input, textarea {
 	font-size: 16px;
 	line-height: 24px;
 	padding: 2px 8px;
+	border: 1px solid #ddd;
+}
+
+input.error, textarea.error {
+	border-color: $errorText;
 }
 
 input[type="submit"], button, a.button {

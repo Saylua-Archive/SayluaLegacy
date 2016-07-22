@@ -2,35 +2,40 @@
 {% block body %}
 <h2>Login to Saylua</h2>
 
-<table class="form-table center">
-  <tr>
-    <th class="label">
-      <label for="username-field">Username</label>
-    </th>
-    <td>
-      <input type="text" placeholder="Username" name="username" id="username-field">
-    </td>
-  </tr>
-  <tr>
-    <th class="label">
-      <label for="password-field">Password</label>
-    </th>
-    <td>
-      <input type="password" placeholder="Password" name="password" id="password-field">
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td>
-      <input type="submit" value="Login" name="login">
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td class="left">
-      <p><a href="/login/recover/">Lost username or password?</a></p>
-      <p><a href="/register/">Register a new account!</a></p>
-    </td>
-  </tr>
-</table>
+<div id="login-error"></div>
+<form class="validated-form" method="post" id="login-form" data-error-id="login-error">
+  <table class="form-table center">
+    <tr>
+      <th class="label">
+        <label for="username-field">Username</label>
+      </th>
+      <td>
+        <input type="text" placeholder="Username" name="username" id="username-field"
+          data-validators="required">
+      </td>
+    </tr>
+    <tr>
+      <th class="label">
+        <label for="password-field">Password</label>
+      </th>
+      <td>
+        <input type="password" placeholder="Password" name="password" id="password-field"
+          data-validators="required">
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" value="Login!" name="login">
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <p><a href="/login/recover/">Lost username or password?</a></p>
+        <p><a href="/register/">Register a new account!</a></p>
+      </td>
+    </tr>
+  </table>
+</form>
 {% endblock %}

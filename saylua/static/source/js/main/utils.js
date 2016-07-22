@@ -1,15 +1,3 @@
-Element.prototype.remove = function() {
-    this.parentElement.removeChild(this);
-}
-
-NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
-    for(var i = this.length - 1; i >= 0; i--) {
-        if(this[i] && this[i].parentElement) {
-            this[i].parentElement.removeChild(this[i]);
-        }
-    }
-}
-
 // From http://jaketrent.com/post/addremove-classes-raw-javascript/
 function hasClass(el, className) {
   if (el.classList)
@@ -30,5 +18,17 @@ function removeClass(el, className) {
   else if (hasClass(el, className)) {
     var reg = new RegExp('(\\s|^)' + className + '(\\s|$)')
     el.className=el.className.replace(reg, ' ')
+  }
+}
+
+// http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript
+function capitalizeFirst(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+// http://stackoverflow.com/questions/8830839/javascript-dom-remove-element
+function removeElement(el) {
+  if (el) {
+    el.parentNode.removeChild(el);
   }
 }

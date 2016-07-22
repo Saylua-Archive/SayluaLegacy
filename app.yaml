@@ -40,3 +40,13 @@ libraries:
   version: latest
 - name: MySQLdb
   version: "latest"
+
+# Files to ignore in production
+skip_files:
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*/RCS/.*$
+- ^(.*/)?\..*$
+- ^saylua/static/source/.*
+- ^node_modules/.*
