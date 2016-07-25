@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2>User Settings: Change Email</h2>
+{% include 'user/settings/sidebar.html' %}
+<p>
+  If you change your email address, you will have to validate your new email.
+</p>
+<form method="post" class="validated-form" data-error-id="user-settings-email-error">
+  <table class="form-table">
+    <tr>
+      <td colspan="2" id="user-settings-email-error"></td>
+    </tr>
+    <tr>
+      <th class="label">
+        <label for="user-settings-email">Email Address</label>
+      </th>
+      <td>
+        <input type="text" name="email" placeholder="Email Address" id="user-settings-email"
+          data-validators="required not_empty email">
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" name="submit" value="Change Email">
+      </td>
+    </tr>
+  </table>
+</form>
+{% endblock %}

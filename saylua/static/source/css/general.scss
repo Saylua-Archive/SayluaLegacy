@@ -97,6 +97,7 @@ a:hover {
 
 table {
 	text-align: left;
+	box-sizing: border-box;
 }
 
 table.center {
@@ -111,6 +112,10 @@ th {
 
 table.form-table {
 	min-width: 60%;
+}
+
+table.form-table.width-70 {
+	width: 70%;
 }
 
 table.form-table td.label, table.form-table th.label {
@@ -136,6 +141,13 @@ table.form-table td textarea {
 	height: 200px;
 }
 
+table.form-table td textarea.big {
+	height: 300px;
+	width: 100%;
+	margin: 0;
+	box-sizing: border-box;
+}
+
 table.form-table small.form-tip {
 	width: 90%;
 	display: block;
@@ -149,25 +161,12 @@ input, textarea {
 	border: 1px solid #ddd;
 }
 
-input.error, textarea.error {
-	border-color: $errorText;
-}
-
-input[type="submit"], button, a.button {
-	border: none;
-	background-color: $maincolor;
-	background-color: $accent;
-	color: $white;
-	cursor: pointer;
-	border-radius: 12px;
-	padding: 6px 15px;
-	-webkit-transition: background-color 0.5s;
-	transition: background-color 0.5s;
-}
-
-input[type="submit"]:hover, button:hover, a.button:hover {
-	background-color: $maincolor;
-	text-decoration: none;
+p.error {
+	margin: 0;
+	padding: 0;
+	line-height: 150%;
+	text-align: center;
+  color: $errorText;
 }
 
 a.tiny-button {

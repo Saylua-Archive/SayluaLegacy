@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2>User Settings: General</h2>
+{% include 'user/settings/sidebar.html' %}
+<form method="post">
+  <table class="form-table">
+    <tr>
+      <th class="label break">
+        <label>Allow guests to see profile?</label>
+      </th>
+      <td>
+        <div class="switch">
+          <label>
+            <input type="radio" name="guests" value="1" checked>
+            <b>On</b>
+          </label>
+          <label>
+            <input type="radio" name="guests" value="0">
+            <b>Off</b>
+          </label>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th class="label break">
+        <label>Receive notifications for pings?</label>
+      </th>
+      <td>
+        <div class="switch">
+          <label>
+            <input type="radio" name="pings" value="1" checked>
+            <b>On</b>
+          </label>
+          <label>
+            <input type="radio" name="pings" value="0">
+            <b>Off</b>
+          </label>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th class="label break">
+        <label>Disable Human Avatars?</label>
+      </th>
+      <td>
+        <div class="switch">
+          <label>
+            <input type="radio" name="disable_ha" value="1">
+            <b>On</b>
+          </label>
+          <label>
+            <input type="radio" name="disable_ha" value="0" checked>
+            <b>Off</b>
+          </label>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" value="Save Settings" name="submit">
+      </td>
+    </tr>
+  </table>
+</form>
+{% endblock %}

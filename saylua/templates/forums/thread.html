@@ -1,5 +1,6 @@
 {% from "macros/pagination.html" import pagination %}
 {% extends "layout.html" %}
+{% set page_title = "Viewing Sample Thread" %}
 {% block body %}
 <h2>Viewing Sample Thread</h2>
 <span class="breadcrumb">
@@ -63,22 +64,28 @@
 {{ pagination() }}
 </div>
 
-<table class="forum-table form-table" id="write-forum-reply">
-  <tr>
-    <th class="section-header">
-      Write a New Reply
-    </th>
-  </tr>
-  <tr>
-    <td class="center">
-      <textarea placeholder="Type your post content here" id="forum-post-body"></textarea>
-    </td>
-  </tr>
-  <tr>
-    <td class="center">
-      <input type="submit" value="Post New Reply" name="post">
-      <input type="submit" value="Preview Reply" name="preview">
-    </td>
-  </tr>
-</table>
+<form method="post" class="validated-form" data-error-id="forum-post-error">
+  <table class="forum-table form-table" id="write-forum-reply">
+    <tr>
+      <th class="section-header">
+        Write a New Reply
+      </th>
+    </tr>
+    <tr>
+      <td id="forum-post-error"></td>
+    </tr>
+    <tr>
+      <td class="center">
+        <textarea placeholder="Type your post content here" id="forum-post-body"
+          data-validators="required min:2" name="body"></textarea>
+      </td>
+    </tr>
+    <tr>
+      <td class="center">
+        <input type="submit" value="Post New Reply" name="post">
+        <input type="submit" value="Preview Reply" name="preview">
+      </td>
+    </tr>
+  </table>
+</form>
 {% endblock %}

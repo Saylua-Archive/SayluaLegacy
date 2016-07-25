@@ -1,8 +1,26 @@
-{% macro pagination(current_page=5, page_count=10, url_base="?page=", url_end="", page_buffer=2) -%}
+{% macro pagination(current_page=1, page_count=10, url_base="?page=", url_end="", page_buffer=2) -%}
+
+{% if request.args.get('page') %}
+  {% set current_page = request.args.get('page')|int %}
+{% endif %}
 
 {% set start_page_range = current_page - page_buffer %}
 
 {% set end_page_range = current_page + page_buffer %}
+
+{% if start_page_range < 1 %}
+  {% set end_page_range = end_page_range - (start_page_range - 1) %}
+  {% set start_page_range = 1 %}
+{% endif %}
+
+{% if end_page_range > page_count %}
+  {% set start_page_range = start_page_range - (end_page_range - page_count) %}
+  {% if start_page_range < 1 %}
+    {% set start_page_range = 1 %}
+  {% endif %}
+  {% set end_page_range = page_count %}
+{% endif %}
+
 
 <div class="pagination">
 
@@ -17,7 +35,7 @@
   <span>...</span>
 {% endif %}
 
-{% for i in range(start_page_range, end_page_range) %}
+{% for i in range(start_page_range, end_page_range + 1) %}
   {% if i == current_page %}
   <span class="active">{{ i }}</span>
   {% else %}

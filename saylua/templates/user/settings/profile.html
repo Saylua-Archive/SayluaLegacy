@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2>User Settings: Profile Details</h2>
+{% include 'user/settings/sidebar.html' %}
+<p>
+  These fields contain information about yourself that you'd like to have shown on your profile.
+  They are entirely optional.
+</p>
+<form method="post" class="validated-form" data-error-id="user-settings-profile-error">
+  <table class="form-table width-70">
+    <tr>
+      <td colspan="2" id="user-settings-profile-error"></td>
+    </tr>
+    <tr>
+      <th class="label">
+        <label for="user-settings-gender">Gender</label>
+      </th>
+      <td>
+        <input type="text" name="gender" placeholder="Gender" id="user-settings-gender">
+      </td>
+    </tr>
+    <tr>
+      <th class="label">
+        <label for="user-settings-pronouns">Pronouns</label>
+      </th>
+      <td>
+        <input type="text" name="pronouns" placeholder="Pronouns" id="user-settings-pronouns">
+      </td>
+    </tr>
+    <tr>
+      <th class="label">
+        <label for="user-settings-bio">About Me</label>
+      </th>
+      <td>
+        <textarea name="bio" placeholder="Write a bit about yourself for others to see. " id="user-settings-bio"></textarea>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" name="submit" value="Save Details">
+      </td>
+    </tr>
+  </table>
+</form>
+{% endblock %}

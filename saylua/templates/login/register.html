@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% set page_title = "Registration" %}
 {% block body %}
 <h2>Register a New Account on Saylua</h2>
 
@@ -41,6 +42,15 @@
       <td>
         <input type="text" placeholder="Email" name="email" id="email-field"
           data-validators="required email">
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <input type="checkbox" name="tos_agreed"
+          data-errors='{"required": "You must agree to the Terms and Service. "}'
+          data-validators="required" id="i-agree-field">
+        <label for="i-agree-field">I agree to the Terms of Service</label>
       </td>
     </tr>
     <tr>

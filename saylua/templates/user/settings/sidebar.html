@@ -1,0 +1,20 @@
+<div class="section-menu">
+  <a href="/settings/"{%- if request.url_rule.endpoint == 'user_settings' %} class="active"{% endif %}>
+    General Settings
+  </a>
+  <a href="/settings/profile/"{%- if request.url_rule.endpoint == 'user_settings_profile' %} class="active"{% endif %}>
+    Profile Details
+  </a>
+  <a href="/settings/css/"{%- if request.url_rule.endpoint == 'user_settings_css' %} class="active"{% endif %}>
+    Profile CSS
+  </a>
+  <a href="/settings/email/"{%- if request.url_rule.endpoint == 'user_settings_email' %} class="active"{% endif %}>
+    Change Email
+  </a>
+  <a href="/settings/username/"{%- if request.url_rule.endpoint == 'user_settings_username' %} class="active"{% endif %}>
+    Change Username
+  </a>
+  <a href="/settings/password/"{%- if request.url_rule.endpoint == 'user_settings_password' %} class="active"{% endif %}>
+    Change Password
+  </a>
+</div>

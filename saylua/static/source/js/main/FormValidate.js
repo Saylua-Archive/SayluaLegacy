@@ -4,7 +4,13 @@ var _FormValidation = (function FormValidation() {
     'required': {
       'error': '<field> is required. ',
       'validator':  function (input) {
-        return input != '';
+        return input;
+      }
+    },
+    'not_empty': {
+      'error': '<field> cannot be only spaces. ',
+      'validator':  function (input) {
+        return /\S/.test(input);
       }
     },
     'min': {
@@ -33,7 +39,7 @@ var _FormValidation = (function FormValidation() {
       }
     },
     'match_password': {
-      'error': 'Passwords must match! ',
+      'error': 'Passwords must match. ',
       'validator': function (input, match_id) {
         return document.getElementById(match_id).value === input;
       }
@@ -65,25 +71,39 @@ var _FormValidation = (function FormValidation() {
     }
     for (var j = 0; j < fields.length; j++) {
       var validators = fields[j].getAttribute('data-validators');
+      var errors = fields[j].getAttribute('data-errors');
+      if (errors) {
+        errors = JSON.parse(errors);
+      }
       if (validators) {
         removeClass(fields[j], 'error');
         validators = validators.split(" ");
         var noErrors = true;
         for (var k = 0; noErrors && k < validators.length; k++) {
           var params = validators[k].split(":");
-          var valName = params[0];
-          if(!validatorList[valName]) {
-            throw "Invalid validator type: " + valName;
+          var validatorName = params[0];
+          if(!validatorList[validatorName]) {
+            throw "Invalid validator type: " + validatorName;
+          }
+
+          var value = fields[j].value;
+          if (fields[j].type == 'checkbox') {
+            value = fields[j].checked;
           }
 
           // [input, p1, p2, ...]
-          params = [fields[j].value].concat(params.slice(1));
+          params = [value].concat(params.slice(1));
 
           // Check to see if the validation fails
-          if (!validatorList[valName].validator.apply(this, params)) {
+          if (!validatorList[validatorName].validator.apply(this, params)) {
             addClass(fields[j], 'error');
             var field = capitalizeFirst(fields[j].name);
-            var err = validatorList[valName].error.replace('<field>', field);
+            var err;
+            if (errors && validatorName in errors) {
+              err = errors[validatorName];
+            } else {
+              err = validatorList[validatorName].error.replace('<field>', field.replace(/[_-]/g, ' '));
+            }
             for (var l = 1; l < params.length; l++) {
               err = err.replace('<' + l + '>', params[l]);
             }

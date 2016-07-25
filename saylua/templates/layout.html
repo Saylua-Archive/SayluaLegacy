@@ -35,18 +35,61 @@
 <div class="container" id="nav-container">
   <div id="navbar">
     <div class="content-width">
-      <a href="/">Home</a>
-      <a href="/explore/">Explore</a>
-      <a href="/forums/">Community</a>
-      <a href="/games/">Games</a>
-      <a href="/shops/">Shops</a>
-      <a href="/quests/">Quests</a>
+      <div id="responsive-nav">
+        <a href="javascript:void();" class="block-link" id="hamburger-menu-link">
+          <i class="fa fa-navicon" aria-hidden="true"></i>
+        </a>
+        <a href="javascript:void();" class="block-link" id="sidebar-menu-link">
+          <i class="fa fa-paw" aria-hidden="true"></i>
+        </a>
+      </div>
+      <a href="/" class="block-link"><i class="fa fa-home" aria-hidden="true"></i></a>
+      <div id="nav-links">
+        <a href="/explore/" class="block-link">Explore</a>
+        <a href="/forums/" class="block-link">Forums</a>
+        <a href="/games/" class="block-link">Games</a>
+        <a href="/shops/" class="block-link">Shops</a>
+        <a href="/quests/" class="block-link">Quests</a>
+        <a href="/help/" class="block-link">Help</a>
+      </div>
 
       <form class="search" action="/search/">
         <input type="text" placeholder="Search Saylua" name="q">
         <button><i class="fa fa-search" aria-hidden="true"></i></button>
-
       </form>
+      <div id="navigation-right">
+        <div id="dropdown-right">
+          <div id="user-menu" class="menu">
+            <h3>Logged in as User</h3>
+            <a href="/user/settings/"><img src="/static/img/icons/user.png"> My Profile</a>
+            <a href="/settings/"><img src="/static/img/icons/cog.png"> Account Settings</a>
+            <span class="dropdown-separator"></span>
+            <a href="/user/settings/"><img src="/static/img/icons/user.png"> My Achievements</a>
+            <a href="/user/settings/"><img src="/static/img/icons/user.png"> Friends List</a>
+            <span class="dropdown-separator"></span>
+            Currency
+          </div>
+          <div id="notifications-menu" class="menu">
+            <h3>Your Notifications</h3>
+            Bill likes your pet.
+          </div>
+          <div id="messages-menu" class="menu">
+            <h3>Your Messages</h3>
+            You have no unread messages.
+          </div>
+        </div>
+        <a href="/user/user/" class="block-link" data-section="user-menu">
+          <i class="fa fa-user" aria-hidden="true"></i>
+        </a>
+        <a href="/notifications/" class="block-link" data-section="notifications-menu">
+          <i class="fa fa-bell" aria-hidden="true"></i>
+          <span class="alert-number">1</span>
+        </a>
+        <a href="/messages/" class="block-link" data-section="messages-menu">
+          <i class="fa fa-envelope" aria-hidden="true"></i>
+          <span class="alert-number">99+</span>
+        </a>
+      </div>
     </div>
   </div>
 </div>
@@ -71,6 +114,7 @@
 <div class="container footer">
   <div class="content-width">
     <p>
+      <a href="#">1 Users Online</a> &bull;
       <a href="#">Back to Top</a> &bull;
       <a href="#">About</a> &bull;
       <a href="#">Terms of Service</a> &bull;

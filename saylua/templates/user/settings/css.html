@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2>User Settings: CSS</h2>
+{% include 'user/settings/sidebar.html' %}
+<p>
+  Saylua allows users to customize the look of their profile using CSS.
+  To learn more about CSS, you can find
+  <a target="_blank" href="http://www.w3schools.com/css/">CSS tutorials online</a>.
+</p>
+<form method="post">
+  <table class="form-table width-70" id="write-forum-reply">
+    <tr>
+      <th class="section-header">
+        Custom Profile CSS
+      </th>
+    </tr>
+    <tr>
+      <td class="center">
+        <textarea class="big" placeholder="Enter your custom CSS here" id="user-setting-css" name="css"></textarea>
+      </td>
+    </tr>
+    <tr>
+      <td class="center">
+        <input type="submit" value="Save CSS" name="post">
+        <input type="submit" value="Preview CSS" name="preview">
+      </td>
+    </tr>
+  </table>
+</form>
+{% endblock %}
