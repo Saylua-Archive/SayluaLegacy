@@ -4,7 +4,7 @@
 @mixin content-width {
   box-sizing: border-box;
 	width: 95%;
-  min-width: 640px;
+  min-width: 600px;
   max-width: 1700px;
 }
 
@@ -158,13 +158,14 @@ h3 {
 	text-align: center;
 	height: $navheight;
   width: 100%;
+  z-index: 8000;
+  position: relative;
 }
 
 #navbar.fixed {
   top: 0;
   left: 0;
   position: fixed;
-  z-index: 8000;
 }
 
 #nav-links {
@@ -188,6 +189,14 @@ h3 {
   -moz-box-shadow: 3px 8px 32px -13px $black;
   box-shadow: 3px 8px 32px -13px $black;
   padding-bottom: 8px;
+}
+
+#dropdown-right.shown {
+  display: block;
+}
+
+#dropdown-right.hidden {
+  display: none;
 }
 
 .dropdown-separator {
@@ -311,6 +320,17 @@ h3 {
 	background: url('../img/habg.jpg');
 }
 
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background: rgba(34, 34, 34, 0.5);
+}
+
 .footer {
 	text-align: center;
 	font-size: 14px;
@@ -319,30 +339,67 @@ h3 {
 @media (max-width: 1024px) {
   #nav-links {
     display: none;
-    position: fixed;
-    top: 0;
+    margin-top: $navheight;
+    box-sizing: border-box;
     left: 0;
-    z-index: 9999;
+    width: 100%;
+    position: absolute;
+    min-height: 100px;
+    background: #fff;
+    border-bottom: 1px solid $neutralcolor;
+    -webkit-box-shadow: 3px 8px 32px -13px $black;
+    -moz-box-shadow: 3px 8px 32px -13px $black;
+    box-shadow: 3px 8px 32px -13px $black;
+    padding-bottom: 8px;
+    z-index: 8001;
+  }
+
+  #nav-links a.block-link, #nav-links a.block-link:visited, #nav-links a.block-link:link {
+    box-sizing: border-box;
+    text-align: left;
+    color: $maindarkercolor;
+    width: 100%;
+    padding: 0 15px;
+  }
+
+  #nav-links a.block-link:hover {
+    background: $accentsoft;
   }
 
   #responsive-nav {
     display: inline-block;
   }
 
-  .sidebar-container {
-    width: 160px;
-    float: left;
+  #sidebar-container {
+    display: none;
+    z-index: 1000;
+    position: absolute;
+    margin-top: -10px;
+    width: 100%;
+    background: $bgcolor;
+    -webkit-box-shadow: 3px 8px 32px -13px $black;
+    -moz-box-shadow: 3px 8px 32px -13px $black;
+    box-shadow: 3px 8px 32px -13px $black;
   }
 
-  .sidebar {
-    box-sizing: border-box;
-    width: 160px;
-    padding: 10px 10px;
+  #sidebar-container.fixed {
+    padding-top: 10px;
+    position: fixed;
+    top: $navheight;
+    left: 0;
   }
 
-	.sidebar.right {
-		float: left;
-	}
+  #sidebar-container.shown, #nav-links.shown {
+    display: inline-block;
+  }
+
+  #sidebar-container.hidden, #nav-links.hidden {
+    display: none;
+  }
+
+  #sidebar-container .sidebar {
+    width: 30%;
+  }
 
 	.container {
 		min-width: 640px;
@@ -370,31 +427,12 @@ h3 {
   #banner {
     display: none;
   }
-  .sidebar-container {
-    width: 100%;
-    height: 250px;
-    float: left;
-  }
+}
 
-  .sidebar-container .sidebar {
-    height: 100%;
-    width: 50%;
-    float: left;
-    max-width: 50%;
-  }
-
-  .sidebar-container .sidebar .sidebar-section {
-    width: 48%;
-    padding: 1%;
-    float: left;
-    height: 100%;
-  }
-
-  .sidebar-container .sidebar .sidebar-header {
-    display: none;
-  }
-
-  .sidebar-container .sidebar img {
-    max-height: 100%;
+@media (max-width: 600px) {
+  #navbar.fixed {
+    top: auto;
+    left: auto;
+    position: relative;
   }
 }

@@ -17,8 +17,13 @@ function removeClass(el, className) {
     el.classList.remove(className)
   else if (hasClass(el, className)) {
     var reg = new RegExp('(\\s|^)' + className + '(\\s|$)')
-    el.className=el.className.replace(reg, ' ')
+    el.className = el.className.replace(reg, ' ')
   }
+}
+
+function swapClass(el, classA, classB) {
+  removeClass(el, classA);
+  addClass(el, classB);
 }
 
 // http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript

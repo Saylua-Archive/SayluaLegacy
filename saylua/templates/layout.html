@@ -12,6 +12,7 @@
   </title>
   <meta name="description" content="A new virtual petsite. ">
   <meta name="author" content="Saylua">
+  <meta name="viewport" content="width=700, initial-scale=1">
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
   <link rel="stylesheet" href="/static/css/styles.min.css">
@@ -27,6 +28,7 @@
 </head>
 
 <body>
+<div class="overlay"></div>
 <div id="banner" class="container">
   <div id="logo">
     <a href="/">Saylua</a>
@@ -36,10 +38,10 @@
   <div id="navbar">
     <div class="content-width">
       <div id="responsive-nav">
-        <a href="javascript:void();" class="block-link" id="hamburger-menu-link">
+        <a href="/menu/" class="block-link" id="hamburger-menu-link">
           <i class="fa fa-navicon" aria-hidden="true"></i>
         </a>
-        <a href="javascript:void();" class="block-link" id="sidebar-menu-link">
+        <a href="/sidebars/" class="block-link" id="sidebar-menu-link">
           <i class="fa fa-paw" aria-hidden="true"></i>
         </a>
       </div>
@@ -64,10 +66,10 @@
             <a href="/user/settings/"><img src="/static/img/icons/user.png"> My Profile</a>
             <a href="/settings/"><img src="/static/img/icons/cog.png"> Account Settings</a>
             <span class="dropdown-separator"></span>
-            <a href="/user/settings/"><img src="/static/img/icons/user.png"> My Achievements</a>
-            <a href="/user/settings/"><img src="/static/img/icons/user.png"> Friends List</a>
+            <a href="/user/settings/"><img src="/static/img/icons/award_star_gold.png"> My Achievements</a>
+            <a href="/user/settings/"><img src="/static/img/icons/group.png"> Friends List</a>
             <span class="dropdown-separator"></span>
-            Currency
+            <a href="/logout/"><img src="/static/img/icons/lock_unlock.png"> Logout</a>
           </div>
           <div id="notifications-menu" class="menu">
             <h3>Your Notifications</h3>
