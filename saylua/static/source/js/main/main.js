@@ -4,9 +4,6 @@ window.addEventListener('load', function () {
   // Get all of the right navbar links and bind click events to them
   initializeRightMenu();
 
-  initializeMenu(document.getElementById('hamburger-menu-link'), document.getElementById('nav-links'));
-  initializeMenu(document.getElementById('sidebar-menu-link'), document.getElementById('sidebar-container'));
-
   // Form Validation
   FormValidation.bind('.validated-form');
 });
@@ -25,39 +22,6 @@ function fixNavbar(e) {
     removeClass(document.getElementById("navbar"), "fixed");
     if (sidebars) {
       removeClass(sidebars, "fixed");
-    }
-  }
-}
-
-function initializeMenu(link, menu) {
-  link.addEventListener('click', function (e) {
-    if (!menu) {
-      return true;
-    }
-    e.preventDefault();
-    if (hasClass(link, 'active')) {
-      hideMenu();
-    } else {
-      showMenu();
-    }
-  });
-
-  function showMenu() {
-    swapClass(menu, 'hidden', 'shown');
-    addClass(link, 'active');
-    document.body.addEventListener('click', closeOnOutsideClick);
-  }
-
-  function hideMenu(e) {
-    swapClass(menu, 'shown', 'hidden');
-    removeClass(link, 'active');
-    document.body.removeEventListener('click', closeOnOutsideClick, false);
-  }
-
-  function closeOnOutsideClick (e) {
-    var target = e.target;
-    if (!link.contains(target) && !menu.contains(target)) {
-      hideMenu();
     }
   }
 }

@@ -4,7 +4,7 @@
 @mixin content-width {
   box-sizing: border-box;
 	width: 95%;
-  min-width: 600px;
+  min-width: 1024px;
   max-width: 1700px;
 }
 
@@ -87,6 +87,7 @@ button:focus {
 
 .container {
 	width: 100%;
+  min-width: 1024px;
 	float: left;
 }
 
@@ -310,14 +311,10 @@ h3 {
 // Total width should not exceed 180px
 .sidebar {
 	box-sizing: border-box;
-	width: 16%;
+	width: 17%;
   min-width: 160px;
-	padding: 10px 20px;
+	padding: 10px 1%;
   max-width: 300px;
-}
-
-#ha-panel {
-	background: url('../img/habg.jpg');
 }
 
 .overlay {
@@ -337,100 +334,8 @@ h3 {
 }
 
 @media (max-width: 1024px) {
-  #nav-links {
-    display: none;
-    margin-top: $navheight;
-    box-sizing: border-box;
-    left: 0;
-    width: 100%;
-    position: absolute;
-    min-height: 100px;
-    background: #fff;
-    border-bottom: 1px solid $neutralcolor;
-    -webkit-box-shadow: 3px 8px 32px -13px $black;
-    -moz-box-shadow: 3px 8px 32px -13px $black;
-    box-shadow: 3px 8px 32px -13px $black;
-    padding-bottom: 8px;
-    z-index: 8001;
-  }
-
-  #nav-links a.block-link, #nav-links a.block-link:visited, #nav-links a.block-link:link {
-    box-sizing: border-box;
-    text-align: left;
-    color: $maindarkercolor;
-    width: 100%;
-    padding: 0 15px;
-  }
-
-  #nav-links a.block-link:hover {
-    background: $accentsoft;
-  }
-
-  #responsive-nav {
-    display: inline-block;
-  }
-
-  #sidebar-container {
-    display: none;
-    z-index: 1000;
-    position: absolute;
-    margin-top: -10px;
-    width: 100%;
-    background: $bgcolor;
-    -webkit-box-shadow: 3px 8px 32px -13px $black;
-    -moz-box-shadow: 3px 8px 32px -13px $black;
-    box-shadow: 3px 8px 32px -13px $black;
-  }
-
-  #sidebar-container.fixed {
-    padding-top: 10px;
-    position: fixed;
-    top: $navheight;
-    left: 0;
-  }
-
-  #sidebar-container.shown, #nav-links.shown {
-    display: inline-block;
-  }
-
-  #sidebar-container.hidden, #nav-links.hidden {
-    display: none;
-  }
-
-  #sidebar-container .sidebar {
-    width: 30%;
-  }
-
-	.container {
-		min-width: 640px;
-	}
-
-  .content-width {
-    width: 100%;
-    min-width: 640px;
-  }
-
-	.content {
-		border: none;
-		width: 100%;
-		margin: 0;
-		min-width: 640px;
-    background: $white;
-	}
-
-	.footer {
-		padding: 10px 0;
-	}
-}
-
-@media (max-width: 820px) {
-  #banner {
-    display: none;
-  }
-}
-
-@media (max-width: 600px) {
   #navbar.fixed {
+    width: 1024px;
     top: auto;
     left: auto;
     position: relative;
