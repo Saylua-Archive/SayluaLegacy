@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% set page_title = "Human Avatar" %}
+{% block header_scripts %}
+<script src="/static/js/ha.min.js"></script>
+{% endblock %}
+{% block body %}
+<h2>Customize Your Avatar</h2>
+<div class="left" style="width:40%;">
+	<img src="/api/ha/m/" id="preview-ha">
+	<button>Save Human Avatar</button>
+</div>
+<div id="clothing" class="left" style="width:59%;"></div>
+{% endblock %}

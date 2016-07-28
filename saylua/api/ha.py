@@ -12,6 +12,10 @@ def api_ha_wardrobe():
 
     return json.dumps(item_images)
 
+@app.route('/api/ha/<base>/')
+def api_ha_image_base(base):
+    return api_ha_image(base, '')
+
 @app.route('/api/ha/<base>/<items>/')
 def api_ha_image(base, items):
     items = items.split(',')

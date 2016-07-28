@@ -8,18 +8,6 @@
   max-width: 1700px;
 }
 
-#info button {
-  @include fast-color-trans;
-	cursor: pointer;
-	border-radius: 10px;
-	border: 0px;
-}
-
-button:focus {
-	border: none;
-	outline:none;
-}
-
 .content-width {
 	@include content-width;
 	margin: auto;
@@ -59,30 +47,6 @@ button:focus {
   font-size: 14px;
   width: 100%;
   padding: 5px 10px;
-}
-
-.section-menu {
-  width: 25%;
-  float: left;
-  border-right: 1px solid $neutralcolor;
-  margin-right: 10px;
-}
-
-.section-menu a {
-  @include fast-color-trans;
-  display: block;
-  width: 100%;
-  line-height: 150%;
-  box-sizing: border-box;
-  padding: 8px;
-}
-
-.section-menu a:hover {
-  background: $accentsoft;
-}
-
-.section-menu a:active, .section-menu a.active {
-  background: $neutralcolor;
 }
 
 .container {
@@ -161,6 +125,10 @@ h3 {
   width: 100%;
   z-index: 8000;
   position: relative;
+}
+
+#navbar .menu {
+  text-align: left;
 }
 
 #navbar.fixed {
@@ -299,6 +267,8 @@ h3 {
 	position: relative;
 	margin-left: -26px;
 	cursor: pointer;
+  font-size: 14px;
+  line-height: 100%;
 	border: 0;
 	background: none;
 	color: $maindarkcolor;
@@ -315,17 +285,6 @@ h3 {
   min-width: 160px;
 	padding: 10px 1%;
   max-width: 300px;
-}
-
-.overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  background: rgba(34, 34, 34, 0.5);
 }
 
 .footer {

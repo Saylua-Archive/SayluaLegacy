@@ -28,6 +28,14 @@ img {
 	max-width: 100%;
 }
 
+ul {
+	margin: 0;
+}
+
+ul li {
+	margin: 0;
+}
+
 h1 {
 	display: block;
 	font-size: 2em;
@@ -112,63 +120,12 @@ th {
 	background: $mainsoftcolor;
 }
 
-table.form-table {
-	min-width: 60%;
-}
-
-table.form-table.width-70 {
-	width: 70%;
-}
-
-table.form-table td.label, table.form-table th.label {
-	text-align: right;
-	min-width: 30%;
-}
-
-table.form-table td, table.form-table th {
-	background: none;
-	padding: 5px;
-	vertical-align: top;
-}
-
-table.form-table td input, table.form-table td textarea {
-	width: 90%;
-}
-
-table.form-table td input[type="submit"] {
-	width: auto;
-}
-
-table.form-table td textarea {
-	height: 200px;
-}
-
-table.form-table td textarea.big {
-	height: 300px;
-	width: 100%;
-	margin: 0;
-	box-sizing: border-box;
-}
-
-table.form-table small.form-tip {
-	width: 90%;
-	display: block;
-	font-size: 0.8em;
-}
-
-input, textarea {
-	font-size: 16px;
-	line-height: 24px;
-	padding: 2px 8px;
-	border: 1px solid #ddd;
-}
-
 p.error {
 	margin: 0;
 	padding: 0;
 	line-height: 150%;
 	text-align: center;
-  color: $errorText;
+	color: $errorText;
 }
 
 a.tiny-button {

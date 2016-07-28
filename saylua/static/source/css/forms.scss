@@ -1,13 +1,20 @@
 @import "assets/variables";
 @import "assets/transitions";
 
+input, textarea, button {
+	font-size: 16px;
+	line-height: 24px;
+	padding: 2px 8px;
+	border: 1px solid #ddd;
+}
+
 .switch {
 	display: inline-block;
 	margin: auto;
 }
 
 .switch label b {
-  @include fast-color-trans;
+	@include fast-color-trans;
 	font-weight: normal;
 	float: left;
 	display: block;
@@ -22,11 +29,11 @@
 
 .switch label:first-of-type b {
 	border-left: $mainsoftcolor 1px solid;
-  border-radius: 8px 0 0 8px;
+	border-radius: 8px 0 0 8px;
 }
 
 .switch label:last-of-type b {
-  border-radius: 0 8px 8px 0;
+	border-radius: 0 8px 8px 0;
 }
 
 .switch label b:hover {
@@ -53,10 +60,11 @@ input.error, textarea.error {
 }
 
 input[type="checkbox"].error {
-  outline: 1px solid $errorText;
+	outline: 1px solid $errorText;
 }
 
 input[type="submit"], button, a.button {
+	font-size: 1em;
 	border: none;
 	background-color: $maincolor;
 	background-color: $accent;
@@ -87,8 +95,8 @@ table.form-table td.label, table.form-table th.label {
 }
 
 table.form-table td.label.break, table.form-table th.label.break {
-  width: 30%;
-  max-width: 30%;
+	width: 30%;
+	max-width: 30%;
 }
 
 table.form-table td, table.form-table th {
