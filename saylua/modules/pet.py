@@ -6,11 +6,11 @@ from flask import (render_template, redirect,
 def pet_profile(name):
     return render_template("pets/profile.html")
 
-@app.route('/pets/')
+@app.route('/den/')
 def pet_collection_default():
     username = 'user'
-    return redirect('/pets/' + username, code=302)
+    return redirect('/den/' + username, code=302)
 
-@app.route('/pets/<username>/')
+@app.route('/den/<username>/')
 def pet_collection(username):
-    return render_template("pets/profile.html")
+    return render_template("pets/den.html")

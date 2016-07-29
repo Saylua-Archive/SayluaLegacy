@@ -1,0 +1,33 @@
+{% from "_macros/pagination.html" import pagination %}
+{% extends "layout.html" %}
+{% set page_title = "Viewing Den" %}
+{% block body %}
+<h2>User's Den</h2>
+<div id="den-pets">
+  <div class="full center">
+    {{ pagination() }}
+  </div>
+  {% for i in range(20) %}
+  <div class="den-pet-square">
+    <a href="/pet/shc/">
+      <img src="/static/img/SHC.png" title="Pet" alt="Smoking Hot Chick" />
+      Smoking Hot Chick
+    </a>
+  </div>
+  {% endfor %}
+  <div class="full center">
+    {{ pagination() }}
+  </div>
+</div>
+<div id="den-pets-sidebar">
+  <h3>Filter Pets</h3>
+  <select>
+    <option>Pet Type</option>
+  </select>
+
+  <h3>Groups</h3>
+  <ul>
+    <li>Hmmm</li>
+  </ul>
+</div>
+{% endblock %}
