@@ -1,3 +1,4 @@
+import books
 import explore
 import forums
 import games

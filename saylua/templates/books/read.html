@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% set page_title = "Reading Book" %}
+{% block body %}
+<h2>Reading Book: Lorem Ipsum</h2>
+<div id="book-cover">
+  <div id="spine"></div>
+  <div id="book-page-left" class="book-page">
+    <div class="page-edge left"></div>
+    <div class="page-main left">
+      <h3>Chapter 1</h3>
+      <p>
+        I loved Eydruns. They were always staring at me when I traveled in the woods of
+        Luaria. I could see their glowing yellow eyes from the dark caves. Lights would
+        flicker on and off the rocky walls as they blinked.
+      </p>
+      <p>
+        I never got too close to them though. Their glowing eyes were beautiful, but I heard
+        they were dangerous. I could hear them though - a call a bit like a slow, high whine.
+        Melancholic and melodic, I was attracted to their voice.
+      </p>
+      <p>
+        I knew I had to stay away though. They told stories of their glares. They say no one
+        has ever returned from seeing an Eydrun stare at them with all of their eyes at once.
+      </p>
+    </div>
+  </div>
+  <div id="book-page-right" class="book-page">
+    <div class="page-edge right"></div>
+    <div class="page-main right">
+      <p>
+        But I had seen illustrations of them in books. I think they looked a little like this: 
+      </p>
+      <img src="/static/img/eydrun.png">
+    </div>
+  </div>
+</div>
+{% endblock %}
