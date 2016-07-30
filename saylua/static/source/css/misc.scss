@@ -1,0 +1,31 @@
+// CSS for Dens
+#den-pets {
+  width: 75%;
+  float: left;
+}
+
+#den-pets-sidebar {
+  width: 25%;
+  float: left;
+}
+
+#den-pets-sidebar h3 {
+  font-size: 1em;
+  line-height: 120%;
+}
+
+.den-pet-square {
+  width: 20%;
+  float: left;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+// CSS for items
+.item-box {
+  width: 20%;
+  float: left;
+  box-sizing: border-box;
+  padding: 10px;
+  text-align: center;
+}

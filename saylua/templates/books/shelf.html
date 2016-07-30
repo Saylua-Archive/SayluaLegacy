@@ -1,0 +1,26 @@
+{% from "_macros/pagination.html" import pagination %}
+{% extends "layout.html" %}
+{% set page_title = "Bookshelf" %}
+{% block body %}
+<h2>Your Bookshelf</h2>
+<div class="center full padded">
+{{ pagination() }}
+</div>
+<div id="book-shelf">
+  {% for i in range(4) %}
+  <div class="shelf-row">
+    {% for j in range(5) %}
+      <div class="book-square">
+        <a href="/read/1/">
+          Lorem Ipsum
+          <img src="/static/img/items/tome.png">
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+<div class="center full padded">
+{{ pagination() }}
+</div>
+{% endblock %}

@@ -2,6 +2,9 @@
 {% set page_title = "Reading Book" %}
 {% block body %}
 <h2>Reading Book: Lorem Ipsum</h2>
+<div class="center vertical-padded">
+  <a href="/shelf/"><img src="/static/img/icons/arrow_left.png"> Back to Your Shelf</a>
+</div>
 <div id="book-cover">
   <div id="spine"></div>
   <div id="book-page-left" class="book-page">
@@ -28,10 +31,14 @@
     <div class="page-edge right"></div>
     <div class="page-main right">
       <p>
-        But I had seen illustrations of them in books. I think they looked a little like this: 
+        But I had seen illustrations of them in books. I think they looked a little like this:
       </p>
       <img src="/static/img/eydrun.png">
     </div>
   </div>
+</div>
+<div class="binary-pagination">
+  <a href="#">&#8592; Prev</a>
+  <a href="#" class="right">Next &#8594;</a>
 </div>
 {% endblock %}
