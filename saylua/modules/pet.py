@@ -6,6 +6,10 @@ from flask import (render_template, redirect,
 def pet_profile(name):
     return render_template("pets/profile.html")
 
+@app.route('/adopt/')
+def pet_adoption():
+    return render_template("pets/adopt.html")
+
 @app.route('/den/')
 def pet_collection_default():
     username = 'user'

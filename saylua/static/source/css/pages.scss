@@ -1,3 +1,4 @@
+// CSS for Dens
 #den-pets {
   width: 75%;
   float: left;
@@ -18,4 +19,13 @@
   float: left;
   box-sizing: border-box;
   padding: 10px;
+}
+
+// CSS for items
+.item-box {
+  width: 20%;
+  float: left;
+  box-sizing: border-box;
+  padding: 10px;
+  text-align: center;
 }

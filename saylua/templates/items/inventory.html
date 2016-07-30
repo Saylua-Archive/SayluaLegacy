@@ -1,0 +1,21 @@
+{% from "_macros/pagination.html" import pagination %}
+{% extends "layout.html" %}
+{% set page_title = "Your Inventory" %}
+{% block body %}
+<h2>Your Inventory</h2>
+<div class="full center">
+  {{ pagination() }}
+</div>
+{% for i in range(60) %}
+<div class="item-box">
+  <a href="javascript:void();">
+    <img src="/static/img/items/orange.png">
+    <span class="full">Orange</span>
+    <small class="full">Count: 10</small>
+  </a>
+</div>
+{% endfor %}
+<div class="full center">
+  {{ pagination() }}
+</div>
+{% endblock %}

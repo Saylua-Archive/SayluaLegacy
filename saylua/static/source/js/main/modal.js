@@ -1,5 +1,5 @@
 /*
- * A simply library for a JavaScript modal with no dependencies.  
+ * A simply library for a JavaScript modal with no dependencies.
  */
 (function (g) {
   g.Modal = function (modalSettings) {

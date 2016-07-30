@@ -2,6 +2,11 @@ from saylua import app
 from flask import (render_template, redirect,
                    url_for, flash, session, abort, request)
 
+@app.route('/user/')
+def user_profile_default():
+    username = 'username'
+    return redirect('/user/' + username + '/', code=302)
+
 @app.route('/user/<user>/')
 def user_profile(user):
     return render_template("user/profile.html")
