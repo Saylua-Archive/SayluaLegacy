@@ -9,8 +9,8 @@ var makeDungeon = function (window, dungeonId) {
   var dungeon;
 
   var tileList = {
-    'water' : 'lightblue',
-    'dirt' : '#DEB887',
+    'water' : '#156C99',
+    'dirt' : '#DEB887 url("/static/img/tiles/46.png")',
     'cave_wall' : '#322125',
   };
 
@@ -81,9 +81,10 @@ var makeDungeon = function (window, dungeonId) {
          newDiv.style.height = T_WIDTH + "px";
          if (map.getTile(j, i).landmark == 'exit') {
            // Exit
-           newDiv.style.backgroundColor = "#FF0000";
+           newDiv.style.background = "#FF0000";
          } else {
-           newDiv.style.backgroundColor = tileList[map.getTile(j, i).type];
+           var tileType = map.getTile(j, i).type;
+           newDiv.style.background = tileList[tileType];
          }
          newDiv.addEventListener("click", findPath);
          newDiv.dataset.x = j;

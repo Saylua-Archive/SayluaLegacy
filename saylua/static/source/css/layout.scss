@@ -160,11 +160,11 @@ h3 {
   padding-bottom: 8px;
 }
 
-#dropdown-right.shown {
+#dropdown-right.shown, .shown {
   display: block;
 }
 
-#dropdown-right.hidden {
+#dropdown-right.hidden, .hidden {
   display: none;
 }
 
