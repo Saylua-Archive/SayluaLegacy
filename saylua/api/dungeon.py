@@ -7,7 +7,7 @@ import json, random
 @app.route('/api/explore/map/')
 def api_map_generation():
     # TODO: Make sure to authorize player for viewing map
-    explore_map = ExploreMap(10, 8)
+    explore_map = ExploreMap(10, 10)
     return explore_map.json()
 
 @app.route('/api/explore/move/', methods=['POST'])

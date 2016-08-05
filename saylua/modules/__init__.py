@@ -7,4 +7,5 @@ import home
 import items
 import login
 import pet
+import shops
 import user

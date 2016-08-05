@@ -1,7 +1,7 @@
 var makeDungeon = function (window, dungeonId) {
-  const T_WIDTH = 64;
+  const T_WIDTH = 50;
   const T_COUNTX = 10;
-  const T_COUNTY = 8;
+  const T_COUNTY = 10;
   const TILE_LOC = '/static/img/tiles/';
   const API_MAP_ENDPOINT = '/api/explore/map/';
   const API_MOVE_ENDPOINT = '/api/explore/move/';

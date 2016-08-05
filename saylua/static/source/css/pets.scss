@@ -13,19 +13,19 @@
 
 // Pet rooms
 #pet-room-container {
-  width: 640px;
+  width: 750px;
   margin: auto;
 }
 
 #pet-room {
-  width: 640px;
-  height: 450px;
+  width: 750px;
+  height: 400px;
   background: url('/static/img/battle.png');
   position: relative;
 }
 
 #pet-room .pet {
-  top: 120px;
+  top: 70px;
   position: absolute;
   left: 50%;
   margin-left: -150px;

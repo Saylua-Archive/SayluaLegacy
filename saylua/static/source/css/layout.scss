@@ -215,10 +215,6 @@ h3 {
   background: $maindarkercolor;
 }
 
-#responsive-nav {
-  display: none;
-}
-
 #navbar .alert-number {
   box-sizing: border-box;
   display: block;
@@ -278,11 +274,20 @@ h3 {
   padding: 5px;
 }
 
+#social-icons a {
+  @include slow-color-trans;
+  font-size: 20px;
+}
+
+#social-icons a:hover {
+  text-decoration: none;
+  color: $maincolor;
+}
+
 // Total width should not exceed 180px
 .sidebar {
 	box-sizing: border-box;
-	width: 17%;
-  min-width: 160px;
+	width: 16%;
 	padding: 10px 1%;
   max-width: 300px;
 }
@@ -292,11 +297,23 @@ h3 {
 	font-size: 14px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   #navbar.fixed {
     width: 1024px;
     top: auto;
     left: auto;
     position: relative;
+  }
+  #sidebar-container {
+    float: left;
+    box-sizing: border-box;
+    width: 17%;
+  	padding: 10px 1%;
+  }
+  .sidebar {
+    width: 100%;
+  }
+  .sidebar.right {
+    float: left;
   }
 }
