@@ -86,6 +86,7 @@ var makeDungeon = function (window, dungeonId) {
            var tileType = map.getTile(j, i).type;
            newDiv.style.background = tileList[tileType];
          }
+         newDiv.style.backgroundSize =  T_WIDTH + "px " + T_WIDTH + "px ";
          newDiv.addEventListener("click", findPath);
          newDiv.dataset.x = j;
          newDiv.dataset.y = i;
