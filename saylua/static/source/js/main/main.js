@@ -6,6 +6,7 @@ window.addEventListener('load', function () {
 
   // Form Validation
   FormValidation.bind('.validated-form');
+  CheckAll.bind('.check-all');
 });
 
 // Make navigation bar stay at the top

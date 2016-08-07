@@ -6,6 +6,8 @@ import ha
 import home
 import items
 import login
+import messages
+import notifications
 import pet
 import shops
 import user

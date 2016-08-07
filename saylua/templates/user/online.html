@@ -1,0 +1,17 @@
+{% from "_macros/pagination.html" import pagination %}
+{% extends "layout.html" %}
+{% set page_title = "Users Online" %}
+{% block body %}
+<h2>Users Online</h2>
+<div class="full center">
+  {{ pagination() }}
+</div>
+{% for i in range(60) %}
+<div class="user">
+  User
+</div>
+{% endfor %}
+<div class="full center">
+  {{ pagination() }}
+</div>
+{% endblock %}

@@ -168,6 +168,11 @@ h3 {
   display: none;
 }
 
+#dropdown-right .menu ul li {
+  width: 100%;
+  display: block;
+}
+
 .dropdown-separator {
   width: 210px;
   box-sizing: border-box;

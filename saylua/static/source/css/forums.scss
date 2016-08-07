@@ -32,13 +32,21 @@ table.forum-table .forum-board-row td {
   font-size: 14px;
 }
 
+table.forum-table .forum-thread-row:nth-child(odd) {
+  background: $neutralcolor;
+}
+
+table.forum-table .forum-thread-row.highlight:nth-child(n) {
+  background-color: $highlightsoft;
+}
+
+table.forum-table .forum-thread-row.highlight:nth-child(odd) {
+  background-color: $highlight;
+}
+
 table.forum-table .forum-board-row:hover,
 table.forum-table .forum-thread-row:nth-child(n):hover {
   background-color: $accentsoft;
-}
-
-table.forum-table .forum-thread-row:nth-child(odd) {
-  background: $neutralcolor;
 }
 
 table.forum-table td.forum-board-icon {

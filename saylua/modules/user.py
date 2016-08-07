@@ -11,6 +11,11 @@ def user_profile_default():
 def user_profile(user):
     return render_template("user/profile.html")
 
+@app.route('/online/')
+def users_online():
+    return render_template("user/online.html")
+
+
 @app.route('/settings/')
 def user_settings():
     return render_template("user/settings/main.html")

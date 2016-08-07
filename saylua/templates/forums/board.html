@@ -37,10 +37,13 @@
     </th>
   </tr>
 
-  {% for i in range(5) %}
-  <tr class="forum-thread-row">
+  {% for i in range(10) %}
+  <tr class="forum-thread-row{% if i < 5 %} highlight{% endif %}">
     <td class="forum-thread-icon">
-      {% if i == 3 %}
+      {% if i < 5 %}
+      <img src="/static/img/icons/pin.png">
+      {% endif %}
+      {% if i == 8 %}
       <img src="/static/img/icons/lock.png">
       {% endif %}
     </td>

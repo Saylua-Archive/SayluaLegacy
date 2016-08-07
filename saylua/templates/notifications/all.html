@@ -1,0 +1,50 @@
+{% from "_macros/pagination.html" import pagination %}
+{% extends "layout.html" %}
+{% set page_title = "Notifications" %}
+{% block body %}
+<h2>View All Notifications</h2>
+<form method="post">
+  <div class="full center">
+    <input type="submit" class="small" name="delete" value="Delete Selected Notifications">
+    <input type="submit" class="small" name="read" value="Mark Selected as Read">
+  </div>
+  <table class="forum-table">
+    <tr>
+      <th>
+        <input type="checkbox" class="check-all" data-name="notification_id">
+      </th>
+      <th>
+        Notification Text
+      </th>
+      <th>
+        Time
+      </th>
+      <th>
+        Status
+      </th>
+    </tr>
+
+    {% for i in range(50) %}
+    <tr class="forum-thread-row">
+      <td>
+        <input type="checkbox" name="notification_id" value="i">
+      </td>
+      <td>
+        <a href="/">Sample Notification is awesome. </a>
+      </td>
+      <td>
+        43 seconds ago
+      </td>
+      <td>
+        Read
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  <div class="full center">
+    <input type="submit" class="small" name="delete" value="Delete Selected Notifications">
+    <input type="submit" class="small" name="read" value="Mark Selected as Read">
+  </div>
+</form>
+
+{% endblock %}

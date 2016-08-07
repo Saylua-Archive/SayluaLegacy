@@ -1,6 +1,6 @@
 // Depends on utils.js
 var _Tabs = (function Tabs() {
-  return function FormValidationConstructor() {
+  return function TabsConstructor() {
     this.bind = function(selector) {
       var tabContainers = document.querySelectorAll(selector);
       for (var i = 0; i < tabContainers.length; i++) {
