@@ -108,7 +108,7 @@ def register_post():
     password = request.form['password']
     password2 = request.form['password2']
     email = request.form['email'].lower()
-    tos_agreed = request.form['tos_agreed']
+    tos_agreed = 'tos_agreed' in request.form
 
     valid = True
     #Validate everything here
@@ -120,19 +120,23 @@ def register_post():
         flash("You're missing a field!")
         valid = False
 
-    if tos_agreed == None:
+    if not tos_agreed:
         flash("You must accept the TOS to register.")
         valid = False
 
     if len(password) < app.config['MIN_PASSWORD_LENGTH']:
-        flash("Your password must be at least " + app.config['MIN_PASSWORD_LENGTH'] + " characters.")
+        flash("Your password must be at least " + str(app.config['MIN_PASSWORD_LENGTH']) + " characters.")
         valid = False
 
     if len(username) < app.config['MIN_USERNAME_LENGTH']:
-        flash("Your password must be at least " + app.config['MIN_USERNAME_LENGTH'] + " characters.")
+        flash("Your password must be at least " + str(app.config['MIN_USERNAME_LENGTH']) + " characters.")
         valid = False
 
-    pattern = re.compile('^[A-Za-z0-9_-]+$')
+    if len(email) < 5:
+        flash("You must use a valid email address.")
+        valid = False
+
+    pattern = re.compile('^[A-Za-z0-9_-]*$')
     if not pattern.match(username):
         flash("Your username may only contain letters, numbers, underscores, or hyphens.")
         valid = False
