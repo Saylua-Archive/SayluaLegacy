@@ -25,10 +25,12 @@ class LoginSession(ndb.Model):
 def inject_user():
     username = request.cookies.get('username')
     session_key = request.cookies.get('session_key')
-    found = User.query(User.username == username).get()
+    found = LoginSession.query(LoginSession.username == username,
+            LoginSession.session_key == session_key).get()
     if found == None:
         return dict(username="guest", displayname="Guest")
-    return dict(username=found.username, displayname=found.displayname)
+    founduser = User.query(User.username == username).get()
+    return dict(username=founduser.username, displayname=founduser.displayname)
 
 
 def login_required(f):
