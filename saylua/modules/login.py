@@ -155,5 +155,19 @@ def register_post():
         new_user = User(username=username, displayname=displayname, phash=phash,
                 email=email, email_verified=False)
         new_user.put()
-        flash("You have successfully registered! Please log in below.")
-    return redirect(url_for('login'))
+
+        #Add a session to the datastore
+        session_key = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(32))
+        expires = datetime.datetime.utcnow()
+        expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
+        new_session = LoginSession(username=username, session_key=session_key,
+                expires=expires)
+        new_session.put()
+
+        #Generate a matching cookie and redirct
+        resp = make_response(redirect(url_for('home')))
+        resp.set_cookie("username", username, expires=expires)
+        resp.set_cookie("session_key", session_key, expires=expires)
+        return resp
+
+    return redirect(url_for('register'))
