@@ -26,16 +26,10 @@ var _FormValidation = (function FormValidation() {
       }
     },
     'username_chars': {
-      'error': '<field> may only contain letters, numbers, or these special characters: _.+!*()- ',
+      'error': '<field> may only contain letters, numbers, underscores, or hyphens. ',
       'validator': function (input) {
-        var reg = new RegExp('^[A-Za-z0-9_.+!*()-]+$');
+        var reg = new RegExp('^[A-Za-z0-9_-]+$');
         return reg.test(input);
-      }
-    },
-    'no_repeated_underscores': {
-      'error': '<field> may not contain two underscores in a row. ',
-      'validator': function (input) {
-        return input.indexOf('__') < 0;
       }
     },
     'match_password': {
