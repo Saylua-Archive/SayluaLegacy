@@ -7,15 +7,18 @@
   width: 100%;
   float: left;
   padding: 10px 0 0;
-  border-bottom: 10px solid #EFC06F;
+  border-bottom: 10px solid #8A5A50;
   position: relative;
+  -webkit-box-shadow: 0px 45px 38px -42px rgba(122,105,100,1);
+  -moz-box-shadow: 0px 45px 38px -42px rgba(122,105,100,1);
+  box-shadow: 0px 45px 38px -42px rgba(122,105,100,1);
 }
 
 #book-shelf .shelf-row:after {
   content:"";
   box-sizing: border-box;
   display: block;
-	border-bottom: 20px solid #96743B;
+	border-bottom: 20px solid #593B3A;
 	border-left: 50px solid transparent;
 	border-right: 50px solid transparent;
 	height: 0;

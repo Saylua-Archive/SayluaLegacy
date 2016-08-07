@@ -1,7 +1,7 @@
 var makeDungeon = function (window, dungeonId) {
-  const T_WIDTH = 64;
+  const T_WIDTH = 50;
   const T_COUNTX = 10;
-  const T_COUNTY = 8;
+  const T_COUNTY = 10;
   const TILE_LOC = '/static/img/tiles/';
   const API_MAP_ENDPOINT = '/api/explore/map/';
   const API_MOVE_ENDPOINT = '/api/explore/move/';
@@ -9,8 +9,8 @@ var makeDungeon = function (window, dungeonId) {
   var dungeon;
 
   var tileList = {
-    'water' : 'lightblue',
-    'dirt' : '#DEB887',
+    'water' : '#156C99',
+    'dirt' : '#DEB887 url("/static/img/tiles/46.png")',
     'cave_wall' : '#322125',
   };
 
@@ -81,10 +81,12 @@ var makeDungeon = function (window, dungeonId) {
          newDiv.style.height = T_WIDTH + "px";
          if (map.getTile(j, i).landmark == 'exit') {
            // Exit
-           newDiv.style.backgroundColor = "#FF0000";
+           newDiv.style.background = "#FF0000";
          } else {
-           newDiv.style.backgroundColor = tileList[map.getTile(j, i).type];
+           var tileType = map.getTile(j, i).type;
+           newDiv.style.background = tileList[tileType];
          }
+         newDiv.style.backgroundSize =  T_WIDTH + "px " + T_WIDTH + "px ";
          newDiv.addEventListener("click", findPath);
          newDiv.dataset.x = j;
          newDiv.dataset.y = i;

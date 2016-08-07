@@ -50,13 +50,29 @@ p {
 	padding: 0px;
 }
 
-a, a:active, a:link, a:visited {
+a, a:active, a:visited {
 	text-decoration: none;
 	color: $accent;
 }
 
 a:hover {
 	text-decoration: underline;
+}
+
+.tab {
+	@include slow-color-trans;
+  display: block;
+  float: left;
+  box-sizing: border-box;
+  padding: 8px 20px;
+}
+
+.tab:hover {
+	background: $accentsoft;
+}
+
+.tab.selected {
+	background: $mainsoftcolor;
 }
 
 .clearfix {

@@ -1,13 +1,6 @@
 @import "assets/variables";
 @import "assets/transitions";
 
-input, textarea, button, select {
-	font-size: 16px;
-	line-height: 24px;
-	padding: 2px 8px;
-	border: 1px solid #ddd;
-}
-
 .switch {
 	display: inline-block;
 	margin: auto;
@@ -48,7 +41,7 @@ input, textarea, button, select {
 	display: none;
 }
 
-input, textarea {
+input, textarea, select {
 	font-size: 16px;
 	line-height: 24px;
 	padding: 2px 8px;
@@ -63,10 +56,15 @@ input[type="checkbox"].error {
 	outline: 1px solid $errorText;
 }
 
-input[type="submit"], button, a.button {
+a.button {
+	display: block;
+	width: auto;
+}
+
+input[type="submit"], button, a.button, a.button:link, a.button:visited {
 	font-size: 1em;
+	line-height: 150%;
 	border: none;
-	background-color: $maincolor;
 	background-color: $accent;
 	color: $white;
 	cursor: pointer;

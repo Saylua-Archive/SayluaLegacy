@@ -21,5 +21,4 @@ def application_error(e):
 
 # Make sure imports for other modules are at the bottom of the file
 import api
-
 import modules
