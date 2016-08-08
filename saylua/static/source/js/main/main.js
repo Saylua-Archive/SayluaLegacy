@@ -30,6 +30,8 @@ function fixNavbar(e) {
 function initializeRightMenu() {
   var navigation = document.getElementById('navigation-right');
   var menu = document.getElementById('dropdown-right');
+  if (!navigation || !menu) return;
+  
   var links = navigation.getElementsByClassName('block-link');
   var sections = menu.getElementsByClassName('menu');
 

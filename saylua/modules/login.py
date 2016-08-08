@@ -6,10 +6,11 @@ import random, string
 from bcryptmaster import bcrypt
 import datetime, re
 from functools import wraps
+from dateutil import tz
 
 class User(ndb.Model):
     username = ndb.StringProperty(indexed=True)
-    displayname = ndb.StringProperty()
+    display_name = ndb.StringProperty()
     phash = ndb.StringProperty()
     email = ndb.StringProperty(indexed=True)
     email_verified = ndb.BooleanProperty()
@@ -20,17 +21,30 @@ class LoginSession(ndb.Model):
     expires = ndb.DateTimeProperty()
 
 
+@app.context_processor
+def inject_time():
+    time = datetime.datetime.now()
+    from_zone = tz.gettz('UTC')
+    to_zone = tz.gettz('America/New_York')
+    time = time.replace(tzinfo = from_zone)
+    time = time.astimezone(to_zone)
+    time = time.strftime("%I:%M:%S %p SST")
+    return dict(saylua_time=time)
 
 @app.context_processor
 def inject_user():
     username = request.cookies.get('username')
     session_key = request.cookies.get('session_key')
-    found = LoginSession.query(LoginSession.username == username,
-            LoginSession.session_key == session_key).get()
+    found = None
+    if username and session_key:
+        found = LoginSession.query(LoginSession.username == username,
+                LoginSession.session_key == session_key).get()
     if found == None:
-        return dict(username="guest", displayname="Guest")
+        return dict(logged_in=False)
     founduser = User.query(User.username == username).get()
-    return dict(username=founduser.username, displayname=founduser.displayname)
+    return dict(logged_in=True,
+        username=founduser.username,
+        display_name=founduser.display_name)
 
 
 def login_required(f):
@@ -105,8 +119,8 @@ def register():
 
 @app.route('/register/', methods=['POST'])
 def register_post():
-    displayname = request.form['username']
-    username = displayname.lower()
+    display_name = request.form['username']
+    username = display_name.lower()
     password = request.form['password']
     password2 = request.form['password2']
     email = request.form['email'].lower()
@@ -152,7 +166,7 @@ def register_post():
         flash("A user with that username already exists.")
     if valid:
         phash = bcrypt.hashpw(password, bcrypt.gensalt())
-        new_user = User(username=username, displayname=displayname, phash=phash,
+        new_user = User(username=username, display_name=display_name, phash=phash,
                 email=email, email_verified=False)
         new_user.put()
 

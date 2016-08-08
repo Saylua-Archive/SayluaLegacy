@@ -76,6 +76,10 @@ h3, table th.section-header {
   font-weight: normal;
 }
 
+#side-login-form table th.section-header {
+  border-bottom: 1px $gray dotted;
+}
+
 h3 {
   padding: 4px;
   box-sizing: border-box;
@@ -168,9 +172,26 @@ h3 {
   display: none;
 }
 
-#dropdown-right .menu ul li {
+#dropdown-right .menu ul {
+  padding: 0;
+  font-size: 0.8em;
+}
+
+#dropdown-right .menu ul a {
+  color: $gray;
+  padding: 3px;
+  padding-left: 30px;
   width: 100%;
   display: block;
+  box-sizing: border-box;
+}
+
+#dropdown-right .menu ul a.highlight {
+  color: $accent;
+}
+
+#dropdown-right .menu ul a:hover {
+  text-decoration: none;
 }
 
 .dropdown-separator {
@@ -188,6 +209,7 @@ h3 {
 }
 
 #dropdown-right a, #dropdown-right a:visited {
+  @include fast-color-trans;
   display: block;
   width: 100%;
   box-sizing: border-box;

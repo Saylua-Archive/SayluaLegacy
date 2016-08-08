@@ -1,31 +1,63 @@
 <div id="sidebar-container">
   <div class="sidebar left" id="left-bar">
-    <div class="sidebar-content">
-      <div class="sidebar-section flipped" id="ha-panel">
-        <a href="/ha/"><img src="/api/ha/fd/1,8,3,4,2,7,6,9,11/"></a>
-      </div>
-      <div class="sidebar-section">
-        <p>You are {{displayname}}</p>
-        <p>
-          <img src="/static/img/icons/star_1.png"> 20 Star Shards
-        </p>
-        <p>
-          <img src="/static/img/icons/heart_empty.png"> 76 Opal Hearts
-        </p>
-      </div>
+    {% if logged_in %}
+    <div class="sidebar-section flipped" id="ha-panel">
+      <a href="/ha/"><img src="/api/ha/fd/1,8,3,4,2,7,6,9,11/"></a>
     </div>
+    <div class="sidebar-section">
+      <p>You are <a href="/user/{{username}}/">{{display_name}}</a></p>
+      <p>
+        <img src="/static/img/icons/star_1.png"> <a href="/shops/star/">20 Star Shards</a>
+      </p>
+      <p>
+        <img src="/static/img/icons/heart_empty.png"> <a href="/shops/oh/">76 Opal Hearts</a>
+      </p>
+    </div>
+    {% else %}
+    <div id="side-login-error"></div>
+    <form class="validated-form" action="/login/" method="post" id="side-login-form" data-error-id="side-login-error">
+      <table class="form-table center">
+        <tr>
+          <th class="section-header">
+            Login to Saylua
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <label for="sidebar-username">Username</label>
+            <input type="text" placeholder="Username" id="sidebar-username" name="username" data-validators="required">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="sidebar-password">Password</label>
+            <input type="password" placeholder="Password" id="sidebar-password" name="password" data-validators="required">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input type="submit" class="small" value="Login!" name="login">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="/login/recover/">Lost credentials?</a></p>
+            <p><a href="/register/">Register!</a></p>
+          </td>
+        </tr>
+      </table>
+    </form>
+    {% endif %}
   </div>
   <div class="sidebar right" id="right-bar">
-    <div class="sidebar-content">
-      <div class="sidebar-section">
-        <div class="sidebar-header">Your Party</div>
-        <a href="/pet/shc/"><img src="/static/img/SHC.png" class="left"></a>
-      </div>
-      <div class="sidebar-section">
-        <a href="/pet/shc/"><img src="/static/img/SHC.png" style="width: 50%;" class="left"></a>
-        <a href="/pet/shc/"><img src="/static/img/SHC.png" style="width: 50%;" class="left"></a>
-        <p>Flowering Oranda is hungry! <a href="/room/shc/">Feed them?</a> </p>
-      </div>
+    <div class="sidebar-section">
+      <i class="fa fa-clock-o" aria-hidden="true"></i> <span id="site-time">{{saylua_time}}</span>
+      <a href="/pet/shc/"><img src="/static/img/SHC.png" class="left"></a>
+    </div>
+    <div class="sidebar-section">
+      <a href="/pet/shc/"><img src="/static/img/SHC.png" style="width: 50%;" class="left"></a>
+      <a href="/pet/shc/"><img src="/static/img/SHC.png" style="width: 50%;" class="left"></a>
+      <p>Flowering Oranda is hungry! <a href="/room/shc/">Feed them?</a> </p>
     </div>
   </div>
 </div>
