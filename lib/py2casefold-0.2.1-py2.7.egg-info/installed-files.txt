@@ -1,0 +1,8 @@
+../py2casefold/__init__.py
+../py2casefold/VERSION
+../py2casefold/CaseFolding.txt
+../py2casefold/__init__.pyc
+dependency_links.txt
+PKG-INFO
+SOURCES.txt
+top_level.txt

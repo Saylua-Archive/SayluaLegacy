@@ -7,4 +7,3 @@ config.py
 saylua/static/js/*
 saylua/static/css/*
 !saylua/static/js/lib
-lib

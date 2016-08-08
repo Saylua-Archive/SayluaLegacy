@@ -1,0 +1,12 @@
+MANIFEST.in
+README.rst
+setup.cfg
+setup.py
+py2casefold/CaseFolding.txt
+py2casefold/VERSION
+py2casefold/__init__.py
+py2casefold.egg-info/PKG-INFO
+py2casefold.egg-info/SOURCES.txt
+py2casefold.egg-info/dependency_links.txt
+py2casefold.egg-info/top_level.txt
+tests/test_casefold.py

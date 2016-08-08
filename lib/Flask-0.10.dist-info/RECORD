@@ -1,3 +1,9 @@
+Flask-0.10.dist-info/DESCRIPTION.rst,sha256=YsWE_jM8p5TWeiY2cuesAHH5JUW95FFaHKvruzGCg5o,694
+Flask-0.10.dist-info/METADATA,sha256=_qSRkl4wlw8mDGdAdNn1mxnnQ91qdGXo6FZj2h73AYQ,1557
+Flask-0.10.dist-info/RECORD,,
+Flask-0.10.dist-info/WHEEL,sha256=BtVfdXUcEYLcFjOkbIrCFRyXU4qszVPt-E9o3RWkSNw,93
+Flask-0.10.dist-info/metadata.json,sha256=3xEFrO6Dx8hvt9GPlv_d9rj2Ah8fyl0WoWybAsLOuPM,1011
+Flask-0.10.dist-info/top_level.txt,sha256=dvi65F6AeGWVU0TBpYiC04yM60-FX1gJFkK31IKQr5c,6
 flask/__init__.py,sha256=Hmok7MXSW0QTF-6TCFPfRqpHlVq1zOihqSMnHfXysvo,1672
 flask/_compat.py,sha256=ug9fCmzhMFE1ecCpZLvbHSTXluYCcLXt3_8SNwGNZyg,2164
 flask/app.py,sha256=U7K6oLEhv59ZrIJEzfVfVcB33PYKRQQN2CYLalOaNSA,76786
@@ -64,8 +70,8 @@ flask/testsuite/test_apps/flaskext/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQe
 flask/testsuite/test_apps/flaskext/oldext_simple.py,sha256=fuHRIiStUQIS-JoiE_Vwkc_nRX3qkMETN1yBtEDQyck,25
 flask/testsuite/test_apps/flaskext/oldext_package/__init__.py,sha256=u6W0k3--q15e2nTlDWvTA0gvu1EuvaJQGIb-y9gPe8A,26
 flask/testsuite/test_apps/flaskext/oldext_package/submodule.py,sha256=VBKM2Msdeq6F7ziaPiwTbcu9c4wAH4kKZH6FDUPi6zg,35
-flask/testsuite/test_apps/lib/python2.5/site-packages/site_app.py,sha256=yObUTJgzGrSHwp-eLsE-bMbGmKLogUdE6bCn7jQPR6A,42
 flask/testsuite/test_apps/lib/python2.5/site-packages/SiteEgg.egg,sha256=fVBqIK3Yab7f_mM6B5dZO2zN1N9abqQKS1xRIbKNsgc,1218
+flask/testsuite/test_apps/lib/python2.5/site-packages/site_app.py,sha256=yObUTJgzGrSHwp-eLsE-bMbGmKLogUdE6bCn7jQPR6A,42
 flask/testsuite/test_apps/lib/python2.5/site-packages/site_package/__init__.py,sha256=yObUTJgzGrSHwp-eLsE-bMbGmKLogUdE6bCn7jQPR6A,42
 flask/testsuite/test_apps/moduleapp/__init__.py,sha256=x5mMfvASdMFFNFp0tq2Fwpp_-9DxNlRwHIFxj_bhbnQ,188
 flask/testsuite/test_apps/moduleapp/apps/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
@@ -78,12 +84,7 @@ flask/testsuite/test_apps/moduleapp/apps/frontend/templates/index.html,sha256=hc
 flask/testsuite/test_apps/path/installed_package/__init__.py,sha256=yObUTJgzGrSHwp-eLsE-bMbGmKLogUdE6bCn7jQPR6A,42
 flask/testsuite/test_apps/subdomaintestmodule/__init__.py,sha256=o7W5jKRXGVqfjwYKWjI3QX8WUztGxuVnGiZ-wSGd1Fk,74
 flask/testsuite/test_apps/subdomaintestmodule/static/hello.txt,sha256=5PvE5WQoKT9dXkOTZ63vfG9F0iAysyTmSTX0dA4uiQI,16
-Flask-0.10.dist-info/DESCRIPTION.rst,sha256=YsWE_jM8p5TWeiY2cuesAHH5JUW95FFaHKvruzGCg5o,694
-Flask-0.10.dist-info/METADATA,sha256=pqbqQzdvCFKHyFRIFyxq9hyctjcYvH9MGStkHlbfBqk,1557
-Flask-0.10.dist-info/metadata.json,sha256=nWJBE8_HRpsHM1zLFJsfFrxuzec2njoS7UDgZMpCiFE,1011
-Flask-0.10.dist-info/RECORD,,
-Flask-0.10.dist-info/top_level.txt,sha256=dvi65F6AeGWVU0TBpYiC04yM60-FX1gJFkK31IKQr5c,6
-Flask-0.10.dist-info/WHEEL,sha256=54bVun1KfEBTJ68SHUmbxNPj80VxlQ0sHi4gZdGZXEY,92
+Flask-0.10.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
 flask/config.pyc,,
 flask/testsuite/deprecations.pyc,,
 flask/testsuite/test_apps/flaskext/oldext_package/__init__.pyc,,

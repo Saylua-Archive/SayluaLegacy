@@ -17,8 +17,8 @@ Classifier: Programming Language :: Python :: 2.6
 Classifier: Programming Language :: Python :: 2.7
 Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
-Requires-Dist: Werkzeug (>=0.7)
 Requires-Dist: Jinja2 (>=2.4)
+Requires-Dist: Werkzeug (>=0.7)
 Requires-Dist: itsdangerous (>=0.21)
 
 Flask

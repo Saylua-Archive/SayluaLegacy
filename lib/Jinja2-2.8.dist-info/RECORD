@@ -28,6 +28,7 @@ Jinja2-2.8.dist-info/metadata.json,sha256=4TsqsSBwGwy0C2xF_uRZHYsRn2W5Lv4NUMBjTn
 Jinja2-2.8.dist-info/RECORD,,
 Jinja2-2.8.dist-info/top_level.txt,sha256=PkeVWtLb3-CqjWi1fO29OCbj55EhX_chhKrCdrVe_zs,7
 Jinja2-2.8.dist-info/WHEEL,sha256=AvR0WeTpDaxT645bl5FQxUK6NPsTls2ttpcGJg3j1Xg,110
+Jinja2-2.8.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
 jinja2/_compat.pyc,,
 jinja2/sandbox.pyc,,
 jinja2/_stringdefs.pyc,,
