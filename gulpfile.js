@@ -39,7 +39,7 @@ gulp.task('scripts', ['clean'], function() {
   jsFolder.forEach(function(folder) {
     var pkgName = folder.match(/.+\/(.+)\/$/)[1];
 
-    gulp.src([folder + '*.js'])
+    gulp.src([folder + '**/*.js'])
             .pipe(sourcemaps.init())
               .pipe(uglify())
               .pipe(concat(pkgName + '.min.js'))

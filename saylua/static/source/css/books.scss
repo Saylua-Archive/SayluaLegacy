@@ -40,7 +40,7 @@
 
 // CSS for single books
 #book-cover {
-  width: 95%;
+  width: 750px;
   box-sizing: border-box;
   padding: 6px 15px;
   background: #9C6967;
@@ -104,6 +104,7 @@
   background: -ms-linear-gradient(left, rgba(250,248,245,1) 0%, rgba(255,255,255,1) 18%, rgba(252,250,247,1) 47%, rgba(255,254,252,1) 82%, rgba(235,229,217,1) 100%);
   background: linear-gradient(to right, rgba(250,248,245,1) 0%, rgba(255,255,255,1) 18%, rgba(252,250,247,1) 47%, rgba(255,254,252,1) 82%, rgba(235,229,217,1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#faf8f5', endColorstr='#ebe5d9', GradientType=1 );
+  border-top-right-radius: 20px 10px;
 }
 
 #book-cover #book-page-right {
@@ -116,4 +117,5 @@
   background: -ms-linear-gradient(left, rgba(235,229,217,1) 0%, rgba(255,254,252,1) 18%, rgba(252,250,247,1) 53%, rgba(255,255,255,1) 82%, rgba(250,248,245,1) 100%);
   background: linear-gradient(to right, rgba(235,229,217,1) 0%, rgba(255,254,252,1) 18%, rgba(252,250,247,1) 53%, rgba(255,255,255,1) 82%, rgba(250,248,245,1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ebe5d9', endColorstr='#faf8f5', GradientType=1 );
+  border-top-left-radius: 20px 10px;
 }
