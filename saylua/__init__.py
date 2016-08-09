@@ -10,6 +10,7 @@ from flask import request, session, g, redirect, url_for, abort, render_template
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
+import context_processors
 
 @app.errorhandler(404)
 def page_not_found(e):
