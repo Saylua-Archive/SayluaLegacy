@@ -6,6 +6,7 @@ import ha
 import home
 import items
 import login
+import context_processors
 import messages
 import notifications
 import pet
