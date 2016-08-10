@@ -5,13 +5,19 @@ from flask import Flask
 # the App Engine WSGI application server.
 
 from os.path import isfile, join
-from flask import request, session, g, redirect, url_for, abort, render_template, flash, make_response
+from flask import (request, session, g, redirect, url_for, abort, render_template,
+    flash, make_response, send_from_directory)
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
 import g_globals
 import context_processors
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(join(app.root_path, 'static'),
+        'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.errorhandler(404)
 def page_not_found(e):

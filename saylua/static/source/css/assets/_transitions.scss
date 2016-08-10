@@ -12,3 +12,12 @@
   -moz-transition: background .25s ease-in-out;
   -webkit-transition: background .25s ease-in-out;
 }
+
+@mixin filter-trans {
+  -webkit-transition: 0.5s -webkit-filter ease-in-out;
+  -moz-transition: 0.5s -moz-filter ease-in-out;
+  -moz-transition: 0.5s filter ease-in-out;
+  -ms-transition: 0.5s -ms-filter ease-in-out;
+  -o-transition: 0.5s -o-filter ease-in-out;
+  transition: 0.5s filter ease-in-out, 0.5s -webkit-filter ease-in-out;
+}
