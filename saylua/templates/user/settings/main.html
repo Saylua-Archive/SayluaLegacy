@@ -11,11 +11,13 @@
       <td>
         <div class="switch">
           <label>
-            <input type="radio" name="guests" value="1" checked>
+            <input type="radio" name="profile_is_public" value="1"
+              {% if g.user.profile_is_public %}checked{% endif %}>
             <b>On</b>
           </label>
           <label>
-            <input type="radio" name="guests" value="0">
+            <input type="radio" name="profile_is_public" value=""
+              {% if not g.user.profile_is_public %}checked{% endif %}>
             <b>Off</b>
           </label>
         </div>
@@ -28,11 +30,13 @@
       <td>
         <div class="switch">
           <label>
-            <input type="radio" name="pings" value="1" checked>
+            <input type="radio" name="notified_on_pings" value="1"
+              {% if g.user.notified_on_pings %}checked{% endif %}>
             <b>On</b>
           </label>
           <label>
-            <input type="radio" name="pings" value="0">
+            <input type="radio" name="notified_on_pings" value=""
+              {% if not g.user.notified_on_pings %}checked{% endif %}>
             <b>Off</b>
           </label>
         </div>
@@ -45,11 +49,13 @@
       <td>
         <div class="switch">
           <label>
-            <input type="radio" name="disable_ha" value="1">
+            <input type="radio" name="ha_disabled" value="1"
+              {% if g.user.ha_disabled %}checked{% endif %}>
             <b>On</b>
           </label>
           <label>
-            <input type="radio" name="disable_ha" value="0" checked>
+            <input type="radio" name="ha_disabled" value=""
+              {% if not g.user.ha_disabled %}checked{% endif %}>
             <b>Off</b>
           </label>
         </div>
@@ -62,11 +68,13 @@
       <td>
         <div class="switch">
           <label>
-            <input type="radio" name="autosubscribe_threads" value="1" checked>
+            <input type="radio" name="autosubscribe_threads" value="1"
+              {% if g.user.autosubscribe_threads %}checked{% endif %}>
             <b>On</b>
           </label>
           <label>
-            <input type="radio" name="autosubscribe_threads" value="0">
+            <input type="radio" name="autosubscribe_threads" value=""
+              {% if not g.user.autosubscribe_threads %}checked{% endif %}>
             <b>Off</b>
           </label>
         </div>
@@ -79,11 +87,13 @@
       <td>
         <div class="switch">
           <label>
-            <input type="radio" name="autosubscribe_posts" value="1">
+            <input type="radio" name="autosubscribe_posts" value="1"
+              {% if g.user.autosubscribe_posts %}checked{% endif %}>
             <b>On</b>
           </label>
           <label>
-            <input type="radio" name="autosubscribe_posts" value="0" checked>
+            <input type="radio" name="autosubscribe_posts" value=""
+              {% if not g.user.autosubscribe_posts %}checked{% endif %}>
             <b>Off</b>
           </label>
         </div>

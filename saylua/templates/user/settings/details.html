@@ -13,10 +13,21 @@
     </tr>
     <tr>
       <th class="label">
+        <label for="user-settings-display-name">Display Name</label>
+      </th>
+      <td>
+        <input type="text" name="display_name" placeholder="Your Display Name"
+          id="user-settings-display-name" value="{{g.user.display_name}}">
+        <small class="form-tip">You can change your display name as often as you want. </small>
+      </td>
+    </tr>
+    <tr>
+      <th class="label">
         <label for="user-settings-gender">Gender</label>
       </th>
       <td>
-        <input type="text" name="gender" placeholder="Gender" id="user-settings-gender">
+        <input type="text" name="gender" placeholder="Gender" id="user-settings-gender"
+          value="{{g.user.gender}}">
       </td>
     </tr>
     <tr>
@@ -24,7 +35,8 @@
         <label for="user-settings-pronouns">Pronouns</label>
       </th>
       <td>
-        <input type="text" name="pronouns" placeholder="Pronouns" id="user-settings-pronouns">
+        <input type="text" name="pronouns" placeholder="Pronouns" id="user-settings-pronouns"
+          value="{{g.user.pronouns}}">
       </td>
     </tr>
     <tr>
@@ -32,7 +44,8 @@
         <label for="user-settings-bio">About Me</label>
       </th>
       <td>
-        <textarea name="bio" placeholder="Write a bit about yourself for others to see. " id="user-settings-bio"></textarea>
+        <textarea name="bio" placeholder="Write a bit about yourself for others to see. "
+          id="user-settings-bio">{{g.user.css}}</textarea>
       </td>
     </tr>
     <tr>

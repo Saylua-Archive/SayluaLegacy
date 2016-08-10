@@ -1,22 +1,12 @@
-from saylua import app
+from saylua import app, login_required
 from flask import (render_template, redirect, make_response,
                    url_for, flash, session, abort, request, g)
 from google.appengine.ext import ndb
 import random, string
 from bcryptmaster import bcrypt
 import datetime, re
-from functools import wraps
 
 from saylua.models.user import LoginSession, User
-
-
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if g.logged_in == False:
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated_function
 
 @app.route('/login/', methods=['GET'])
 def login():

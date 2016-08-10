@@ -7,10 +7,12 @@
     <div class="sidebar-section">
       <p>You are <a href="/user/{{g.user.username}}/">{{g.user.display_name}}</a></p>
       <p>
-        <img src="/static/img/icons/star_1.png"> <a href="/shops/star/">20 Star Shards</a>
+        <img src="/static/img/icons/star_1.png">
+        <a href="/shops/star/">{{g.user.star_shards}} Star Shards</a>
       </p>
       <p>
-        <img src="/static/img/icons/heart_empty.png"> <a href="/shops/oh/">76 Opal Hearts</a>
+        <img src="/static/img/icons/heart_empty.png">
+        <a href="/shops/oh/">{{g.user.opal_hearts}} Opal Hearts</a>
       </p>
     </div>
     {% else %}
