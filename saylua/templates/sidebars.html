@@ -1,11 +1,11 @@
 <div id="sidebar-container">
   <div class="sidebar left" id="left-bar">
-    {% if logged_in %}
+    {% if g.logged_in %}
     <div class="sidebar-section flipped" id="ha-panel">
       <a href="/ha/"><img src="/api/ha/fd/1,8,3,4,2,7,6,9,11/"></a>
     </div>
     <div class="sidebar-section">
-      <p>You are <a href="/user/{{username}}/">{{display_name}}</a></p>
+      <p>You are <a href="/user/{{g.user.username}}/">{{g.user.display_name}}</a></p>
       <p>
         <img src="/static/img/icons/star_1.png"> <a href="/shops/star/">20 Star Shards</a>
       </p>

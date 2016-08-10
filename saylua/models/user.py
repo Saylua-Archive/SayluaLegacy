@@ -6,6 +6,8 @@ class User(ndb.Model):
     phash = ndb.StringProperty()
     email = ndb.StringProperty(indexed=True)
     email_verified = ndb.BooleanProperty()
+    star_shards = ndb.IntegerProperty()
+    opal_hearts = ndb.IntegerProperty()
 
 class LoginSession(ndb.Model):
     username = ndb.StringProperty(indexed=True)

@@ -13,11 +13,7 @@ from saylua.models.user import LoginSession, User
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        username = request.cookies.get('username')
-        session_key = request.cookies.get('session_key')
-        found = LoginSession.query(LoginSession.username == username,
-                LoginSession.session_key == session_key).get()
-        if found == None:
+        if g.logged_in == False:
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function

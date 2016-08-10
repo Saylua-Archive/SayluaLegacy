@@ -59,12 +59,12 @@
         <input type="text" placeholder="Search Saylua" name="q">
         <button><i class="fa fa-search" aria-hidden="true"></i></button>
       </form>
-      {% if logged_in %}
+      {% if g.logged_in %}
       <div id="navigation-right">
         <div id="dropdown-right">
           <div id="user-menu" class="menu">
-            <h3>Logged in as {{display_name}}</h3>
-            <a href="/user/{{username}}/"><img src="/static/img/icons/user.png"> My Profile</a>
+            <h3>Logged in as {{g.user.display_name}}</h3>
+            <a href="/user/{{g.user.username}}/"><img src="/static/img/icons/user.png"> My Profile</a>
             <a href="/settings/"><img src="/static/img/icons/cog.png"> Account Settings</a>
             <span class="dropdown-separator"></span>
             <a href="/user/settings/"><img src="/static/img/icons/award_star_gold.png"> My Achievements</a>
@@ -96,7 +96,7 @@
             <a href="/messages/"><img src="/static/img/icons/email.png"> View All Messages</a>
           </div>
         </div>
-        <a href="/user/{{username}}/" class="block-link" data-section="user-menu">
+        <a href="/user/{{g.user.username}}/" class="block-link" data-section="user-menu">
           <i class="fa fa-user" aria-hidden="true"></i>
         </a>
         <a href="/notifications/" class="block-link" data-section="notifications-menu">
