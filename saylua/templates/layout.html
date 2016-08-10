@@ -12,10 +12,12 @@
   </title>
   <meta name="description" content="A new virtual petsite. ">
   <meta name="author" content="Saylua">
-  <meta name="viewport" content="width=1024, initial-scale=1">
+  <meta name="viewport" content="width=1024">
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
   <link rel="stylesheet" href="/static/css/styles.min.css?v=02">
+
+  <link rel="icon" type="image/png" href="/static/favicon.png" />
 
   <script src="/static/js/lib/reqwest.min.js"></script>
   <script src="/static/js/main.min.js"></script>
@@ -30,9 +32,9 @@
 <body>
 <div class="overlay"></div>
 <div id="banner" class="container">
-  <div id="logo">
-    <a href="/">Saylua</a>
-  </div>
+  <a href="/" class="block-link" id="logo">
+    <img src="/static/img/logo.svg" alt="Saylua" title="Saylua" />
+  </a>
 </div>
 <div class="container" id="nav-container">
   <div id="navbar">
