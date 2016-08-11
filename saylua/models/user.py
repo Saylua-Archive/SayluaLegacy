@@ -14,7 +14,6 @@ class User(ndb.Model):
     opal_hearts = ndb.IntegerProperty(default=0)
 
     # Settings
-    profile_is_public = ndb.BooleanProperty(default=True)
     notified_on_pings = ndb.BooleanProperty(default=True)
     ha_disabled = ndb.BooleanProperty(default=False)
     autosubscribe_threads = ndb.BooleanProperty(default=True)

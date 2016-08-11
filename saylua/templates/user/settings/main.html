@@ -6,25 +6,6 @@
   <table class="form-table">
     <tr>
       <th class="label break">
-        <label>Allow guests to see profile?</label>
-      </th>
-      <td>
-        <div class="switch">
-          <label>
-            <input type="radio" name="profile_is_public" value="1"
-              {% if g.user.profile_is_public %}checked{% endif %}>
-            <b>Yes</b>
-          </label>
-          <label>
-            <input type="radio" name="profile_is_public" value=""
-              {% if not g.user.profile_is_public %}checked{% endif %}>
-            <b>No</b>
-          </label>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <th class="label break">
         <label>Receive notifications for pings?</label>
       </th>
       <td>

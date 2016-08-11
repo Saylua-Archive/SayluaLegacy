@@ -1,18 +1,26 @@
 from saylua import app, login_required
 from flask import (render_template, redirect, g,
                    url_for, flash, session, abort, request)
-import saylua.models.user
+from saylua.models.user import User
 
 # User Profiles
 @app.route('/user/')
 @login_required
 def user_profile_default():
-    username = 'username'
-    return redirect('/user/' + username + '/', code=302)
+    return redirect('/user/' + g.user.username + '/', code=302)
 
-@app.route('/user/<user>/')
-def user_profile(user):
-    return render_template('user/profile.html')
+@app.route('/user/<username>/')
+def user_profile(username):
+    user = None
+    if g.logged_in and username == g.user.username:
+        user = g.user
+    else:
+        user = User.query(User.username == username).get()
+
+    if user == None:
+        return render_template('user/notfound.html')
+
+    return render_template('user/profile.html', viewed_user=user)
 
 # Users Online
 @app.route('/online/')
@@ -24,7 +32,7 @@ def users_online():
 @login_required
 def user_settings():
     if request.method == 'POST':
-        boolean_fields = ['profile_is_public', 'notified_on_pings',
+        boolean_fields = ['notified_on_pings',
             'ha_disabled', 'autosubscribe_threads', 'autosubscribe_posts']
         save_fields_to_user(request.form, bool_fields=boolean_fields)
         return redirect(url_for('user_settings'))
