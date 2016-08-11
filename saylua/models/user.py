@@ -28,6 +28,6 @@ class User(ndb.Model):
 
 
 class LoginSession(ndb.Model):
-    username = ndb.StringProperty(indexed=True)
+    user_key = ndb.StringProperty(indexed=True)
     session_key = ndb.StringProperty()
     expires = ndb.DateTimeProperty()
