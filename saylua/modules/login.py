@@ -26,17 +26,19 @@ def login_post():
         flash("Your password is incorrect.", 'error')
         return render_template("login/login.html")
 
+    found_key = found.key.urlsafe()
+
     #Add a session to the datastore
     session_key = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(32))
     expires = datetime.datetime.utcnow()
     expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
-    new_session = LoginSession(username=found.username, session_key=session_key,
+    new_session = LoginSession(user_key=found_key, session_key=session_key,
             expires=expires)
     new_session.put()
 
     #Generate a matching cookie and redirct
     resp = make_response(redirect(url_for('home')))
-    resp.set_cookie("username", username, expires=expires)
+    resp.set_cookie("user_key", found_key, expires=expires)
     resp.set_cookie("session_key", session_key, expires=expires)
     return resp
 
@@ -51,14 +53,14 @@ def reset_password(user, code):
 
 @app.route('/logout/')
 def logout():
-    username = request.cookies.get('username')
+    user_key = request.cookies.get('user_key')
     session_key = request.cookies.get('session_key')
-    found = LoginSession.query(LoginSession.username == username,
+    found = LoginSession.query(LoginSession.user_key == user_key,
         LoginSession.session_key == session_key).get()
     if found != None:
         found.key.delete()
     resp = make_response(redirect(url_for('home')))
-    resp.set_cookie('username', '', expires=0)
+    resp.set_cookie('user_key', '', expires=0)
     resp.set_cookie('session_key', '', expires=0)
     return resp
 
@@ -117,19 +119,19 @@ def register_post():
         phash = bcrypt.hashpw(password, bcrypt.gensalt())
         new_user = User(username=username, display_name=display_name, phash=phash,
                 email=email, email_verified=False)
-        new_user.put()
+        user_key = new_user.put().urlsafe()
 
         #Add a session to the datastore
         session_key = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(32))
         expires = datetime.datetime.utcnow()
         expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
-        new_session = LoginSession(username=username, session_key=session_key,
+        new_session = LoginSession(user_key=user_key, session_key=session_key,
                 expires=expires)
         new_session.put()
 
         #Generate a matching cookie and redirct
         resp = make_response(redirect(url_for('home')))
-        resp.set_cookie("username", username, expires=expires)
+        resp.set_cookie("user_key", user_key, expires=expires)
         resp.set_cookie("session_key", session_key, expires=expires)
         return resp
 
