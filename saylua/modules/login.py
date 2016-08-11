@@ -26,7 +26,6 @@ def login_post():
         flash("Your password is incorrect.", 'error')
         return render_template("login/login.html")
 
-    #found_key = User.query(User.username == username).get(keys_only=True).urlsafe()
     found_key = found.key.urlsafe()
 
     #Add a session to the datastore
