@@ -17,7 +17,8 @@
       </th>
       <td>
         <input type="text" name="display_name" placeholder="Your Display Name"
-          id="user-settings-display-name" value="{{g.user.display_name}}">
+          id="user-settings-display-name" value="{{g.user.display_name}}"
+          data-validators="required not_empty min:2 max:25">
         <small class="form-tip">You can change your display name as often as you want. </small>
       </td>
     </tr>
@@ -45,7 +46,7 @@
       </th>
       <td>
         <textarea name="bio" placeholder="Write a bit about yourself for others to see. "
-          id="user-settings-bio">{{g.user.css}}</textarea>
+          id="user-settings-bio">{{g.user.bio}}</textarea>
       </td>
     </tr>
     <tr>

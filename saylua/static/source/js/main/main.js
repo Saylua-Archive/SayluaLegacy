@@ -7,7 +7,24 @@ window.addEventListener('load', function () {
   // Form Validation
   FormValidation.bind('.validated-form');
   CheckAll.bind('.check-all');
+
+  bindTabTyping('.tabs-allowed');
 });
+
+function bindTabTyping(selector) {
+  var inputs = document.querySelectorAll(selector);
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].addEventListener('keydown', function (e) {
+      if (e.keyCode == 9 || e.which == 9) {
+          e.preventDefault();
+          var s = this.selectionStart;
+          this.value = this.value.substring(0, this.selectionStart)
+            + "\t" + this.value.substring(this.selectionEnd);
+          this.selectionEnd = s + 1;
+      }
+    });
+  }
+}
 
 // Make navigation bar stay at the top
 function fixNavbar(e) {

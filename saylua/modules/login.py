@@ -19,11 +19,11 @@ def login_post():
 
     found = User.query(User.username == username).get()
     if found == None:
-        flash("We can't find a user by that name.")
+        flash("We can't find a user by that name.", 'error')
         return render_template("login/login.html")
 
     if not bcrypt.hashpw(password, found.phash) == found.phash:
-        flash("Your password is incorrect.")
+        flash("Your password is incorrect.", 'error')
         return render_template("login/login.html")
 
     #found_key = User.query(User.username == username).get(keys_only=True).urlsafe()
@@ -81,32 +81,32 @@ def register_post():
     valid = True
     #Validate everything here
     if password != password2:
-        flash("Passwords must match!")
+        flash("Passwords must match!", 'error')
         valid = False
 
     if username == None or password == None or email == None:
-        flash("You're missing a field!")
+        flash("You're missing a field!", 'error')
         valid = False
 
     if not tos_agreed:
-        flash("You must accept the TOS to register.")
+        flash("You must accept the TOS to register.", 'error')
         valid = False
 
     if len(password) < app.config['MIN_PASSWORD_LENGTH']:
-        flash("Your password must be at least " + str(app.config['MIN_PASSWORD_LENGTH']) + " characters.")
+        flash("Your password must be at least " + str(app.config['MIN_PASSWORD_LENGTH']) + " characters.", 'error')
         valid = False
 
     if len(username) < app.config['MIN_USERNAME_LENGTH']:
-        flash("Your password must be at least " + str(app.config['MIN_USERNAME_LENGTH']) + " characters.")
+        flash("Your password must be at least " + str(app.config['MIN_USERNAME_LENGTH']) + " characters.", 'error')
         valid = False
 
     if len(email) < 5:
-        flash("You must use a valid email address.")
+        flash("You must use a valid email address.", 'error')
         valid = False
 
     pattern = re.compile('^[A-Za-z0-9_-]*$')
     if not pattern.match(username):
-        flash("Your username may only contain letters, numbers, underscores, or hyphens.")
+        flash("Your username may only contain letters, numbers, underscores, or hyphens.", 'error')
         valid = False
 
     if not valid:
@@ -115,7 +115,7 @@ def register_post():
     found = User.query(User.username == username).get()
     if found != None:
         valid = False
-        flash("A user with that username already exists.")
+        flash("A user with that username already exists.", 'error')
     if valid:
         phash = bcrypt.hashpw(password, bcrypt.gensalt())
         new_user = User(username=username, display_name=display_name, phash=phash,
