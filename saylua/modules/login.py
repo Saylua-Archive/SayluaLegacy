@@ -29,12 +29,10 @@ def login_post():
     found_key = found.key.urlsafe()
 
     #Add a session to the datastore
-    session_key = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(32))
     expires = datetime.datetime.utcnow()
     expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
-    new_session = LoginSession(user_key=found_key, session_key=session_key,
-            expires=expires)
-    new_session.put()
+    new_session = LoginSession(user_key=found_key, expires=expires)
+    session_key = new_session.put().urlsafe()
 
     #Generate a matching cookie and redirct
     resp = make_response(redirect(url_for('home')))
@@ -55,9 +53,9 @@ def reset_password(user, code):
 def logout():
     user_key = request.cookies.get('user_key')
     session_key = request.cookies.get('session_key')
-    found = LoginSession.query(LoginSession.user_key == user_key,
-        LoginSession.session_key == session_key).get()
-    if found != None:
+    key = ndb.Key(urlsafe=session_key)
+    found = key.get()
+    if found != None and found.user_key == user_key:
         found.key.delete()
     resp = make_response(redirect(url_for('home')))
     resp.set_cookie('user_key', '', expires=0)
@@ -122,12 +120,10 @@ def register_post():
         user_key = new_user.put().urlsafe()
 
         #Add a session to the datastore
-        session_key = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(32))
         expires = datetime.datetime.utcnow()
         expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
-        new_session = LoginSession(user_key=user_key, session_key=session_key,
-                expires=expires)
-        new_session.put()
+        new_session = LoginSession(user_key=user_key, expires=expires)
+        session_key = new_session.put().urlsafe()
 
         #Generate a matching cookie and redirct
         resp = make_response(redirect(url_for('home')))
