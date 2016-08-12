@@ -9,6 +9,10 @@ class User(ndb.Model):
     date_joined = ndb.DateTimeProperty(auto_now_add=True)
     last_action = ndb.DateTimeProperty(auto_now_add=True)
 
+    #Ban Status
+    permabanned = ndb.BooleanProperty(default=False)
+    banned_until = ndb.DateTimeProperty(auto_now_add=True)
+
     # Currency
     star_shards = ndb.IntegerProperty(default=0)
     opal_hearts = ndb.IntegerProperty(default=0)
@@ -28,5 +32,4 @@ class User(ndb.Model):
 
 class LoginSession(ndb.Model):
     user_key = ndb.StringProperty(indexed=True)
-    session_key = ndb.StringProperty()
     expires = ndb.DateTimeProperty()
