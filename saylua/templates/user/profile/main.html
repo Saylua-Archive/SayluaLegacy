@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block header_scripts %}
+<style style="text/css">
+{{viewed_user.css}}
+</style>
+{% endblock %}
+{% block body %}
+<h2 id="profile-header">{{viewed_user.display_name}} (@{{viewed_user.username}})</h2>
+<div id="profile-container">
+  <div id="profile-column">
+    <img src="http://localhost:8080/api/ha/fd/1,8,3,4,2,7,6,9,11/" id="profile-human-avatar" />
+    <fieldset id="profile-details">
+      <legend id="profile-details-legend">Details</legend>
+      <table id="profile-details-table">
+        <tr>
+          <th>Display Name</th>
+          <td>{{viewed_user.display_name}}</td>
+        </tr>
+        <tr>
+          <th>Username</th>
+          <td>{{viewed_user.username}}</td>
+        </tr>
+        {% if viewed_user.pronouns %}
+        <tr>
+          <th>Pronouns</th>
+          <td>{{viewed_user.pronouns}}</td>
+        </tr>
+        {% endif %}
+        {% if viewed_user.gender %}
+        <tr>
+          <th>Gender</th>
+          <td>{{viewed_user.gender}}</td>
+        </tr>
+        {% endif %}
+        <tr>
+          <th>Date Joined</th>
+          <td>{{viewed_user.date_joined|show_date}}</td>
+        </tr>
+        <tr>
+          <th>Last Online</th>
+          <td>{{viewed_user.last_action|show_date}}</td>
+        </tr>
+      </table>
+    </fieldset>
+  </div>
+  <div id="profile-body">
+    <div id="profile-about-me">
+      {{viewed_user.bio}}
+    </div>
+    <h3>Active Pets</h3>
+    <img src="/static/img/SHC.png" style="width:33%; float:left">
+    <img src="/static/img/SHC.png" style="width:33%; float:left">
+    <img src="/static/img/SHC.png" style="width:33%; float:left">
+    <h3>Trophies</h3>
+  </div>
+</div>
+{% endblock %}

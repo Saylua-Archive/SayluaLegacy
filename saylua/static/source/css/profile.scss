@@ -1,0 +1,37 @@
+@import "assets/variables";
+
+#profile-column {
+  width: 280px;
+  float: left;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+#profile-column fieldset {
+  width: 100%;
+  box-sizing: border-box;
+  border: $bordercolor 1px solid;
+}
+
+#profile-column fieldset table {
+  margin: auto;
+  font-size: 0.9em;
+  word-wrap: break-word;
+}
+
+#profile-column fieldset table th {
+  font-weight: bold;
+  background-color: transparent;
+  text-align: center;
+  width: 100px;
+}
+
+#profile-container {
+  width: 100%;
+}
+
+#profile-body {
+  padding: 10px;
+  min-height: 100%;
+  overflow: auto;
+}

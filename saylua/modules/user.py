@@ -20,7 +20,7 @@ def user_profile(username):
     if user == None:
         return render_template('user/notfound.html')
 
-    return render_template('user/profile.html', viewed_user=user)
+    return render_template('user/profile/main.html', viewed_user=user)
 
 # Users Online
 @app.route('/online/')
