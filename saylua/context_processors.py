@@ -43,7 +43,7 @@ def saylua_show_datetime(time):
 
 @app.template_filter('relative_time')
 def saylua_relative_time(d):
-    diff = datetime.datetime.utcnow() - d
+    diff = datetime.datetime.now() - d
     s = diff.seconds
     if diff.days > 7 or diff.days < 0:
         return template_show_datetime(d)

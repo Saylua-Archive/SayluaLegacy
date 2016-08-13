@@ -6,6 +6,8 @@ from saylua.utils import make_ndb_key
 
 @app.before_request
 def load_user():
+    if request.script_root == '/static':
+        return
     user_key = request.cookies.get('user_key')
     session_key = request.cookies.get('session_key')
     found = None
