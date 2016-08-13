@@ -1,5 +1,5 @@
 from saylua import app, login_required
-from saylua.utils import make_ndb_key
+from saylua.utils import make_ndb_key, pluralize
 from flask import (render_template, redirect, make_response,
                    url_for, flash, session, abort, request, g)
 from google.appengine.ext import ndb
@@ -32,10 +32,13 @@ def notifications_main_post():
         if not n_id:
             flash('You are attempting to edit an invalid notification!', 'error')
             return redirect('/notifications/', code=302)
-        keys.append()
+        keys.append(n_id)
 
     notifications = ndb.get_multi(keys)
     for n in notifications:
+        if not n:
+            flash('You are attempting to edit a notification which does not exist!', 'error')
+            return redirect('/notifications/', code=302)
         if n.user != g.user.key:
             flash('You do not have permission to edit these notifications!', 'error')
             return redirect('/notifications/', code=302)
@@ -43,10 +46,10 @@ def notifications_main_post():
 
     if 'delete' in request.form:
         ndb.delete_multi(keys)
-        flash(str(len(keys)) + ' notifications deleted. ')
+        flash(pluralize(len(keys), 'notification') + ' deleted. ')
     elif 'read' in request.form:
         ndb.put_multi(notifications)
-        flash(str(len(keys)) + ' notifications marked as read. ')
+        flash(pluralize(len(keys), 'notification') + ' marked as read. ')
     return redirect('/notifications/', code=302)
 
 @app.route('/notification/<key>/')
