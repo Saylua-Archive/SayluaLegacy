@@ -9,7 +9,13 @@ def load_user():
     session_key = request.cookies.get('session_key')
     found = None
     if user_key and session_key:
-        s_key = ndb.Key(urlsafe=session_key)
+        try:
+            s_key = ndb.Key(urlsafe=session_key)
+            u_key = ndb.Key(urlsafe=user_key)
+        except Exception:
+            g.logged_in = False
+            g.user = None
+            return None
         found = s_key.get()
         if found.user_key != user_key:
             found = None
@@ -17,7 +23,6 @@ def load_user():
         g.logged_in = False
         g.user = None
         return None
-    u_key = ndb.Key(urlsafe=user_key)
     founduser = u_key.get()
     g.logged_in = True
     g.user = founduser
