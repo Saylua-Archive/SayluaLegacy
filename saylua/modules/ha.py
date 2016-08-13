@@ -1,7 +1,6 @@
-from saylua import app
+from saylua import app, login_required
 from flask import (render_template, redirect,
                    url_for, flash, session, abort, request)
-from login import login_required
 
 @app.route('/ha/')
 @login_required

@@ -1,12 +1,15 @@
-{% from "_macros/pagination.html" import pagination %}
+{% from "_macros/simple_pagination.html" import simple_pagination %}
 {% extends "layout.html" %}
 {% set page_title = "Notifications" %}
 {% block body %}
 <h2>View All Notifications</h2>
+<div class="padded full center">
+  {{ simple_pagination(current_page=page, has_more_pages=more_pages) }}
+</div>
 <form method="post">
   <div class="full center">
-    <input type="submit" class="small" name="delete" value="Delete Selected Notifications">
-    <input type="submit" class="small" name="read" value="Mark Selected as Read">
+    <input type="submit" class="small" name="delete" value="Delete Selected Notifications" />
+    <input type="submit" class="small" name="read" value="Mark Selected as Read" />
   </div>
   <table class="forum-table">
     <tr>
@@ -23,28 +26,38 @@
         Status
       </th>
     </tr>
-
-    {% for i in range(50) %}
-    <tr class="forum-thread-row">
+    {% for notification in viewed_notifications %}
+    <tr class="forum-thread-row{% if not notification.is_read%} highlight{% endif %}">
       <td>
-        <input type="checkbox" name="notification_id" value="i">
+        <input type="checkbox" name="notification_id" value="{{notification.key.urlsafe()}}">
       </td>
       <td>
-        <a href="/">Sample Notification is awesome. </a>
+        <a href="/notification/{{notification.key.urlsafe()}}/">
+          {{notification.text}}{% if notification.count > 1 %} ({{notification.count}}){% endif %}
+        </a>
       </td>
       <td>
-        43 seconds ago
+        {{notification.time|relative_time}}
       </td>
       <td>
-        Read
+        {% if notification.is_read %}
+          Read
+        {% else %}
+          Unread
+        {% endif %}
       </td>
     </tr>
+    {% else %}
+      You have no notifications.
     {% endfor %}
   </table>
   <div class="full center">
-    <input type="submit" class="small" name="delete" value="Delete Selected Notifications">
-    <input type="submit" class="small" name="read" value="Mark Selected as Read">
+    <input type="submit" class="small" name="delete" value="Delete Selected Notifications" />
+    <input type="submit" class="small" name="read" value="Mark Selected as Read" />
   </div>
 </form>
+<div class="padded full center">
+  {{ simple_pagination(current_page=page, has_more_pages=more_pages) }}
+</div>
 
 {% endblock %}

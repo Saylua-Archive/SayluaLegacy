@@ -69,20 +69,23 @@
             <a href="/user/{{g.user.username}}/"><img src="/static/img/icons/user.png"> My Profile</a>
             <a href="/settings/"><img src="/static/img/icons/cog.png"> Account Settings</a>
             <span class="dropdown-separator"></span>
-            <a href="/user/settings/"><img src="/static/img/icons/award_star_gold.png"> My Achievements</a>
-            <a href="/user/settings/"><img src="/static/img/icons/group.png"> Friends List</a>
+            <a href="/achievements/{{g.user.username}}/"><img src="/static/img/icons/award_star_gold.png"> My Achievements</a>
+            <a href="/friends/"><img src="/static/img/icons/group.png"> Friends List</a>
             <span class="dropdown-separator"></span>
             <a href="/logout/"><img src="/static/img/icons/lock_unlock.png"> Logout</a>
           </div>
           <div id="notifications-menu" class="menu">
             <h3>Latest Notifications</h3>
             <ul>
-              <a href="/pet/shc/" class="highlight">
-                <li>Bill (@likemybread) likes your pet Smoking Hot Chick. </li>
-              </a>
-              <a href="/pet/shc/">
-                <li>Haha, you're being notified. </li>
-              </a>
+              {% for notification in notifications %}
+                <a href="/notification/{{notification.key.urlsafe()}}/"{% if not notification.is_read%} class="highlight"{% endif %}>
+                  <li>{{notification.text}}{% if notification.count > 1 %} ({{notification.count}}){% endif %}</li>
+                </a>
+              {% else %}
+                <a href="/notifications/">
+                  <li>You have no notifications. </li>
+                </a>
+              {% endfor %}
             </ul>
             <span class="dropdown-separator"></span>
             <a href="/notifications/"><img src="/static/img/icons/star_1.png"> View All Notifications</a>
@@ -103,7 +106,11 @@
         </a>
         <a href="/notifications/" class="block-link" data-section="notifications-menu">
           <i class="fa fa-bell" aria-hidden="true"></i>
-          <span class="alert-number">1</span>
+          {% if notifications_count > 99 %}
+            <span class="alert-number">99+</span>
+          {% elif notifications_count > 0 %}
+            <span class="alert-number">{{notifications_count}}</span>
+          {% endif %}
         </a>
         <a href="/messages/" class="block-link" data-section="messages-menu">
           <i class="fa fa-envelope" aria-hidden="true"></i>

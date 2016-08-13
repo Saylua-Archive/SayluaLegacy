@@ -1,14 +1,25 @@
 from saylua import app
 from dateutil import tz
 import datetime
-from flask import request
-from saylua.models.user import LoginSession, User
+from flask import request, g
+from saylua.models.notification import Notification
+import random
 
 def saylua_time(time):
     from_zone = tz.gettz('UTC')
     to_zone = tz.gettz('America/New_York')
     time = time.replace(tzinfo = from_zone)
     return time.astimezone(to_zone)
+
+@app.context_processor
+def inject_notifications():
+    notifications_count = Notification.query(Notification.user==g.user.key,
+        Notification.is_read==False).count(limit=100)
+    notifications = Notification.query(Notification.user==g.user.key).order(Notification.is_read,
+        -Notification.time).fetch(limit=5)
+    if not notifications:
+        notifications = []
+    return dict(notifications_count=notifications_count, notifications=notifications)
 
 @app.context_processor
 def inject_time():

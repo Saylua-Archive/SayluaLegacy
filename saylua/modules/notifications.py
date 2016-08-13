@@ -1,19 +1,60 @@
-from saylua import app
+from saylua import app, login_required
+from saylua.utils import make_ndb_key
 from flask import (render_template, redirect, make_response,
-                   url_for, flash, session, abort, request)
+                   url_for, flash, session, abort, request, g)
+from google.appengine.ext import ndb
 from saylua.models.notification import Notification
 
-@app.route('/notifications/')
+@app.route('/notifications/', methods=['GET'])
+@login_required
 def notifications_main():
-    return render_template("notifications/all.html")
+    per_page = 100
+    page = request.args.get('page')
+    if not page:
+        page = 1
+    else:
+        page = int(page)
+    offset = per_page * (page - 1)
+
+    # TODO: Find a way to use cursors instead of offsets
+    notifications, cursor, more = Notification.query(Notification.user==g.user.key).order(
+        Notification.is_read, -Notification.time).fetch_page(per_page, offset=offset)
+    return render_template("notifications/all.html",
+        viewed_notifications=notifications, page=page, more_pages=more)
 
 @app.route('/notifications/', methods=['POST'])
+@login_required
 def notifications_main_post():
-    return render_template("notifications/all.html")
+    notification_ids = request.form.getlist('notification_id')
+    keys = []
+    for n_id in notification_ids:
+        n_id = make_ndb_key(n_id)
+        if not n_id:
+            flash('You are attempting to edit an invalid notification!', 'error')
+            return redirect('/notifications/', code=302)
+        keys.append()
 
-@app.route('/notifications/<int:key>/')
-def notifications_follow(key):
-    notification = Notification.get_by_id(key)
-    if notification:
+    notifications = ndb.get_multi(keys)
+    for n in notifications:
+        if n.user != g.user.key:
+            flash('You do not have permission to edit these notifications!', 'error')
+            return redirect('/notifications/', code=302)
+        n.is_read = True
+
+    if 'delete' in request.form:
+        ndb.delete_multi(keys)
+        flash(str(len(keys)) + ' notifications deleted. ')
+    elif 'read' in request.form:
+        ndb.put_multi(notifications)
+        flash(str(len(keys)) + ' notifications marked as read. ')
+    return redirect('/notifications/', code=302)
+
+@app.route('/notification/<key>/')
+@login_required
+def notification_follow(key):
+    notification = Notification.get_by_id(ndb.Key(urlsafe=key).id())
+    if notification and notification.user == g.user.key:
+        notification.is_read = True
+        notification.put()
         return redirect(notification.link, code=302)
-    return render_template("notifications/invalid.html")
+    return render_template('notifications/invalid.html')
