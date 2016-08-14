@@ -11,7 +11,7 @@ from saylua.models.user import LoginSession, User
 
 @app.route('/login/', methods=['GET'])
 def login():
-    return render_template("login/login.html")
+    return render_template('user/login/login.html')
 
 @app.route('/login/', methods=['POST'])
 def login_post():
@@ -21,11 +21,11 @@ def login_post():
     found = User.query(User.username == username).get()
     if found == None:
         flash("We can't find a user by that name.", 'error')
-        return render_template("login/login.html")
+        return render_template('user/login/login.html')
 
     if not bcrypt.hashpw(password, found.phash) == found.phash:
         flash("Your password is incorrect.", 'error')
-        return render_template("login/login.html")
+        return render_template('user/login/login.html')
 
     found_key = found.key.urlsafe()
 
@@ -44,11 +44,11 @@ def login_post():
 
 @app.route('/login/recover/')
 def recover_login():
-    return render_template("login/recover.html")
+    return render_template('user/login/recover.html')
 
 @app.route('/login/reset/<user>/<code>/')
 def reset_password(user, code):
-    return render_template("login/recover.html")
+    return render_template('user/login/recover.html')
 
 @app.route('/logout/')
 def logout():
@@ -65,7 +65,7 @@ def logout():
 
 @app.route('/register/', methods=['GET'])
 def register():
-    return render_template("login/register.html",
+    return render_template('user/login/register.html',
         min_password_length = app.config['MIN_PASSWORD_LENGTH'],
         max_password_length = app.config['MAX_PASSWORD_LENGTH'],
         min_username_length = app.config['MIN_USERNAME_LENGTH'],
