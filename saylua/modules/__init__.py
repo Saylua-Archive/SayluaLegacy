@@ -8,6 +8,7 @@ import items
 import messages
 import notifications
 import pet
+import search
 import shops
 
 import user.login
