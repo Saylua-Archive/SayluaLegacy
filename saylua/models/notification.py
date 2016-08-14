@@ -2,7 +2,7 @@ from google.appengine.ext import ndb
 import user
 
 class Notification(ndb.Model):
-    user = ndb.KeyProperty(indexed=True)
+    user_key = ndb.KeyProperty(indexed=True)
     time = ndb.DateTimeProperty(auto_now_add=True)
     text = ndb.StringProperty()
     link = ndb.StringProperty()
@@ -14,7 +14,7 @@ class Notification(ndb.Model):
         notification = cls.query(cls.user==user_key,
             cls.text==text, cls.link==link, cls.is_read==False).get()
         if not notification:
-            notification = cls(user=user_key, text=text, link=link)
+            notification = cls(user_key=user_key, text=text, link=link)
         else:
             notification.count += 1
         return notification.put()

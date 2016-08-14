@@ -5,9 +5,12 @@ import games
 import ha
 import home
 import items
-import login
 import messages
 import notifications
 import pet
 import shops
-import user
+
+import user.login
+import user.online
+import user.profile
+import user.settings

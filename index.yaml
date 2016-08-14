@@ -22,3 +22,10 @@ indexes:
   - name: user
   - name: time
     direction: desc
+
+- kind: Notification
+  properties:
+  - name: user_key
+  - name: is_read
+  - name: time
+    direction: desc

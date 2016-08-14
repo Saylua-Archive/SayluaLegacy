@@ -1,21 +1,18 @@
 from saylua import app
+from saylua.utils import saylua_time, pluralize
 from dateutil import tz
 import datetime
 from flask import request, g
 from saylua.models.notification import Notification
-import random
 
-def saylua_time(time):
-    from_zone = tz.gettz('UTC')
-    to_zone = tz.gettz('America/New_York')
-    time = time.replace(tzinfo = from_zone)
-    return time.astimezone(to_zone)
-
+# Context Processor
 @app.context_processor
 def inject_notifications():
-    notifications_count = Notification.query(Notification.user==g.user.key,
+    if not g.logged_in:
+        return {}
+    notifications_count = Notification.query(Notification.user_key==g.user.key,
         Notification.is_read==False).count(limit=100)
-    notifications = Notification.query(Notification.user==g.user.key).order(Notification.is_read,
+    notifications = Notification.query(Notification.user_key==g.user.key).order(Notification.is_read,
         -Notification.time).fetch(limit=5)
     if not notifications:
         notifications = []
@@ -25,6 +22,12 @@ def inject_notifications():
 def inject_time():
     time = saylua_show_time(datetime.datetime.now())
     return dict(saylua_time=time)
+
+
+# Template Filters
+@app.template_filter('pluralize')
+def saylua_pluralize(count, singular_noun, plural_noun=None):
+    return pluralize(count, singular_noun, plural_noun)
 
 @app.template_filter('show_date')
 def saylua_show_date(time):

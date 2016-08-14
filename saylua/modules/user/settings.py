@@ -2,30 +2,7 @@ from saylua import app, login_required
 from flask import (render_template, redirect, g,
                    url_for, flash, session, abort, request)
 from saylua.models.user import User
-
-# User Profiles
-@app.route('/user/')
-@login_required
-def user_profile_default():
-    return redirect('/user/' + g.user.username + '/', code=302)
-
-@app.route('/user/<username>/')
-def user_profile(username):
-    user = None
-    if g.logged_in and username == g.user.username:
-        user = g.user
-    else:
-        user = User.query(User.username == username).get()
-
-    if user == None:
-        return render_template('user/notfound.html')
-
-    return render_template('user/profile/main.html', viewed_user=user)
-
-# Users Online
-@app.route('/online/')
-def users_online():
-    return render_template('user/online.html')
+from saylua.utils.validation import FieldValidator
 
 # User Settings
 @app.route('/settings/', methods=['GET', 'POST'])
@@ -45,17 +22,19 @@ def user_settings():
 def user_settings_details():
     if request.method == 'POST':
         display_name = request.form['display_name'].strip()
-        if len(display_name) < 2:
-            flash('Your display name must be at least two characters long!',
-                'error')
-        elif len(display_name) > 25:
-            flash('Your display name cannot be more than 25 characters long!',
-                'error')
-        else:
+        displayNameValidator = (FieldValidator('display name', display_name)
+            .required()
+            .min(app.config['MIN_DISPLAY_NAME_LENGTH'])
+            .max(app.config['MAX_DISPLAY_NAME_LENGTH']))
+        displayNameValidator.flash()
+
+        if displayNameValidator.valid:
             string_fields = ['display_name', 'gender', 'pronouns', 'bio']
             save_fields_to_user(request.form, str_fields=string_fields)
             return redirect(url_for('user_settings_details'))
-    return render_template("user/settings/details.html")
+    return render_template('user/settings/details.html',
+        min_display_name_length=app.config['MIN_DISPLAY_NAME_LENGTH'],
+        max_display_name_length=app.config['MAX_DISPLAY_NAME_LENGTH'])
 
 @app.route('/settings/css/', methods=['GET', 'POST'])
 @login_required

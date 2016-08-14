@@ -4,8 +4,9 @@ from flask import (render_template, redirect, make_response,
 from google.appengine.ext import ndb
 import random, string
 from bcryptmaster import bcrypt
-import datetime, re
+import datetime
 
+from saylua.utils.validation import FieldValidator
 from saylua.models.user import LoginSession, User
 
 @app.route('/login/', methods=['GET'])
@@ -64,7 +65,11 @@ def logout():
 
 @app.route('/register/', methods=['GET'])
 def register():
-    return render_template("login/register.html")
+    return render_template("login/register.html",
+        min_password_length = app.config['MIN_PASSWORD_LENGTH'],
+        max_password_length = app.config['MAX_PASSWORD_LENGTH'],
+        min_username_length = app.config['MIN_USERNAME_LENGTH'],
+        max_username_length = app.config['MAX_USERNAME_LENGTH'])
 
 @app.route('/register/', methods=['POST'])
 def register_post():
@@ -75,36 +80,34 @@ def register_post():
     email = request.form['email'].lower()
     tos_agreed = 'tos_agreed' in request.form
 
-    valid = True
-    #Validate everything here
-    if password != password2:
-        flash("Passwords must match!", 'error')
-        valid = False
+    # Validate all of the fields
+    passwordValidator = (FieldValidator('password', password)
+        .required()
+        .min(app.config['MIN_PASSWORD_LENGTH'])
+        .max(app.config['MAX_PASSWORD_LENGTH'])
+        .matches(password2, error='Passwords must match.'))
 
-    if username == None or password == None or email == None:
-        flash("You're missing a field!", 'error')
-        valid = False
+    usernameValidator = (FieldValidator('username', username)
+        .required()
+        .min(app.config['MIN_USERNAME_LENGTH'])
+        .max(app.config['MAX_USERNAME_LENGTH'])
+        .matches_regex('^[A-Za-z0-9_-]*$', error='Usernames may only contain alphanumeric characters, underscroes, and hyphens.'))
 
-    if not tos_agreed:
-        flash("You must accept the TOS to register.", 'error')
-        valid = False
+    emailValidator = (FieldValidator('email', email)
+        .required()
+        .min(5, error='You must enter a valid email address.'))
 
-    if len(password) < app.config['MIN_PASSWORD_LENGTH']:
-        flash("Your password must be at least " + str(app.config['MIN_PASSWORD_LENGTH']) + " characters.", 'error')
-        valid = False
+    tosValidator = (FieldValidator('TOS', tos_agreed)
+        .required(error='You must agree to the Terms of Service.'))
 
-    if len(username) < app.config['MIN_USERNAME_LENGTH']:
-        flash("Your password must be at least " + str(app.config['MIN_USERNAME_LENGTH']) + " characters.", 'error')
-        valid = False
+    # Flash all of the validation errors found
+    passwordValidator.flash()
+    usernameValidator.flash()
+    emailValidator.flash()
+    tosValidator.flash()
 
-    if len(email) < 5:
-        flash("You must use a valid email address.", 'error')
-        valid = False
-
-    pattern = re.compile('^[A-Za-z0-9_-]*$')
-    if not pattern.match(username):
-        flash("Your username may only contain letters, numbers, underscores, or hyphens.", 'error')
-        valid = False
+    valid = (passwordValidator.valid and usernameValidator.valid
+        and emailValidator.valid and tosValidator.valid)
 
     if not valid:
         return redirect(url_for('register'))
@@ -112,7 +115,7 @@ def register_post():
     found = User.query(User.username == username).get()
     if found != None:
         valid = False
-        flash("A user with that username already exists.", 'error')
+        flash('A user with that username already exists.', 'error')
     if valid:
         phash = bcrypt.hashpw(password, bcrypt.gensalt())
         new_user = User(username=username, display_name=display_name, phash=phash,
@@ -127,8 +130,8 @@ def register_post():
 
         #Generate a matching cookie and redirct
         resp = make_response(redirect(url_for('home')))
-        resp.set_cookie("user_key", user_key, expires=expires)
-        resp.set_cookie("session_key", session_key, expires=expires)
+        resp.set_cookie('user_key', user_key, expires=expires)
+        resp.set_cookie('session_key', session_key, expires=expires)
         return resp
 
     return redirect(url_for('register'))

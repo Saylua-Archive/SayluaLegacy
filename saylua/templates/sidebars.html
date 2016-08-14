@@ -2,17 +2,17 @@
   <div class="sidebar left" id="left-bar">
     {% if g.logged_in %}
     <div class="sidebar-section flipped" id="ha-panel">
-      <a href="/ha/"><img src="/api/ha/fd/1,8,3,4,2,7,6,9,11/"></a>
+      <a href="/ha/"><img src="{{g.user.ha_url}}"></a>
     </div>
     <div class="sidebar-section">
       <p>You are <a href="/user/{{g.user.username}}/">{{g.user.display_name}}</a></p>
       <p>
-        <img src="/static/img/icons/star_1.png">
-        <a href="/shops/star/">{{g.user.star_shards}} Star Shards</a>
+        <img src="/static/img/icons/weather_clouds.png">
+        <a href="/shops/cloud/">{{g.user.cloud_coins|pluralize('Cloud Coin')}}</a>
       </p>
       <p>
-        <img src="/static/img/icons/heart_empty.png">
-        <a href="/shops/oh/">{{g.user.opal_hearts}} Opal Hearts</a>
+        <img src="/static/img/icons/star_1.png">
+        <a href="/shops/star/">{{g.user.star_shards|pluralize('Star Shard')}}</a>
       </p>
     </div>
     {% else %}

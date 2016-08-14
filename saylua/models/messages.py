@@ -1,17 +1,18 @@
 from google.appengine.ext import ndb
-import user
+from saylua.models.user import User
 
-class Message(ndb.Model):
-    time = ndb.DateTimeProperty(auto_now=True)
+class Conversation(ndb.Model):
     title = ndb.StringProperty()
 
-class MessagePost(ndb.Model):
+class ConversationMessage(ndb.Model):
+    user = ndb.KeyProperty(indexed=True)
     text = ndb.StringProperty()
     time = ndb.DateTimeProperty(indexed=True, auto_now_add=True)
 
-class MessageUser(ndb.Model):
+class ConversationUser(ndb.Model):
     user = ndb.KeyProperty(indexed=True)
-    message = ndb.KeyProperty(indexed=True)
-    read = ndb.BooleanProperty()
-    deleted = ndb.BooleanProperty(default=False)
+    conversation = ndb.KeyProperty(indexed=True)
+    conversation_title = ndb.StringProperty()
+    is_read = ndb.BooleanProperty(default=False)
+    is_deleted = ndb.BooleanProperty(default=False)
     time = ndb.DateTimeProperty(indexed=True, auto_now=True)

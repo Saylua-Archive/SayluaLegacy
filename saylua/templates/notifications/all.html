@@ -3,6 +3,7 @@
 {% set page_title = "Notifications" %}
 {% block body %}
 <h2>View All Notifications</h2>
+{% if viewed_notifications|length > 0 %}
 <div class="padded full center">
   {{ simple_pagination(current_page=page, has_more_pages=more_pages) }}
 </div>
@@ -47,8 +48,6 @@
         {% endif %}
       </td>
     </tr>
-    {% else %}
-      You have no notifications.
     {% endfor %}
   </table>
   <div class="full center">
@@ -59,5 +58,13 @@
 <div class="padded full center">
   {{ simple_pagination(current_page=page, has_more_pages=more_pages) }}
 </div>
+{% else %}
+<p class="center full padded">
+  You have no notifications!
+</p>
+<p class="center full padded">
+  <a href="/">Go back home?</a>
+</p>
+{% endif %}
 
 {% endblock %}
