@@ -1,17 +1,25 @@
 {% from "_macros/pagination.html" import pagination %}
+{% from "_macros/user_link.html" import user_link %}
 {% extends "layout.html" %}
 {% set page_title = "Users Online" %}
 {% block body %}
 <h2>Users Online</h2>
 <div class="full center">
-  {{ pagination() }}
+  {{ pagination(page_count=(users_online_count/50)|int) }}
 </div>
-{% for i in range(60) %}
-<div class="user">
-  User
+{% for user in users_online %}
+<div class="small-grid-box">
+  {{ user_link(user) }}
 </div>
+{% else %}
+  <p class="center full padded">
+    No one is online!
+  </p>
+  <p class="center full padded">
+    <a href="/">Go back home?</a>
+  </p>
 {% endfor %}
 <div class="full center">
-  {{ pagination() }}
+  {{ pagination(page_count=(users_online_count/50)|int) }}
 </div>
 {% endblock %}

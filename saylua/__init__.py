@@ -15,6 +15,7 @@ app.config.from_pyfile('config/settings.py')
 
 import g_globals
 import context_processors
+import template_filters
 
 def login_required(f):
     @wraps(f)

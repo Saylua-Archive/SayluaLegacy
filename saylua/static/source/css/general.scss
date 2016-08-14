@@ -59,6 +59,14 @@ a:hover {
 	text-decoration: underline;
 }
 
+.small-grid-box {
+  width: 20%;
+  float: left;
+  box-sizing: border-box;
+  padding: 10px;
+  text-align: center;
+}
+
 .tab {
 	@include slow-color-trans;
   display: block;

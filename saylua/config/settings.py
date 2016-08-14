@@ -10,3 +10,7 @@ MAX_PASSWORD_LENGTH = 200
 
 MIN_DISPLAY_NAME_LENGTH = 2
 MAX_DISPLAY_NAME_LENGTH = 25
+
+# Number of minutes from a user's last action for them to be counted as online
+USERS_ONLINE_RANGE = 15
+LAST_ACTION_OFFSET = 5
