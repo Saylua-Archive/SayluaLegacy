@@ -25,7 +25,7 @@ def load_user():
             return None
 
         found = s_key.get()
-        if found.user_key != user_key:
+        if not found or found.user_key != user_key:
             found = None
     if not found:
         g.logged_in = False
