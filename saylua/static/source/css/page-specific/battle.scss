@@ -1,34 +1,4 @@
-@import "assets/transitions";
-
-#dungeon-wrapper {
-  margin: auto;
-  width: 750px;
-}
-
-#dungeon {
-  background-color: #322125;
-  float: left;
-  width: 500px;
-  min-height: 50px;
-  position: relative;
-}
-
-#dungeon-info {
-  box-sizing: border-box;
-  float: left;
-  width: 250px;
-  padding-left: 5px;
-}
-
-.dungeonTile {
-  float: left;
-	cursor: pointer;
-}
-
-.dungeonObject {
-  z-index: 1;
-  position: absolute;
-}
+@import '../assets/transitions';
 
 .battler {
   width: 200px;
@@ -37,9 +7,9 @@
 #battle-screen {
   width: 100%;
   min-height: 500px;
+  text-align: center;
   background: url('/static/img/habitats/flat-bambooforest.jpg') no-repeat center;
   background-size: cover;
-  text-align: center;
 }
 
 #battle-screen .side {
@@ -54,42 +24,41 @@
   right: 120px;
 }
 
-
 #battle-screen .stat-meter {
+  font-size: 12px;
+  line-height: 16px;
   position: relative;
   top: 80px;
-  background: #fff;
-  border-radius: 5px;
-  height: 16px;
-  line-height: 16px;
-  font-size: 12px;
   width: 120px;
-  border: #fff 1px solid;
+  height: 16px;
   margin-bottom: 5px;
+  border: #fff 1px solid;
+  border-radius: 5px;
+  background: #fff;
 }
 
 #battle-screen .stat-meter div {
-  float: left;
-  border-radius: 5px;
-  height: 100%;
   position: absolute;
   top: 0;
   left: 0;
+  float: left;
+  height: 100%;
+  border-radius: 5px;
 }
 
 #battle-screen .stat-meter.health div {
-  background: #68DF76;
+  background: #68df76;
 }
 
 #battle-screen .stat-meter.stamina div {
-  background: #687EDD;
+  background: #687edd;
 }
 
 #battle-screen .stat-meter span {
   position: absolute;
+  display: block;
   width: 100%;
   text-align: center;
-  display: block;
 }
 
 #battle-screen .battler img {
@@ -102,10 +71,10 @@
 }
 
 #battle-screen .enemy img:hover {
-  -webkit-filter: brightness(130%); /* Chrome, Safari, Opera */
-  filter: brightness(130%);
-  border: 5px dotted #E65715;
   padding: 0px;
+  border: 5px dotted #e65715;
+  filter: brightness(130%);
+  -webkit-filter: brightness(130%); /* Chrome, Safari, Opera */
 }
 
 #battle-screen .battler:not(:first-child) {

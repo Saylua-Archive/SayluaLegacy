@@ -1,19 +1,19 @@
-@import "assets/variables";
-@import "assets/transitions";
+@import 'assets/variables';
+@import 'assets/transitions';
 
 .section-menu {
-  width: 25%;
   float: left;
-  border-right: 1px solid $neutralcolor;
+  width: 25%;
   margin-right: 10px;
+  border-right: 1px solid $neutralcolor;
 }
 
 .section-menu a {
   @include fast-color-trans;
-  display: block;
-  width: 100%;
   line-height: 150%;
+  display: block;
   box-sizing: border-box;
+  width: 100%;
   padding: 8px;
 }
 

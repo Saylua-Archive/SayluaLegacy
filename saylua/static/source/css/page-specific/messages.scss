@@ -1,0 +1,21 @@
+@import '../assets/variables';
+@import '../assets/transitions';
+
+.conversation-message {
+  box-sizing: border-box;
+  width: 98%;
+  margin: 10px 1%;
+  padding: 0px;
+  border-collapse: collapse;
+  border: 1px $neutralcolor solid;
+}
+
+.conversation-message td, .conversation-message th {
+  padding: 3px 8px;
+}
+
+.conversation-message th {
+  width: 120px;
+  text-align: center;
+  background: $neutralcolor;
+}

@@ -1,15 +1,5 @@
-@import "assets/variables";
-@import "assets/transitions";
-
-// Standard pet size
-.pet {
-  width: 350px;
-  text-align: center;
-  display: inline-block;
-  vertical-align: middle;
-  height: 350px;
-  margin: auto;
-}
+@import '../assets/variables';
+@import '../assets/transitions';
 
 // Pet rooms
 #pet-room-container {
@@ -18,54 +8,54 @@
 }
 
 #pet-room {
+  position: relative;
   width: 750px;
   height: 400px;
   background: url('/static/img/bg/1.jpg');
   background-size: cover;
-  position: relative;
 }
 
 #pet-room .pet {
-  top: 70px;
   position: absolute;
+  z-index: 10;
+  top: 70px;
   left: 50%;
-  margin-left: -150px;
   width: 300px;
   height: 300px;
-  z-index: 10;
+  margin-left: -150px;
 }
 
 #pet-room .pet::after {
-  content: "";
-  display: block;
+  content: '';
+  position: absolute;
+  z-index: -1;
   top: 150px;
   left: 25px;
-  position: absolute;
+  display: block;
   width: 250px;
   height: 80px;
   border-radius: 50%;
   -webkit-box-shadow: 0px 110px 20px -25px rgba(0,0,0,0.5);
   -moz-box-shadow: 0px 110px 20px -25px rgba(0,0,0,0.5);
   box-shadow: 0px 110px 20px -25px rgba(0,0,0,0.5);
-  z-index: -1;
 }
 
 #pet-room-actions .tab {
-  width: 25%;
   display: block;
   float: left;
   box-sizing: border-box;
+  width: 25%;
   padding: 8px 20px;
-  background: $mainsoftcolor;
   border: 1px solid $white;
   border-bottom: 1px solid $neutralcolor;
+  background: $mainsoftcolor;
 }
 
 #pet-room-actions .action {
-  box-sizing: border-box;
-  padding: 10px;
-  width: 100%;
   float: left;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
   border: 1px solid $neutralcolor;
   border-top: none;
 }
@@ -75,30 +65,7 @@
 }
 
 #pet-room-actions .tab.selected {
-  background: $white;
   border: 1px solid $neutralcolor;
   border-bottom: 1px solid $white;
-}
-
-// CSS for Dens
-#den-pets {
-  width: 75%;
-  float: left;
-}
-
-#den-pets-sidebar {
-  width: 25%;
-  float: left;
-}
-
-#den-pets-sidebar h3 {
-  font-size: 1em;
-  line-height: 120%;
-}
-
-.den-pet-square {
-  width: 20%;
-  float: left;
-  box-sizing: border-box;
-  padding: 10px;
+  background: $white;
 }

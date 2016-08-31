@@ -1,16 +1,13 @@
 @mixin slow-color-trans {
-  transition: background .5s ease-in-out,
-    color .5s ease-in-out;
-  -moz-transition: background .5s ease-in-out,
-    color .5s ease-in-out;
-  -webkit-transition: background .5s ease-in-out,
-    color .5s ease-in-out;
+  -webkit-transition: background 0.5s ease-in-out, color 0.5s ease-in-out;
+  -moz-transition: background 0.5s ease-in-out, color 0.5s ease-in-out;
+  transition: background 0.5s ease-in-out, color 0.5s ease-in-out;
 }
 
 @mixin fast-color-trans {
-  transition: background .25s ease-in-out;
-  -moz-transition: background .25s ease-in-out;
-  -webkit-transition: background .25s ease-in-out;
+  -webkit-transition: background 0.25s ease-in-out;
+  -moz-transition: background 0.25s ease-in-out;
+  transition: background 0.25s ease-in-out;
 }
 
 @mixin filter-trans {

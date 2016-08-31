@@ -6,11 +6,11 @@
 <div class="full center">
   {{ pagination() }}
 </div>
-{% for i in range(60) %}
+{% for item in items %}
 <div class="small-grid-box">
   <a href="javascript:void();">
-    <img src="/static/img/items/orange.png">
-    <span class="full">Orange</span>
+    <img src="{{ item.img_url }}" class="item">
+    <span class="full">{{ item.name }}</span>
     <small class="full">Count: 10</small>
   </a>
 </div>

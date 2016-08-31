@@ -1,24 +1,24 @@
-@import "assets/variables";
-@import "assets/transitions";
+@import 'assets/variables';
+@import 'assets/transitions';
 
-table.forum-table {
+.forum-table {
   width: 100%;
-  border-collapse: collapse;
   margin-bottom: 40px;
+  border-collapse: collapse;
 }
 
-table.forum-table td, table.forum-table th {
+.forum-table td, .forum-table th {
   padding: 4px;
 }
 
-table.forum-table th.section-header {
-  padding-top: 20px;
+.forum-table th {
+  font-size: 12px;
+  text-align: left;
+  background: none;
 }
 
-table.forum-table th {
-  background: none;
-  text-align: left;
-  font-size: 12px;
+th.section-header {
+  padding-top: 20px;
 }
 
 table.forum-table .forum-board-row,
@@ -35,9 +35,9 @@ table.forum-table .forum-board-row.highlight td {
 }
 
 table.forum-table .forum-board-row td {
-  border-bottom: 1px $mainsoftcolor solid;
-  vertical-align: center;
   font-size: 14px;
+  vertical-align: center;
+  border-bottom: 1px $mainsoftcolor solid;
 }
 
 table.forum-table .forum-thread-row:nth-child(odd) {
@@ -68,10 +68,10 @@ table.forum-table td.forum-board-info {
 
 table.forum-table td.forum-board-info a {
   display: block;
+  float: left;
   overflow: auto;
   width: 100%;
   height: 100%;
-  float: left;
   text-decoration: none;
 }
 
@@ -81,8 +81,8 @@ table.forum-table td.forum-board-info a:hover .forum-board-link {
 
 table.forum-table td.forum-board-info a p,
 table.forum-table td.forum-board-info a:hover p {
-  margin: 0;
   line-height: 18px;
+  margin: 0;
   text-decoration: none;
   color: $black;
   border: 0;
@@ -93,29 +93,29 @@ table.forum-table td.forum-thread-info {
 }
 
 table.forum-table td.forum-thread-info a {
+  line-height: normal;
   display: block;
   width: 100%;
   height: 100%;
-  line-height: normal;
   text-decoration: none;
 }
 
 table.forum-table td.forum-thread-info a:hover .forum-thread-link {
-  text-decoration: underline;
   display: block;
   width: 100%;
+  text-decoration: underline;
 }
 
 table.forum-table td.forum-thread-info a p.small,
 table.forum-table td.forum-thread-info a:hover p.small {
   margin: 5px 0;
-  color: $black;
   text-decoration: none;
+  color: $black;
 }
 
 table.forum-table td.forum-thread-icon {
-  text-align: center;
   width: 16px;
+  text-align: center;
 }
 
 table.forum-table td.forum-latest-post {
@@ -123,21 +123,21 @@ table.forum-table td.forum-latest-post {
   width: 25%;
 }
 
-table.forum-post  {
+table.forum-post {
+  box-sizing: border-box;
   width: 98%;
-  border: 1px $mainsoftcolor solid;
   margin: 20px 1%;
   padding: 0px;
-  box-sizing: border-box;
   border-collapse: collapse;
+  border: 1px $mainsoftcolor solid;
 }
 
 .forum-post th {
-  font-weight: normal;
-  background: $mainsoftcolor;
-  padding: 3px 8px;
   font-size: 14px;
+  font-weight: normal;
+  padding: 3px 8px;
   text-align: left;
+  background: $mainsoftcolor;
 }
 
 .forum-post td {

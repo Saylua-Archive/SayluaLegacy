@@ -1,0 +1,25 @@
+@import '../assets/variables';
+@import '../assets/transitions';
+
+// CSS for Dens
+#den-pets {
+  float: left;
+  width: 75%;
+}
+
+#den-pets-sidebar {
+  float: left;
+  width: 25%;
+}
+
+#den-pets-sidebar h3 {
+  font-size: 1em;
+  line-height: 120%;
+}
+
+.den-pet-square {
+  float: left;
+  box-sizing: border-box;
+  width: 20%;
+  padding: 10px;
+}
