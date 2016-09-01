@@ -15,13 +15,13 @@
   padding: 3px 8px;
   cursor: pointer;
   text-align: center;
-  border: $mainsoftcolor 1px solid;
+  border: $mainSoftColor 1px solid;
   border-left: 0px;
   background: #fff;
 }
 
 .switch label:first-of-type b {
-  border-left: $mainsoftcolor 1px solid;
+  border-left: $mainSoftColor 1px solid;
   border-radius: 8px 0 0 8px;
 }
 
@@ -30,11 +30,11 @@
 }
 
 .switch label b:hover {
-  background: $accentsoft;
+  background: $accentSoftColor;
 }
 
 .switch input:checked + b {
-  background: $neutralcolor;
+  background: $neutralColor;
 }
 
 .switch input {

@@ -9,11 +9,11 @@ input, textarea, select {
 }
 
 input.error, textarea.error {
-  border-color: $errorText;
+  border-color: $errorColor;
 }
 
 input[type='checkbox'].error {
-  outline: 1px solid $errorText;
+  outline: 1px solid $errorColor;
 }
 
 a.button {
@@ -30,7 +30,7 @@ input[type='submit'], button, a.button, a.button:link, a.button:visited {
   color: $white;
   border: none;
   border-radius: 12px;
-  background-color: $accent;
+  background-color: $accentColor;
 }
 
 input[type='submit'].small, button.small {
@@ -40,15 +40,11 @@ input[type='submit'].small, button.small {
 
 input[type='submit']:hover, button:hover, a.button:hover {
   text-decoration: none;
-  background-color: $maincolor;
+  background-color: $mainColor;
 }
 
 .form-table {
   min-width: 60%;
-}
-
-.form-table.width-70 {
-  width: 70%;
 }
 
 .form-table td.label, .form-table th.label {

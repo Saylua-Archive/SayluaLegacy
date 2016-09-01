@@ -17,7 +17,7 @@
   background: none;
 }
 
-th.section-header {
+.forum-table th.section-header {
   padding-top: 20px;
 }
 
@@ -27,34 +27,34 @@ table.forum-table .forum-thread-row {
 }
 
 table.forum-table .forum-board-row.highlight {
-  background: $highlightsoft;
+  background: $highlightSoftColor;
 }
 
 table.forum-table .forum-board-row.highlight td {
-  border-bottom: 1px $highlight solid;
+  border-bottom: 1px $highlightColor solid;
 }
 
 table.forum-table .forum-board-row td {
   font-size: 14px;
   vertical-align: center;
-  border-bottom: 1px $mainsoftcolor solid;
+  border-bottom: 1px $mainSoftColor solid;
 }
 
 table.forum-table .forum-thread-row:nth-child(odd) {
-  background: $neutralcolor;
+  background: $neutralColor;
 }
 
 table.forum-table .forum-thread-row.highlight:nth-child(n) {
-  background-color: $highlightsoft;
+  background-color: $highlightSoftColor;
 }
 
 table.forum-table .forum-thread-row.highlight:nth-child(odd) {
-  background-color: $highlight;
+  background-color: $highlightColor;
 }
 
 table.forum-table .forum-board-row:hover,
 table.forum-table .forum-thread-row:nth-child(n):hover {
-  background-color: $accentsoft;
+  background-color: $accentSoftColor;
 }
 
 table.forum-table td.forum-board-icon {
@@ -129,7 +129,7 @@ table.forum-post {
   margin: 20px 1%;
   padding: 0px;
   border-collapse: collapse;
-  border: 1px $mainsoftcolor solid;
+  border: 1px $mainSoftColor solid;
 }
 
 .forum-post th {
@@ -137,7 +137,7 @@ table.forum-post {
   font-weight: normal;
   padding: 3px 8px;
   text-align: left;
-  background: $mainsoftcolor;
+  background: $mainSoftColor;
 }
 
 .forum-post td {

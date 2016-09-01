@@ -1,7 +1,6 @@
-{% extends "layout.html" %}
-{% block body %}
-<h2>User Settings: Change Email</h2>
-{% include 'user/settings/sidebar.html' %}
+{% extends "user/settings/template.html" %}
+{% set section_title = "Change Email" %}
+{% block section_body %}
 <p>
   If you change your email address, you will have to validate your new email.
 </p>

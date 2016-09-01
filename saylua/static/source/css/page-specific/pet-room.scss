@@ -10,7 +10,7 @@
 #pet-room {
   position: relative;
   width: 750px;
-  height: 400px;
+  height: 450px;
   background: url('/static/img/bg/1.jpg');
   background-size: cover;
 }
@@ -20,16 +20,15 @@
   z-index: 10;
   top: 70px;
   left: 50%;
-  width: 300px;
-  height: 300px;
   margin-left: -150px;
 }
 
+// Shadow
 #pet-room .pet::after {
   content: '';
   position: absolute;
   z-index: -1;
-  top: 150px;
+  top: 180px;
   left: 25px;
   display: block;
   width: 250px;
@@ -47,8 +46,8 @@
   width: 25%;
   padding: 8px 20px;
   border: 1px solid $white;
-  border-bottom: 1px solid $neutralcolor;
-  background: $mainsoftcolor;
+  border-bottom: 1px solid $neutralColor;
+  background: $mainSoftColor;
 }
 
 #pet-room-actions .action {
@@ -56,16 +55,16 @@
   box-sizing: border-box;
   width: 100%;
   padding: 10px;
-  border: 1px solid $neutralcolor;
+  border: 1px solid $neutralColor;
   border-top: none;
 }
 
 #pet-room-actions .tab:hover {
-  background: $accentsoft;
+  background: $accentSoftColor;
 }
 
 #pet-room-actions .tab.selected {
-  border: 1px solid $neutralcolor;
+  border: 1px solid $neutralColor;
   border-bottom: 1px solid $white;
   background: $white;
 }

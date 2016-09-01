@@ -1,7 +1,6 @@
-{% extends "layout.html" %}
-{% block body %}
-<h2>User Settings: General</h2>
-{% include 'user/settings/sidebar.html' %}
+{% extends "user/settings/template.html" %}
+{% set section_title = "General" %}
+{% block section_body %}
 <form method="post">
   <table class="form-table">
     <tr>

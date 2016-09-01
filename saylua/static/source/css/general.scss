@@ -1,72 +1,6 @@
 @import 'assets/variables';
 @import 'assets/transitions';
 
-html {
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  margin: 0px;
-  padding: 0px;
-  word-wrap: break-word;
-}
-
-body {
-  font-family: Arial, 'san serif';
-  font-size: 16px;
-  line-height: 22px;
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  margin: 0px;
-  padding: 0px;
-  color: $black;
-  background: $bgcolor;
-}
-
-img {
-  max-width: 100%;
-  border: 0px;
-}
-
-ul {
-  margin: 0;
-}
-
-ul li {
-  margin: 0;
-}
-
-h1 {
-  font-size: 2em;
-  display: block;
-  margin: 0px;
-  padding: 0.5em 0px;
-}
-
-p {
-  font-size: 1em;
-  display: block;
-  margin: 1em 0px;
-  padding: 0px;
-}
-
-a, a:active, a:visited {
-  text-decoration: none;
-  color: $accent;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-.small-grid-box {
-  float: left;
-  box-sizing: border-box;
-  width: 20%;
-  padding: 10px;
-  text-align: center;
-}
-
 .tab {
   @include slow-color-trans;
   display: block;
@@ -76,11 +10,11 @@ a:hover {
 }
 
 .tab:hover {
-  background: $accentsoft;
+  background: $accentSoftColor;
 }
 
 .tab.selected {
-  background: $mainsoftcolor;
+  background: $mainSoftColor;
 }
 
 .clearfix {
@@ -140,19 +74,8 @@ a:hover {
   font-size: 14px;
 }
 
-table {
-  box-sizing: border-box;
-  text-align: left;
-}
-
 table.center {
   text-align: left;
-}
-
-th {
-  font-weight: normal;
-  text-align: center;
-  background: $mainsoftcolor;
 }
 
 p.error {
@@ -160,7 +83,7 @@ p.error {
   margin: 0;
   padding: 0;
   text-align: center;
-  color: $errorText;
+  color: $errorColor;
 }
 
 a.tiny-button {
@@ -172,11 +95,11 @@ a.tiny-button {
 }
 
 a.tiny-button:hover {
-  background-color: $mainsoftcolor;
+  background-color: $mainSoftColor;
 }
 
 .divider {
   width: 100%;
   margin-bottom: 16px;
-  border-bottom: 1px $mainsoftcolor solid;
+  border-bottom: 1px $mainSoftColor solid;
 }

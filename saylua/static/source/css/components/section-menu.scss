@@ -1,11 +1,11 @@
-@import 'assets/variables';
-@import 'assets/transitions';
+@import '../assets/variables';
+@import '../assets/transitions';
 
 .section-menu {
   float: left;
-  width: 25%;
-  margin-right: 10px;
-  border-right: 1px solid $neutralcolor;
+  box-sizing: border-box;
+  padding: 0px;
+  border-right: 1px solid $neutralColor;
 }
 
 .section-menu a {
@@ -18,9 +18,9 @@
 }
 
 .section-menu a:hover {
-  background: $accentsoft;
+  background: $accentSoftColor;
 }
 
 .section-menu a:active, .section-menu a.active {
-  background: $neutralcolor;
+  background: $neutralColor;
 }

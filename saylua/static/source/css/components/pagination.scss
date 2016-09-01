@@ -11,11 +11,11 @@
 }
 
 .pagination a:hover {
-  background-color: $accentsoft;
+  background-color: $accentSoftColor;
 }
 
 .pagination .active {
-  background-color: $mainsoftcolor;
+  background-color: $mainSoftColor;
 }
 
 .binary-pagination {
@@ -41,5 +41,5 @@
 
 .binary-pagination a:hover {
   text-decoration: none;
-  background-color: $accentsoft;
+  background-color: $accentSoftColor;
 }

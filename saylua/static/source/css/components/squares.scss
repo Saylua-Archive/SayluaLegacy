@@ -9,7 +9,11 @@
 }
 
 .pet {
-  @include square(350px);
+  @include square(320px);
+}
+
+.mini {
+  @include square(160px);
 }
 
 .item {

@@ -1,7 +1,6 @@
-{% extends "layout.html" %}
-{% block body %}
-<h2>User Settings: Profile Details</h2>
-{% include 'user/settings/sidebar.html' %}
+{% extends "user/settings/template.html" %}
+{% set section_title = "Profile Details" %}
+{% block section_body %}
 <p>
   These fields contain information about yourself that you'd like to have shown on your profile.
   They are entirely optional.
