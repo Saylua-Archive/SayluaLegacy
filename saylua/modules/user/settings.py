@@ -1,30 +1,15 @@
 from saylua import app, login_required
 from flask import (render_template, redirect, g,
                    url_for, flash, session, abort, request)
-import saylua.models.user
-
-# User Profiles
-@app.route('/user/')
-@login_required
-def user_profile_default():
-    username = 'username'
-    return redirect('/user/' + username + '/', code=302)
-
-@app.route('/user/<user>/')
-def user_profile(user):
-    return render_template('user/profile.html')
-
-# Users Online
-@app.route('/online/')
-def users_online():
-    return render_template('user/online.html')
+from saylua.models.user import User
+from saylua.utils.validation import FieldValidator
 
 # User Settings
 @app.route('/settings/', methods=['GET', 'POST'])
 @login_required
 def user_settings():
     if request.method == 'POST':
-        boolean_fields = ['profile_is_public', 'notified_on_pings',
+        boolean_fields = ['notified_on_pings',
             'ha_disabled', 'autosubscribe_threads', 'autosubscribe_posts']
         save_fields_to_user(request.form, bool_fields=boolean_fields)
         return redirect(url_for('user_settings'))
@@ -37,17 +22,19 @@ def user_settings():
 def user_settings_details():
     if request.method == 'POST':
         display_name = request.form['display_name'].strip()
-        if len(display_name) < 2:
-            flash('Your display name must be at least two characters long!',
-                'error')
-        elif len(display_name) > 25:
-            flash('Your display name cannot be more than 25 characters long!',
-                'error')
-        else:
+        displayNameValidator = (FieldValidator('display name', display_name)
+            .required()
+            .min(app.config['MIN_DISPLAY_NAME_LENGTH'])
+            .max(app.config['MAX_DISPLAY_NAME_LENGTH']))
+        displayNameValidator.flash()
+
+        if displayNameValidator.valid:
             string_fields = ['display_name', 'gender', 'pronouns', 'bio']
             save_fields_to_user(request.form, str_fields=string_fields)
             return redirect(url_for('user_settings_details'))
-    return render_template("user/settings/details.html")
+    return render_template('user/settings/details.html',
+        min_display_name_length=app.config['MIN_DISPLAY_NAME_LENGTH'],
+        max_display_name_length=app.config['MAX_DISPLAY_NAME_LENGTH'])
 
 @app.route('/settings/css/', methods=['GET', 'POST'])
 @login_required

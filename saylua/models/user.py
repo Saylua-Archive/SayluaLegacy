@@ -9,16 +9,18 @@ class User(ndb.Model):
     date_joined = ndb.DateTimeProperty(auto_now_add=True)
     last_action = ndb.DateTimeProperty(auto_now_add=True)
 
-    #Ban Status
+    # Human Avatar
+    ha_url = ndb.StringProperty(default='/api/ha/m/')
+
+    # Ban Status
     permabanned = ndb.BooleanProperty(default=False)
     banned_until = ndb.DateTimeProperty(auto_now_add=True)
 
     # Currency
     star_shards = ndb.IntegerProperty(default=0)
-    opal_hearts = ndb.IntegerProperty(default=0)
+    cloud_coins = ndb.IntegerProperty(default=0)
 
     # Settings
-    profile_is_public = ndb.BooleanProperty(default=True)
     notified_on_pings = ndb.BooleanProperty(default=True)
     ha_disabled = ndb.BooleanProperty(default=False)
     autosubscribe_threads = ndb.BooleanProperty(default=True)

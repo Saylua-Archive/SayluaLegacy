@@ -1,0 +1,42 @@
+@import '../assets/variables';
+@import '../assets/transitions';
+
+.switch {
+  display: inline-block;
+  margin: auto;
+}
+
+.switch label b {
+  @include fast-color-trans;
+  font-weight: normal;
+  display: block;
+  float: left;
+  min-width: 50px;
+  padding: 3px 8px;
+  cursor: pointer;
+  text-align: center;
+  border: $mainSoftColor 1px solid;
+  border-left: 0px;
+  background: #fff;
+}
+
+.switch label:first-of-type b {
+  border-left: $mainSoftColor 1px solid;
+  border-radius: 8px 0 0 8px;
+}
+
+.switch label:last-of-type b {
+  border-radius: 0 8px 8px 0;
+}
+
+.switch label b:hover {
+  background: $accentSoftColor;
+}
+
+.switch input:checked + b {
+  background: $neutralColor;
+}
+
+.switch input {
+  display: none;
+}

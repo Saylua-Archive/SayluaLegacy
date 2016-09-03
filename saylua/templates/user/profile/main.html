@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block header_scripts %}
+<style style="text/css">
+{{viewed_user.css}}
+</style>
+{% endblock %}
+{% block body %}
+<h2 id="profile-header">{{viewed_user.display_name}} (@{{viewed_user.username}})</h2>
+<div id="profile-container">
+  <div id="profile-column">
+    <img src="{{viewed_user.ha_url}}" class="flipped" id="profile-human-avatar">
+    <fieldset id="profile-details">
+      <legend id="profile-details-legend">Details</legend>
+      <table id="profile-details-table">
+        <tr>
+          <th>Display Name</th>
+          <td>{{viewed_user.display_name}}</td>
+        </tr>
+        <tr>
+          <th>Username</th>
+          <td>{{viewed_user.username}}</td>
+        </tr>
+        {% if viewed_user.pronouns %}
+        <tr>
+          <th>Pronouns</th>
+          <td>{{viewed_user.pronouns}}</td>
+        </tr>
+        {% endif %}
+        {% if viewed_user.gender %}
+        <tr>
+          <th>Gender</th>
+          <td>{{viewed_user.gender}}</td>
+        </tr>
+        {% endif %}
+        <tr>
+          <th>Date Joined</th>
+          <td>{{viewed_user.date_joined|show_date}}</td>
+        </tr>
+        <tr>
+          <th>Last Online</th>
+          <td>{{viewed_user.last_action|show_date}}</td>
+        </tr>
+      </table>
+    </fieldset>
+  </div>
+  <div id="profile-body">
+    <a class="tiny-button" href="/user/{{viewed_user.username}}/threads/">Threads</a>
+    <a class="tiny-button" href="/user/{{viewed_user.username}}/posts/">Posts</a>
+    <a class="tiny-button" href="/den/{{viewed_user.username}}/">Den</a>
+    <a class="tiny-button" href="/shop/{{viewed_user.username}}/">Shop</a>
+    <div id="profile-about-me">
+      {{viewed_user.bio}}
+    </div>
+    <h3>Active Pets</h3>
+    <img src="/static/img/SHC.png" style="width:33%; float:left">
+    <img src="/static/img/SHC.png" style="width:33%; float:left">
+    <img src="/static/img/SHC.png" style="width:33%; float:left">
+    <h3>Trophies</h3>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+#dungeon-wrapper {
+  width: 750px;
+  margin: auto;
+}
+
+#dungeon {
+  position: relative;
+  float: left;
+  width: 500px;
+  min-height: 50px;
+  background-color: #322125;
+}
+
+#dungeon-info {
+  float: left;
+  box-sizing: border-box;
+  width: 250px;
+  padding-left: 5px;
+}
+
+.dungeonTile {
+  float: left;
+  cursor: pointer;
+}
+
+.dungeonObject {
+  position: absolute;
+  z-index: 1;
+}

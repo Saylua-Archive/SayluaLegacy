@@ -1,0 +1,89 @@
+@import '../assets/variables';
+@import '../assets/transitions';
+
+input, textarea, select {
+  font-size: 16px;
+  line-height: 24px;
+  padding: 2px 8px;
+  border: 1px solid #ddd;
+}
+
+input.error, textarea.error {
+  border-color: $errorColor;
+}
+
+input[type='checkbox'].error {
+  outline: 1px solid $errorColor;
+}
+
+a.button {
+  display: block;
+  width: auto;
+}
+
+input[type='submit'], button, a.button, a.button:link, a.button:visited {
+  @include slow-color-trans;
+  font-size: 1em;
+  line-height: 150%;
+  padding: 6px 15px;
+  cursor: pointer;
+  color: $white;
+  border: none;
+  border-radius: 12px;
+  background-color: $accentColor;
+}
+
+input[type='submit'].small, button.small {
+  font-size: 0.8em;
+  padding: 4px 10px;
+}
+
+input[type='submit']:hover, button:hover, a.button:hover {
+  text-decoration: none;
+  background-color: $mainColor;
+}
+
+.form-table {
+  min-width: 60%;
+}
+
+.form-table td.label, .form-table th.label {
+  min-width: 20%;
+  text-align: right;
+}
+
+.form-table td.label.break, .form-table th.label.break {
+  width: 30%;
+  max-width: 30%;
+}
+
+.form-table td, .form-table th {
+  padding: 5px;
+  vertical-align: top;
+  background: none;
+}
+
+.form-table input, .form-table textarea {
+  width: 90%;
+}
+
+.form-table input[type='submit'], .form-table input[type='checkbox'] {
+  width: auto;
+}
+
+.form-table textarea {
+  height: 200px;
+}
+
+.form-table textarea.big {
+  box-sizing: border-box;
+  width: 100%;
+  height: 300px;
+  margin: 0;
+}
+
+.form-table .form-tip {
+  font-size: 0.8em;
+  display: block;
+  width: 90%;
+}

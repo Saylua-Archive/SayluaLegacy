@@ -1,0 +1,26 @@
+@import '../assets/variables';
+@import '../assets/transitions';
+
+.section-menu {
+  float: left;
+  box-sizing: border-box;
+  padding: 0px;
+  border-right: 1px solid $neutralColor;
+}
+
+.section-menu a {
+  @include fast-color-trans;
+  line-height: 150%;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 8px;
+}
+
+.section-menu a:hover {
+  background: $accentSoftColor;
+}
+
+.section-menu a:active, .section-menu a.active {
+  background: $neutralColor;
+}

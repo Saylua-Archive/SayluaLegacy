@@ -4,4 +4,59 @@
 {% block body %}
 <h2>Your Inbox</h2>
 
+<form method="post">
+  <div class="full padded center">
+    <input type="submit" class="small" name="delete" value="Delete Selected Conversations" />
+    <input type="submit" class="small" name="read" value="Mark Selected as Read" />
+  </div>
+  <table class="forum-table">
+    <tr>
+      <th>
+        <input type="checkbox" class="check-all" data-name="message_id">
+      </th>
+      <th>
+        Conversation Title
+      </th>
+      <th>
+        Users
+      </th>
+      <th>
+        Time
+      </th>
+      <th>
+        Status
+      </th>
+    </tr>
+    {% for i in range(10) %}
+    {% if i > 5 %}
+      {% set is_read = True %}
+    {% endif %}
+    <tr class="forum-board-row{% if not is_read %} highlight{% endif %}">
+      <td>
+        <input type="checkbox" name="message_id" value="{{i}}">
+      </td>
+      <td>
+        <a href="/conversation/sample/">Sample Title</a>
+      </td>
+      <td>
+        <a href="/user/tiff/">Sample Users</a>
+      </td>
+      <td>
+        Sample Time
+      </td>
+      <td>
+        {% if is_read %}
+          Read
+        {% else %}
+          Unread
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  <div class="full padded center">
+    <input type="submit" class="small" name="delete" value="Delete Selected Conversations" />
+    <input type="submit" class="small" name="read" value="Mark Selected as Read" />
+  </div>
+</form>
 {% endblock %}

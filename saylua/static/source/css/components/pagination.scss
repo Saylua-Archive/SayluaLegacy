@@ -1,27 +1,27 @@
-@import "assets/variables";
-@import "assets/transitions";
+@import '../assets/variables';
+@import '../assets/transitions';
 
 .pagination a, .pagination span {
   @include fast-color-trans;
-  display: inline-block;
-  padding: 0 10px;
-  height: 30px;
-  text-align: center;
   line-height: 30px;
+  display: inline-block;
+  height: 30px;
+  padding: 0 10px;
+  text-align: center;
 }
 
 .pagination a:hover {
-  background-color: $accentsoft;
+  background-color: $accentSoftColor;
 }
 
-.pagination span.active {
-  background-color: $mainsoftcolor;
+.pagination .active {
+  background-color: $mainSoftColor;
 }
 
 .binary-pagination {
+  font-size: 2em;
   width: 90%;
   margin: auto;
-  font-size: 2em;
 }
 
 .binary-pagination span {
@@ -30,16 +30,16 @@
 
 .binary-pagination span, .binary-pagination a {
   @include fast-color-trans;
+  display: block;
   float: left;
   box-sizing: border-box;
-  padding: 20px;
   width: 50%;
-  display: block;
-  text-align: center;
   margin: 10px 0;
+  padding: 20px;
+  text-align: center;
 }
 
 .binary-pagination a:hover {
-  background-color: $accentsoft;
   text-decoration: none;
+  background-color: $accentSoftColor;
 }

@@ -1,0 +1,40 @@
+.row-4,
+.row-5 {
+  float: left;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.col-1, .col-2, .col-3, .col-4 {
+  float: left;
+  box-sizing: border-box;
+  padding: 5px 10px;
+}
+
+.row-4 .col-1 {
+  width: 25%;
+}
+
+.row-4 .col-2 {
+  width: 50%;
+}
+
+.row-4 .col-3 {
+  width: 75%;
+}
+
+.row-5 .col-1 {
+  width: 20%;
+}
+
+.row-5 .col-2 {
+  width: 40%;
+}
+
+.row-5 .col-3 {
+  width: 60%;
+}
+
+.row-5 .col-4 {
+  width: 80%;
+}

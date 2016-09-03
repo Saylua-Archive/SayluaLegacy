@@ -16,12 +16,10 @@
   position: fixed;
   top: 0;
   left: 0;
-  opacity: 0;
-
   width: 100%;
   height: 100%;
-
-  background: rgba(0, 0, 0, .6);
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .modal {
@@ -30,18 +28,14 @@
   z-index: 9999;
   top: 50%;
   left: 50%;
-
-  opacity: 0;
-
   width: 94%;
   padding: 24px 20px;
-
   -webkit-transform: translate(-50%, -50%);
   -moz-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   -o-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-
+  opacity: 0;
   border-radius: 2px;
   background: #fff;
 }
@@ -65,15 +59,15 @@
   right: 5px;
   padding: 5px 7px 7px;
   cursor: pointer;
+  border-color: #fff;
   outline: none;
   background: #fff;
-  border-color: #fff;
 }
 
 .modal.fade-and-drop {
   top: -300%;
-  opacity: 1;
   display: block;
+  opacity: 1;
 }
 
 .modal.fade-and-drop.modal-active,
@@ -112,15 +106,16 @@
 .modal-overlay.fade-and-drop,
 .modal-overlay.zoom {
   display: block;
-  opacity: 0;
   -webkit-transition: 200ms opacity 200ms ease;
   -moz-transition: 200ms opacity 200ms ease;
   -ms-transition: 200ms opacity 200ms ease;
   -o-transition: 200ms opacity 200ms ease;
   transition: 200ms opacity 200ms ease;
+  opacity: 0;
 }
 
 .modal.zoom {
+  display: block;
   -webkit-transition: 200ms -webkit-transform ease;
   -moz-transition: 200ms -moz-transform ease;
   -ms-transition: 200ms -ms-transform ease;
@@ -132,7 +127,6 @@
   -o-transform: translate(-50%, -50%) scale(0);
   transform: translate(-50%, -50%) scale(0);
   opacity: 1;
-  display: block;
 }
 
 .modal.zoom.modal-active {

@@ -3,19 +3,21 @@
 {% set page_title = "Your Inventory" %}
 {% block body %}
 <h2>Your Inventory</h2>
-<div class="full center">
+<div class="full center padded">
   {{ pagination() }}
 </div>
-{% for i in range(60) %}
-<div class="item-box">
-  <a href="javascript:void();">
-    <img src="/static/img/items/orange.png">
-    <span class="full">Orange</span>
-    <small class="full">Count: 10</small>
-  </a>
+<div class="row-5">
+  {% for item in items %}
+  <div class="col-1 center">
+    <a href="javascript:void();">
+      <img src="{{ item.img_url }}" class="item">
+      <span class="full">{{ item.name }}</span>
+      <small class="full">Count: 10</small>
+    </a>
+  </div>
+  {% endfor %}
 </div>
-{% endfor %}
-<div class="full center">
+<div class="full center padded">
   {{ pagination() }}
 </div>
 {% endblock %}

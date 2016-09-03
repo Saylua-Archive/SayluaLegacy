@@ -62,58 +62,65 @@
         <button><i class="fa fa-search" aria-hidden="true"></i></button>
       </form>
       {% if g.logged_in %}
-      <div id="navigation-right">
-        <div id="dropdown-right">
-          <div id="user-menu" class="menu">
-            <h3>Logged in as {{g.user.display_name}}</h3>
-            <a href="/user/{{g.user.username}}/"><img src="/static/img/icons/user.png"> My Profile</a>
-            <a href="/settings/"><img src="/static/img/icons/cog.png"> Account Settings</a>
-            <span class="dropdown-separator"></span>
-            <a href="/user/settings/"><img src="/static/img/icons/award_star_gold.png"> My Achievements</a>
-            <a href="/user/settings/"><img src="/static/img/icons/group.png"> Friends List</a>
-            <span class="dropdown-separator"></span>
-            <a href="/logout/"><img src="/static/img/icons/lock_unlock.png"> Logout</a>
+        <div id="navigation-right">
+          <div id="dropdown-right">
+            <div id="user-menu" class="menu">
+              <h3>Logged in as {{g.user.display_name}}</h3>
+              <a href="/user/{{g.user.username}}/"><img src="/static/img/icons/user.png"> My Profile</a>
+              <a href="/settings/"><img src="/static/img/icons/cog.png"> Account Settings</a>
+              <span class="dropdown-separator"></span>
+              <a href="/achievements/{{g.user.username}}/"><img src="/static/img/icons/award_star_gold.png"> My Achievements</a>
+              <a href="/friends/"><img src="/static/img/icons/group.png"> Friends List</a>
+              <span class="dropdown-separator"></span>
+              <a href="/logout/"><img src="/static/img/icons/lock_unlock.png"> Logout</a>
+            </div>
+            <div id="notifications-menu" class="menu">
+              <h3>Latest Notifications</h3>
+              <ul>
+                {% for notification in notifications %}
+                  <a href="/notification/{{notification.key.urlsafe()}}/"{% if not notification.is_read%} class="highlight"{% endif %}>
+                    <li>{{notification.text}}{% if notification.count > 1 %} ({{notification.count}}){% endif %}</li>
+                  </a>
+                {% else %}
+                  <a href="/notifications/">
+                    <li>You have no notifications. </li>
+                  </a>
+                {% endfor %}
+              </ul>
+              <span class="dropdown-separator"></span>
+              <a href="/notifications/"><img src="/static/img/icons/star_1.png"> View All Notifications</a>
+            </div>
+            <div id="messages-menu" class="menu">
+              <h3>Latest Messages</h3>
+              <ul>
+                <a href="/messages/">
+                  <li>You have no messages. </li>
+                </a>
+              </ul>
+              <span class="dropdown-separator"></span>
+              <a href="/messages/"><img src="/static/img/icons/email.png"> View All Messages</a>
+            </div>
           </div>
-          <div id="notifications-menu" class="menu">
-            <h3>Latest Notifications</h3>
-            <ul>
-              <a href="/pet/shc/" class="highlight">
-                <li>Bill (@likemybread) likes your pet Smoking Hot Chick. </li>
-              </a>
-              <a href="/pet/shc/">
-                <li>Haha, you're being notified. </li>
-              </a>
-            </ul>
-            <span class="dropdown-separator"></span>
-            <a href="/notifications/"><img src="/static/img/icons/star_1.png"> View All Notifications</a>
-          </div>
-          <div id="messages-menu" class="menu">
-            <h3>Latest Messages</h3>
-            <ul>
-              <a href="/messages/">
-                <li>You have no messages. </li>
-              </a>
-            </ul>
-            <span class="dropdown-separator"></span>
-            <a href="/messages/"><img src="/static/img/icons/email.png"> View All Messages</a>
-          </div>
+          <a href="/user/{{g.user.username}}/" class="block-link" data-section="user-menu">
+            <i class="fa fa-user" aria-hidden="true"></i>
+          </a>
+          <a href="/notifications/" class="block-link" data-section="notifications-menu">
+            <i class="fa fa-bell" aria-hidden="true"></i>
+            {% if notifications_count > 99 %}
+              <span class="alert-number">99+</span>
+            {% elif notifications_count > 0 %}
+              <span class="alert-number">{{notifications_count}}</span>
+            {% endif %}
+          </a>
+          <a href="/messages/" class="block-link" data-section="messages-menu">
+            <i class="fa fa-envelope" aria-hidden="true"></i>
+            <span class="alert-number">99+</span>
+          </a>
         </div>
-        <a href="/user/{{g.user.username}}/" class="block-link" data-section="user-menu">
+      {% else %}
+        <a href="/login/" class="block-link">
           <i class="fa fa-user" aria-hidden="true"></i>
         </a>
-        <a href="/notifications/" class="block-link" data-section="notifications-menu">
-          <i class="fa fa-bell" aria-hidden="true"></i>
-          <span class="alert-number">1</span>
-        </a>
-        <a href="/messages/" class="block-link" data-section="messages-menu">
-          <i class="fa fa-envelope" aria-hidden="true"></i>
-          <span class="alert-number">99+</span>
-        </a>
-      </div>
-      {% else %}
-      <a href="/login/" class="block-link">
-        <i class="fa fa-user" aria-hidden="true"></i>
-      </a>
       {% endif %}
     </div>
   </div>
@@ -143,7 +150,7 @@
 <div class="container footer">
   <div class="content-width">
     <p>
-      <a href="/online/">1 User Online</a> &bull;
+      <a href="/online/">{{users_online_count|pluralize('User')}} Online</a> &bull;
       <a href="#">Back to Top</a> &bull;
       <a href="#">About</a> &bull;
       <a href="#">Terms of Service</a> &bull;

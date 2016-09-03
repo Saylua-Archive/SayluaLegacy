@@ -1,0 +1,21 @@
+// Standard sizes for different parts of the site
+@mixin square($size) {
+  display: inline-block;
+  width: $size;
+  height: $size;
+  margin: auto;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.pet {
+  @include square(320px);
+}
+
+.mini {
+  @include square(160px);
+}
+
+.item {
+  @include square(80px);
+}

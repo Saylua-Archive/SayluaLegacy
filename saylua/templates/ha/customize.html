@@ -5,9 +5,12 @@
 {% endblock %}
 {% block body %}
 <h2>Customize Your Avatar</h2>
-<div class="left" style="width:40%;">
-	<img src="/api/ha/m/" id="preview-ha">
-	<button>Save Human Avatar</button>
+<div class="left center" style="width:30%;">
+	<img src="/api/ha/m/" class="flipped" id="preview-ha">
+	<form method="post">
+		<input type="hidden" name="img" id="ha-image-url" value="/api/ha/m/">
+		<input type="submit" value="Save Human Avatar">
+	</form>
 </div>
-<div id="clothing" class="left" style="width:59%;"></div>
+<div id="clothing" class="left" style="width:70%;"></div>
 {% endblock %}

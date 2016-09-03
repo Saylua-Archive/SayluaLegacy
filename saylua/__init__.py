@@ -10,10 +10,12 @@ from flask import (request, session, g, redirect, url_for, abort, render_templat
 from functools import wraps
 
 app = Flask(__name__)
-app.config.from_pyfile('config.py')
+app.config.from_pyfile('config/secure.py')
+app.config.from_pyfile('config/settings.py')
 
 import g_globals
 import context_processors
+import template_filters
 
 def login_required(f):
     @wraps(f)

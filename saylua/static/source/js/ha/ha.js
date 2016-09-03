@@ -33,6 +33,8 @@ window.addEventListener('load', function () {
     		wearing.push(item);
     	}
 
-    	haImage.src = haEndpoint + wearing.join(',');
+			var img_url = haEndpoint + wearing.join(',');
+    	haImage.src = img_url;
+			document.getElementById('ha-image-url').value = img_url;
     }
 });

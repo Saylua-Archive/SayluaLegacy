@@ -3,31 +3,33 @@
 {% set page_title = "Viewing Den" %}
 {% block body %}
 <h2>User's Den</h2>
-<div id="den-pets">
-  <div class="full center">
-    {{ pagination() }}
+<div class="row-4">
+  <div id="den-pets" class="row-5 col-3">
+    <div class="full padded center">
+      {{ pagination() }}
+    </div>
+    {% for i in range(20) %}
+    <div class="col-1 den-pet-square center">
+      <a href="/pet/shc/">
+        <img src="/static/img/SHC.png" title="Pet" alt="Flowering Oranda" />
+        Flowering Oranda
+      </a>
+    </div>
+    {% endfor %}
+    <div class="full padded center">
+      {{ pagination() }}
+    </div>
   </div>
-  {% for i in range(20) %}
-  <div class="den-pet-square">
-    <a href="/pet/shc/">
-      <img src="/static/img/SHC.png" title="Pet" alt="Flowering Oranda" />
-      Flowering Oranda
-    </a>
-  </div>
-  {% endfor %}
-  <div class="full center">
-    {{ pagination() }}
-  </div>
-</div>
-<div id="den-pets-sidebar">
-  <h3>Filter Pets</h3>
-  <select>
-    <option>Pet Type</option>
-  </select>
+  <div id="den-pets-sidebar" class="col-1">
+    <h4>Filter Pets</h4>
+    <select>
+      <option>Pet Type</option>
+    </select>
 
-  <h3>Groups</h3>
-  <ul>
-    <li>Hmmm</li>
-  </ul>
+    <h4>Groups</h4>
+    <ul>
+      <li>Hmmm</li>
+    </ul>
+  </div>
 </div>
 {% endblock %}

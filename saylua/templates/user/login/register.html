@@ -12,8 +12,8 @@
       </th>
       <td>
         <input type="text" placeholder="Username" name="username" id="username-field"
-          data-validators="required min:3 max:40 username_chars">
-        <small class="form-tip">Allowed: letters, numbers, underscores, or hyphens.</small>
+          data-validators="required min:{{min_username_length}} max:{{max_username_length}} username_chars">
+        <small class="form-tip">Allowed character: alphanumeric, underscores, or hyphens.</small>
       </td>
     </tr>
     <tr>
@@ -22,8 +22,8 @@
       </th>
       <td>
         <input type="password" placeholder="Password" name="password" id="password-field"
-          data-validators="required min:5">
-        <small class="form-tip">Passwords must be at least 5 characters. </small>
+          data-validators="required min:{{min_password_length}} max:{{max_password_length}}">
+        <small class="form-tip">Passwords must be at least {{min_password_length}} characters. </small>
       </td>
     </tr>
     <tr>

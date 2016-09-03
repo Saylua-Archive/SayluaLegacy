@@ -1,7 +1,6 @@
-{% extends "layout.html" %}
-{% block body %}
-<h2>User Settings: Profile Details</h2>
-{% include 'user/settings/sidebar.html' %}
+{% extends "user/settings/template.html" %}
+{% set section_title = "Profile Details" %}
+{% block section_body %}
 <p>
   These fields contain information about yourself that you'd like to have shown on your profile.
   They are entirely optional.
@@ -18,7 +17,7 @@
       <td>
         <input type="text" name="display_name" placeholder="Your Display Name"
           id="user-settings-display-name" value="{{g.user.display_name}}"
-          data-validators="required not_empty min:2 max:25">
+          data-validators="required not_empty min:{{min_display_name_length}} max:{{max_display_name_length}}">
         <small class="form-tip">You can change your display name as often as you want. </small>
       </td>
     </tr>
