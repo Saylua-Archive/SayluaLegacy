@@ -79,7 +79,7 @@
               <ul>
                 {% for notification in notifications %}
                   <a href="/notification/{{notification.key.urlsafe()}}/"{% if not notification.is_read%} class="highlight"{% endif %}>
-                    <li>{{notification.text}}{% if notification.count > 1 %} ({{notification.count}}){% endif %}</li>
+                    <li>{{ notification.text }}{% if notification.count > 1 %} ({{ notification.count }}){% endif %}</li>
                   </a>
                 {% else %}
                   <a href="/notifications/">
@@ -93,9 +93,15 @@
             <div id="messages-menu" class="menu">
               <h3>Latest Messages</h3>
               <ul>
-                <a href="/messages/">
-                  <li>You have no messages. </li>
-                </a>
+                {% for message in messages %}
+                  <a href="/conversation/{{message.conversation_key.urlsafe()}}/"{% if not message.is_read %} class="highlight"{% endif %}>
+                    <li>{{ message.title }}</li>
+                  </a>
+                {% else %}
+                  <a href="/messages/">
+                    <li>You have no messages. </li>
+                  </a>
+                {% endfor %}
               </ul>
               <span class="dropdown-separator"></span>
               <a href="/messages/"><img src="/static/img/icons/email.png"> View All Messages</a>
@@ -114,7 +120,11 @@
           </a>
           <a href="/messages/" class="block-link" data-section="messages-menu">
             <i class="fa fa-envelope" aria-hidden="true"></i>
-            <span class="alert-number">99+</span>
+            {% if messages_count > 99 %}
+              <span class="alert-number">99+</span>
+            {% elif messages_count > 0 %}
+              <span class="alert-number">{{messages_count}}</span>
+            {% endif %}
           </a>
         </div>
       {% else %}

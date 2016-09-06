@@ -7,18 +7,20 @@
 <div class="full center">
   {{ pagination(page_count=(users_online_count/50)|int) }}
 </div>
-{% for user in users_online %}
-<div class="small-grid-box">
-  {{ user_link(user) }}
+<div class="row-5">
+  {% for user in users_online %}
+    <div class="col-1">
+      {{ user_link(user) }}
+    </div>
+  {% else %}
+    <p class="center full padded">
+      No one is online!
+    </p>
+    <p class="center full padded">
+      <a href="/">Go back home?</a>
+    </p>
+  {% endfor %}
 </div>
-{% else %}
-  <p class="center full padded">
-    No one is online!
-  </p>
-  <p class="center full padded">
-    <a href="/">Go back home?</a>
-  </p>
-{% endfor %}
 <div class="full center">
   {{ pagination(page_count=(users_online_count/50)|int) }}
 </div>

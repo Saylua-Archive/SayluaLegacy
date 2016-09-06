@@ -4,7 +4,11 @@
 {% block body %}
 <h2>Your Inbox</h2>
 
+{% if viewed_messages|length > 0 %}
 <form method="post">
+  <div class="padded full center">
+    {{ pagination() }}
+  </div>
   <div class="full padded center">
     <input type="submit" class="small" name="delete" value="Delete Selected Conversations" />
     <input type="submit" class="small" name="read" value="Mark Selected as Read" />
@@ -27,29 +31,22 @@
         Status
       </th>
     </tr>
-    {% for i in range(10) %}
-    {% if i > 5 %}
-      {% set is_read = True %}
-    {% endif %}
-    <tr class="forum-board-row{% if not is_read %} highlight{% endif %}">
+    {% for message in viewed_messages %}
+    <tr class="forum-board-row{% if not message.is_read %} highlight{% endif %}">
       <td>
-        <input type="checkbox" name="message_id" value="{{i}}">
+        <input type="checkbox" name="message_id" value="{{ message.key }}">
       </td>
       <td>
-        <a href="/conversation/sample/">Sample Title</a>
+        <a href="/conversation/{{ message.conversation_key.urlsafe() }}/">{{ message.title }}</a>
       </td>
       <td>
-        <a href="/user/tiff/">Sample Users</a>
+        With <a href="/user/tiff/">{{ message.recipient_key.urlsafe() }}</a>
       </td>
       <td>
-        Sample Time
+        {{ message.time|relative_time }}
       </td>
       <td>
-        {% if is_read %}
-          Read
-        {% else %}
-          Unread
-        {% endif %}
+        {{ message|message_status }}
       </td>
     </tr>
     {% endfor %}
@@ -58,5 +55,16 @@
     <input type="submit" class="small" name="delete" value="Delete Selected Conversations" />
     <input type="submit" class="small" name="read" value="Mark Selected as Read" />
   </div>
+  <div class="padded full center">
+    {{ pagination() }}
+  </div>
 </form>
+{% else %}
+<p class="center full padded">
+  You have no messages!
+</p>
+<p class="center full padded">
+  <a href="/">Go back home?</a>
+</p>
+{% endif %}
 {% endblock %}

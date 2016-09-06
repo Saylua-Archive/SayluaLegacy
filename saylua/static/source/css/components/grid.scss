@@ -1,8 +1,15 @@
 .row-4,
 .row-5 {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
   float: left;
+  overflow: hidden;
   box-sizing: border-box;
   width: 100%;
+  flex-flow: row wrap;
 }
 
 .col-1, .col-2, .col-3, .col-4 {

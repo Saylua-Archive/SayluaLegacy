@@ -1,4 +1,3 @@
 {% macro user_link(user) -%}
-<a href="/user/{{user.username}}/">{{user.display_name}}</a>
-<br /><small>@{{user.username}}</small>
+<a href="/user/{{ user.username }}/">{{ user.display_name }}</a>
 {%- endmacro %}
