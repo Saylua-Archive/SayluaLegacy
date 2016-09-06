@@ -45,3 +45,16 @@ def saylua_relative_time(d):
         return '1 hour ago'
     else:
         return '{} hours ago'.format(s / 3600)
+
+
+@app.template_filter('message_status')
+def saylua_message_status(conversation_user):
+    if conversation_user.is_deleted:
+        return 'deleted'
+    if not conversation_user.is_read:
+        return 'unread'
+    if conversation_user.is_first:
+        return 'sent'
+    if conversation_user.is_replied:
+        return 'replied'
+    return 'read'

@@ -55,7 +55,10 @@ def notifications_main_post():
 @app.route('/notification/<key>/')
 @login_required
 def notification_follow(key):
-    notification = Notification.get_by_id(ndb.Key(urlsafe=key).id())
+    key = make_ndb_key(key)
+    if key:
+        notification = Notification.get_by_id(key.id())
+
     if notification and notification.user_key == g.user.key:
         notification.is_read = True
         notification.put()
