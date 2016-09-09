@@ -1,4 +1,5 @@
 {% from "_macros/pagination.html" import pagination %}
+{% from "_macros/user_link.html" import user_link %}
 {% extends "layout.html" %}
 {% set page_title = "Inbox" %}
 {% block body %}
@@ -40,7 +41,11 @@
         <a href="/conversation/{{ message.conversation_key.urlsafe() }}/">{{ message.title }}</a>
       </td>
       <td>
-        With <a href="/user/tiff/">{{ message.recipient_key.urlsafe() }}</a>
+        With
+        {% for recipient_key in message.recipient_keys %}
+          {% set recipient = recipient_key|user_object %}
+          {{ user_link(recipient) }}
+        {% endfor %}
       </td>
       <td>
         {{ message.time|relative_time }}
