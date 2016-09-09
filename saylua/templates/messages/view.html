@@ -16,7 +16,7 @@
       </th>
       <td>
         <textarea placeholder="Type your reply here" id="message-post-body"
-          data-validators="required min:2" name="body"></textarea>
+          data-validators="required min:2" name="text"></textarea>
       </td>
     </tr>
     <tr>
@@ -28,23 +28,25 @@
     </tr>
   </table>
 </form>
-{% for i in range(10) %}
+{% for message in conversation.messages|reverse %}
+{% set message_user = message.user_key|user_object %}
 <table class="conversation-message">
   <tr>
     <th rowspan="2">
-      <div class="full">{{ user_link(g.user) }}</div>
-      <a href="/user/"><img src="/static/img/SHC.png" style="width:80px"></a>
+      <div class="full">{{ user_link(message_user) }}</div>
+      <div class="item">
+        <a href="{{ message_user|user_url }}">
+          <img src="/static/img/SHC.png">
+        </a>
+      </div>
     </th>
     <td class="message-body">
-      <span class="right small">4 June 2016 5:21 SST</span>
+      <span class="right small">{{ message.time|expanded_relative_time }}</span>
     </td>
   </tr>
   <tr>
     <td class="message-body">
-      <p>
-        User loves making forum posts, hello everyone. I need to type
-        a onger thread because of my new job as a tester.
-      </p>
+      {{ message.text }}
     </td>
   </tr>
 </table>
