@@ -32,6 +32,16 @@ class User(ndb.Model):
     pronouns = ndb.StringProperty(default='')
     bio = ndb.StringProperty(default='')
 
+    @classmethod
+    def by_username(cls, username):
+        return cls.query(cls.username==username).get()
+
+    @classmethod
+    def key_by_username(cls, username):
+        user = cls.query(cls.username==username).get()
+        if user:
+            return user.key
+        return None
 
 class LoginSession(ndb.Model):
     user_key = ndb.StringProperty(indexed=True)

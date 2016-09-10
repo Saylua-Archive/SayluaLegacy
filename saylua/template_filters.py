@@ -19,12 +19,12 @@ def saylua_show_date(time):
 @app.template_filter('show_time')
 def saylua_show_time(time):
     time = saylua_time(time)
-    return time.strftime('%I:%M:%S %p SST')
+    return time.strftime('%I:%M:%S %p SMT')
 
 @app.template_filter('show_datetime')
 def saylua_show_datetime(time):
     time = saylua_time(time)
-    return time.strftime('%b %d, %Y %I:%M %p SST')
+    return time.strftime('%b %d, %Y %I:%M %p SMT')
 
 @app.template_filter('expanded_relative_time')
 def saylua_expanded_relative_time(d):

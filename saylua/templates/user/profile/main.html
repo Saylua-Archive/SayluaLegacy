@@ -48,6 +48,11 @@
     <a class="tiny-button" href="/user/{{viewed_user.username}}/posts/">Posts</a>
     <a class="tiny-button" href="/den/{{viewed_user.username}}/">Den</a>
     <a class="tiny-button" href="/shop/{{viewed_user.username}}/">Shop</a>
+
+    <a class="right normal" href="/messages/write/?to={{ viewed_user.username }}">
+      <img src="/static/img/icons/pencil.png">
+      Message
+    </a>
     <div id="profile-about-me">
       {{viewed_user.bio}}
     </div>
