@@ -23,7 +23,7 @@
   <table class="forum-table">
     <tr>
       <th>
-        <input type="checkbox" class="check-all" data-name="message_id">
+        <input type="checkbox" class="check-all" data-name="user_conversation_id">
       </th>
       <th>
         Conversation Title
@@ -41,7 +41,7 @@
     {% for message in viewed_messages %}
     <tr class="forum-board-row{% if not message.is_read %} highlight{% endif %}">
       <td>
-        <input type="checkbox" name="message_id" value="{{ message.key }}">
+        <input type="checkbox" name="user_conversation_id" value="{{ message.key.urlsafe() }}">
       </td>
       <td>
         <a href="{{ message|conversation_url }}">{{ message.title }}</a>
