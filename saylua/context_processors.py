@@ -2,7 +2,7 @@ from saylua import app
 from dateutil import tz
 import datetime
 from flask import request, g
-from saylua.models.messages import UserConversation
+from saylua.models.conversation import UserConversation
 from saylua.models.notification import Notification
 from saylua.models.user import User
 

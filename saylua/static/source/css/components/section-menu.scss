@@ -24,3 +24,11 @@
 .section-menu a:active, .section-menu a.active {
   background: $neutralColor;
 }
+
+.theme-admin .section-menu a:active, .theme-admin .section-menu a.active {
+  background: $adminNeutralColor;
+}
+
+.theme-admin .section-menu {
+  border-right: 1px solid $adminNeutralColor;
+}

@@ -4,7 +4,7 @@ from google.appengine.ext import ndb
 
 from saylua import app, login_required
 from saylua.utils import make_ndb_key, pluralize, get_from_request
-from saylua.models.messages import UserConversation, Conversation
+from saylua.models.conversation import UserConversation, Conversation
 from saylua.models.user import User
 from saylua.utils.validation import FieldValidator
 
@@ -60,12 +60,12 @@ def messages_write_new():
     if request.method == 'POST':
         recipientValidator = (FieldValidator('recipient', recipient).required().min(2))
         titleValidator = (FieldValidator('title', title).required().min(2))
-        textValidator = (FieldValidator('text', text).required().min(3))
+        textValidator = (FieldValidator('text', text).required().min(2))
         recipientValidator.flash()
         titleValidator.flash()
         textValidator.flash()
 
-        if recipientValidator and titleValidator and textValidator:
+        if recipientValidator.valid and titleValidator.valid and textValidator.valid:
             to = User.key_by_username(recipient)
             if to:
                 key = Conversation.start(g.user.key, to, title, text)
