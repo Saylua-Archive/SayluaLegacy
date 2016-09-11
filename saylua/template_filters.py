@@ -19,12 +19,12 @@ def saylua_show_date(time):
 @app.template_filter('show_time')
 def saylua_show_time(time):
     time = saylua_time(time)
-    return time.strftime('%I:%M:%S %p SST')
+    return time.strftime('%I:%M:%S %p SMT')
 
 @app.template_filter('show_datetime')
 def saylua_show_datetime(time):
     time = saylua_time(time)
-    return time.strftime('%b %d, %Y %I:%M %p SST')
+    return time.strftime('%b %d, %Y %I:%M %p SMT')
 
 @app.template_filter('expanded_relative_time')
 def saylua_expanded_relative_time(d):
@@ -61,14 +61,14 @@ def saylua_relative_time(d):
 # Filters that act on models
 
 @app.template_filter('message_status')
-def saylua_message_status(conversation_user):
-    if conversation_user.is_deleted:
+def saylua_message_status(user_conversation):
+    if user_conversation.is_deleted:
         return 'deleted'
-    if not conversation_user.is_read:
+    if not user_conversation.is_read:
         return 'unread'
-    if conversation_user.is_first:
+    if user_conversation.is_first:
         return 'sent'
-    if conversation_user.is_replied:
+    if user_conversation.is_replied:
         return 'replied'
     return 'read'
 
@@ -76,16 +76,16 @@ def saylua_message_status(conversation_user):
 def saylua_user_url(user):
     return '/user/' + user.username + '/'
 
-# conversation can be either a ConversationUser or Conversation model
+# conversation can be either a UserConversation or Conversation model
 @app.template_filter('conversation_url')
 def saylua_conversation_url(conversation):
     key = conversation.conversation_key
     if not key:
         # This is the case if this is acting on a Conversation object instead of
-        # a ConversationUser object
+        # a UserConversation object
         key = conversation.key
     elif not conversation.is_read:
-        # This case can only happen on a ConversationUser object
+        # This case can only happen on a UserConversation object
         return '/conversation_read/' + key.urlsafe() + '/'
 
     return '/conversation/' + key.urlsafe() + '/'

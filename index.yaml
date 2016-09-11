@@ -36,3 +36,18 @@ indexes:
   - name: is_read
   - name: time
     direction: desc
+
+- kind: UserConversation
+  properties:
+  - name: is_deleted
+  - name: user_key
+  - name: is_read
+  - name: time
+    direction: desc
+
+- kind: UserConversation
+  properties:
+  - name: user_key
+  - name: is_read
+  - name: time
+    direction: desc

@@ -2,7 +2,7 @@ from saylua import app
 from dateutil import tz
 import datetime
 from flask import request, g
-from saylua.models.messages import ConversationUser
+from saylua.models.messages import UserConversation
 from saylua.models.notification import Notification
 from saylua.models.user import User
 
@@ -22,10 +22,11 @@ def inject_notifications():
 def inject_messages():
     if not g.logged_in:
         return {}
-    messages_count = ConversationUser.query(ConversationUser.user_key==g.user.key,
-        ConversationUser.is_read==False).count(limit=100)
-    messages = ConversationUser.query(ConversationUser.user_key==g.user.key).order(
-        ConversationUser.is_read, -ConversationUser.time).fetch(limit=5)
+    messages_count = UserConversation.query(UserConversation.user_key==g.user.key,
+        UserConversation.is_read==False, UserConversation.is_deleted==False).count(limit=100)
+    messages = UserConversation.query(UserConversation.user_key==g.user.key,
+        UserConversation.is_deleted==False).order(
+        UserConversation.is_read, -UserConversation.time).fetch(limit=5)
     if not messages:
         messages = []
     return dict(messages_count=messages_count, messages=messages)

@@ -4,7 +4,13 @@
 {% set page_title = "Inbox" %}
 {% block body %}
 <h2>Your Inbox</h2>
-
+<h3>
+  Your Conversations
+  <a class="right normal" href="/messages/write/">
+    <img src="/static/img/icons/pencil.png">
+    Send a New Message
+  </a>
+</h3>
 {% if viewed_messages|length > 0 %}
 <form method="post">
   <div class="padded full center">
@@ -17,7 +23,7 @@
   <table class="forum-table">
     <tr>
       <th>
-        <input type="checkbox" class="check-all" data-name="message_id">
+        <input type="checkbox" class="check-all" data-name="user_conversation_id">
       </th>
       <th>
         Conversation Title
@@ -35,10 +41,10 @@
     {% for message in viewed_messages %}
     <tr class="forum-board-row{% if not message.is_read %} highlight{% endif %}">
       <td>
-        <input type="checkbox" name="message_id" value="{{ message.key }}">
+        <input type="checkbox" name="user_conversation_id" value="{{ message.key.urlsafe() }}">
       </td>
       <td>
-        <a href="/conversation/{{ message.conversation_key.urlsafe() }}/">{{ message.title }}</a>
+        <a href="{{ message|conversation_url }}">{{ message.title }}</a>
       </td>
       <td>
         With
@@ -69,7 +75,7 @@
   You have no messages!
 </p>
 <p class="center full padded">
-  <a href="/">Go back home?</a>
+  <a href="/"> Go back home?</a>
 </p>
 {% endif %}
 {% endblock %}

@@ -20,3 +20,15 @@ def saylua_time(time):
     to_zone = tz.gettz('America/New_York')
     time = time.replace(tzinfo = from_zone)
     return time.astimezone(to_zone)
+
+def get_from_request(request, key, form_key=None, args_key=None):
+    if not args_key:
+        args_key = key
+    if not form_key:
+        form_key = key
+    result = ''
+    if form_key in request.form:
+        result = request.form.get(form_key)
+    elif request.args.get(args_key):
+        result = request.args.get(args_key)
+    return result

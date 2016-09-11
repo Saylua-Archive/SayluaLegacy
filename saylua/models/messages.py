@@ -27,14 +27,14 @@ class Conversation(ndb.Model):
 
         conversation_key = conversation.put()
 
-        # Add all people in the conversation (ConversationUser)
+        # Add all people in the conversation (UserConversation)
         if recipient_key != sender_key:
-            sender = ConversationUser(conversation_key=conversation_key,
+            sender = UserConversation(conversation_key=conversation_key,
                 user_key=sender_key, recipient_keys=[recipient_key], title=title,
                 is_read=True, is_first=True)
             sender.put()
 
-        recipient = ConversationUser(conversation_key=conversation_key,
+        recipient = UserConversation(conversation_key=conversation_key,
             user_key=recipient_key, title=title, recipient_keys=[sender_key])
         recipient.put()
 
@@ -45,9 +45,9 @@ class Conversation(ndb.Model):
         time = datetime.datetime.now()
 
         # Update the user statuses
-        sender = ConversationUser.query(
-            ConversationUser.conversation_key==conversation_key,
-            ConversationUser.user_key==user_key).get()
+        sender = UserConversation.query(
+            UserConversation.conversation_key==conversation_key,
+            UserConversation.user_key==user_key).get()
 
         # Check that the user has permission to reply to this conversation
         if not sender:
@@ -60,9 +60,9 @@ class Conversation(ndb.Model):
 
         # Update recipient status
         for recipient_key in sender.recipient_keys:
-            recipient = ConversationUser.query(
-                ConversationUser.conversation_key==conversation_key,
-                ConversationUser.user_key==recipient_key).get()
+            recipient = UserConversation.query(
+                UserConversation.conversation_key==conversation_key,
+                UserConversation.user_key==recipient_key).get()
             # This should always exist, but if not something is wrong with the data.
             if recipient:
                 recipient.time = time
@@ -83,7 +83,7 @@ class Conversation(ndb.Model):
         return result
 
 # Child
-class ConversationUser(ndb.Model):
+class UserConversation(ndb.Model):
     user_key = ndb.KeyProperty(indexed=True)
     recipient_keys = ndb.KeyProperty(indexed=True, repeated=True)
     conversation_key = ndb.KeyProperty(indexed=True)

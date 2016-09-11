@@ -15,7 +15,7 @@ def user_profile(username):
     if g.logged_in and username == g.user.username:
         user = g.user
     else:
-        user = User.query(User.username == username).get()
+        user = User.by_username(username)
 
     if user == None:
         return render_template('user/notfound.html')

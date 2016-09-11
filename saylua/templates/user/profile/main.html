@@ -44,10 +44,18 @@
     </fieldset>
   </div>
   <div id="profile-body">
-    <a class="tiny-button" href="/user/{{viewed_user.username}}/threads/">Threads</a>
-    <a class="tiny-button" href="/user/{{viewed_user.username}}/posts/">Posts</a>
-    <a class="tiny-button" href="/den/{{viewed_user.username}}/">Den</a>
-    <a class="tiny-button" href="/shop/{{viewed_user.username}}/">Shop</a>
+    <div id="profile-navigation">
+      <a class="tiny-button" href="/user/{{viewed_user.username}}/threads/">Threads</a>
+      <a class="tiny-button" href="/user/{{viewed_user.username}}/posts/">Posts</a>
+      <a class="tiny-button" href="/den/{{viewed_user.username}}/">Den</a>
+      <a class="tiny-button" href="/shop/{{viewed_user.username}}/">Shop</a>
+
+      <a class="right normal" href="/messages/write/?to={{ viewed_user.username }}">
+        <img src="/static/img/icons/pencil.png">
+        Message
+      </a>
+    </div>
+    <h3>About {{ viewed_user.username }}</h3>
     <div id="profile-about-me">
       {{viewed_user.bio}}
     </div>
