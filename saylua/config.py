@@ -1,0 +1,13 @@
+DEBUG = True
+DB_HOST = "23.251.151.0"
+DB_USER = "root"
+DB_PORT = 3306
+DB_PASSWORD = "p/,H6Py<HG>7*#9^"
+DB_DATABASE = "lyrefly-main"
+SESSION_LIMIT = 5
+UPLOAD_FOLDER = "static/uploads/"
+SECRET_KEY = "FSDFF"
+COOKIE_DURATION = 90
+PRODUCTION_DB_HOST = ""
+PRODUCTION_DB_PASSWORD = "c%Q:AW\'_{db4z+f"
+INSTANCE_NAME = "lyrefly-1210:lyrefly"
