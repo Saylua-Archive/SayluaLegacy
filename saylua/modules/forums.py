@@ -8,7 +8,6 @@ from saylua.models.forum import Board, BoardCategory, ForumThread, ForumPost
 @app.route('/forums/newcategory', methods=['POST'])
 def new_category_post():
     category = request.form['category']
-    found = User.query(User.username == username).get()
     return render_template("forums/main.html")
 
 @app.route('/forums/newcategory', methods=['GET'])
@@ -17,7 +16,7 @@ def new_category_view():
 
 @app.route('/forums/newboard', methods=['POST'])
 def new_board():
-
+    category = request.form['title']
     return render_template("forums/main.html")
 
 @app.route('/forums/')
