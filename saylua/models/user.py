@@ -1,8 +1,10 @@
 from google.appengine.ext import ndb
+from bcryptmaster import bcrypt
 
 class User(ndb.Model):
-    username = ndb.StringProperty(indexed=True)
-    display_name = ndb.StringProperty()
+    usernames = ndb.StringProperty(indexed=True, repeated=True)
+    display_name = ndb.StringProperty(indexed=True)
+    status = ndb.StringProperty(default='')
     phash = ndb.StringProperty()
     email = ndb.StringProperty(indexed=True)
     email_verified = ndb.BooleanProperty(default=False)
@@ -34,14 +36,21 @@ class User(ndb.Model):
 
     @classmethod
     def by_username(cls, username):
-        return cls.query(cls.username==username).get()
+        return cls.query(cls.usernames==username).get()
 
     @classmethod
     def key_by_username(cls, username):
-        user = cls.query(cls.username==username).get()
-        if user:
-            return user.key
-        return None
+        return cls.query(cls.usernames==username).get(keys_only=True)
+
+    @classmethod
+    def hash_password(cls, password, salt=None):
+        if not salt:
+            salt = bcrypt.gensalt()
+        return bcrypt.hashpw(password, salt)
+
+    @classmethod
+    def check_password(cls, user, password):
+        return cls.hash_password(password, user.phash) == user.phash
 
 class LoginSession(ndb.Model):
     user_key = ndb.StringProperty(indexed=True)

@@ -74,7 +74,7 @@ def saylua_message_status(user_conversation):
 
 @app.template_filter('user_url')
 def saylua_user_url(user):
-    return '/user/' + user.username + '/'
+    return '/user/' + user.display_name.lower() + '/'
 
 # conversation can be either a UserConversation or Conversation model
 @app.template_filter('conversation_url')

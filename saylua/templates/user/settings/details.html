@@ -12,13 +12,13 @@
     </tr>
     <tr>
       <th class="label">
-        <label for="user-settings-display-name">Display Name</label>
+        <label for="user-settings-status">Status</label>
       </th>
       <td>
-        <input type="text" name="display_name" placeholder="Your Display Name"
-          id="user-settings-display-name" value="{{g.user.display_name}}"
-          data-validators="required not_empty min:{{min_display_name_length}} max:{{max_display_name_length}}">
-        <small class="form-tip">You can change your display name as often as you want. </small>
+        <input type="text" name="status" placeholder="Your Status"
+          id="user-settings-status" value="{{g.user.status}}"
+          data-validators="max:{{max_status_length}}">
+        <small class="form-tip">Your status is a bit of text displayed next to your name. </small>
       </td>
     </tr>
     <tr>

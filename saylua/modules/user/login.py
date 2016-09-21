@@ -3,7 +3,6 @@ from flask import (render_template, redirect, make_response,
                    url_for, flash, session, abort, request, g)
 from google.appengine.ext import ndb
 import random, string
-from bcryptmaster import bcrypt
 import datetime
 
 from saylua.utils.validation import FieldValidator
@@ -18,12 +17,12 @@ def login_post():
     username = request.form['username'].lower()
     password = request.form['password']
 
-    found = User.query(User.username == username).get()
+    found = User.by_username(username)
     if found == None:
         flash("We can't find a user by that name.", 'error')
         return render_template('user/login/login.html')
 
-    if not bcrypt.hashpw(password, found.phash) == found.phash:
+    if not User.check_password(found, password):
         flash("Your password is incorrect.", 'error')
         return render_template('user/login/login.html')
 
@@ -112,23 +111,23 @@ def register_post():
     if not valid:
         return redirect(url_for('register'))
 
-    found = User.query(User.username == username).get()
+    found = User.key_by_username(username)
     if found != None:
         valid = False
         flash('A user with that username already exists.', 'error')
     if valid:
-        phash = bcrypt.hashpw(password, bcrypt.gensalt())
-        new_user = User(username=username, display_name=display_name, phash=phash,
-                email=email, email_verified=False)
+        phash = User.hash_password(password)
+        new_user = User(display_name=display_name, usernames=[username], phash=phash,
+                email=email)
         user_key = new_user.put().urlsafe()
 
-        #Add a session to the datastore
+        # Add a session to the datastore
         expires = datetime.datetime.utcnow()
         expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
         new_session = LoginSession(user_key=user_key, expires=expires)
         session_key = new_session.put().urlsafe()
 
-        #Generate a matching cookie and redirct
+        # Generate a matching cookie and redirct
         resp = make_response(redirect(url_for('home')))
         resp.set_cookie('user_key', user_key, expires=expires)
         resp.set_cookie('session_key', session_key, expires=expires)
