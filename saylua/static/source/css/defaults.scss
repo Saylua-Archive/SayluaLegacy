@@ -50,12 +50,21 @@ p {
   padding: 0px;
 }
 
-a, a:active, a:visited {
+a, a:active, a:visited, button.link-button, button.link-button:active {
   text-decoration: none;
   color: $accentColor;
 }
 
-a:hover {
+button.link-button, button.link-button:hover {
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+a:hover, button.link-button:hover {
   text-decoration: underline;
 }
 

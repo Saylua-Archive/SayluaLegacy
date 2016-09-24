@@ -26,9 +26,9 @@ var _FormValidation = (function FormValidation() {
       }
     },
     'username_chars': {
-      'error': '<field> may only contain letters, numbers, underscores, or hyphens. ',
+      'error': '<field> may only contain letters, numbers, or these characters: +~._-',
       'validator': function (input) {
-        var reg = new RegExp('^[A-Za-z0-9_-]+$');
+        var reg = new RegExp('^[A-Za-z0-9+~._-]+$');
         return reg.test(input);
       }
     },

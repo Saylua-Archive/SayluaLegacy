@@ -2,8 +2,14 @@ from google.appengine.ext import ndb
 from bcryptmaster import bcrypt
 
 class User(ndb.Model):
+    # A user can have multiple unique usernames. Usernames are NOT case sensitive.
     usernames = ndb.StringProperty(indexed=True, repeated=True)
+
+    # A user's display name must be one of their usernames. Display names are care sensitive.
     display_name = ndb.StringProperty(indexed=True)
+
+    last_username_change = ndb.DateTimeProperty(auto_now_add=True)
+
     status = ndb.StringProperty(default='')
     phash = ndb.StringProperty()
     email = ndb.StringProperty(indexed=True)
@@ -36,11 +42,11 @@ class User(ndb.Model):
 
     @classmethod
     def by_username(cls, username):
-        return cls.query(cls.usernames==username).get()
+        return cls.query(cls.usernames==username.lower()).get()
 
     @classmethod
     def key_by_username(cls, username):
-        return cls.query(cls.usernames==username).get(keys_only=True)
+        return cls.query(cls.usernames==username.lower()).get(keys_only=True)
 
     @classmethod
     def hash_password(cls, password, salt=None):

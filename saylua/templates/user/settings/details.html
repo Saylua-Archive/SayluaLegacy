@@ -17,7 +17,7 @@
       <td>
         <input type="text" name="status" placeholder="Your Status"
           id="user-settings-status" value="{{g.user.status}}"
-          data-validators="max:{{max_status_length}}">
+          data-validators="max:{{config['MAX_USER_STATUS_LENGTH']}}">
         <small class="form-tip">Your status is a bit of text displayed next to your name. </small>
       </td>
     </tr>

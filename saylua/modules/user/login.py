@@ -8,6 +8,7 @@ import datetime
 from saylua.utils.validation import FieldValidator
 from saylua.models.user import LoginSession, User
 
+# Login form shown to the user
 @app.route('/login/', methods=['GET'])
 def login():
     return render_template('user/login/login.html')
@@ -62,13 +63,10 @@ def logout():
     resp.set_cookie('session_key', '', expires=0)
     return resp
 
+# Registration form shown to the user
 @app.route('/register/', methods=['GET'])
 def register():
-    return render_template('user/login/register.html',
-        min_password_length = app.config['MIN_PASSWORD_LENGTH'],
-        max_password_length = app.config['MAX_PASSWORD_LENGTH'],
-        min_username_length = app.config['MIN_USERNAME_LENGTH'],
-        max_username_length = app.config['MAX_USERNAME_LENGTH'])
+    return render_template('user/login/register.html')
 
 @app.route('/register/', methods=['POST'])
 def register_post():
@@ -90,7 +88,7 @@ def register_post():
         .required()
         .min(app.config['MIN_USERNAME_LENGTH'])
         .max(app.config['MAX_USERNAME_LENGTH'])
-        .matches_regex('^[A-Za-z0-9_-]*$', error='Usernames may only contain alphanumeric characters, underscroes, and hyphens.'))
+        .matches_regex('^[A-Za-z0-9+~._-]+$', error='Usernames may only contain letters, numbers, and these characters: +~._-'))
 
     emailValidator = (FieldValidator('email', email)
         .required()
