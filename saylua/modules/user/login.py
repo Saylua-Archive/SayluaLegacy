@@ -3,12 +3,12 @@ from flask import (render_template, redirect, make_response,
                    url_for, flash, session, abort, request, g)
 from google.appengine.ext import ndb
 import random, string
-from bcryptmaster import bcrypt
 import datetime
 
 from saylua.utils.validation import FieldValidator
 from saylua.models.user import LoginSession, User
 
+# Login form shown to the user
 @app.route('/login/', methods=['GET'])
 def login():
     return render_template('user/login/login.html')
@@ -18,12 +18,12 @@ def login_post():
     username = request.form['username'].lower()
     password = request.form['password']
 
-    found = User.query(User.username == username).get()
+    found = User.by_username(username)
     if found == None:
         flash("We can't find a user by that name.", 'error')
         return render_template('user/login/login.html')
 
-    if not bcrypt.hashpw(password, found.phash) == found.phash:
+    if not User.check_password(found, password):
         flash("Your password is incorrect.", 'error')
         return render_template('user/login/login.html')
 
@@ -63,13 +63,10 @@ def logout():
     resp.set_cookie('session_key', '', expires=0)
     return resp
 
+# Registration form shown to the user
 @app.route('/register/', methods=['GET'])
 def register():
-    return render_template('user/login/register.html',
-        min_password_length = app.config['MIN_PASSWORD_LENGTH'],
-        max_password_length = app.config['MAX_PASSWORD_LENGTH'],
-        min_username_length = app.config['MIN_USERNAME_LENGTH'],
-        max_username_length = app.config['MAX_USERNAME_LENGTH'])
+    return render_template('user/login/register.html')
 
 @app.route('/register/', methods=['POST'])
 def register_post():
@@ -91,7 +88,7 @@ def register_post():
         .required()
         .min(app.config['MIN_USERNAME_LENGTH'])
         .max(app.config['MAX_USERNAME_LENGTH'])
-        .matches_regex('^[A-Za-z0-9_-]*$', error='Usernames may only contain alphanumeric characters, underscroes, and hyphens.'))
+        .matches_regex('^[A-Za-z0-9+~._-]+$', error='Usernames may only contain letters, numbers, and these characters: +~._-'))
 
     emailValidator = (FieldValidator('email', email)
         .required()
@@ -112,23 +109,23 @@ def register_post():
     if not valid:
         return redirect(url_for('register'))
 
-    found = User.query(User.username == username).get()
+    found = User.key_by_username(username)
     if found != None:
         valid = False
         flash('A user with that username already exists.', 'error')
     if valid:
-        phash = bcrypt.hashpw(password, bcrypt.gensalt())
-        new_user = User(username=username, display_name=display_name, phash=phash,
-                email=email, email_verified=False)
+        phash = User.hash_password(password)
+        new_user = User(display_name=display_name, usernames=[username], phash=phash,
+                email=email)
         user_key = new_user.put().urlsafe()
 
-        #Add a session to the datastore
+        # Add a session to the datastore
         expires = datetime.datetime.utcnow()
         expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
         new_session = LoginSession(user_key=user_key, expires=expires)
         session_key = new_session.put().urlsafe()
 
-        #Generate a matching cookie and redirct
+        # Generate a matching cookie and redirct
         resp = make_response(redirect(url_for('home')))
         resp.set_cookie('user_key', user_key, expires=expires)
         resp.set_cookie('session_key', session_key, expires=expires)

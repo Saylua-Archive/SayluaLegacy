@@ -16,7 +16,8 @@
       </th>
       <td>
         <input placeholder="Recipient's Username" id="message-post-recipient"
-          data-validators="required" value="{{ recipient }}" name="recipient" />
+          data-validators="required min:{{config['MIN_USERNAME_LENGTH']}} max:{{config['MAX_USERNAME_LENGTH']}} username_chars"
+          value="{{ recipient }}" name="recipient" />
         <small class="form-tip">Enter the username for the message recipient</small>
       </td>
     </tr>

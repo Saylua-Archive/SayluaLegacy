@@ -25,10 +25,16 @@ var _FormValidation = (function FormValidation() {
         return input.length <= length;
       }
     },
-    'username_chars': {
-      'error': '<field> may only contain letters, numbers, underscores, or hyphens. ',
+    'number': {
+      'error': '<field> must be a number! ',
       'validator': function (input) {
-        var reg = new RegExp('^[A-Za-z0-9_-]+$');
+        return !isNaN(input);
+      }
+    },
+    'username_chars': {
+      'error': '<field> may only contain letters, numbers, or these characters: +~._-',
+      'validator': function (input) {
+        var reg = new RegExp('^[A-Za-z0-9+~._-]+$');
         return reg.test(input);
       }
     },

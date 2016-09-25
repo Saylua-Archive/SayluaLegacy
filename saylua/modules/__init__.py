@@ -1,4 +1,5 @@
 import books
+import currency
 import explore
 import forums
 import games

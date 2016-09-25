@@ -1,0 +1,67 @@
+{% extends "user/settings/template.html" %}
+{% set section_title = "Change Username" %}
+{% block section_body %}
+<p>
+  You can only change your username once every 24 hours. After you change your username,
+  your old username will redirect to your new username unless you release it.
+</p>
+<form method="post" class="validated-form" data-error-id="user-settings-username-error">
+  <table class="form-table">
+    <tr>
+      <td colspan="2" id="user-settings-username-error"></td>
+    </tr>
+    <tr>
+      <th class="label">
+        <label for="user-settings-username">Username</label>
+      </th>
+      <td>
+        <input type="text" placeholder="Username" name="username" value="{{g.user.display_name}}" id="username-field"
+          data-validators="required min:{{config['MIN_USERNAME_LENGTH']}} max:{{config['MAX_USERNAME_LENGTH']}} username_chars">
+        <small class="form-tip">Valid characters: letters, numbers, and +~._-</small>
+      </td>
+    </tr>
+    <tr>
+      <th class="label">
+        <label>Last Changed</label>
+      </th>
+      <td>
+        {{ g.user.last_username_change|relative_time }}
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" name="submit" value="Change Username">
+      </td>
+    </tr>
+  </table>
+</form>
+
+<table class="form-table">
+  <tr>
+    <th class="section-header" colspan="2">
+      Your Past Usernames
+    </th>
+  </tr>
+  {% for username in g.user.usernames|reverse %}
+  <tr>
+    <td>
+      {{ username }}
+    </td>
+    <td>
+      {% if username == g.user.display_name.lower() %}
+        <em>Current Username</em>
+      {% else %}
+        <form method="post" action="/settings/username/release/">
+          <input type="hidden" name="username" value="{{ username }}">
+          <button type="submit" class="link-button" name="submit">
+            Release username
+          </button>
+        </form>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
