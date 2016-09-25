@@ -16,6 +16,12 @@
           <th>Username</th>
           <td>{{ viewed_user.display_name }}</td>
         </tr>
+        {% if viewed_user.status %}
+        <tr>
+          <th>User Status</th>
+          <td>{{ viewed_user.status }}</td>
+        </tr>
+        {% endif %}
         {% if viewed_user.pronouns %}
         <tr>
           <th>Pronouns</th>
@@ -46,10 +52,16 @@
       <a class="tiny-button" href="/den/{{viewed_user.display_name}}/">Den</a>
       <a class="tiny-button" href="/shop/{{viewed_user.display_name}}/">Shop</a>
 
-      <a class="right normal" href="/messages/write/?to={{ viewed_user.display_name }}">
-        <img src="/static/img/icons/pencil.png">
-        Message
-      </a>
+      <span class="right">
+        <a class="normal" href="/messages/write/?to={{viewed_user.display_name|urlencode}}">
+          <img src="/static/img/icons/pencil.png">
+          Message
+        </a>
+        <a class="normal" href="/currency/transfer/?to={{viewed_user.display_name|urlencode}}">
+          <img src="/static/img/icons/weather_clouds.png">
+          Send Money
+        </a>
+      </span>
     </div>
     <h3>About {{ viewed_user.display_name }}</h3>
     <div id="profile-about-me">

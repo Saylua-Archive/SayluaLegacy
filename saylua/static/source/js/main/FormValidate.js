@@ -25,6 +25,12 @@ var _FormValidation = (function FormValidation() {
         return input.length <= length;
       }
     },
+    'number': {
+      'error': '<field> must be a number! ',
+      'validator': function (input) {
+        return !isNaN(input);
+      }
+    },
     'username_chars': {
       'error': '<field> may only contain letters, numbers, or these characters: +~._-',
       'validator': function (input) {

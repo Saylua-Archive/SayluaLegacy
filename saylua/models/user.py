@@ -2,6 +2,9 @@ from google.appengine.ext import ndb
 from bcryptmaster import bcrypt
 
 class User(ndb.Model):
+    class InvalidCurrencyException(Exception):
+        pass
+
     # A user can have multiple unique usernames. Usernames are NOT case sensitive.
     usernames = ndb.StringProperty(indexed=True, repeated=True)
 
@@ -57,6 +60,39 @@ class User(ndb.Model):
     @classmethod
     def check_password(cls, user, password):
         return cls.hash_password(password, user.phash) == user.phash
+
+    @classmethod
+    @ndb.transactional(xg=True)
+    def transfer_currency(cls, from_key, to_key, cc, ss):
+        from_user, to_user = ndb.get_multi([from_key, to_key])
+        from_user.star_shards -= ss
+        from_user.cloud_coins -= cc
+
+        to_user.star_shards += ss
+        to_user.cloud_coins += cc
+
+        # Throw exceptions if the currency amount is invalid
+        cls.except_if_currency_invalid(from_user)
+        cls.except_if_currency_invalid(to_user)
+
+        ndb.put_multi([from_user, to_user])
+
+    @classmethod
+    @ndb.transactional(xg=True)
+    def update_currency(cls, user_key, cc, ss):
+        user = user_key.get()
+        user.star_shards += ss
+        user.cloud_coins += cc
+
+        # Throw exceptions if the currency amount is invalid
+        cls.except_if_currency_invalid(user)
+
+        user.put()
+
+    @classmethod
+    def except_if_currency_invalid(cls, user):
+        if user.star_shards < 0 or user.cloud_coins < 0:
+            raise cls.InvalidCurrencyException('Currency cannot be negative!')
 
 class LoginSession(ndb.Model):
     user_key = ndb.StringProperty(indexed=True)
