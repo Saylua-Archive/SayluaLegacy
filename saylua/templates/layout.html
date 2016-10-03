@@ -48,13 +48,61 @@
       <a href="/inventory/" class="block-link" title="Inventory">
         <i class="fa fa-suitcase" aria-hidden="true"></i>
       </a>
-      <div id="nav-links">
-        <a href="/explore/" class="block-link">Explore</a>
-        <a href="/forums/" class="block-link">Forums</a>
-        <a href="/games/" class="block-link">Games</a>
-        <a href="/shop/vera/" class="block-link">Shops</a>
-        <a href="/read/1/" class="block-link">World</a>
-        <a href="/help/" class="block-link">Help</a>
+      <div class="nav-link" id="navigation-text-links">
+        <div class="nav-link">
+          <a href="/games/" class="block-link" data-section="site-menu">Site</a>
+          <div class="left-menu dropdown-menu menu" id="site-menu">
+            <h3>General Saylua Stuff</h3>
+            <a href="/"><img src="/static/img/icons/house.png"> Home</a>
+            <a href="/inventory/"><img src="/static/img/icons/box.png"> My Inventory</a>
+            <a href="/den/"><img src="/static/img/icons/joystick.png"> My Pet Den</a>
+            <a href="/user_shop/"><img src="/static/img/icons/tag_blue.png"> My Shop</a>
+          </div>
+        </div>
+        <div class="nav-link">
+          <a href="/games/" class="block-link" data-section="play-menu">Play</a>
+          <div class="left-menu dropdown-menu menu" id="play-menu">
+            <h3>Games and Fun</h3>
+            <a href="/explore/"><img src="/static/img/icons/compass.png"> Explore</a>
+            <a href="/map/"><img src="/static/img/icons/group.png"> Town Square</a>
+            <a href="/games/"><img src="/static/img/icons/joystick.png"> The Arcade</a>
+            <a href="/crafting/"><img src="/static/img/icons/hammer.png"> Crafting</a>
+          </div>
+        </div>
+        <div class="nav-link">
+          <a href="/shops/" class="block-link" data-section="trade-menu">Trade</a>
+          <div class="left-menu dropdown-menu menu" id="trade-menu">
+            <h3>Buy and Sell</h3>
+            <a href="/shops/"><img src="/static/img/icons/tag_blue.png"> NPC Shops</a>
+            <a href="/shops/"><img src="/static/img/icons/find.png"> Shop Search</a>
+            <a href="/bank/"><img src="/static/img/icons/coins.png"> Bank of Saylua</a>
+            <span class="dropdown-separator"></span>
+            <a href="/starshards/"><img src="/static/img/icons/star_1.png"> Purchase Star Shards</a>
+          </div>
+        </div>
+        <div class="nav-link">
+          <a href="/forums/" class="block-link" data-section="community-menu">Community</a>
+          <div class="left-menu dropdown-menu menu" id="community-menu">
+            <h3>Interact with Others</h3>
+            <a href="/forums/"><img src="/static/img/icons/comment.png"> Forums</a>
+            <span class="dropdown-separator"></span>
+            <a href="/adopt/"><img src="/static/img/icons/heart.png"> Adoption Center</a>
+            <a href="/reserve/"><img src="/static/img/icons/shield.png"> Pet Reserve</a>
+            <span class="dropdown-separator"></span>
+            <a href="/newspaper/"><img src="/static/img/icons/newspaper.png"> Newspaper</a>
+            <a href="/museum/"><img src="/static/img/icons/palette.png"> The Museum</a>
+          </div>
+        </div>
+        <div class="nav-link">
+          <a href="/help/" class="block-link" data-section="archives-menu">Archives</a>
+          <div class="left-menu dropdown-menu menu" id="archives-menu">
+            <h3>Learn About Saylua</h3>
+            <a href="/pets/"><img src="/static/img/icons/clipboard_text.png"> Species Guide</a>
+            <a href="/items/"><img src="/static/img/icons/drawer.png"> Item Database</a>
+            <span class="dropdown-separator"></span>
+            <a href="/shelf/"><img src="/static/img/icons/book_open.png"> My Bookshelf</a>
+          </div>
+        </div>
       </div>
 
       <form class="search" action="/search/">
@@ -63,7 +111,26 @@
       </form>
       {% if g.logged_in %}
         <div id="navigation-right">
-          <div id="dropdown-right">
+          <a href="{{ g.user|user_url }}" class="block-link" data-section="user-menu">
+            <i class="fa fa-user" aria-hidden="true"></i>
+          </a>
+          <a href="/notifications/" class="block-link" data-section="notifications-menu">
+            <i class="fa fa-bell" aria-hidden="true"></i>
+            {% if notifications_count > 99 %}
+              <span class="alert-number">99+</span>
+            {% elif notifications_count > 0 %}
+              <span class="alert-number">{{notifications_count}}</span>
+            {% endif %}
+          </a>
+          <a href="/messages/" class="block-link" data-section="messages-menu">
+            <i class="fa fa-envelope" aria-hidden="true"></i>
+            {% if messages_count > 99 %}
+              <span class="alert-number">99+</span>
+            {% elif messages_count > 0 %}
+              <span class="alert-number">{{messages_count}}</span>
+            {% endif %}
+          </a>
+          <div id="dropdown-right" class="dropdown-menu">
             <div id="user-menu" class="menu">
               <h3>Logged in as {{g.user.display_name}}</h3>
               <a href="{{ g.user|user_url }}"><img src="/static/img/icons/user.png"> My Profile</a>
@@ -107,25 +174,6 @@
               <a href="/messages/"><img src="/static/img/icons/email.png"> View All Messages</a>
             </div>
           </div>
-          <a href="{{ g.user|user_url }}" class="block-link" data-section="user-menu">
-            <i class="fa fa-user" aria-hidden="true"></i>
-          </a>
-          <a href="/notifications/" class="block-link" data-section="notifications-menu">
-            <i class="fa fa-bell" aria-hidden="true"></i>
-            {% if notifications_count > 99 %}
-              <span class="alert-number">99+</span>
-            {% elif notifications_count > 0 %}
-              <span class="alert-number">{{notifications_count}}</span>
-            {% endif %}
-          </a>
-          <a href="/messages/" class="block-link" data-section="messages-menu">
-            <i class="fa fa-envelope" aria-hidden="true"></i>
-            {% if messages_count > 99 %}
-              <span class="alert-number">99+</span>
-            {% elif messages_count > 0 %}
-              <span class="alert-number">{{messages_count}}</span>
-            {% endif %}
-          </a>
         </div>
       {% else %}
         <a href="/login/" class="block-link">
@@ -183,6 +231,9 @@
     </p>
     <p>
       &copy; 2016 <a href="/">Saylua</a>
+    </p>
+    <p>
+      <a href="/admin/">Admin Panel</a>
     </p>
   </div>
 </div>

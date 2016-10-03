@@ -19,3 +19,7 @@
 .item {
   @include square(80px);
 }
+
+.item-big {
+  @include square(160px);
+}

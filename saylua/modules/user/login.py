@@ -15,8 +15,8 @@ def login():
 
 @app.route('/login/', methods=['POST'])
 def login_post():
-    username = request.form['username'].lower()
-    password = request.form['password']
+    username = request.form.get('username').lower()
+    password = request.form.get('password')
 
     found = User.by_username(username)
     if found == None:
@@ -70,12 +70,17 @@ def register():
 
 @app.route('/register/', methods=['POST'])
 def register_post():
-    display_name = request.form['username']
-    username = display_name.lower()
-    password = request.form['password']
-    password2 = request.form['password2']
-    email = request.form['email'].lower()
+    display_name = request.form.get('username')
+    username = display_name
+    password = request.form.get('password')
+    password2 = request.form.get('password2')
+    email = request.form.get('email')
     tos_agreed = 'tos_agreed' in request.form
+
+    if username:
+        username = username.lower()
+    if email:
+        email = email.lower()
 
     # Validate all of the fields
     passwordValidator = (FieldValidator('password', password)

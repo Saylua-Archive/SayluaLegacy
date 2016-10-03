@@ -4,8 +4,6 @@ from saylua.utils import make_ndb_key
 
 import datetime
 
-# TODO: Make things transactional
-
 # StructuredProperty for Conversation
 class ConversationMessage(ndb.Model):
     user_key = ndb.KeyProperty()

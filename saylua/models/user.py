@@ -30,6 +30,8 @@ class User(ndb.Model):
     # Currency
     star_shards = ndb.IntegerProperty(default=0)
     cloud_coins = ndb.IntegerProperty(default=0)
+    bank_cc = ndb.IntegerProperty(default=0)
+    bank_ss = ndb.IntegerProperty(default=0)
 
     # Settings
     notified_on_pings = ndb.BooleanProperty(default=True)
@@ -78,7 +80,7 @@ class User(ndb.Model):
         ndb.put_multi([from_user, to_user])
 
     @classmethod
-    @ndb.transactional(xg=True)
+    @ndb.transactional
     def update_currency(cls, user_key, cc, ss):
         user = user_key.get()
         user.star_shards += ss
