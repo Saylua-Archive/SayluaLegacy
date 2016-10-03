@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% set is_admin = True %}
+{% set fullscreen = true %}
+{% set page_title = "Admin Panel: " + section_title %}
+{% block body %}
+<h2>Admin Panel: {{ section_title }} </h2>
+<div class="row-5">
+  <div class="col-1 section-menu">
+    <h4>Items</h4>
+    <a href="/admin/items/add/"{%- if request.url_rule.endpoint == 'admin_panel_items_add' %} class="active"{% endif %}>
+      Add New Items
+    </a>
+    <a href="/admin/items/edit/"{%- if request.url_rule.endpoint == 'admin_panel_items_edit' %} class="active"{% endif %}>
+      Edit Items
+    </a>
+  </div>
+  <div class="col-4">
+    {% block section_body %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

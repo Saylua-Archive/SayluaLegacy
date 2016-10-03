@@ -11,7 +11,5 @@ import pet
 import search
 import shops
 
-import user.login
-import user.online
-import user.profile
-import user.settings
+import admin
+import user

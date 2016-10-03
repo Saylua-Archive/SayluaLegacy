@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 {% block header_scripts %}
 <style style="text/css">
-{{viewed_user.css}}
+{{ viewed_user.css }}
 </style>
 {% endblock %}
 {% block body %}
-<h2 id="profile-header">{{viewed_user.display_name}} (@{{viewed_user.username}})</h2>
+<h2 id="profile-header">{{viewed_user.username}}</h2>
 <div id="profile-container">
   <div id="profile-column">
     <img src="{{viewed_user.ha_url}}" id="profile-human-avatar">
@@ -13,28 +13,24 @@
       <legend id="profile-details-legend">Details</legend>
       <table id="profile-details-table">
         <tr>
-          <th>Display Name</th>
-          <td>{{viewed_user.display_name}}</td>
-        </tr>
-        <tr>
           <th>Username</th>
-          <td>{{viewed_user.username}}</td>
+          <td>{{ viewed_user.username }}</td>
         </tr>
         {% if viewed_user.pronouns %}
         <tr>
           <th>Pronouns</th>
-          <td>{{viewed_user.pronouns}}</td>
+          <td>{{ viewed_user.pronouns }}</td>
         </tr>
         {% endif %}
         {% if viewed_user.gender %}
         <tr>
           <th>Gender</th>
-          <td>{{viewed_user.gender}}</td>
+          <td>{{ viewed_user.gender }}</td>
         </tr>
         {% endif %}
         <tr>
           <th>Date Joined</th>
-          <td>{{viewed_user.date_joined|show_date}}</td>
+          <td>{{ viewed_user.date_joined|show_date }}</td>
         </tr>
         <tr>
           <th>Last Online</th>
@@ -57,7 +53,7 @@
     </div>
     <h3>About {{ viewed_user.username }}</h3>
     <div id="profile-about-me">
-      {{viewed_user.bio}}
+      {{ viewed_user.bio }}
     </div>
     <h3>Active Pets</h3>
     <img src="/static/img/SHC.png" style="width:33%; float:left">
