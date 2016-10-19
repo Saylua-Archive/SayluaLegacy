@@ -12,11 +12,10 @@
     </tr>
     <tr>
       <th class="label">
-        <label for="user-settings-username">Username</label>
+        {{ form.username.label }}
       </th>
       <td>
-        <input type="text" placeholder="Username" name="username" value="{{g.user.display_name}}" id="username-field"
-          data-validators="required min:{{config['MIN_USERNAME_LENGTH']}} max:{{config['MAX_USERNAME_LENGTH']}} username_chars">
+        {{ form.username() }}
         <small class="form-tip">Valid characters: letters, numbers, and +~._-</small>
       </td>
     </tr>

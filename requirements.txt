@@ -8,4 +8,4 @@ Flask==0.10
 py2casefold
 bcrypt
 python-dateutil
-PIL
+Flask-WTF

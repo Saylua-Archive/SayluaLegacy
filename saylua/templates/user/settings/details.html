@@ -12,40 +12,35 @@
     </tr>
     <tr>
       <th class="label">
-        <label for="user-settings-status">Status</label>
+        {{ form.status.label }}
       </th>
       <td>
-        <input type="text" name="status" placeholder="Your Status"
-          id="user-settings-status" value="{{g.user.status}}"
-          data-validators="max:{{config['MAX_USER_STATUS_LENGTH']}}">
+        {{ form.status(placeholder="Your Status") }}
         <small class="form-tip">Your status is a bit of text displayed next to your name. </small>
       </td>
     </tr>
     <tr>
       <th class="label">
-        <label for="user-settings-gender">Gender</label>
+        {{ form.gender.label }}
       </th>
       <td>
-        <input type="text" name="gender" placeholder="Gender" id="user-settings-gender"
-          value="{{g.user.gender}}">
+        {{ form.gender() }}
       </td>
     </tr>
     <tr>
       <th class="label">
-        <label for="user-settings-pronouns">Pronouns</label>
+        {{ form.pronouns.label }}
       </th>
       <td>
-        <input type="text" name="pronouns" placeholder="Pronouns" id="user-settings-pronouns"
-          value="{{g.user.pronouns}}">
+        {{ form.pronouns() }}
       </td>
     </tr>
     <tr>
       <th class="label">
-        <label for="user-settings-bio">About Me</label>
+        {{ form.bio.label }}
       </th>
       <td>
-        <textarea name="bio" placeholder="Write a bit about yourself for others to see. "
-          id="user-settings-bio">{{g.user.bio}}</textarea>
+        {{ form.bio(placeholder="Write a bit about yourself for others to see. ") }}
       </td>
     </tr>
     <tr>

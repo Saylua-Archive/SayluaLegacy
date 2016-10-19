@@ -11,11 +11,10 @@
     </tr>
     <tr>
       <th class="label">
-        <label for="user-settings-email">Email Address</label>
+        {{ form.email.label }}
       </th>
       <td>
-        <input type="text" name="email" placeholder="Email Address" id="user-settings-email"
-          data-validators="required not_empty email" value="{{g.user.email}}">
+        {{ form.email() }}
       </td>
     </tr>
     <tr>

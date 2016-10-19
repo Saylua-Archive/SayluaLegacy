@@ -5,52 +5,47 @@
 
 <div id="register-error"></div>
 <form class="validated-form" method="post" id="register-form" data-error-id="register-error">
+  {{ form.csrf_token }}
   <table class="form-table center">
     <tr>
       <th class="label">
-        <label for="username-field">Username</label>
+        {{ form.username.label }}
       </th>
       <td>
-        <input type="text" placeholder="Username" name="username" id="username-field"
-          data-validators="required min:{{config['MIN_USERNAME_LENGTH']}} max:{{config['MAX_USERNAME_LENGTH']}} username_chars">
+        {{ form.username() }}
         <small class="form-tip">Valid characters: letters, numbers, and +~._-</small>
       </td>
     </tr>
     <tr>
       <th class="label">
-        <label for="password-field">Password</label>
+        {{ form.password.label }}
       </th>
       <td>
-        <input type="password" placeholder="Password" name="password" id="password-field"
-          data-validators="required min:{{config['MIN_PASSWORD_LENGTH']}} max:{{config['MAX_PASSWORD_LENGTH']}}">
+        {{ form.password() }}
         <small class="form-tip">Passwords must be at least {{config['MIN_PASSWORD_LENGTH']}} characters. </small>
       </td>
     </tr>
     <tr>
       <th class="label">
-        <label for="password-field-2">Confirm Password</label>
+        {{ form.confirm_password.label }}
       </th>
       <td>
-        <input type="password" placeholder="Confirm Password" name="password2" id="password-field-2"
-          data-validators="match_password:password-field">
+        {{ form.confirm_password() }}
       </td>
     </tr>
     <tr>
       <th class="label">
-        <label for="email-field">Email</label>
+        {{ form.email.label }}
       </th>
       <td>
-        <input type="text" placeholder="Email" name="email" id="email-field"
-          data-validators="required email">
+        {{ form.email() }}
       </td>
     </tr>
     <tr>
       <td></td>
       <td>
-        <input type="checkbox" name="tos_agreed"
-          data-errors='{"required": "You must agree to the Terms and Service. "}'
-          data-validators="required" id="i-agree-field">
-        <label for="i-agree-field">I agree to the Terms of Service</label>
+        {{ form.accept_tos() }}
+        {{ form.accept_tos.label }}
       </td>
     </tr>
     <tr>

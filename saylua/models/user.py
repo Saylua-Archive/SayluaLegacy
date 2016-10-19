@@ -2,26 +2,27 @@ from google.appengine.ext import ndb
 from bcryptmaster import bcrypt
 
 class User(ndb.Model):
+    # An exception thrown if an operation would make a user's currency negative
     class InvalidCurrencyException(Exception):
         pass
 
     # A user can have multiple unique usernames. Usernames are NOT case sensitive.
-    usernames = ndb.StringProperty(indexed=True, repeated=True)
+    usernames = ndb.StringProperty(repeated=True)
 
     # A user's display name must be one of their usernames. Display names are care sensitive.
-    display_name = ndb.StringProperty(indexed=True)
+    display_name = ndb.StringProperty()
 
     last_username_change = ndb.DateTimeProperty(auto_now_add=True)
 
     status = ndb.StringProperty(default='')
-    phash = ndb.StringProperty()
-    email = ndb.StringProperty(indexed=True)
+    phash = ndb.StringProperty(indexed=False)
+    email = ndb.StringProperty()
     email_verified = ndb.BooleanProperty(default=False)
     date_joined = ndb.DateTimeProperty(auto_now_add=True)
     last_action = ndb.DateTimeProperty(auto_now_add=True)
 
     # Human Avatar
-    ha_url = ndb.StringProperty(default='/api/ha/m/')
+    ha_url = ndb.StringProperty(default='/api/ha/m/', indexed=False)
 
     # Ban Status
     permabanned = ndb.BooleanProperty(default=False)
