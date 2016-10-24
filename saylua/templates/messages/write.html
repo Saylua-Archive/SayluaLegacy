@@ -12,31 +12,27 @@
     </tr>
     <tr>
       <th class="label">
-        <label for="message-post-recipient">Recipient</label>
+        {{ form.recipient.label }}
       </th>
       <td>
-        <input placeholder="Recipient's Username" id="message-post-recipient"
-          data-validators="required min:{{config['MIN_USERNAME_LENGTH']}} max:{{config['MAX_USERNAME_LENGTH']}} username_chars"
-          value="{{ recipient }}" name="recipient" />
+        {{ form.recipient() }}
         <small class="form-tip">Enter the username for the message recipient</small>
       </td>
     </tr>
     <tr>
       <th class="label">
-        <label for="message-post-title">Message Title</label>
+        {{ form.title.label }}
       </th>
       <td>
-        <input placeholder="Message Title" id="message-post-title"
-          data-validators="required min:2" value="{{ title }}" name="title" />
+        {{ form.title() }}
       </td>
     </tr>
     <tr>
       <th class="label">
-        <label for="message-post-body">Message Body</label>
+        {{ form.text.label }}
       </th>
       <td>
-        <textarea placeholder="Type the body for your message here" id="message-post-body"
-          data-validators="required min:2" name="text">{{ text }}</textarea>
+        {{ form.text() }}
       </td>
     </tr>
     <tr>

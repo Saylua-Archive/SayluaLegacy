@@ -1,79 +1,76 @@
-## Python Flask Skeleton for Google App Engine
-
-A skeleton for building Python applications on Google App Engine with the
-[Flask micro framework](http://flask.pocoo.org).
-
-See our other [Google Cloud Platform github
-repos](https://github.com/GoogleCloudPlatform) for sample applications and
-scaffolding for other python frameworks and use cases.
+## Saylua
 
 ## Run Locally
-1. Install the [App Engine Python SDK](https://developers.google.com/appengine/downloads).
-See the README file for directions. You'll need python 2.7 and [pip 1.4 or later](http://www.pip-installer.org/en/latest/installing.html) installed too.
+If you are on Windows, it is heavily suggested you use Vagrant.
 
-2. Clone this repo with
+### Manual
+1. Install [Python 2.7](https://www.python.org/downloads/)
 
-   ```
-   git clone https://github.com/GoogleCloudPlatform/appengine-python-flask-skeleton.git
-   ```
-3. Install dependencies in the project's lib directory.
-   Note: App Engine can only import libraries from inside your project directory.
+      Note: Ensure you have pip 1.4+ installed with pip --version. If you do not, see: https://pip.pypa.io/en/latest/installing/
 
-   ```
-   cd appengine-python-flask-skeleton
-   pip install -r requirements.txt -t lib
-   ```
+2. Install [NodeJS](https://nodejs.org/en/download/current/)
+
+3. [Install the AppEngine SDK (Make sure you choose to install the original App Engine SDK for Python)](https://cloud.google.com/appengine/docs/python/download)
+
+4. Clone this repo and move to project directory:
+
+      ```
+      git clone git@bitbucket.org:saylua/saylua.git
+      cd saylua
+      ```
+
+5. Install PIL dependencies zlib and libjpeg.
+
+      ```
+      # Ubuntu users can do the following:
+      sudo apt-get install libjpeg8-dev zlib1g-dev
+
+      # OS X users need only install libjpeg:
+      # https://dzone.com/articles/installing-libjpeg-os-x
+      ```
+
+6. Install python dependencies locally.
+
+      `pip install -r requirements.txt -t lib`
+
+
+7. Install NodeJS dependencies.
+
+      `npm install && npm install -g gulp`
+
+
+8. Run this project locally from the command line:
+
+      `sh run.sh`
+
+
+### Vagrant
+1. Ensure you have [Vagrant](https://www.vagrantup.com/downloads.html), and [VirtualBox](https://www.virtualbox.org/wiki/Downloads) installed.
+
+      Note: VMWare Fusion users do not have to install VirtualBox.
+
+2. Clone this repo and move to project directory:
+
+      ```
+      git clone git@bitbucket.org:saylua/saylua.git
+      cd saylua
+      ```
+
+3. Install and provision project, SSH into VM:
+
+      `vagrant up && vagrant ssh`
+
 4. Run this project locally from the command line:
 
-   ```
-   dev_appserver.py .
-   ```
+      ```
+      cd /vagrant
+      sh run.sh
+      ```
 
-Visit the application [http://localhost:8080](http://localhost:8080)
+Visit the application at [http://localhost:8080](http://localhost:8080)
 
 See [the development server documentation](https://developers.google.com/appengine/docs/python/tools/devserver)
 for options when running dev_appserver.
 
-## Deploy
-To deploy the application:
-
-1. Use the [Admin Console](https://appengine.google.com) to create a
-   project/app id. (App id and project id are identical)
-1. [Deploy the
-   application](https://developers.google.com/appengine/docs/python/tools/uploadinganapp) with
-
-   ```
-   appcfg.py -A <your-project-id> --oauth2 update .
-   ```
-1. Congratulations!  Your application is now live at your-app-id.appspot.com
-
-## Next Steps
-This skeleton includes `TODO` markers to help you find basic areas you will want
-to customize.
-
-### Relational Databases and Datastore
-To add persistence to your models, use
-[NDB](https://developers.google.com/appengine/docs/python/ndb/) for
-scale.  Consider
-[CloudSQL](https://developers.google.com/appengine/docs/python/cloud-sql)
-if you need a relational database.
-
-### Installing Libraries
-See the [Third party
-libraries](https://developers.google.com/appengine/docs/python/tools/libraries27)
-page for libraries that are already included in the SDK.  To include SDK
-libraries, add them in your app.yaml file. Other than libraries included in
-the SDK, only pure python libraries may be added to an App Engine project.
-
-### Feedback
-Star this repo if you found it useful. Use the github issue tracker to give
-feedback on this repo.
-
-## Contributing changes
-See [CONTRIB.md](CONTRIB.md)
-
-## Licensing
-See [LICENSE](LICENSE)
-
 ## Author
-Logan Henriquez and Johan Euphrosine
+Tiffany Zhang

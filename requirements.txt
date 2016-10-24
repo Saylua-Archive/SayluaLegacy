@@ -4,8 +4,10 @@
 # in `lib/` subdirectory.
 #
 # Note: The `lib` directory is added to `sys.path` by `appengine_config.py`.
+#
+# bcrypt dependency deferred in favor of manually adding a version that works.
 Flask==0.10
 py2casefold
-bcrypt
 python-dateutil
-PIL
+Flask-WTF
+pillow

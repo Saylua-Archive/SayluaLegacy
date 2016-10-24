@@ -2,7 +2,6 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
-var del = require('del');
 var sass = require('gulp-sass');
 var cleanCSS = require('gulp-clean-css');
 var glob = require('glob');
@@ -17,10 +16,6 @@ var dests = {
   sass: 'saylua/static/css/'
 };
 
-gulp.task('clean', function() {
-  return del(['build']);
-});
-
 gulp.task('sass', function () {
   gulp.src(paths.sass)
     .pipe(sass.sync().on('error', sass.logError))
@@ -31,7 +26,7 @@ gulp.task('sass', function () {
     .pipe(gulp.dest(dests.sass));
 });
 
-gulp.task('scripts', ['clean'], function() {
+gulp.task('scripts', [], function() {
   // Minify and copy all JavaScript (except vendor scripts)
   // with sourcemaps all the way down
   var jsFolder = glob.sync(paths.scripts);

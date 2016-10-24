@@ -26,14 +26,14 @@
         </tr>
         <tr>
           <td>
-            <label for="sidebar-username">Username</label>
-            <input type="text" placeholder="Username" id="sidebar-username" name="username" data-validators="required">
+            {{ sidebar_form.username.label }}
+            {{ sidebar_form.username() }}
           </td>
         </tr>
         <tr>
           <td>
-            <label for="sidebar-password">Password</label>
-            <input type="password" placeholder="Password" id="sidebar-password" name="password" data-validators="required">
+            {{ sidebar_form.password.label }}
+            {{ sidebar_form.password() }}
           </td>
         </tr>
         <tr>
