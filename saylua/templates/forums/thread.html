@@ -1,12 +1,12 @@
 {% from "_macros/pagination.html" import pagination %}
 {% extends "layout.html" %}
-{% set page_title = "Viewing Sample Thread" %}
+{% set page_title = thread.title %}
 {% block body %}
-<h2>Viewing Sample Thread</h2>
+<h2>{{ thread.title }}</h2>
 <span class="breadcrumb">
-  <a href="/forums">Forums</a> &#187;
-  <a href="/forums/board/1">Sample Board</a> &#187;
-  Sample Thread
+  <a href="/forums/">Forums</a> &#187;
+  <a href="/forums/board/{{ board.url_title }}/"> {{ board.title }}</a> &#187;
+  {{ thread.title }}
 </span>
 
 <div class="full padded normal">
@@ -14,10 +14,6 @@
     <a class="tiny-button" href="#write-forum-reply">
       <img src="/static/img/icons/pencil.png">
       Write a Reply
-    </a>
-    <a class="tiny-button" href="#">
-      <img src="/static/img/icons/transmit.png">
-      Bump Topic
     </a>
   </div>
 
@@ -30,14 +26,15 @@
 </div>
 
 <div class="center">
-{{ pagination() }}
+{{ pagination(page_count=page_count) }}
 </div>
-{% for i in range(10) %}
-<table class="forum-post" id="forum-post-<?=$i ?>">
+{% for post in posts %}
+{% set creator = post.creator_key|user_from_key_string %}
+<table class="forum-post" id="forum-post-{{ loop.index }}">
   <tr>
     <th colspan="2">
-      <a href="#forum-post-<?=$i ?>">Post in Really Long Sample...</a> |
-      4 June 2016 5:21 SST
+      <a href="#forum-post-{{ loop.index }}">Link This Post</a> |
+      {{ post.created_time|show_datetime }}
       <span class="right">
         <a href="#">Quote</a>  |
         <a href="#">Modify</a>
@@ -46,22 +43,21 @@
   </tr>
   <tr>
     <td class="forum-post-info">
-      <a href="/ha"><img src="/static/img/ha.png"></a>
+      <a href="/ha"><img src="{{ creator.ha_url }}"></a>
     </td>
     <td class="forum-post-body">
       <p>
-        User loves making forum posts, hello everyone. I need to type
-        a onger thread because of my new job as a tester.
+        {{ post.body }}
       </p>
       <div class="divider"></div>
-      User has a signature too.
+      {{ creator.display_name }} hasn't set a signature yet.
     </td>
   </tr>
 </table>
 {% endfor %}
 
 <div class="center">
-{{ pagination() }}
+{{ pagination(page_count=page_count) }}
 </div>
 
 <form method="post" class="validated-form" data-error-id="forum-post-error">

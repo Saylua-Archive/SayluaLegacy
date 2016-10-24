@@ -50,3 +50,4 @@ skip_files:
 - ^(.*/)?\..*$
 - ^saylua/static/source/.*
 - ^node_modules/.*
+- ^lib/PIL*

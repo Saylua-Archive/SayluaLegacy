@@ -1,8 +1,13 @@
 *.pyc
-# don't include third-party dependencies.
-!lib/README.md
 .DS_Store
 node_modules
 saylua/static/js/*
 saylua/static/css/*
 !saylua/static/js/lib
+.vagrant
+build
+yarn.lock
+
+# Ignore all third party dependencies other than bcrypt.
+lib/*
+!lib/bcrypt*

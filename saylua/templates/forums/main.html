@@ -2,10 +2,10 @@
 {% set page_title = "Forums" %}
 {% block body %}
 <h2>Forums</h2>
-{% for j in range(3) %}
+{% for forum_block in forum_blocks %}
 <table class="forum-table">
   <tr>
-    <th colspan="5" class="section-header">Category Name</th>
+    <th colspan="5" class="section-header">{{ forum_block[0] }}</th>
   </tr>
   <tr>
     <td></td>
@@ -22,30 +22,33 @@
       Latest Post
     </th>
   </tr>
-  {% for i in range(5) %}
+  {% for board in forum_block[1] %}
   <tr class="forum-board-row">
     <td class="forum-board-icon">
       <img src="/static/img/items/orange.png" class="faded">
     </td>
     <td class="forum-board-info">
-      <a href="/forums/board/1">
-        <span class="forum-board-link">Sample Board</span>
+      <a href="/forums/board/{{ board.url_title }}/">
+        <span class="forum-board-link">{{ board.title }}</span>
         <p>
-          Sample board is the best place to talk about anything. You can make
-          sample threads and keep on posting on other people's threads.
+          {{ board.description }}
         </p>
       </a>
     </td>
     <td>
-      5
+      {{ board.key.id()|count_board_threads }}
     </td>
     <td>
-      322
+      {{ board.key.id()|count_board_posts }}
     </td>
     <td class="forum-latest-post">
-      <a href="/forums/thread">Sample Thread is the world's longest
-        thread title</a> by <a href="/user">User</a>
-      on 5 May 2016 21:05 SST
+      {% set last_post = board.key.id()|last_post_board %}
+      {% if last_post is not none %}
+      <a href="/forums/thread/{{ last_post.thread_id }}">{{ (last_post.thread_id|thread_by_id).title }}
+      </a> by <a href="/user/{{ last_post.creator_key|name_from_key_string }}">
+        {{ last_post.creator_key|name_from_key_string }}</a>
+      on {{ last_post.created_time|show_datetime }}
+      {% endif %}
     </td>
   </tr>
   {% endfor %}

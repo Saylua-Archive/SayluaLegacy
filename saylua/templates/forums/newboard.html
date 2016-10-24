@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% set page_title = "New Board" %}
+{% block body %}
+<form method="post">
+  <input type="text" placeholder="Board Title" name="title">
+  <input type="text" placeholder="Board Description" name="description">
+  <select name="category">
+    <option value="" disabled selected>Choose a Category</option>
+    {% for category in categories %}
+      <option value="{{ category.key|make_urlsafe }}">{{ category.title }}</option>
+    {% endfor %}
+  </select>
+  <button>Create Board</button>
+</form>
+{% endblock %}

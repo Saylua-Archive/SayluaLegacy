@@ -1,19 +1,19 @@
 {% from "_macros/pagination.html" import pagination %}
 {% extends "layout.html" %}
-{% set page_title = "Viewing Sample Board" %}
+{% set page_title = board.title %}
 {% block body %}
-<h2>Viewing Sample Board</h2>
+<h2>{{ board.title }}</h2>
 <span class="breadcrumb">
-  <a href="/forums/">Forums</a> &#187; Sample Board
+  <a href="/forums/">Forums</a> &#187; {{ board.title }}
 </span>
 <div class="center">
-  {{ pagination() }}
+  {{ pagination(page_count=page_count) }}
 </div>
 
 <table class="forum-table">
   <tr>
     <th class="section-header" colspan="5">
-      Threads in Sample Board
+      Threads in {{ board.title }}
       <a class="right normal" href="#write-forum-thread">
         <img src="/static/img/icons/pencil.png">
         Make a New Thread
@@ -37,41 +37,45 @@
     </th>
   </tr>
 
-  {% for i in range(10) %}
-  <tr class="forum-thread-row{% if i < 5 %} highlight{% endif %}">
+  {% for thread in threads %}
+  <tr class="forum-thread-row{% if thread.is_pinned %} highlight{% endif %}">
     <td class="forum-thread-icon">
-      {% if i < 5 %}
+      {% if thread.is_pinned %}
       <img src="/static/img/icons/pin.png">
       {% endif %}
-      {% if i == 8 %}
+      {% if thread.is_locked %}
       <img src="/static/img/icons/lock.png">
       {% endif %}
     </td>
     <td class="forum-thread-info">
-      <a href="/forums/thread/1/">
-        <span class="forum-thread-link">Sample Thread</span>
-        <p class="small">Created on May 5, 2016 at 6:21 PM</p>
+      <a href="/forums/thread/{{ thread.key.id() }}/">
+        <span class="forum-thread-link">{{ thread.title }}</span>
+        <p class="small">Created on {{ thread.created_time|show_datetime }}</p>
       </a>
     </td>
     <td>
-      5
+      {{ thread.key.id()|count_thread_posts - 1 }}
     </td>
     <td>
-      <a href="/user">User</a>
+      <a href="/user/{{ thread.creator_key|name_from_key_string }}">{{ thread.creator_key|name_from_key_string }}</a>
     </td>
+    {% set last_post = thread.key.id()|last_post_thread %}
     <td class="forum-latest-post">
-      by <a href="/user">User</a>
-      on 5 May 2016 21:05 SST
+      {% if last_post is not none %}
+      by <a href="/user/{{ last_post.creator_key|name_from_key_string }}">
+        {{ last_post.creator_key|name_from_key_string }}</a>
+      on {{ last_post.created_time|show_datetime }}
+      {% endif %}
     </td>
   </tr>
   {% endfor %}
 </table>
 
 <div class="center">
-{{ pagination() }}
+{{ pagination(page_count=page_count) }}
 </div>
 
-<form class="validated-form" data-error-id="forum-board-error">
+<form method="post" class="validated-form" data-error-id="forum-board-error">
   <table class="forum-table form-table" id="write-forum-thread">
     <tr>
       <th class="section-header" colspan="2">
