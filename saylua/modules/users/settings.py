@@ -5,24 +5,26 @@ import datetime
 
 from saylua.utils.form import flash_errors
 from saylua.models.user import User
-from forms.settings import DetailsForm, UsernameForm, EmailForm, PasswordForm
+from forms.settings import (GeneralSettingsForm, DetailsForm, UsernameForm,
+    EmailForm, PasswordForm)
 
 # User Settings
 @app.route('/settings/', methods=['GET', 'POST'])
 @login_required
 def user_settings():
-    if request.method == 'POST':
-        boolean_fields = ['notified_on_pings', 'ha_disabled',
-            'autosubscribe_threads', 'autosubscribe_posts']
-        save_fields_to_user(request.form, bool_fields=boolean_fields)
+    form = GeneralSettingsForm(request.form, obj=g.user)
+    if request.method == 'POST' and form.validate():
+        form.populate_obj(g.user)
+        g.user.put()
+        flash('Your settings have successfully been saved. ')
 
     # Allows user to change general on/off settings
-    return render_template('user/settings/main.html')
+    return render_template('user/settings/main.html', form=form)
 
 @app.route('/settings/details/', methods=['GET', 'POST'])
 @login_required
 def user_settings_details():
-    form = DetailsForm(request.form)
+    form = DetailsForm(request.form, obj=g.user)
     if request.method == 'POST' and form.validate():
         form.populate_obj(g.user)
         g.user.put()
@@ -34,20 +36,16 @@ def user_settings_details():
 @login_required
 def user_settings_css():
     if request.method == 'POST':
-        string_fields = ['css']
-        save_fields_to_user(request.form, str_fields=string_fields)
+        g.user.css = request.form.get('css')
+        g.user.put()
+        flash('You have successfully changed your CSS. ')
     return render_template("user/settings/css.html")
 
 @app.route('/settings/username/', methods=['GET', 'POST'])
 @login_required
 def user_settings_username():
-    form = UsernameForm(request.form)
+    form = UsernameForm(request.form, obj=g.user)
     form.setUser(g.user)
-
-    # Make sure if a user tries to submit a blank form it does not autofill to
-    # their current name.
-    if request.method != 'POST':
-        form.username.data = form.username.data or g.user.display_name
 
     cutoff_time = datetime.datetime.now() - datetime.timedelta(days=1)
     can_change = g.user.last_username_change < cutoff_time
@@ -103,7 +101,7 @@ def user_settings_username_release():
 @app.route('/settings/email/', methods=['GET', 'POST'])
 @login_required
 def user_settings_email():
-    form = EmailForm(request.form)
+    form = EmailForm(request.form, obj=g.user)
     form.setUser(g.user)
     if request.method == 'POST' and form.validate():
         g.user.email = form.email.data
@@ -132,21 +130,3 @@ def user_settings_password():
     flash_errors(form)
 
     return render_template('user/settings/password.html', form=form)
-
-def save_fields_to_user(request, bool_fields=[], str_fields=[], int_fields=[]):
-    for field in bool_fields:
-        setattr(g.user, field, bool(request[field]))
-
-    for field in int_fields:
-        setattr(g.user, field, int(request[field]))
-
-    for field in str_fields:
-        value = ''
-        if request[field]:
-            value = request[field]
-        setattr(g.user, field, value.strip())
-
-    # Commit changes
-    g.user.put()
-    flash('Your settings have been saved! ')
-    return

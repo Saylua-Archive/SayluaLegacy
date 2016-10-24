@@ -5,77 +5,49 @@
   <table class="form-table">
     <tr>
       <th class="label break">
-        <label>Receive notifications for pings?</label>
+        {{ form.notified_on_pings.label }}
       </th>
       <td>
         <div class="switch">
-          <label>
-            <input type="radio" name="notified_on_pings" value="1"
-              {% if g.user.notified_on_pings %}checked{% endif %}>
-            <b>Yes</b>
-          </label>
-          <label>
-            <input type="radio" name="notified_on_pings" value=""
-              {% if not g.user.notified_on_pings %}checked{% endif %}>
-            <b>No</b>
-          </label>
+          {% for subfield in form.notified_on_pings %}
+            {{ subfield }} {{ subfield.label }}
+          {% endfor %}
         </div>
       </td>
     </tr>
     <tr>
       <th class="label break">
-        <label>Disable Human Avatars?</label>
+        {{ form.ha_disabled.label }}
       </th>
       <td>
         <div class="switch">
-          <label>
-            <input type="radio" name="ha_disabled" value="1"
-              {% if g.user.ha_disabled %}checked{% endif %}>
-            <b>Yes</b>
-          </label>
-          <label>
-            <input type="radio" name="ha_disabled" value=""
-              {% if not g.user.ha_disabled %}checked{% endif %}>
-            <b>No</b>
-          </label>
+          {% for subfield in form.ha_disabled %}
+            {{ subfield }} {{ subfield.label }}
+          {% endfor %}
         </div>
       </td>
     </tr>
     <tr>
       <th class="label break">
-        <label>Autosubscribe to your own threads?</label>
+        {{ form.autosubscribe_threads.label }}
       </th>
       <td>
         <div class="switch">
-          <label>
-            <input type="radio" name="autosubscribe_threads" value="1"
-              {% if g.user.autosubscribe_threads %}checked{% endif %}>
-            <b>Yes</b>
-          </label>
-          <label>
-            <input type="radio" name="autosubscribe_threads" value=""
-              {% if not g.user.autosubscribe_threads %}checked{% endif %}>
-            <b>No</b>
-          </label>
+          {% for subfield in form.autosubscribe_threads %}
+            {{ subfield }} {{ subfield.label }}
+          {% endfor %}
         </div>
       </td>
     </tr>
     <tr>
       <th class="label break">
-        <label>Autosubscribe to threads you post on?</label>
+        {{ form.autosubscribe_posts.label }}
       </th>
       <td>
         <div class="switch">
-          <label>
-            <input type="radio" name="autosubscribe_posts" value="1"
-              {% if g.user.autosubscribe_posts %}checked{% endif %}>
-            <b>Yes</b>
-          </label>
-          <label>
-            <input type="radio" name="autosubscribe_posts" value=""
-              {% if not g.user.autosubscribe_posts %}checked{% endif %}>
-            <b>No</b>
-          </label>
+          {% for subfield in form.autosubscribe_posts %}
+            {{ subfield }} {{ subfield.label }}
+          {% endfor %}
         </div>
       </td>
     </tr>
