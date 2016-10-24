@@ -134,67 +134,77 @@ $navHeight: 38px;
       background: $mainColor;
     }
 
-    #navbar .menu {
-      text-align: left;
-    }
-
     #navbar.fixed {
       position: fixed;
       top: 0;
       left: 0;
     }
 
-    #nav-links {
+    .nav-link {
       display: inline-block;
+      position: relative;
     }
 
     #navigation-right {
       display: inline-block;
     }
 
-    #dropdown-right {
+    #dropdown-right.dropdown-menu {
+      margin-left: -100px;
+    }
+
+    .dropdown-menu {
       position: absolute;
       display: none;
+      margin-left: -50px;
       width: 220px;
       min-height: 50px;
-      margin-top: 35px;
-      margin-left: -100px;
+      margin-top: -3px;
       padding-bottom: 8px;
       border: 1px solid $neutralColor;
       background: $white;
       -webkit-box-shadow: 3px 8px 32px -13px $black;
       -moz-box-shadow: 3px 8px 32px -13px $black;
       box-shadow: 3px 8px 32px -13px $black;
+      z-index: 999;
     }
 
-    #dropdown-right.shown, .shown {
+    .dropdown-menu.shown, .shown {
       display: block;
     }
 
-    #dropdown-right.hidden, .hidden {
+    .dropdown-menu.hidden, .hidden {
       display: none;
     }
 
-    #dropdown-right .menu ul {
+    .dropdown-menu ul {
       font-size: 0.8em;
       padding: 0;
     }
 
-    #dropdown-right .menu ul a {
+    .dropdown-menu a, .dropdown-menu a:visited {
+      @include fast-color-trans;
       display: block;
       box-sizing: border-box;
       width: 100%;
+      padding: 5px;
+      text-align: left;
+    }
+
+    // For notifications and messages!
+    .dropdown-menu ul a {
       padding: 3px;
       padding-left: 30px;
       color: $gray;
     }
 
-    #dropdown-right .menu ul a.highlight {
+    .dropdown-menu a.highlight {
       color: $accentColor;
     }
 
-    #dropdown-right .menu ul a:hover {
+    .dropdown-menu a:hover {
       text-decoration: none;
+      background: $neutralColor;
     }
 
     .dropdown-separator {
@@ -205,23 +215,10 @@ $navHeight: 38px;
       border-bottom: 1px solid $neutralColor;
     }
 
-    #dropdown-right h3 {
+    .dropdown-menu h3 {
       @extend .dropdown-separator;
       font-size: 1em;
       line-height: 130%;
-    }
-
-    #dropdown-right a, #dropdown-right a:visited {
-      @include fast-color-trans;
-      display: block;
-      box-sizing: border-box;
-      width: 100%;
-      padding: 5px;
-      text-align: left;
-    }
-
-    #dropdown-right a:hover {
-      background: $neutralColor;
     }
 
     #navbar a.block-link, #navbar a.block-link:visited {

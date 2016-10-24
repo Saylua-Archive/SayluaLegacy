@@ -8,6 +8,11 @@
   border-right: 1px solid $neutralColor;
 }
 
+.section-menu.horizontal {
+  width: 100%;
+  border: 0;
+}
+
 .section-menu a {
   @include fast-color-trans;
   line-height: 150%;
@@ -17,12 +22,20 @@
   padding: 8px;
 }
 
-.section-menu a:hover {
-  background: $accentSoftColor;
+.section-menu.horizontal a {
+  line-height: inherit;
+  display: inline-block;
+  width: auto;
+  border-radius: 5px;
+  padding: 3px 10px;
 }
 
 .section-menu a:active, .section-menu a.active {
   background: $neutralColor;
+}
+
+.section-menu a:hover {
+  background: $accentSoftColor;
 }
 
 .theme-admin .section-menu a:active, .theme-admin .section-menu a.active {

@@ -12,7 +12,7 @@
       </th>
       <td>
         <input type="text" placeholder="Username" name="username" id="username-field"
-          data-validators="required">
+          data-validators="required min:{{config['MIN_USERNAME_LENGTH']}} max:{{config['MAX_USERNAME_LENGTH']}} username_chars">
       </td>
     </tr>
     <tr>

@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 from dateutil import tz
+import re
 
 def make_ndb_key(key_string):
     try:
@@ -32,3 +33,7 @@ def get_from_request(request, key, form_key=None, args_key=None):
     elif request.args.get(args_key):
         result = request.args.get(args_key)
     return result
+
+def urlize(s):
+    s = re.sub('[^0-9a-zA-Z]+', '_', s).lower()
+    return s

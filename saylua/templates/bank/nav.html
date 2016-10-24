@@ -1,0 +1,8 @@
+<div class="full padded center horizontal section-menu">
+  <a href="/bank/"{%- if request.url_rule.endpoint == 'bank_main' %} class="active"{% endif %}>
+    Your Bank Account
+  </a>
+  <a href="/bank/transfer/"{%- if request.url_rule.endpoint == 'bank_transfer' %} class="active"{% endif %}>
+    Transfer Currency
+  </a>
+</div>

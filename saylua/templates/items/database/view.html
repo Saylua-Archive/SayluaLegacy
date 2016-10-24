@@ -1,0 +1,19 @@
+{% from "_macros/pagination.html" import pagination %}
+{% extends "layout.html" %}
+{% set page_title = "Item Database: " + item.name %}
+{% block body %}
+<h2>Item Database: {{ item.name }}</h2>
+<div class="row-3 full padded">
+  <div class="col-1 center">
+    <div class="item-big">
+      <img src="{{ item.image_url }}">
+    </div>
+  </div>
+  <div class="col-2">
+    {{ item.name }}
+  </div>
+</div>
+<div class="full padded center">
+  <a href="/items/">&leftarrow; Back to Item Database</a>
+</div>
+{% endblock %}

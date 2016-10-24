@@ -2,7 +2,10 @@ window.addEventListener('load', function () {
   window.addEventListener('scroll', fixNavbar);
 
   // Get all of the right navbar links and bind click events to them
-  initializeRightMenu();
+  initializeDropMenus(document.getElementById('navigation-right'),
+    document.getElementById('dropdown-right'));
+
+  initializeDropMenus(document.getElementById('navigation-text-links'));
 
   // Form Validation
   FormValidation.bind('.validated-form');
@@ -44,17 +47,16 @@ function fixNavbar(e) {
   }
 }
 
-function initializeRightMenu() {
-  var navigation = document.getElementById('navigation-right');
-  var menu = document.getElementById('dropdown-right');
-  if (!navigation || !menu) return;
+function initializeDropMenus(navigation, parentMenu) {
+  if (!navigation) return;
 
+  var menu = parentMenu;
   var links = navigation.getElementsByClassName('block-link');
-  var sections = menu.getElementsByClassName('menu');
+  var sections = navigation.getElementsByClassName('menu');
 
   // For through right navigation links and attach listeners to them
   for (var i = 0; i < links.length; i++) {
-    links[i].addEventListener('click', function changeRightMenu(e) {
+    links[i].addEventListener('click', function changeMenu(e) {
       e.preventDefault();
       var link = e.currentTarget;
 
@@ -77,6 +79,7 @@ function initializeRightMenu() {
   }
 
   function showMenu(section) {
+    // Make only the currently selected link highlighted
     for (var i = 0; i < links.length; i++) {
       if (links[i].getAttribute('data-section') == section) {
         addClass(links[i], 'active');
@@ -84,13 +87,19 @@ function initializeRightMenu() {
         removeClass(links[i], 'active');
       }
     }
+
+    // Iterate through all menus and close out ones other than the one showing
     for (var i = 0; i < sections.length; i++) {
       if (sections[i].id == section) {
-        sections[i].style.display = 'block';
+        swapClass(sections[i], 'hidden', 'shown');
+        if (!parentMenu) {
+          menu = sections[i];
+        }
       } else {
-        sections[i].style.display = 'none';
+        swapClass(sections[i], 'shown', 'hidden');
       }
     }
+
     swapClass(menu, 'hidden', 'shown');
     document.body.addEventListener('click', closeOnOutsideClick);
   }

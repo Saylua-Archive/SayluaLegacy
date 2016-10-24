@@ -17,6 +17,44 @@ indexes:
   - name: time
     direction: desc
 
+- kind: ForumPost
+  properties:
+  - name: board_id
+  - name: created_time
+
+- kind: ForumPost
+  properties:
+  - name: thread_id
+  - name: created_time
+
+- kind: ForumThread
+  properties:
+  - name: board_id
+  - name: is_pinned
+    direction: desc
+  - name: last_action
+    direction: desc
+
+- kind: ForumThread
+  properties:
+  - name: board_key
+  - name: is_pinned
+
+- kind: ForumThread
+  properties:
+  - name: board_key
+  - name: is_pinned
+    direction: desc
+  - name: last_action
+
+- kind: ForumThread
+  properties:
+  - name: board_key
+  - name: is_pinned
+    direction: desc
+  - name: last_action
+    direction: desc
+
 - kind: Notification
   properties:
   - name: user

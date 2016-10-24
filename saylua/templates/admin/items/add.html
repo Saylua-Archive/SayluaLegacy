@@ -2,6 +2,55 @@
 {% set section_title = "Add New Items" %}
 {% block section_body %}
 <p>
-  Welcome to the admin panel. Be careful.
+  Add new items to the site here!
 </p>
+<form method="post" class="validated-form" data-error-id="item-upload-error">
+  <table class="form-table">
+    <tr>
+      <td colspan="2" id="item-upload-error"></td>
+    </tr>
+    <tr>
+      <th class="label">
+        <label for="item-upload-name">Item Name</label>
+      </th>
+      <td>
+        <input type="text" name="name" placeholder="Item Name" id="item-upload-name"
+          value="{{name}}" data-validators="required not_empty">
+      </td>
+    </tr>
+    <tr>
+      <th class="label">
+        <label for="item-upload-image">Image URL</label>
+      </th>
+      <td>
+        <input type="text" name="image_url" placeholder="Item's Image" id="item-upload-image"
+          value="" data-validators="required not_empty">
+      </td>
+    </tr>
+    <tr>
+      <th class="label">
+        <label for="item-upload-category">Item Category</label>
+      </th>
+      <td>
+        <input type="text" name="category" placeholder="Item Category" id="item-upload-category"
+          value="{{category}}" data-validators="required not_empty">
+      </td>
+    </tr>
+    <tr>
+      <th class="label">
+        <label for="item-upload-description">Item Description</label>
+      </th>
+      <td>
+        <textarea name="description" placeholder="Write a description for the item. "
+          data-validators="required not_empty" id="item-upload-description">{{ description }}</textarea>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" name="submit" value="Upload Item">
+      </td>
+    </tr>
+  </table>
+</form>
 {% endblock %}

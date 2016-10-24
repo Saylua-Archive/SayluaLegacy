@@ -11,7 +11,7 @@ class Notification(ndb.Model):
 
     @classmethod
     def send(cls, user_key, text, link):
-        notification = cls.query(cls.user==user_key,
+        notification = cls.query(cls.user_key==user_key,
             cls.text==text, cls.link==link, cls.is_read==False).get()
         if not notification:
             notification = cls(user_key=user_key, text=text, link=link)
