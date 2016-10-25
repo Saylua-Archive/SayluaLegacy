@@ -10,16 +10,16 @@ from google.appengine.datastore.datastore_query import Cursor
 THREADS_PER_PAGE = 10
 POSTS_PER_PAGE = 10
 
-@app.route('/forums/newcategory', methods=['GET', 'POST'])
-def new_category():
+@app.route('/admin/forums/newcategory/', methods=['GET', 'POST'])
+def new_board_category():
     if request.method == 'POST':
         category = request.form.get('category')
         new_category = BoardCategory(title=category)
         new_category.put()
         flash("New category: " + category + " successfully created.")
-    return render_template("forums/newcategory.html")
+    return render_template("/admin/forums/newcategory.html")
 
-@app.route('/forums/newboard', methods=['GET', 'POST'])
+@app.route('/admin/forums/newboard/', methods=['GET', 'POST'])
 def new_board():
     categories = BoardCategory.query().fetch()
     if request.method == 'POST':
@@ -31,7 +31,7 @@ def new_board():
                 category_key=category, description=description)
         new_board.put()
         flash("New board: \"" + title + "\" successfully created!")
-    return render_template("forums/newboard.html", categories=categories)
+    return render_template("/admin/forums/newboard.html", categories=categories)
 
 @app.route('/forums/')
 def forums_home():

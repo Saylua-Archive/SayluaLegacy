@@ -34,7 +34,7 @@
   <tr>
     <th colspan="2">
       <a href="#forum-post-{{ loop.index }}">Link This Post</a> |
-      {{ post.created_time|show_datetime }}
+      {{ post.created_time|expanded_relative_time }}
       <span class="right">
         <a href="#">Quote</a>  |
         <a href="#">Modify</a>

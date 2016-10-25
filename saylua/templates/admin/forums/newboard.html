@@ -1,6 +1,6 @@
-{% extends "layout.html" %}
-{% set page_title = "New Board" %}
-{% block body %}
+{% extends "admin/template.html" %}
+{% set section_title = "New Board" %}
+{% block section_body %}
 <form method="post">
   <input type="text" placeholder="Board Title" name="title">
   <input type="text" placeholder="Board Description" name="description">

@@ -50,7 +50,7 @@
     <td class="forum-thread-info">
       <a href="/forums/thread/{{ thread.key.id() }}/">
         <span class="forum-thread-link">{{ thread.title }}</span>
-        <p class="small">Created on {{ thread.created_time|show_datetime }}</p>
+        <p class="small">Created on {{ thread.created_time|expanded_relative_time }}</p>
       </a>
     </td>
     <td>
@@ -64,7 +64,7 @@
       {% if last_post is not none %}
       by <a href="/user/{{ last_post.creator_key|name_from_key_string }}">
         {{ last_post.creator_key|name_from_key_string }}</a>
-      on {{ last_post.created_time|show_datetime }}
+       {{ last_post.created_time|relative_time }}
       {% endif %}
     </td>
   </tr>
