@@ -117,7 +117,7 @@ def user_from_key_string(user_key):
 
 @app.template_filter('last_post_thread')
 def last_post_thread(thread_id):
-    post_query = ForumPost.query(ForumPost.thread_id==thread_id).order(ForumPost.created_time)
+    post_query = ForumPost.query(ForumPost.thread_id==thread_id).order(-ForumPost.created_time)
     post = post_query.fetch(1)
     if len(post) > 0:
         return post[0]
@@ -125,7 +125,7 @@ def last_post_thread(thread_id):
 
 @app.template_filter('last_post_board')
 def last_post_board(board_id):
-    post_query = ForumPost.query(ForumPost.board_id==board_id).order(ForumPost.created_time)
+    post_query = ForumPost.query(ForumPost.board_id==board_id).order(-ForumPost.created_time)
     post = post_query.fetch(1)
     if len(post) > 0:
         return post[0]

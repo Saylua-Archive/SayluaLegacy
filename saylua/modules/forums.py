@@ -10,16 +10,16 @@ from google.appengine.datastore.datastore_query import Cursor
 THREADS_PER_PAGE = 10
 POSTS_PER_PAGE = 10
 
-@app.route('/forums/newcategory', methods=['GET', 'POST'])
-def new_category():
+@app.route('/admin/forums/newcategory/', methods=['GET', 'POST'])
+def new_board_category():
     if request.method == 'POST':
         category = request.form.get('category')
         new_category = BoardCategory(title=category)
         new_category.put()
         flash("New category: " + category + " successfully created.")
-    return render_template("forums/newcategory.html")
+    return render_template("/admin/forums/newcategory.html")
 
-@app.route('/forums/newboard', methods=['GET', 'POST'])
+@app.route('/admin/forums/newboard/', methods=['GET', 'POST'])
 def new_board():
     categories = BoardCategory.query().fetch()
     if request.method == 'POST':
@@ -31,7 +31,7 @@ def new_board():
                 category_key=category, description=description)
         new_board.put()
         flash("New board: \"" + title + "\" successfully created!")
-    return render_template("forums/newboard.html", categories=categories)
+    return render_template("/admin/forums/newboard.html", categories=categories)
 
 @app.route('/forums/')
 def forums_home():
@@ -85,14 +85,25 @@ def forums_thread(thread_id):
         return render_template('404.html'), 404
     board = ndb.Key(Board, thread.board_id).get()
     if request.method == 'POST':
-        creator_key = g.user.key.urlsafe()
-        body = request.form.get('body')
-        board_id = board.key.id()
-        new_post = ForumPost(creator_key=creator_key, thread_id=thread_id,
-                board_id=board_id, body=body)
-        new_post.put()
-        thread.put()
-        return redirect("forums/thread/" + str(thread_id) + "/")
+        if 'move' in request.form:
+            destination = int(request.form.get('destination'))
+            thread.board_id = destination
+            thread.put()
+            post_query = ForumPost.query(ForumPost.thread_id==thread_id)
+            posts = post_query.fetch()
+            for post in posts:
+                post.board_id = destination
+                post.put()
+            return redirect("forums/thread/" + str(thread_id) + "/")
+        else:
+            creator_key = g.user.key.urlsafe()
+            body = request.form.get('body')
+            board_id = board.key.id()
+            new_post = ForumPost(creator_key=creator_key, thread_id=thread_id,
+                    board_id=board_id, body=body)
+            new_post.put()
+            thread.put()
+            return redirect("forums/thread/" + str(thread_id) + "/")
 
     page_number = request.args.get('page')
     if page_number is None:
@@ -102,5 +113,6 @@ def forums_thread(thread_id):
     posts = post_query.fetch(limit=POSTS_PER_PAGE,
             offset=((page_number - 1) * POSTS_PER_PAGE))
     page_count = int(math.ceil(len(post_query.fetch(keys_only=True))/float(POSTS_PER_PAGE)))
+    other_boards = Board.query().fetch()
     return render_template("forums/thread.html", board=board, thread=thread, posts=posts,
-            page_count=page_count)
+            page_count=page_count, other_boards=other_boards)

@@ -24,8 +24,20 @@ indexes:
 
 - kind: ForumPost
   properties:
+  - name: board_id
+  - name: created_time
+    direction: desc
+
+- kind: ForumPost
+  properties:
   - name: thread_id
   - name: created_time
+
+- kind: ForumPost
+  properties:
+  - name: thread_id
+  - name: created_time
+    direction: desc
 
 - kind: ForumThread
   properties:

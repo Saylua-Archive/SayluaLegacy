@@ -1,6 +1,6 @@
-{% extends "layout.html" %}
-{% set page_title = "Forums" %}
-{% block body %}
+{% extends "admin/template.html" %}
+{% set section_title = "New Board Category" %}
+{% block section_body %}
 <form method="post">
   <input type="text" placeholder="Category Title" name="category">
   <button>Create Category</button>
