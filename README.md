@@ -69,6 +69,20 @@ If you are on Windows, it is heavily suggested you use Vagrant.
 
 Visit the application at [http://localhost:8080](http://localhost:8080)
 
+TODO:
+Vagrant script for the following. Reduces startup time exponentially, gets rid of filewatcher limit problems.
+
+      ## --> ./saylua/build/google_appengine/google/appengine/tools/devappserver2/watcher_common.py
+
+      # Prevent watcher file limit issues.
+      _IGNORED_DIRS = ('node_modules', '.git', '.vagrant', 'build', 'lib')
+
+      def skip_ignored_dirs(dirs):
+            """Skip directories that should not be watched."""
+
+            _remove_pred(dirs, lambda d: d.startswith(_IGNORED_PREFIX) or d in _IGNORED_DIRS)
+
+
 See [the development server documentation](https://developers.google.com/appengine/docs/python/tools/devserver)
 for options when running dev_appserver.
 

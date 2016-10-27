@@ -5,6 +5,10 @@ Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
   config.vm.network "forwarded_port", guest: 8080, host: 8080
 
+  config.vm.provider "virtualbox" do |v|
+    v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/vagrant", "1"]
+  end
+
   config.vm.provision "shell", inline: <<-SHELL
     sudo apt-get update
     sudo apt-get upgrade
@@ -32,10 +36,10 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -y nodejs
 
     # Install Global deps
-    npm install -g gulp webpack
+    sudo npm install -g gulp webpack
 
     cd /vagrant/
-    npm install --no-bin-links
+    npm install
 
   SHELL
 end

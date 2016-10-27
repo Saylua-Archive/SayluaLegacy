@@ -39,12 +39,18 @@ gulp.task('build-js', [], function() {
   jsFolder.forEach(function(folder) {
     var pkgName = folder.match(/.+\/(.+)\/$/)[1];
 
-    gulp.src([folder + '**/*.js'])
-      .pipe(sourcemaps.init())
-      .pipe(uglify())
-      .pipe(concat(pkgName + '.min.js'))
-      .pipe(sourcemaps.write())
-      .pipe(gulp.dest(dests.scripts));
+    var out = gulp.src([folder + '**/*.js']);
+
+    if (process.env.NODE_ENV === "dev") {
+      out.pipe(concat(pkgName + '.min.js'))
+        .pipe(gulp.dest(dests.scripts));
+    } else {
+      out.pipe(sourcemaps.init())
+        .pipe(uglify())
+        .pipe(concat(pkgName + '.min.js'))
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest(dests.scripts));
+    }
   });
 });
 
@@ -56,6 +62,7 @@ gulp.task('build-es6', [], function() {
     var pkgName = folder.match(/.+\/(.+)\/$/)[1];
     var pkgPath = folder + "Main.jsx";
 
+    // Separate dev env options are handled within the webpackConfig.
     gulp.src(pkgPath)
       .pipe(webpack(webpackConfig))
       .pipe(concat(pkgName + '.min.js'))
@@ -63,6 +70,7 @@ gulp.task('build-es6', [], function() {
   });
 });
 
+// Build everything. Check under every stone. Leave no survivors.
 gulp.task('build', ['build-js', 'build-es6', 'build-sass']);
 
 // Rerun the task when a file changes
