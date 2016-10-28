@@ -8,7 +8,8 @@ import cPickle, copy
 # ===================================================
 # Note:
 # A tile with an unset meta.visibility value is treated as unseen.
-# A tile with a set but falsey meta.visibility value is treated as seen but hidden.
+# A tile with a set but falsey meta.visibility value should be
+# treated as seen but hidden.
 #
 # Sample 1x3 map:
 # [
@@ -36,31 +37,65 @@ import cPickle, copy
 # ]
 
 class TileGrid():
-  def __init__(self, width, height, cell_map=None):
+  def __init__(self, width, height, cell_map=None, default_tile=None):
     self.width = width
     self.height = height
+
+    self.frozen_map = None
+    self.locks = 0
 
     if cell_map:
       self.cell_map = cell_map
 
     else:
+      # Populate with empty cells
       self.cell_map = []
 
-      # Populate with empty cells
-      for row in xrange(height):
-        self.cell_map.append([{'tile': None, 'meta': {}}] * width)
+      default_cell = {
+        'tile': default_tile,
+        'meta': {}
+      }
 
-      # Generates lists that all refer to the same
-      # point in memory. Not useful.
-      # [[0] * width] * height
+      for row in xrange(height):
+        self.cell_map.append([copy.deepcopy(default_cell) for i in range(width)])
+
+  def __lock(self):
+    if self.locks == 0:
+      self.frozen_map = copy.deepcopy(self.cell_map)
+
+    self.locks += 1
+
+  def __unlock(self):
+    self.locks -= 1
+
+    if self.locks == 0:
+      del self.frozen_map
+
+  def __get_cell_map(self):
+    if self.locks > 0:
+      return self.frozen_map
+    else:
+      return self.cell_map
+
+  def _debug_print(self, default_tile):
+    def translate(cell):
+      return '0' if cell.get('tile') == default_tile else '1'
+    def flatten_row(row):
+      return "".join([translate(cell) for cell in row])
+
+    print("Debug {}x{}".format(self.width, self.height))
+    print("\n".join([flatten_row(row) for row in self.cell_map]))
+    print("\n")
 
   def get(self, a, b=None):
     # Default to returning a single cell,
     # return an array subset if a second argument is provided.
     a_x, a_y = a
 
+    cell_map = self.__get_cell_map()
+
     if b is None:
-      return self.cell_map[y][x]
+      return cell_map[a_y][a_x]
 
     else:
       sub_map = []
@@ -72,8 +107,12 @@ class TileGrid():
       for offset in xrange(height + 1):
         y = a_y + offset
 
-        if y < self.height:
-          cells = self.cell_map[y][a_x : a_x + (width + 1)]
+        if 0 <= y < self.height:
+          # Ensure our select doesn't go out of bounds.
+          x_left = max(a_x, 0)
+          x_right = min((a_x + width + 1), (self.width - 1))
+
+          cells = cell_map[y][x_left:x_right]
           sub_map.append(cells)
 
       return sub_map
@@ -97,30 +136,31 @@ class TileGrid():
     # Returns a list of tupled cell locations that satisfy <search_function>
     results = []
 
-    for x, y, cell in self.iterate(static=False):
+    for x, y, cell in self.iterate():
       if search_function(cell):
         results.append((x, y))
 
     return results
 
-  def iterate(self, static=True):
+  def iterate(self):
     # Generator that yields cells. Exists for performance / niceness reasons.
     # Works from a copy so that iterators can edit the object's grid in-place.
-    working_set = None
+    # Will ensure all read operations occur on a copy of the map until finished.
 
-    if static:
-      working_set = copy.deepcopy(self.cell_map)
-    else:
-      working_set = self.cell_map
+    self.__lock()
+    working_set = self.__get_cell_map()
 
     for y in xrange(self.height):
       for x in xrange(self.width):
         yield (x, y, working_set[y][x])
 
+    self.__unlock()
+
   def fill_circle(self, center, radius, filler, meta=None):
     # Fill circles from the center, with radius of N.
     c_x, c_y = center
-    for x, y, cell in self.iterate(static=False):
+
+    for x, y, cell in self.iterate():
       # Calculate box shaped FOV
       within_range_x = (c_x - radius) <= x <= (c_x + radius)
       within_range_y = (c_y - radius) <= y <= (c_y + radius)
@@ -147,19 +187,21 @@ class TileGrid():
       # Determine row
       y = a_y + offset
 
-      if y < self.height:
-        # Make sure that we're not inserting more cells than are being selected.
-        new_cells = self.cell_map[y][a_x : a_x + (width + 1)]
+      if 0 <= y < self.height:
+        # Ensure our selects don't go out of bounds.
+        x_left = max(a_x, 0)
+        x_right = min((a_x + width + 1), (self.width - 1))
 
-        for cell in new_cells:
+        # Make sure we're not inserting more cells than exist
+        selected_cells = self.cell_map[y][x_left:x_right]
+
+        for cell in selected_cells:
           cell['tile'] = filler
 
           if meta and (type(meta) == dict):
             cell['meta'] = meta
 
-        self.cell_map[y][a_x : a_x + (width + 1)] = new_cells
-
-    return self.cell_map
+        self.cell_map[y][x_left:x_right] = selected_cells
 
   def draw_line(self, a, b, filler, meta=None):
     a_x, a_y = a
@@ -185,8 +227,10 @@ class TileGrid():
       obstacle_types = ['wall']
       cell = self.cell_map[y][x]
 
-      tile = list(filter(lambda x: x.get('id') == cell['tile'], Terrain.tiles))[0]
-      return tile['type'] in obstacle_types
+      matching_tile = filter(lambda tile: tile.get('id') == cell['tile'], Terrain.tiles)
+      matching_tile = list(matching_tile)[0]
+
+      return matching_tile['type'] in obstacle_types
 
     def reveal_tile(x, y):
       self.cell_map[y][x]['meta']['visible'] = True
@@ -194,9 +238,9 @@ class TileGrid():
     # Because reasons
     p_x, p_y = player_position
 
-    for x, y, cell in self.iterate(static=False):
+    for x, y, cell in self.iterate():
       # First, make sure that we're always resetting visibility
-      cell['meta']['visible'] = False
+      self.cell_map[y][x]['meta']['visible'] = False
 
     # Yes, I *am* the dev who will put each arg on it's own line.
     helpers.fieldOfView(
@@ -209,15 +253,13 @@ class TileGrid():
       funcTileBlocked=tile_obstructs_vision
     )
 
-    return True
-
   def get_visible(self):
     cell_map = []
 
     for row in xrange(self.height):
-      cell_map.append([{'tile': None, 'meta': {}}] * self.width)
+      cell_map.append([copy.copy({}) for i in range(self.width)])
 
-    for x, y, cell in self.iterate(static=False):
+    for x, y, cell in self.iterate():
       if cell['meta'].get('visible') == True:
         cell_map[y][x] = cell
 

@@ -21,7 +21,7 @@ def generate(options):
   width, height = options.get("size")
 
   # Prepare empty map
-  grid = TileGrid.TileGrid(width=width, height=height)
+  grid = TileGrid.TileGrid(width=width, height=height, default_tile='0x00')
 
   # Seed with cells. Enforce an exact fill percentage, with no overlap.
   cells_to_fill = int(round(options.get("fill_percentage") * (width * height)))
@@ -44,17 +44,19 @@ def generate(options):
 def iterate(options, grid):
   from itertools import chain
 
-  # A cell with N adjacent walls (including itself) becomes a wall.
+  # A cell with N adjacent floors (including itself) becomes a floor.
+  # Otherwise, it becomes a wall. The goal is to average cell
+  # distribution uniformly.
   for x, y, cell in grid.iterate():
     # Grab neighbor subset, flatten
     neighbors = grid.get((x - 1, y - 1), (x + 1, y + 1))
     neighbors = list(chain.from_iterable(neighbors))
-    wall_count = sum(1 for x in neighbors if x.get('tile') == '0x01')
+    floor_count = sum(1 for n in neighbors if n.get('tile') == '0x00')
 
-    if wall_count >= options.get("minimum_neighbors"):
-      grid.set((x, y), '0x01')
-    else:
+    if floor_count >= options.get("minimum_neighbors"):
       grid.set((x, y), '0x00')
+    else:
+      grid.set((x, y), '0x01')
 
   return True
 
@@ -91,7 +93,7 @@ API = {
   "iterate":  iterate,
   "populate":  populate,
   "default_options": {
-    "fill_percentage": 0.37,
+    "fill_percentage": 0.63,
     "minimum_neighbors": 4,
     "iterations": 4,
     "size": [80, 50]

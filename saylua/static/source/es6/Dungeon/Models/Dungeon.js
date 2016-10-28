@@ -32,7 +32,7 @@ export default class Dungeon {
       "entitySet": [],
       "tileLayer": [],
       "entityLayer": []
-    }
+    };
   }
 
   bindComponent(component) {
@@ -43,18 +43,19 @@ export default class Dungeon {
     // Therefore, we will component.setState() when a change is made.
 
     this.state.component = component;
-    this.state.component.setState({
-      "triggerUpdate": false
-    });
+    // Initial .setState() deferred to this.fetch() to prevent double rendering on first initialize.
+    // A better solution would be to use shouldComponentUpdate().
   }
 
-  fetch(action) {
-    let mutation = action ? action : {};
+  fetch(mutation) {
+    mutation = mutation ? mutation : {};
 
     // Ensure that we don't end up with race conditions.
     if (this.state.lock === true) {
       return false;
     }
+
+    this.state.lock = true;
 
     let promise = Reqwest({
       "url": '/api/explore/get/',
@@ -62,7 +63,7 @@ export default class Dungeon {
       "method": 'post',
       "data": {
         "initial": !this.state.initialized,
-        "mutation": mutation
+        "mutation": JSON.stringify(mutation)
       },
       "error": (error) => {
         console.log("Error syncing with Dungeon API.");
@@ -80,13 +81,19 @@ export default class Dungeon {
     promise.always((response) => {
       this.state.lock = false;
       if (this.state.initialized && this.state.component !== undefined) {
+        let triggerUpdate = (this.state.component.triggerUpdate == undefined) ? true : !this.state.component.triggerUpdate;
         this.state.component.setState({
-          "triggerUpdate": !this.state.component.triggerUpdate
+          "triggerUpdate": triggerUpdate
         });
       }
     });
 
     return promise;
+  }
+
+  get(attr) {
+    // Reasons
+    return this.state.model[attr];
   }
 
   mergeDiff(diff) {
@@ -106,27 +113,34 @@ export default class Dungeon {
       return changedEntity ? changedEntity : e;
     });
 
-    // Diff the actual tile map without micro-managing performance
-    // by replacing any changed rows, rather than going cell by cell.
-    //
-    // Unchanged rows are represented as 'undefined'.
-    diff.tileLayer.map((e, i , a) => {
-      if (e !== undefined) {
-        newModel.tileLayer[i] = e;
-      }
+    // Does not diff deeply, checks for changes and replaces the entire cell.
+    // Unseen cells are represented as empty objects.
+    diff.tileLayer.map((row, y , a) => {
+      row.map((cell, x, a) => {
+        if (Object.keys(cell).length !== 0) {
+          newModel.tileLayer[y][x] = cell;
+        } else {
+          // Do we have this cell in memory already?
+          if (Object.keys(this.state.model.tileLayer[y][x]).length > 0) {
+            // Our cell is now hidden, but seen.
+            newModel.tileLayer[y][x]['meta']['visible'] = false;
+          }
+        }
+      });
     });
 
     return newModel;
   }
 
-  mutate(action) {
-    // For now, the only possible action is movement.
-    // i.e. {"move": "up"}
+  mutate(mutation) {
+    // For now, the only possible mutation is movement.
+    // i.e. {"mutation": "move": "data": "up"}
     //
     // This is futureproofing in the event of things such as inventories, items, UI interactions, etc.
-    // e.g. {"use": "<item-id>"}, {"equip": "<item-id>"}, {"switch": "<pet-id>"}
+    // e.g. {"mutation": "use": "data": "<item-id>"},
+    //      {"mutation": "equip": "data": "<item-id>"},
+    //      {"mutation": "switch": "data": "<pet-id>"}
 
-    this.state.lock = true;
-    this.fetch(action);
+    this.fetch(mutation);
   }
 }

@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var gutil = require('gulp-util');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
@@ -7,6 +8,7 @@ var cleanCSS = require('gulp-clean-css');
 
 var glob = require('glob');
 
+var _webpack = require('webpack');
 var webpack = require('webpack-stream');
 var webpackConfig = require('./webpack.config.js');
 
@@ -62,9 +64,22 @@ gulp.task('build-es6', [], function() {
     var pkgName = folder.match(/.+\/(.+)\/$/)[1];
     var pkgPath = folder + "Main.jsx";
 
-    // Separate dev env options are handled within the webpackConfig.
+    // Set additional dev options
+    if (process.env.NODE_ENV === "dev") {
+      //webpackConfig['devtool'] = 'inline-source-map';
+    } else {
+      webpackConfig['plugins'] = [
+        new _webpack.optimize.DedupePlugin(),
+        new _webpack.optimize.UglifyJsPlugin({
+          "compress": {
+            "warnings": false
+          }
+        })
+      ];
+    }
+
     gulp.src(pkgPath)
-      .pipe(webpack(webpackConfig))
+      .pipe(webpack(webpackConfig)).on('error', gutil.log)
       .pipe(concat(pkgName + '.min.js'))
       .pipe(gulp.dest(dests.scripts));
   });

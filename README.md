@@ -21,13 +21,14 @@ If you are on Windows, it is heavily suggested you use Vagrant.
 
 5. Install PIL dependencies zlib and libjpeg.
 
-      ```
-      # Ubuntu users can do the following:
-      sudo apt-get install libjpeg8-dev zlib1g-dev
+      Ubuntu users can do the following:
 
-      # OS X users need only install libjpeg:
-      # https://dzone.com/articles/installing-libjpeg-os-x
       ```
+      sudo apt-get install libjpeg8-dev zlib1g-dev
+      ```
+
+      OS X users need only install libjpeg:
+      See: https://dzone.com/articles/installing-libjpeg-os-x
 
 6. Install python dependencies locally.
 
@@ -69,8 +70,13 @@ If you are on Windows, it is heavily suggested you use Vagrant.
 
 Visit the application at [http://localhost:8080](http://localhost:8080)
 
-TODO:
-Vagrant script for the following. Reduces startup time exponentially, gets rid of filewatcher limit problems.
+See [the development server documentation](https://developers.google.com/appengine/docs/python/tools/devserver)
+for options when running dev_appserver.
+
+#### Notes:
+
+- By default, the dev_appserver.py will track ALL changes to ALL directories, causing startup issues.
+Making the following change reduces startup time exponentially, and gets rid of filewatcher limit problems.
 
       ## --> ./saylua/build/google_appengine/google/appengine/tools/devappserver2/watcher_common.py
 
@@ -82,9 +88,6 @@ Vagrant script for the following. Reduces startup time exponentially, gets rid o
 
             _remove_pred(dirs, lambda d: d.startswith(_IGNORED_PREFIX) or d in _IGNORED_DIRS)
 
-
-See [the development server documentation](https://developers.google.com/appengine/docs/python/tools/devserver)
-for options when running dev_appserver.
 
 ## Author
 Tiffany Zhang

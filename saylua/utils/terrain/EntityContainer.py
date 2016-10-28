@@ -60,6 +60,13 @@ class EntityContainer():
     # should always be the first entity.
     return self.entities[0]
 
+  def update_entity(self, entity):
+    # Replace entity with an updated copy of itself
+    for i in xrange(len(self.entities)):
+      if self.entities[i]['id'] == entity['id']:
+        self.entities[i] = entity
+        break
+
   def to_string(self):
     return cPickle.dumps(self.entities)
 

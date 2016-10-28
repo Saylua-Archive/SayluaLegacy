@@ -33,23 +33,16 @@ export default class DungeonClient extends Component {
     super(props);
 
     this.state = {
-      "domLoaded": false
+      "domLoaded": true
     };
   }
 
-  onComponentWillMount() {
+  componentWillMount() {
     // Make sure that when our model updates, we do too.
     this.props.model.bindComponent(this);
 
     // Match keyboard presses to events.
-    this.state.eventListener = window.addEventListener("keydown", this.handleKeyPress);
-
-    // In the EXTREMELY rare (probably impossible in real-world conditions)
-    // event that we get this far before the DOM has loaded, wait for it to complete
-    // so that the entity renderer doesn't have issues.
-    document.addEventListener("DOMContentLoaded", (event) => {
-      this.setState({ "domLoaded": true });
-    });
+    this.state.eventListener = window.addEventListener("keydown", this.handleKeyPress.bind(this));
   }
 
   handleKeyPress(event) {
@@ -84,46 +77,86 @@ export default class DungeonClient extends Component {
 
     // If we've gotten this far, prevent default behavior.
     event.preventDefault();
-
-    this.props.model.mutate({action: direction});
+    this.props.model.mutate({
+      'action': action,
+      'data': direction
+    });
   }
 
   getMap(tileLayer, entityLayer, tileSet, entitySet) {
-    // First, we generate our tile layer
+    // First, we create a lookup table for entities so that we
+    // can insert entities in linear time rather than exponential.
+    //
+    // This is almost definitely still far more expensive than just injecting them directly.
+    // More research necessary to figure out how to do injection properly.
+    // Starting point: 'ref (1.0.0) or onAttached (0.7.x) for callback when node is attached first parameter is the node'
+
+    let entityLookupTable = [];
+
+    for (let entity of entityLayer) {
+      let content = (<span className={ `entity entity-${entity.parent}` } />);
+
+      let x = entity.location.x;
+      let y = entity.location.y;
+
+      entityLookupTable[y] = entityLookupTable[y] || [];
+      entityLookupTable[y][x] = entityLookupTable[y][x] || [];
+
+      entityLookupTable[y][x].push(content);
+    }
+
+    // Then, we generate our tile layer
     let tileMap = tileLayer.map((row, y) => {
       let cells = row.map((cell, x) => {
-        let cellID = tileSet.filter((e) => e.id === cell);
+        let entities = false;
+        let cellSeen = (Object.keys(cell).length > 0);
+        let cellID = cellSeen ? cell.tile : 'unseen';
+        let classes = ['cell', `cell-${cellID}`, `cell-${x}-${y}`];
+
+        if (cellSeen) {
+          if (cell.meta.visible === false) {
+            // This cell has been seen before, and is now hidden.
+            // Cells that are still undiscovered will not have meta.visible set at all.
+            classes.push('cell-hidden');
+          }
+
+          if (entityLookupTable[y] !== undefined) {
+            if (entityLookupTable[y][x] !== undefined) {
+              entities = entityLookupTable[y][x];
+            }
+          }
+        }
+
         return (
-          <span className={ `cell-${cellID} cell-{x}-{y}` } />
+          <span className={ classes.join(' ') } >{ entities }</span>
         );
       });
 
       return (
-        <div className="cell-row">
+        <div className={`cell-row cell-row-${y}`}>
           { cells }
         </div>
       );
     });
-
-    // Now we use our entity layer, along with our generated
-    // coord classes to inject entities.
-    for (let entity of entityLayer) {
-      let content = document.createElement("span");
-      content.className = `entity-${entity.parent}`;
-
-      let element = tileMap.dom.querySelectorAll(`cell-${entity.location.x}-${entity.location.y}`)[0];
-      element.appendChild(content);
-    }
 
     return tileMap;
   }
 
   render() {
     let model = this.props.model;
-    let map = (this.state.domLoaded) ? this.getMap(model.tileLayer, model.entityLayer, model.tileSet, model.entitySet) : false;
+    let map = false;
+
+    if (this.state.domLoaded) {
+      map = this.getMap(
+        model.get('tileLayer'),
+        model.get('entityLayer'),
+        model.get('tileSet'),
+        model.get('entitySet')
+      );
+    }
 
     return (
-      <div className="content-wrapper">
+      <div className="dungeon-wrapper">
         <div className='dungeon-map'>{ map }</div>
       </div>
     );

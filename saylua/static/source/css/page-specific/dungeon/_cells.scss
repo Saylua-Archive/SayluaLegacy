@@ -1,0 +1,55 @@
+/*****************************************************************
+  --> Cells.scss
+  Perhaps would be more appropriately named 'tiles.scss',
+  as tiles are templates and cells are instances of those
+  templates.
+
+  TABLE OF CONTENTS:
+    -- #0.1a Base Classes (You are here)
+    -- #0.2a Cave Tiles
+
+*****************************************************************/
+
+.cell {
+  display: inline-block;
+
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+
+  height: 5px;
+  width: 5px;
+}
+
+.cell-row {
+  display: block;
+
+  // Prevent odd spacing issues.
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+}
+
+.cell-unseen {
+  background: #222;
+}
+
+.cell-hidden {
+  opacity: 0.6;
+}
+
+/*****************************************************************
+  -- #0.1a Cave Tiles
+  ===============================================================
+  Cave specific. This should be it's own file eventually.
+*****************************************************************/
+
+// Ground tile
+.cell-0x00 {
+  background: #ce783b;
+}
+
+// Wall tile
+.cell-0x01 {
+  background: #5a3216;
+}
