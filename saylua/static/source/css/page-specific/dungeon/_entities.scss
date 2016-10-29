@@ -1,0 +1,51 @@
+/*****************************************************************
+  --> Entities.scss
+  This file defines basic and dungeon-specific entities.
+  In the future, entities will be split up into
+  dungeon-specific entity lists and imported here.
+
+  TABLE OF CONTENTS:
+    -- #0.1a Base Classes (You are here)
+    -- #0.2a Base Entities
+    -- #0.3a Cave Entities
+
+*****************************************************************/
+
+.entity {
+  display: inline-block;
+
+  margin: 0 auto;
+  padding: 0;
+  line-height: 0;
+
+  height: 5px;
+  width: 5px;
+}
+
+/*****************************************************************
+  -- #0.2a Base Entities
+  ===============================================================
+  Entities that are consistent across all dungeon types.
+*****************************************************************/
+
+// Player entity
+.entity-0x1000 {
+  background: red;
+}
+
+// Exit portal
+.entity-0x1001 {
+  background: blue;
+}
+
+/*****************************************************************
+  -- #0.3a Cave Entities
+  ===============================================================
+  What it says on the tin.
+*****************************************************************/
+
+// Slimes.
+.entity-0x2000 {
+  background: green;
+}
+
