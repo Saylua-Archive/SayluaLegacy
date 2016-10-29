@@ -1,21 +1,95 @@
-from saylua import app
-from saylua.models.dungeon import ExploreMap
+from saylua import app, login_required
+from saylua.models.dungeon import Dungeon
 
-from flask import (url_for, session, abort, request)
+from saylua.utils.terrain import Terrain
+from saylua.utils.terrain.TileGrid import TileGrid
+from saylua.utils.terrain.EntityContainer import EntityContainer
+from saylua.utils.terrain.helpers import diff
+
+from saylua.utils import saylua_time
+
+from flask import (url_for, session, abort, request, g)
+
+from datetime import datetime
+from random import shuffle
 
 import json
 
-@app.route('/api/explore/map/')
-def api_map_generation():
-    # TODO: Make sure to authorize player for viewing map
-    explore_map = ExploreMap(7, 7)
-    return explore_map.json()
+def generate_dungeon():
+  # Grab a random dungeon type
+  dungeon_types = list(Terrain.terrains.keys())
+  shuffle(dungeon_types)
+  dungeon_name = dungeon_types[0]
+  dungeon_api = Terrain.terrains[dungeon_name]
 
-@app.route('/api/explore/move/', methods=['POST'])
-def api_map_move():
-    if not (request.form and request.form["x"] and request.form["y"]):
-        return json.dumps({'Error' : 'Bad API Usage. '}), 400
+  # Stick with default option set for now.
+  default_options = dungeon_api.get('default_options')
 
-    result = {}
+  # Create our map. Yeah, this syntax is ultra weird.
+  grid = dungeon_api['generate'](default_options)
 
-    return json.dumps(result)
+  # Iterate the suggested amount of times.
+  # Modifies grid in-place.
+  for i in xrange(default_options.get('iterations', 1)):
+    dungeon_api['iterate'](default_options, grid)
+
+  # Create our entity layer. (And hide tiles)
+  entities = dungeon_api['populate'](default_options, grid)
+
+  return dungeon_name, grid, entities
+
+
+@app.route('/api/explore/get/', methods=['POST'])
+@login_required
+def api_dungeon_request():
+  # Acquire our dungeon
+  dungeon = Dungeon.query(Dungeon.user_key == g.user_key).fetch()
+
+  if dungeon:
+    dungeon = dungeon[0]
+  else:
+    # Initialize the user's very first dungeon.
+    name, grid, entities = generate_dungeon()
+    dungeon = Dungeon.create(
+      user_key=g.user_key,
+      name=name,
+      tile_layer=grid.to_string(),
+      entity_layer=entities.to_string()
+    ).get()
+
+  # Get our essentials
+  dungeon_api = Terrain.terrains[dungeon.name]
+  grid = TileGrid.from_string(dungeon.tile_layer)
+  entities = EntityContainer.from_string(dungeon.entity_layer)
+
+  tile_set = dungeon_api.get("tile_set")
+  entity_set = dungeon_api.get("entity_set")
+
+  # Mutate, as necessary.
+  if request.form.get('mutation'):
+    grid, entities = Terrain.mutate(grid, entities, request.form.get('mutation'))
+
+  # Calculate the visible and non-visible tiles and entities.
+  # We are defaulting to a radius of 8 for now.
+  player = entities.get_player()
+  player_position = (player['location']['x'], player['location']['y'])
+
+  grid.calculate_visible(player_position, 8)
+  entities.calculate_visible(grid)
+
+  # Store changes
+  dungeon.tile_layer = grid.to_string()
+  dungeon.entity_layer = entities.to_string()
+  dungeon.last_accessed = datetime.now()
+  dungeon.put()
+
+  # If this is an 'initial' request, dump all data and stop here.
+  # It was originally planned that entity data would only be sent once seen,
+  # this is not necessary while testing, so the entire set will always be sent.
+  if request.form.get('initial') == True or True:
+    return json.dumps({
+      "tileSet": tile_set,
+      "entitySet": entity_set,
+      "tileLayer": grid.get_visible(),
+      "entityLayer": entities.get_visible()
+    })

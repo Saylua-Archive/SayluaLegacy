@@ -1,29 +1,25 @@
-#dungeon-wrapper {
-  width: 750px;
-  margin: auto;
+@import 'dungeon/cells';
+@import 'dungeon/entities';
+
+#dungeon-wrapper, #dungeon-wrapper > * {
+  box-sizing: border-box;
 }
 
-#dungeon {
-  position: relative;
+#dungeon-wrapper {
+  width: 100%;
+}
+
+#dungeon-client-mount {
   float: left;
-  width: 500px;
-  min-height: 50px;
-  background-color: #322125;
+  width: 70%;
 }
 
 #dungeon-info {
   float: left;
-  box-sizing: border-box;
-  width: 250px;
+  width: 30%;
   padding-left: 5px;
 }
 
-.dungeonTile {
-  float: left;
-  cursor: pointer;
-}
-
-.dungeonObject {
-  position: absolute;
-  z-index: 1;
+.dungeon-map {
+  background: #222;
 }
