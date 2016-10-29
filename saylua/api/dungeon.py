@@ -48,10 +48,10 @@ def api_dungeon_request():
   if not dungeon:
     # Initialize the user's very first dungeon.
     name, grid, entities = generate_dungeon()
-    dungeon = dict(
-      name=name,
-      tile_layer=grid.to_string(),
-      entity_layer=entities.to_string())
+    dungeon = Dungeon()
+    dungeon.name = name
+    dungeon.tile_layer = grid.to_string()
+    dungeon.entity_layer = entities.to_string()
 
   # Get our essentials
   dungeon_api = Terrain.terrains[dungeon.name]
@@ -89,3 +89,6 @@ def api_dungeon_request():
       "tileLayer": grid.get_visible(),
       "entityLayer": entities.get_visible()
     })
+
+class Dungeon:
+    pass
