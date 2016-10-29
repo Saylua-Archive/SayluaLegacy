@@ -1,5 +1,5 @@
 from saylua import app, login_required
-from saylua.models.dungeon import Dungeon
+from google.appengine.api import memcache
 
 from saylua.utils.terrain import Terrain
 from saylua.utils.terrain.TileGrid import TileGrid
@@ -43,19 +43,15 @@ def generate_dungeon():
 @login_required
 def api_dungeon_request():
   # Acquire our dungeon
-  dungeon = Dungeon.query(Dungeon.user_key == g.user_key).fetch()
+  dungeon = memcache.get('dungeon-%s' % g.user_key.urlsafe())
 
-  if dungeon:
-    dungeon = dungeon[0]
-  else:
+  if not dungeon:
     # Initialize the user's very first dungeon.
     name, grid, entities = generate_dungeon()
-    dungeon = Dungeon.create(
-      user_key=g.user_key,
+    dungeon = dict(
       name=name,
       tile_layer=grid.to_string(),
-      entity_layer=entities.to_string()
-    ).get()
+      entity_layer=entities.to_string())
 
   # Get our essentials
   dungeon_api = Terrain.terrains[dungeon.name]
@@ -81,7 +77,7 @@ def api_dungeon_request():
   dungeon.tile_layer = grid.to_string()
   dungeon.entity_layer = entities.to_string()
   dungeon.last_accessed = datetime.now()
-  dungeon.put()
+  memcache.set('dungeon-%s' % g.user_key.urlsafe(), dungeon)
 
   # If this is an 'initial' request, dump all data and stop here.
   # It was originally planned that entity data would only be sent once seen,
