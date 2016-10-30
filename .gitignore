@@ -11,3 +11,6 @@ yarn.lock
 # Ignore all third party dependencies other than bcrypt.
 lib/*
 !lib/bcrypt*
+
+# Vagrant nonsense
+ubuntu*.log
