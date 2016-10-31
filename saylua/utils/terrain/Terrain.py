@@ -31,7 +31,7 @@ def mutate(grid, entities, mutation):
     goal_cell = grid.get((g_x, g_y))
 
     # Determine if we can go there, theoretically
-    if not ((0 <= g_x < grid.width) and (0 <= g_y < grid.height)):
+    if not goal_cell:
       return grid, entities
 
     # Determine if we can go there, physically

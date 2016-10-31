@@ -3,18 +3,14 @@
 ## Run startup scripts, check if user is running Vagrant, launch.
 ##################################
 
-# Make sure we have user variables defined, even if unset.
-if [ -z "$USER" ]; then
-  export USER="undefined"
-fi
-
 # Run gulp
 echo " "
 echo "%% Running Gulp . . ."
 echo "========================================"
 gulp scripts && gulp sass
 
-if [ "$USER" = "vagrant" ]; then
+# If a .vagrant folder exists, assume we're inside of a Vagrant machine.
+if [ -d \.vagrant ]; then
   # May come in useful
   export VAGRANT_DEBUG="1"
 
