@@ -33,7 +33,6 @@ class SayluaValidator:
     def clientValidatorMessage(self):
         return self.message
 
-
 class Required(SayluaValidator):
     def __init__(self, message=None):
         self.message = message
@@ -43,7 +42,7 @@ class Required(SayluaValidator):
         return field.data
 
     def clientValidatorName(self):
-        return 'data-slform-required'
+        return 'required'
 
 class NotBlank(SayluaValidator):
     def __init__(self, message=None):
@@ -54,7 +53,7 @@ class NotBlank(SayluaValidator):
         return field.data and not field.data.isspace()
 
     def clientValidatorName(self):
-        return 'data-slform-notblank'
+        return 'notblank'
 
 class EqualTo(SayluaValidator):
     def __init__(self, fieldname, message=None):
@@ -71,7 +70,7 @@ class EqualTo(SayluaValidator):
         return field.data == other.data
 
     def clientValidatorName(self):
-        return 'data-slform-equalto'
+        return 'equalto'
 
     def clientValidatorValue(self):
         return self.fieldname
@@ -86,7 +85,7 @@ class Min(SayluaValidator):
         return len(field.data) >= self.length
 
     def clientValidatorName(self):
-        return 'data-slform-min'
+        return 'min'
 
     def clientValidatorValue(self):
         return self.length
@@ -102,7 +101,7 @@ class Max(SayluaValidator):
         return len(field.data) <= self.length
 
     def clientValidatorName(self):
-        return 'data-slform-max'
+        return 'max'
 
     def clientValidatorValue(self):
         return self.length
@@ -117,7 +116,7 @@ class IsNot(SayluaValidator):
         return field.data != self.pattern
 
     def clientValidatorName(self):
-        return 'data-slform-matches'
+        return 'isnot'
 
     def clientValidatorValue(self):
         return self.pattern
@@ -133,7 +132,7 @@ class MatchesRegex(SayluaValidator):
         return pattern.match(field.data)
 
     def clientValidatorName(self):
-        return 'data-slform-regex'
+        return 'regex'
 
     def clientValidatorValue(self):
         return self.regex

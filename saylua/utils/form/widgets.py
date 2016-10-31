@@ -1,16 +1,42 @@
 from wtforms import widgets
 
+import sl_validators
+
+def generateCustomKwargs(field, error_class, kwargs):
+    if field.errors:
+        c = kwargs.pop('class', '') or kwargs.pop('class_', '')
+        kwargs['class'] = '%s %s' % (error_class, c)
+
+    if not 'placeholder' in kwargs:
+        kwargs['placeholder'] = field.label.text
+
+    # Integrate with clientside validation.
+    for validator in field.validators:
+        if isinstance(validator, sl_validators.SayluaValidator):
+            clientName = validator.clientValidatorName()
+            if clientName:
+                if not 'data-slform-validators' in kwargs:
+                    kwargs['data-slform-validators'] = ''
+                else:
+                    kwargs['data-slform-validators'] += ' '
+
+                kwargs['data-slform-validators'] += clientName
+                val = validator.clientValidatorValue()
+                if val:
+                    kwargs['data-slform-validators'] += ':' + str(val)
+
+                message = validator.clientValidatorMessage()
+                if message:
+                    kwargs['data-slform-' + clientName + '-message'] =  message
+    return kwargs
+
 class SlInput(widgets.TextInput):
     def __init__(self, error_class='error'):
         self.error_class = error_class
 
     def __call__(self, field, **kwargs):
-        if field.errors:
-            c = kwargs.pop('class', '') or kwargs.pop('class_', '')
-            kwargs['class'] = '%s %s' % (self.error_class, c)
+        kwargs = generateCustomKwargs(field, self.error_class, kwargs)
 
-        if not 'placeholder' in kwargs:
-            kwargs['placeholder'] = field.label.text
         return super(SlInput, self).__call__(field, **kwargs)
 
 class SlTextArea(widgets.TextArea):
@@ -18,12 +44,7 @@ class SlTextArea(widgets.TextArea):
         self.error_class = error_class
 
     def __call__(self, field, **kwargs):
-        if field.errors:
-            c = kwargs.pop('class', '') or kwargs.pop('class_', '')
-            kwargs['class'] = '%s %s' % (self.error_class, c)
-
-        if not 'placeholder' in kwargs:
-            kwargs['placeholder'] = field.label.text
+        kwargs = generateCustomKwargs(field, self.error_class, kwargs)
         return super(SlTextArea, self).__call__(field, **kwargs)
 
 class SlPasswordInput(SlInput):

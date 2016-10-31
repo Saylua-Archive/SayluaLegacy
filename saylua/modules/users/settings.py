@@ -44,7 +44,7 @@ def user_settings_css():
 @app.route('/settings/username/', methods=['GET', 'POST'])
 @login_required
 def user_settings_username():
-    form = UsernameForm(request.form, obj=g.user)
+    form = UsernameForm(request.form, obj={'username': g.user.display_name})
     form.setUser(g.user)
 
     cutoff_time = datetime.datetime.now() - datetime.timedelta(days=1)
@@ -54,7 +54,7 @@ def user_settings_username():
             flash('You\'ve already changed your username once within the past 24 hours!', 'error')
             return redirect(url_for('user_settings_username'))
 
-        username = form.username.data
+        username = form.display_name.data
         user_key = User.key_by_username(username)
         if username.lower() in g.user.usernames:
             # If the user is changing to a name they already own, change case

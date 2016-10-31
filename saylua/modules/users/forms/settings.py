@@ -67,7 +67,7 @@ class PasswordForm(Form):
         sl_validators.Required(),
         sl_validators.Min(app.config['MIN_PASSWORD_LENGTH']),
         sl_validators.Max(app.config['MAX_PASSWORD_LENGTH']),
-        sl_validators.EqualTo('confirm_password', message='Passwords must match')
+        sl_validators.EqualTo('confirm_password', message='Passwords must match.')
     ])
     confirm_password = SlPasswordField('Confirm Password')
 
