@@ -11,38 +11,26 @@
     </tr>
     <tr>
       <th class="label">
-        <label for="item-upload-name">Item Name</label>
+        {{ form.name.label }}
       </th>
       <td>
-        <input type="text" name="name" placeholder="Item Name" id="item-upload-name"
-          value="{{name}}" data-validators="required not_empty">
+        {{ form.name() }}
       </td>
     </tr>
     <tr>
       <th class="label">
-        <label for="item-upload-image">Image URL</label>
+        {{ form.image_url.label }}
       </th>
       <td>
-        <input type="text" name="image_url" placeholder="Item's Image" id="item-upload-image"
-          value="" data-validators="required not_empty">
+        {{ form.image_url() }}
       </td>
     </tr>
     <tr>
       <th class="label">
-        <label for="item-upload-category">Item Category</label>
+        {{ form.description.label }}
       </th>
       <td>
-        <input type="text" name="category" placeholder="Item Category" id="item-upload-category"
-          value="{{category}}" data-validators="required not_empty">
-      </td>
-    </tr>
-    <tr>
-      <th class="label">
-        <label for="item-upload-description">Item Description</label>
-      </th>
-      <td>
-        <textarea name="description" placeholder="Write a description for the item. "
-          data-validators="required not_empty" id="item-upload-description">{{ description }}</textarea>
+        {{ form.description() }}
       </td>
     </tr>
     <tr>

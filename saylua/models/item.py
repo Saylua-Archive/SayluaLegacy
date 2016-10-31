@@ -2,22 +2,26 @@ from google.appengine.ext import ndb
 
 import re
 
-ItemTypes = {'food', 'clothing'}
-
 # StructuredProperty for Conversation
-class AvatarItemImage(ndb.Model):
-    front_image = ndb.StringProperty()
-    back_image = ndb.StringProperty()
+class ItemAvatarData(ndb.Model):
+    f_front_image = ndb.StringProperty()
+    f_back_image = ndb.StringProperty()
+    m_front_image = ndb.StringProperty()
+    m_back_image = ndb.StringProperty()
 
 class Item(ndb.Model):
     name = ndb.StringProperty()
     url_name = ndb.StringProperty()
     image_url = ndb.StringProperty()
     description = ndb.StringProperty()
-    category = ndb.StringProperty()
 
-    masculine_image = ndb.StructuredProperty(AvatarItemImage)
-    feminine_image = ndb.StructuredProperty(AvatarItemImage)
+    # Denormalized data for specific item use cases
+    avatar_data = ndb.KeyProperty()
+
+    @classmethod
+    def create(cls, name, image_url, description):
+        return cls(name=name, image_url=image_url, description=description,
+            url_name=cls.make_url_name(name))
 
     @classmethod
     def make_url_name(cls, name):
@@ -30,13 +34,12 @@ class Item(ndb.Model):
         return cls.query(cls.url_name==name.lower()).get()
 
     @classmethod
-    def update_item(cls, item, name, image_url, description, category):
+    def update_item(cls, item_key, name, image_url, description):
         item.name = name
         item.image_url = image_url
         item.description = description
-        item.category = category
 
-        # Update the denormalized versions of this data in everyone's inventory
+        # TODO: Update the denormalized versions of this data in everyone's inventory
 
     @classmethod
     def give_item(cls, user_key, item, count):
@@ -48,15 +51,18 @@ class Item(ndb.Model):
 
 
 class InventoryItem(ndb.Model):
+    # This data is all denormalized. Must update when the main item data is
+    # updated.
     name = ndb.StringProperty()
     image_url = ndb.StringProperty()
     description = ndb.StringProperty()
-    category = ndb.StringProperty()
 
+    avatar_data = ndb.KeyProperty()
+
+    # These two keys define the inventory item entry.
     user_key = ndb.KeyProperty()
     item_key = ndb.KeyProperty()
 
-    # Note that when we update the name/image for an item we need to update it for all users
     count = ndb.IntegerProperty()
 
     @classmethod
