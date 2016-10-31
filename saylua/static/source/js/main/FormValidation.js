@@ -7,7 +7,7 @@ var _FormValidation = (function FormValidation() {
         return input;
       }
     },
-    'not_empty': {
+    'notblank': {
       'error': '<field> cannot be only spaces. ',
       'validator':  function (input) {
         return /\S/.test(input);
@@ -31,25 +31,25 @@ var _FormValidation = (function FormValidation() {
         return !isNaN(input);
       }
     },
-    'username_chars': {
-      'error': '<field> may only contain letters, numbers, or these characters: +~._-',
-      'validator': function (input) {
-        var reg = new RegExp('^[A-Za-z0-9+~._-]+$');
+    'regex': {
+      'error': '<field> is incorrectly formatted. ',
+      'validator': function (input, regex) {
+        var reg = new RegExp(regex);
         return reg.test(input);
       }
     },
-    'match_password': {
-      'error': 'Passwords must match. ',
-      'validator': function (input, match_id) {
-        return document.getElementById(match_id).value === input;
+    'equalto': {
+      'error': '<field> must match <1>. ',
+      'validator': function (input, match_name) {
+        return document.getElementsByName(match_name)[0].value === input;
       }
     },
-    'email': {
-      'error': '<field> must be a valid email. ',
-      'validator': function (input) {
-        return /\S+@\S+\.\S+/.test(input);
+    'isnot': {
+      'error': '<field> cannot be <1>. ',
+      'validator': function (input, value) {
+        return input != value;
       }
-    }
+    },
   };
 
   return function FormValidationConstructor() {
@@ -70,11 +70,7 @@ var _FormValidation = (function FormValidation() {
       errorContainer.innerHTML = '';
     }
     for (var j = 0; j < fields.length; j++) {
-      var validators = fields[j].getAttribute('data-validators');
-      var errors = fields[j].getAttribute('data-errors');
-      if (errors) {
-        errors = JSON.parse(errors);
-      }
+      var validators = fields[j].getAttribute('data-slform-validators');
       if (validators) {
         removeClass(fields[j], 'error');
         validators = validators.split(" ");
@@ -99,11 +95,13 @@ var _FormValidation = (function FormValidation() {
             addClass(fields[j], 'error');
             var field = capitalizeFirst(fields[j].name);
             var err;
-            if (errors && validatorName in errors) {
-              err = errors[validatorName];
+            var message = fields[j].getAttribute('data-slform-' + validatorName + '-message');
+            if (message) {
+              err = message;
             } else {
-              err = validatorList[validatorName].error.replace('<field>', field.replace(/[_-]/g, ' '));
+              err = validatorList[validatorName].error;
             }
+            err = err.replace('<field>', field.replace(/[_-]/g, ' '));
             for (var l = 1; l < params.length; l++) {
               err = err.replace('<' + l + '>', params[l]);
             }

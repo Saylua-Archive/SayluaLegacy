@@ -1,5 +1,7 @@
 from wtforms import widgets
 
+import sl_validators
+
 class SlInput(widgets.TextInput):
     def __init__(self, error_class='error'):
         self.error_class = error_class
@@ -11,6 +13,26 @@ class SlInput(widgets.TextInput):
 
         if not 'placeholder' in kwargs:
             kwargs['placeholder'] = field.label.text
+
+        # Itegrate with clientside validation
+        for validator in field.validators:
+            if isinstance(validator, sl_validators.SayluaValidator):
+                clientName = validator.clientValidatorName()
+                if clientName:
+                    if not 'data-slform-validators' in kwargs:
+                        kwargs['data-slform-validators'] = ''
+                    else:
+                        kwargs['data-slform-validators'] += ' '
+
+                    kwargs['data-slform-validators'] += clientName
+                    val = validator.clientValidatorValue()
+                    if val:
+                        kwargs['data-slform-validators'] += ':' + str(val)
+
+                    message = validator.clientValidatorMessage()
+                    if message:
+                        kwargs['data-slform-' + clientName + '-message'] =  message
+
         return super(SlInput, self).__call__(field, **kwargs)
 
 class SlTextArea(widgets.TextArea):
