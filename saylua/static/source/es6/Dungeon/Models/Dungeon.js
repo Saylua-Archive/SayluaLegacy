@@ -47,8 +47,25 @@ export default class Dungeon {
     // A better solution would be to use shouldComponentUpdate().
   }
 
-  fetch(mutation) {
+  _debug_regenerate(bind) {
+    if (bind === true) {
+      return this._debug_regenerate.bind(this);
+    } else {
+      this.fetch({}, {"regenerate": true});
+    }
+  }
+
+  _debug_reveal(bind) {
+    if (bind === true) {
+      return this._debug_reveal.bind(this);
+    } else {
+      this.fetch({}, {"reveal": true});
+    }
+  }
+
+  fetch(mutation, debug) {
     mutation = mutation ? mutation : {};
+    debug = debug ? debug : {};
 
     // Ensure that we don't end up with race conditions.
     if (this.state.lock === true) {
@@ -63,7 +80,8 @@ export default class Dungeon {
       "method": 'post',
       "data": {
         "initial": !this.state.initialized,
-        "mutation": JSON.stringify(mutation)
+        "mutation": JSON.stringify(mutation),
+        "debug": JSON.stringify(debug)
       },
       "error": (error) => {
         console.log("Error syncing with Dungeon API.");
@@ -73,7 +91,7 @@ export default class Dungeon {
           this.state.model = response;
           this.state.initialized = true;
         } else {
-          this.state.model = this.mergeDiff(response);
+          this.state.model = this.mergeDiff(response, debug);
         }
       }
     });
@@ -96,7 +114,11 @@ export default class Dungeon {
     return this.state.model[attr];
   }
 
-  mergeDiff(diff) {
+  mergeDiff(diff, debug) {
+    if (debug.reveal !== undefined || debug.regenerate !== undefined) {
+      return diff;
+    }
+
     let newModel = this.state.model;
 
     // There's no real point in removing entity or tile schema,

@@ -6,7 +6,10 @@
 }
 
 #dungeon-wrapper {
+  background: #222;
   width: 100%;
+
+  position: relative;
 }
 
 #dungeon-client-mount {
@@ -14,12 +17,32 @@
   width: 70%;
 }
 
-#dungeon-info {
+#dungeon-debug-mount {
   float: left;
+  width: 100%;
+}
+
+#dungeon-info-mount {
+  float: left;
+
   width: 30%;
-  padding-left: 5px;
+}
+
+#dungeon-info-mount p {
+  padding: 0px 15px;
 }
 
 .dungeon-map {
   background: #222;
+  position: relative;
+
+  height: 800px;
+  width: 100%;
+}
+
+.dungeon-mini-map {
+  background: #222;
+
+  // FIXME: Temporary Band-aid
+  margin-top: -6px;
 }

@@ -25,13 +25,16 @@ def generate_dungeon():
   # Stick with default option set for now.
   default_options = dungeon_api.get('default_options')
 
-  # Create our map. Yeah, this syntax is ultra weird.
+  # Create our map. Yeah, this syntax is incredibly weird.
   grid = dungeon_api['generate'](default_options)
 
   # Iterate the suggested amount of times.
   # Modifies grid in-place.
   for i in xrange(default_options.get('iterations', 1)):
     dungeon_api['iterate'](default_options, grid)
+
+  # Make last-step changes.
+  dungeon_api['finalize'](default_options, grid)
 
   # Create our entity layer. (And hide tiles)
   entities = dungeon_api['populate'](default_options, grid)
@@ -42,10 +45,13 @@ def generate_dungeon():
 @app.route('/api/explore/get/', methods=['POST'])
 @login_required
 def api_dungeon_request():
+  # Ascertain debugging values
+  debug = json.loads(request.form.get('debug'))
+
   # Acquire our dungeon
   dungeon = memcache.get('dungeon-%s' % g.user_key.urlsafe())
 
-  if not dungeon:
+  if not dungeon or (debug.get('regenerate') == True and app.debug):
     # Initialize the user's very first dungeon.
     name, grid, entities = generate_dungeon()
     dungeon = Dungeon()
@@ -62,8 +68,10 @@ def api_dungeon_request():
   entity_set = dungeon_api.get("entity_set")
 
   # Mutate, as necessary.
+  event_log = None
+
   if request.form.get('mutation'):
-    grid, entities = Terrain.mutate(grid, entities, request.form.get('mutation'))
+    grid, entities, event_log = Terrain.mutate(grid, entities, request.form.get('mutation'))
 
   # Calculate the visible and non-visible tiles and entities.
   # We are defaulting to a radius of 8 for now.
@@ -82,12 +90,20 @@ def api_dungeon_request():
   # If this is an 'initial' request, dump all data and stop here.
   # It was originally planned that entity data would only be sent once seen,
   # this is not necessary while testing, so the entire set will always be sent.
-  if request.form.get('initial') == True or True:
+  if debug.get('reveal') and app.debug:
+    grid_visible = grid.cell_map
+    entities_visible = entities.entities
+  else:
+    grid_visible = grid.get_visible()
+    entities_visible = entities.get_visible()
+
+  if request.form.get('initial') or True:
     return json.dumps({
       "tileSet": tile_set,
       "entitySet": entity_set,
-      "tileLayer": grid.get_visible(),
-      "entityLayer": entities.get_visible()
+      "tileLayer": grid_visible,
+      "entityLayer": entities_visible,
+      "eventLog": event_log
     })
 
 class Dungeon:

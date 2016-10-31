@@ -1,6 +1,8 @@
 import Inferno from "inferno";
 import Component from "inferno-component";
 
+import cloneDeep from "lodash.clonedeep";
+
 // DungeonClient -> Required by Main
 // --------------------------------------
 // The actual client. This handles input and renders the map.
@@ -83,7 +85,7 @@ export default class DungeonClient extends Component {
     });
   }
 
-  getMap(tileLayer, entityLayer, tileSet, entitySet) {
+  getMap(tileLayer, entityLayer, tileSet, entitySet, radius=8) {
     // First, we create a lookup table for entities so that we
     // can insert entities in linear time rather than exponential.
     //
@@ -105,8 +107,43 @@ export default class DungeonClient extends Component {
       entityLookupTable[y][x].push(content);
     }
 
-    // Then, we generate our tile layer
-    let tileMap = tileLayer.map((row, y) => {
+    // Then, we generate our map and mini-map simultaneously
+    let mapView = [];
+
+    let player = entityLayer[0];
+
+    let p_x = player.location.x;
+    let p_y = player.location.y;
+
+    let mapHeight = tileLayer.length;
+    let mapWidth = tileLayer[0].length;
+
+    // Define mapView bounds
+    // Probably both the best and the worst thing I have written all week.
+    // Keeps two points within the bounds of the map, and a minimum distance from each other.
+
+    let a_x, b_x, x_pool;
+    x_pool = radius * 2;
+
+    a_x = Math.max(p_x - radius, 0);                                    // console.log(`a_x is ${a_x}`);
+    x_pool -= (p_x - a_x);                                              // console.log(`Units left in the pool: is ${x_pool}`);
+    b_x = Math.min(p_x + x_pool, mapWidth - 1);                         // console.log(`b_x is ${b_x}`);
+    x_pool -= (b_x - p_x);                                              // console.log(`Units left in the pool: is ${x_pool}`);
+    a_x = (b_x === mapWidth - 1) ? (a_x - x_pool) : (a_x + x_pool);     // console.log(`Adding ${x_pool} to a_x makes: ${a_x}`);
+
+    let a_y, b_y, y_pool;
+    y_pool = radius * 2;
+
+    a_y = Math.max(p_y - radius, 0);
+    y_pool -= (p_y - a_y);
+    b_y = Math.min(p_y + y_pool, mapHeight - 1);
+    y_pool -= (b_y - p_y);
+    a_y = (b_y === mapHeight - 1) ? (a_y - y_pool) : (a_y + y_pool);
+
+    let miniMap = tileLayer.map((row, y) => {
+      let mapViewRow = [];
+      let within_y_bounds = (a_y <= y) && (y <= b_y);
+
       let cells = row.map((cell, x) => {
         let entities = false;
         let cellSeen = (Object.keys(cell).length > 0);
@@ -127,37 +164,80 @@ export default class DungeonClient extends Component {
           }
         }
 
-        return (
+        // Generate element
+        let el = (
           <span className={ classes.join(' ') } >{ entities }</span>
         );
+
+        // Should we also push a clone of this element to the mapViewRow?
+        let within_x_bounds = (a_x <= x) && (x <= b_x);
+        if (within_x_bounds && within_y_bounds) {
+          // Clone entities with cloneDeep() and add class to prevent diffing issues.
+          classes.push("map-view-cell");
+          let cloned_entities;
+
+          // Add neighbor information
+          if (cellSeen) {
+            classes.push(`ordinal-${cell.meta.ordinals}`);
+          }
+
+          if (entities !== false) {
+            cloned_entities = cloneDeep(entities);
+          } else {
+            cloned_entities = false;
+          }
+
+          let cloned_el = (
+            <span className={ classes.join(' ') } >
+              { cloned_entities }
+            </span>
+          );
+          mapViewRow.push(cloned_el);
+        }
+
+        return el;
       });
 
+      // Should we also push a row to the mapView?
+      if (within_y_bounds) {
+        mapView.push(
+          <div className={`map-view-row cell-row cell-row-${y}`}>
+            { mapViewRow }
+          </div>
+        );
+      }
+
       return (
-        <div className={`cell-row cell-row-${y}`}>
+        <div className={`simple cell-row cell-row-${y}`}>
           { cells }
         </div>
       );
     });
 
-    return tileMap;
+    return [mapView, miniMap];
   }
 
   render() {
     let model = this.props.model;
-    let map = false;
+    let mapView = false;
+    let miniMap = false;
 
     if (this.state.domLoaded) {
-      map = this.getMap(
+      [mapView, miniMap] = this.getMap(
         model.get('tileLayer'),
         model.get('entityLayer'),
         model.get('tileSet'),
         model.get('entitySet')
       );
+
+      this.props.miniMap.set(miniMap);
     }
 
     return (
       <div className="dungeon-wrapper">
-        <div className='dungeon-map'>{ map }</div>
+        <div className='dungeon-map'>
+          { mapView }
+        </div>
       </div>
     );
   }

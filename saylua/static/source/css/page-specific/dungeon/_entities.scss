@@ -12,14 +12,29 @@
 *****************************************************************/
 
 .entity {
+  background-size: cover;
   display: inline-block;
 
   margin: 0 auto;
   padding: 0;
   line-height: 0;
 
-  height: 5px;
-  width: 5px;
+  position: absolute;
+  top: 10%;
+  left: 10%;
+
+  height: 80%;
+  width: 80%;
+
+  z-index: 1;
+}
+
+.dungeon-mini-map .entity {
+  top: 0;
+  left: 0;
+
+  height: 100%;
+  width: 100%;
 }
 
 /*****************************************************************
@@ -30,11 +45,37 @@
 
 // Player entity
 .entity-0x1000 {
+  background-image: url('/static/img/pets/velbird.png');
+
+  animation: player-idle 5s ease-in-out infinite alternate;
+  z-index: 2;
+
+  &:after {
+    width: 10px;
+  }
+} .simple .entity-0x1000 {
   background: red;
+  animation: none;
+}
+
+@keyframes player-idle {
+  0% {
+    transform: scale(2) translateY(0px);
+  }
+
+  50% {
+    transform: scale(2) translateY(3px);
+  }
+
+  100% {
+    transform: scale(2) translateY(0px);
+  }
 }
 
 // Exit portal
 .entity-0x1001 {
+  background: blue;
+} .simple .entity-0x1001 {
   background: blue;
 }
 
@@ -46,6 +87,8 @@
 
 // Slimes.
 .entity-0x2000 {
+  background: green;
+} .simple .entity-0x2000 {
   background: green;
 }
 

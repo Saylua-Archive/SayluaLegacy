@@ -8,7 +8,7 @@ import cPickle, copy
 # ===================================================
 # Note:
 # A tile with an unset meta.visibility value is treated as unseen.
-# A tile with a set but falsey meta.visibility value should be
+# A tile with a set but falsey meta.visibility value will be
 # treated as seen but hidden.
 #
 # Sample 1x3 map:
@@ -95,7 +95,10 @@ class TileGrid():
     cell_map = self.__get_cell_map()
 
     if b is None:
-      return cell_map[a_y][a_x]
+      try:
+        return cell_map[a_y][a_x]
+      except IndexError:
+        return False
 
     else:
       sub_map = []
@@ -117,16 +120,15 @@ class TileGrid():
 
       return sub_map
 
-  def set(self, coords, value, meta=None):
+  def set(self, coords, value=None, meta=None):
     x, y = coords
 
     try:
-      self.cell_map[y][x]['tile'] = value
+      if value:
+        self.cell_map[y][x]['tile'] = value
 
       if meta and (type(meta) == dict):
         self.cell_map[y][x]['meta'] = meta
-
-      return self.cell_map
 
     except IndexError:
       print("Tried filling ({}, {}), and failed. You really messed up.".format(x, y))

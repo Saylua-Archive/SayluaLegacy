@@ -6,6 +6,7 @@ import json
 # It is here for now while we iterate.
 def mutate(grid, entities, mutation):
   mutation = json.loads(mutation)
+  event_log = None
 
   if mutation.get('action') == 'move':
     direction = mutation.get('data')
@@ -32,7 +33,7 @@ def mutate(grid, entities, mutation):
 
     # Determine if we can go there, theoretically
     if not goal_cell:
-      return grid, entities
+      return grid, entities, event_log
 
     # Determine if we can go there, physically
     obstacle_types = ['wall']
@@ -43,14 +44,16 @@ def mutate(grid, entities, mutation):
     is_obstacle = matching_tile['type'] in obstacle_types
 
     if is_obstacle:
-      return grid, entities
+      return grid, entities, event_log
 
     # If we've gotten this far, we can finally move the player.
     player['location']['x'] = g_x
     player['location']['y'] = g_y
     entities.update_entity(player)
 
-  return grid, entities
+    event_log = "OH MY SWEET GODS ABOVE"
+
+  return grid, entities, event_log
 
 
 

@@ -78,15 +78,15 @@ for options when running dev_appserver.
 - By default, the dev_appserver.py will track ALL changes to ALL directories, causing startup issues.
 Making the following change reduces startup time exponentially, and gets rid of filewatcher limit problems.
 
-      ## --> ./saylua/build/google_appengine/google/appengine/tools/devappserver2/watcher_common.py
+            ## --> ./saylua/build/google_appengine/google/appengine/tools/devappserver2/watcher_common.py
 
-      # Prevent watcher file limit issues.
-      _IGNORED_DIRS = ('node_modules', '.git', '.vagrant', 'build', 'lib')
+            # Prevent watcher file limit issues.
+            _IGNORED_DIRS = ('node_modules', '.git', '.vagrant', 'build', 'lib', 'static/')
 
-      def skip_ignored_dirs(dirs):
-            """Skip directories that should not be watched."""
+            def skip_ignored_dirs(dirs):
+                  """Skip directories that should not be watched."""
 
-            _remove_pred(dirs, lambda d: d.startswith(_IGNORED_PREFIX) or d in _IGNORED_DIRS)
+                  _remove_pred(dirs, lambda d: d.startswith(_IGNORED_PREFIX) or d in _IGNORED_DIRS)
 
 
 ## Author

@@ -60,6 +60,62 @@ def iterate(options, grid):
 
   return True
 
+def finalize(options, grid):
+  for x, y, cell in grid.iterate():
+    # Ensure all edge cells are walls.
+    if x in [0, (grid.width - 1)] or y in [0, (grid.height - 1)]:
+      grid.set((x, y), '0x01')
+
+    # Add cell-neighbor information. Fairly expensive, but it only runs once.
+    # 0000: top, right, bottom, left.
+    ordinals = ""
+
+    # Top
+    if y == 0:
+      ordinals += "1"
+    else:
+      neighbor_north = grid.get((x, y - 1))
+
+      if neighbor_north.get('tile') == '0x01':
+        ordinals += "1"
+      else:
+        ordinals += "0"
+
+    # Right
+    if x == (grid.width - 1):
+      ordinals += "1"
+    else:
+      neighbor_east = grid.get((x + 1, y))
+
+      if neighbor_east.get('tile') == '0x01':
+        ordinals += "1"
+      else:
+        ordinals += "0"
+
+    # Bottom
+    if y == (grid.height - 1):
+      ordinals += "1"
+    else:
+      neighbor_south = grid.get((x, y + 1))
+
+      if neighbor_south.get('tile') == '0x01':
+        ordinals += "1"
+      else:
+        ordinals += "0"
+
+    # Left
+    if x == 0:
+      ordinals += "1"
+    else:
+      neighbor_west = grid.get((x - 1, y))
+
+      if neighbor_west.get('tile') == '0x01':
+        ordinals += "1"
+      else:
+        ordinals += "0"
+
+    grid.cell_map[y][x]['meta']['ordinals'] = ordinals
+
 
 def populate(options, grid):
   # Prevent circular import issues
@@ -90,6 +146,7 @@ def populate(options, grid):
 
 API = {
   "generate": generate,
+  "finalize": finalize,
   "iterate":  iterate,
   "populate":  populate,
   "default_options": {
