@@ -19,6 +19,8 @@ def load_user():
         s_key = make_ndb_key(session_key)
         u_key = make_ndb_key(user_key)
 
+        g.user_key = u_key
+
         if not s_key or not u_key:
             g.logged_in = False
             g.user = None
@@ -30,6 +32,7 @@ def load_user():
     if not found:
         g.logged_in = False
         g.user = None
+        g.user_key = None
         return None
     founduser = u_key.get()
     g.logged_in = True

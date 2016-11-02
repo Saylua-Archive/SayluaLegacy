@@ -1,0 +1,108 @@
+/*****************************************************************
+  --> Cells.scss
+  Perhaps would be more appropriately named 'tiles.scss',
+  as tiles are templates and cells are instances of those
+  templates.
+
+  TABLE OF CONTENTS:
+    -- #0.1a Base Classes (You are here)
+    -- #0.2a Cave Tiles
+
+*****************************************************************/
+@mixin gen_ordinal($name, $ordinal) {
+  &.ordinal-#{$ordinal} {
+    background-image: url('/static/img/tiles/#{$name}/#{$ordinal}.png');
+    font-weight: bold;
+  }
+}
+
+@mixin ordinal($name) {
+  $ordinals: '1000' '0100' '0010' '0001' '1100' '0110' '0011' '1001' '1010' '0101' '1110' '0111' '1011' '1101' '1111' '0000';
+  @each $ordinal in $ordinals {
+    @include gen_ordinal($name, $ordinal);
+  }
+
+  font-weight: bold;
+}
+
+.cell {
+  display: inline-block;
+
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+
+  position: relative;
+
+  height: 100%;
+  width: (100% / 17);
+}
+
+.cell-row {
+  // Prevent odd spacing issues.
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+
+  height: (100% / 17);
+  width: 100%;
+}
+
+.cell-unseen {
+  background: #222;
+}
+
+.cell-hidden {
+  opacity: 0.6;
+}
+
+// It may make more sense to make these the defaults,
+// and do minimap-speci
+
+.dungeon-mini-map {
+  .cell {
+    // GIMME THE FUTURE BABY I'M READY
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    box-flex: 1;
+
+    height: 5px;
+    width: 5px;
+  }
+
+  .cell-row {
+    // SO FUTURE
+    display: flex;
+    display: -moz-flex;
+    display: -webkit-flex;
+  }
+
+  .cell-unseen {
+    opacity: 0;
+  }
+}
+
+
+/*****************************************************************
+  -- #0.1a Cave Tiles
+  ===============================================================
+  Cave specific. This should be it's own file eventually.
+*****************************************************************/
+
+// Ground tile
+.cell-0x00 {
+  background: #ce783b;
+}
+
+// Wall tile
+.cell-0x01 {
+  background-color: #5a3216; // Temporary fallback
+  background-size: cover;
+  @include ordinal(test);
+} .simple .cell-0x01 {
+  background: #5a3216;
+}

@@ -1,21 +1,13 @@
 {% extends "layout.html" %}
 {% set page_title = "Exploring" %}
 {% block header_scripts %}
-<script src="/static/js/dungeon.min.js"></script>
+<script src="/static/js/dungeon.min.js?v=0.1"></script>
 {% endblock %}
 {% block body %}
 <h2>Exploring</h2>
 <div id="dungeon-wrapper">
-  <div id="dungeon"></div>
-  <div id="dungeon-info">
-    <img src="/static/img/habitats/flat-bambooforest.jpg">
-    <p>
-      This place is truly beautiful. You look around and revel in the beauty that surrounds you.
-      You become one with the beauty. The beauty conquers all.
-    </p>
-    <p>
-      You found a pile of rocks.
-    </p>
-  </div>
+  <div id="dungeon-client-mount"></div>
+  <div id="dungeon-info-mount"></div>
+  <div id="dungeon-debug-mount"></div>
 </div>
 {% endblock %}

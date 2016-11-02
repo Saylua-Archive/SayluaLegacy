@@ -3,21 +3,25 @@ from flask import (render_template, redirect, make_response,
                    url_for, flash, session, abort, request, g)
 
 from saylua.utils import get_from_request
+from saylua.utils.form import flash_errors
+
 from saylua.models.item import Item
+
+from forms import ItemUploadForm
 
 @app.route('/admin/items/add/', methods=['GET', 'POST'])
 def admin_panel_items_add():
-    name = get_from_request(request, 'name')
-    category = get_from_request(request, 'category')
-    description = get_from_request(request, 'description')
-    if request.method == 'POST':
-        image_url = request.form.get('image_url')
-        item = Item(name=name, category=category, image_url=image_url,
-            url_name=Item.make_url_name(name), description=description)
+    form = ItemUploadForm(request.form)
+    form.name.data = get_from_request(request, 'name')
+    form.description.data = get_from_request(request, 'description')
+    if request.method == 'POST' and form.validate():
+        item = Item.create(name=form.name.data, image_url=form.image_url.data,
+            description=form.description.data)
         item.put()
         flash('You have successfully created a new item! ')
         return redirect(url_for('admin_panel_items_add'))
-    return render_template('admin/items/add.html', name=name, category=category, description=description)
+    flash_errors(form)
+    return render_template('admin/items/add.html', form=form)
 
 @app.route('/admin/items/edit/', methods=['GET'])
 def admin_panel_items_edit():

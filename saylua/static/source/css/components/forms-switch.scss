@@ -6,7 +6,7 @@
   margin: auto;
 }
 
-.switch label b {
+.switch label {
   @include fast-color-trans;
   font-weight: normal;
   display: block;
@@ -20,20 +20,20 @@
   background: #fff;
 }
 
-.switch label:first-of-type b {
+.switch label:first-of-type {
   border-left: $mainSoftColor 1px solid;
   border-radius: 8px 0 0 8px;
 }
 
-.switch label:last-of-type b {
+.switch label:last-of-type {
   border-radius: 0 8px 8px 0;
 }
 
-.switch label b:hover {
+.switch label:hover {
   background: $accentSoftColor;
 }
 
-.switch input:checked + b {
+.switch input:checked + label {
   background: $neutralColor;
 }
 

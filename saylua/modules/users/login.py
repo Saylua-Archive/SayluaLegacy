@@ -11,8 +11,12 @@ from forms.login import LoginForm, RegisterForm, login_check
 
 @app.context_processor
 def inject_sidebar_login_form():
-    if g.logged_in:
-        return {}
+    try:
+        if g.logged_in:
+            return {}
+    except AttributeError:
+        g.logged_in = False
+
     form = LoginForm()
     return dict(sidebar_form=form)
 

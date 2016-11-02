@@ -10,6 +10,7 @@ from saylua.models.user import User
 from forms import ConversationForm, ConversationReplyForm, recipient_check
 from saylua.utils.form import flash_errors
 
+# The main page where the user views all of their messages.
 @app.route('/messages/')
 @login_required
 def messages_main():
@@ -20,6 +21,7 @@ def messages_main():
         messages = []
     return render_template('messages/all.html', viewed_messages=messages)
 
+# The submit action for the user to update their messages.
 @app.route('/messages/', methods=['POST'])
 @login_required
 def messages_main_post():
@@ -52,6 +54,7 @@ def messages_main_post():
         flash(pluralize(len(keys), 'message') + ' marked as read. ')
     return redirect('/messages/', code=302)
 
+# The page for a user to write new messages.
 @app.route('/messages/write/', methods=['GET', 'POST'])
 @login_required
 def messages_write_new():
@@ -85,6 +88,7 @@ def messages_read(key):
             return redirect('/conversation/' + conversation_key.urlsafe() + '/', code=302)
     return render_template('messages/invalid.html')
 
+# The page to view a specific conversation.
 @app.route('/conversation/<key>/', methods=['GET', 'POST'])
 @login_required
 def messages_view_conversation(key):
@@ -107,7 +111,7 @@ def messages_view_conversation(key):
         form=form)
 
 
-# Non-route functionsa
+# Non-route functions.
 def get_conversation_if_valid(key):
     if key:
         conversation = Conversation.get_by_id(key.id())

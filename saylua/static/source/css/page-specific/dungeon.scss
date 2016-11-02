@@ -1,29 +1,48 @@
-#dungeon-wrapper {
-  width: 750px;
-  margin: auto;
-}
+@import 'dungeon/cells';
+@import 'dungeon/entities';
 
-#dungeon {
-  position: relative;
-  float: left;
-  width: 500px;
-  min-height: 50px;
-  background-color: #322125;
-}
-
-#dungeon-info {
-  float: left;
+#dungeon-wrapper, #dungeon-wrapper > * {
   box-sizing: border-box;
-  width: 250px;
-  padding-left: 5px;
 }
 
-.dungeonTile {
+#dungeon-wrapper {
+  background: #222;
+  width: 100%;
+
+  position: relative;
+}
+
+#dungeon-client-mount {
   float: left;
-  cursor: pointer;
+  width: 70%;
 }
 
-.dungeonObject {
-  position: absolute;
-  z-index: 1;
+#dungeon-debug-mount {
+  float: left;
+  width: 100%;
+}
+
+#dungeon-info-mount {
+  float: left;
+
+  width: 30%;
+}
+
+#dungeon-info-mount p {
+  padding: 0px 15px;
+}
+
+.dungeon-map {
+  background: #222;
+  position: relative;
+
+  height: 800px;
+  width: 100%;
+}
+
+.dungeon-mini-map {
+  background: #222;
+
+  // FIXME: Temporary Band-aid
+  margin-top: -6px;
 }
