@@ -108,7 +108,11 @@ def saylua_user_object(user_key):
 @app.template_filter('name_from_key_string')
 def display_name_from_key(user_key):
     u_key = make_ndb_key(user_key)
-    return u_key.get().display_name
+    found = u_key.get()
+    if found:
+        return found.display_name
+    else:
+        return "Unknown User"
 
 @app.template_filter('user_from_key_string')
 def user_from_key_string(user_key):

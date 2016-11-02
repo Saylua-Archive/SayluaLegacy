@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 from bcryptmaster import bcrypt
+from saylua.models.role import Role
 
 class User(ndb.Model):
     # An exception thrown if an operation would make a user's currency negative
@@ -28,6 +29,9 @@ class User(ndb.Model):
     permabanned = ndb.BooleanProperty(default=False)
     banned_until = ndb.DateTimeProperty(auto_now_add=True)
 
+    #Privilege Role
+    role_id = ndb.StringProperty(default='user')
+
     # Currency
     star_shards = ndb.IntegerProperty(default=0)
     cloud_coins = ndb.IntegerProperty(default=0)
@@ -45,6 +49,9 @@ class User(ndb.Model):
     gender = ndb.StringProperty(default='')
     pronouns = ndb.StringProperty(default='')
     bio = ndb.StringProperty(default='')
+
+    def get_role(this):
+        return Role.get_by_id(this.role_id)
 
     @classmethod
     def by_username(cls, username):

@@ -38,6 +38,6 @@ def load_user():
     # Update user's last_action timestamp if it's been at least LAST_ACTION_OFFSET minutes
     current = datetime.datetime.now()
     mins_ago = current - datetime.timedelta(minutes=app.config['LAST_ACTION_OFFSET'])
-    if g.user.last_action < mins_ago:
+    if g.user and g.user.last_action < mins_ago:
         g.user.last_action = current
         g.user.put()

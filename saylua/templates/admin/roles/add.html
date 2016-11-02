@@ -1,0 +1,35 @@
+{% extends "admin/template.html" %}
+{% set section_title = "Add New Role" %}
+{% block section_body %}
+<p>
+  Add new roles to the site here!
+
+</p>
+<form method="post">
+  <p>
+    <input type="text" placeholder="Role Name" name="name">
+  </p>
+  <table class="form-table">
+    {% for priv in privs %}
+    <tr>
+      <th class="label break">
+        <label>{{ priv }}</label>
+      </th>
+      <td>
+        <div class="switch">
+          <label>
+            <input type="radio" name="{{ priv }}" value="True">
+            <b>True</b>
+          </label>
+          <label>
+            <input type="radio" name="{{ priv }}" value="False">
+            <b>False</b>
+          </label>
+        </div>
+      </td>
+    </tr>
+  {% endfor %}
+  </table>
+  <button type="submit" class="small">Create Role</button>
+</form>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "admin/template.html" %}
+{% set section_title = "Edit Roles" %}
+{% block section_body %}
+<form method="post">
+  <table class="form-table">
+    <tr>
+      <td></td>
+      {% for role in roles %}
+      <td>{{ role.key.id() }}</td>
+      {% endfor %}
+    </tr>
+    {% for priv in privs %}
+    <tr>
+      <td>
+        <label>{{ priv }}</label>
+      </td>
+      {% for role in roles %}
+      <td>
+        <input type="checkbox" name="{{ role.key.id() ~ "_*_" ~ priv }}"{% if role|attr(priv)  %} checked{% endif %}>
+      </td>
+      {% endfor %}
+    </tr>
+  {% endfor %}
+  </table>
+  <button type="submit" class="small">Save Changes</button>
+</form>
+{% endblock %}

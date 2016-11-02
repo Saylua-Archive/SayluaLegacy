@@ -35,6 +35,7 @@ def new_board():
 
 @app.route('/forums/')
 def forums_home():
+    #flash(g.user.get_role().can_edit_roles)
     categories = BoardCategory.query().fetch()
     blocks = []
     for category in categories:
@@ -94,6 +95,7 @@ def forums_thread(thread_id):
             for post in posts:
                 post.board_id = destination
                 post.put()
+            flash("Thread moved successfully!")
             return redirect("forums/thread/" + str(thread_id) + "/")
         else:
             creator_key = g.user.key.urlsafe()
