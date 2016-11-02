@@ -25,6 +25,16 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def admin_access_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if g.logged_in == False:
+            return redirect(url_for('login'))
+        if not g.user.get_role().can_access_admin:
+            return render_template('403.html'), 403
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(join(app.root_path, 'static'),

@@ -1,4 +1,4 @@
-from saylua import app, login_required
+from saylua import app, login_required, admin_access_required
 from flask import (render_template, redirect, make_response,
                    url_for, flash, session, abort, request, g)
 
@@ -6,6 +6,7 @@ from saylua.utils import get_from_request
 from saylua.models.role import Role
 
 @app.route('/admin/roles/add/', methods=['GET', 'POST'])
+@admin_access_required
 def admin_panel_roles_add():
     if request.method == 'POST':
         name = request.form.get('name')
@@ -21,6 +22,7 @@ def admin_panel_roles_add():
     return render_template('admin/roles/add.html', privs=privs)
 
 @app.route('/admin/roles/edit/', methods=['GET', 'POST'])
+@admin_access_required
 def admin_panel_roles_edit():
     roles = Role.query().fetch()
     privs = Role().to_dict().keys()

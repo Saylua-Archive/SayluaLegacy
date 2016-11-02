@@ -1,4 +1,4 @@
-from saylua import app
+from saylua import app, admin_access_required
 from flask import (render_template, redirect, g,
                    url_for, flash, session, abort, request)
 from google.appengine.ext import ndb
@@ -11,6 +11,7 @@ THREADS_PER_PAGE = 10
 POSTS_PER_PAGE = 10
 
 @app.route('/admin/forums/newcategory/', methods=['GET', 'POST'])
+@admin_access_required
 def new_board_category():
     if request.method == 'POST':
         category = request.form.get('category')
@@ -20,6 +21,7 @@ def new_board_category():
     return render_template("/admin/forums/newcategory.html")
 
 @app.route('/admin/forums/newboard/', methods=['GET', 'POST'])
+@admin_access_required
 def new_board():
     categories = BoardCategory.query().fetch()
     if request.method == 'POST':
