@@ -19,7 +19,7 @@ class UserCheck:
         self.user = User.by_username(field.data)
         if not self.user:
             raise validators.StopValidation(
-                "We can't find a user with that name.")
+                "We can't find a user with the name %s." % field.data)
 
     def PasswordValid(self, form, field):
         if not self.user:

@@ -1,7 +1,9 @@
 from saylua.utils.terrain import Terrain
 from saylua.utils.terrain import helpers
 
-import cPickle, copy
+import cPickle
+import copy
+
 
 # TileGrid -> Required by dungeon(s)
 # Utility class for the terrain generators.
@@ -80,6 +82,7 @@ class TileGrid():
   def _debug_print(self, default_tile):
     def translate(cell):
       return '0' if cell.get('tile') == default_tile else '1'
+
     def flatten_row(row):
       return "".join([translate(cell) for cell in row])
 

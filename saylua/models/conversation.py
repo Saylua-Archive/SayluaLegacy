@@ -44,8 +44,8 @@ class Conversation(ndb.Model):
 
         # Update the user statuses
         sender = UserConversation.query(
-            UserConversation.conversation_key==conversation_key,
-            UserConversation.user_key==user_key).get()
+            UserConversation.conversation_key == conversation_key,
+            UserConversation.user_key == user_key).get()
 
         # Check that the user has permission to reply to this conversation
         if not sender:
@@ -59,8 +59,8 @@ class Conversation(ndb.Model):
         # Update recipient status
         for recipient_key in sender.recipient_keys:
             recipient = UserConversation.query(
-                UserConversation.conversation_key==conversation_key,
-                UserConversation.user_key==recipient_key).get()
+                UserConversation.conversation_key == conversation_key,
+                UserConversation.user_key == recipient_key).get()
             # This should always exist, but if not something is wrong with the data.
             if recipient:
                 recipient.time = time

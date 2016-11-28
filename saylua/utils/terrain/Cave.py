@@ -4,8 +4,10 @@ from random import shuffle
 # Cave -> Required by Terrain
 # ===================================================
 # In the future, have this dungeon make itself more dangerous over time.
-# Continuously generating low level slimes that grow in size (And therefore strength) as the number of turns increases.
-# The goal on Cave dungeons should be to find the exit as fast as possible or suffer the consequences.
+# Continuously generating low level slimes that grow in size (And therefore strength)
+# as the number of turns increases.
+# The goal on Cave dungeons should be to find the exit as fast as possible or suffer
+# the consequences.
 
 ## Todo:
 ## - Above mentioned lateral difficulty.
@@ -59,6 +61,7 @@ def iterate(options, grid):
       grid.set((x, y), '0x01')
 
   return True
+
 
 def finalize(options, grid):
   for x, y, cell in grid.iterate():
@@ -144,11 +147,12 @@ def populate(options, grid):
 
   return entities
 
+
 API = {
   "generate": generate,
   "finalize": finalize,
-  "iterate":  iterate,
-  "populate":  populate,
+  "iterate": iterate,
+  "populate": populate,
   "default_options": {
     "fill_percentage": 0.63,
     "minimum_neighbors": 4,

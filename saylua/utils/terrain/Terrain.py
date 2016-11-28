@@ -2,6 +2,7 @@ from saylua.utils.terrain import Cave
 
 import json
 
+
 # This belongs in it's own file, probably as a class.
 # It is here for now while we iterate.
 def mutate(grid, entities, mutation):
@@ -54,9 +55,6 @@ def mutate(grid, entities, mutation):
     event_log = "OH MY SWEET GODS ABOVE"
 
   return grid, entities, event_log
-
-
-
 
 
 terrains = {
