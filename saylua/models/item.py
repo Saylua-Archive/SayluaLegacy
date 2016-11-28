@@ -2,12 +2,14 @@ from google.appengine.ext import ndb
 
 import re
 
+
 # StructuredProperty for Conversation
 class ItemAvatarData(ndb.Model):
     f_front_image = ndb.StringProperty()
     f_back_image = ndb.StringProperty()
     m_front_image = ndb.StringProperty()
     m_back_image = ndb.StringProperty()
+
 
 class Item(ndb.Model):
     name = ndb.StringProperty()
@@ -34,7 +36,7 @@ class Item(ndb.Model):
         return cls.query(cls.url_name==name.lower()).get()
 
     @classmethod
-    def update_item(cls, item_key, name, image_url, description):
+    def update_item(cls, item, name, image_url, description):
         item.name = name
         item.image_url = image_url
         item.description = description

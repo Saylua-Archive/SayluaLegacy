@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 
+
 class Role(ndb.Model):
     can_post_threads = ndb.BooleanProperty(default=False, indexed=False)
     can_comment = ndb.BooleanProperty(default=False, indexed=False)

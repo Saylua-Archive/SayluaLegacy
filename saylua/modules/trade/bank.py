@@ -1,14 +1,15 @@
 from saylua import app, login_required
-from saylua.utils import make_ndb_key, get_from_request
+from saylua.utils import get_from_request
 from saylua.models.user import User
 from saylua.models.notification import Notification
-from flask import (render_template, redirect, g,
-                   url_for, flash, session, abort, request)
+from flask import render_template, redirect, g, url_for, flash, request
+
 
 @app.route('/bank/', methods=['GET', 'POST'])
 @login_required
 def bank_main():
     return render_template('bank/main.html')
+
 
 @app.route('/bank/transfer/', methods=['GET', 'POST'])
 @login_required
@@ -42,13 +43,14 @@ def bank_transfer():
                     except User.InvalidCurrencyException:
                         flash('You do not have enough funds to send the amount entered.', 'error')
                     except:
-                        flash('Currency transfer failed for an unexpected reason. Try again later.', 'error')
+                        flash('Currency transfer failed for an unexpected reason. Try again later.',
+                            'error')
                     else:
-                        flash('You have successfully sent %d SS and %d CC to %s' % (ss, cc, recipient))
-
+                        flash('You have successfully sent %d SS and %d CC to %s'
+                            % (ss, cc, recipient))
                         # Send a notification to the user who received the currency
-                        Notification.send(recipient_key, '%s sent you %d SS and %d CC' % (g.user.display_name, ss, cc), '/bank/')
-
+                        Notification.send(recipient_key, '%s sent you %d SS and %d CC'
+                            % (g.user.display_name, ss, cc), '/bank/')
                         return redirect(url_for('bank_transfer'))
                 else:
                     flash('The user you are trying to send money to does not exist!', 'error')

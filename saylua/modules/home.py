@@ -1,6 +1,6 @@
 from saylua import app
-from flask import (render_template, redirect,
-                   url_for, flash, session, abort, request)
+from flask import render_template, redirect
+
 
 @app.route('/')
 def home():
@@ -8,6 +8,7 @@ def home():
     if logged_in:
         return redirect('/news/', code=302)
     return render_template("home/landing.html")
+
 
 @app.route('/news/')
 def home_news():

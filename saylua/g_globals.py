@@ -1,9 +1,8 @@
 from saylua import app
 from flask import request, g
-from google.appengine.ext import ndb
-from saylua.models.user import LoginSession, User
 from saylua.utils import make_ndb_key
 import datetime
+
 
 @app.before_request
 def load_user():
@@ -29,18 +28,23 @@ def load_user():
         found = s_key.get()
         if not found or found.user_key != user_key:
             found = None
+
     if not found:
         g.logged_in = False
         g.user = None
         g.user_key = None
         return None
+
     founduser = u_key.get()
     g.logged_in = True
     g.user = founduser
 
-    # Update user's last_action timestamp if it's been at least LAST_ACTION_OFFSET minutes
+    # Update user's last_action timestamp if it's been at least
+    # LAST_ACTION_OFFSET minutes
     current = datetime.datetime.now()
-    mins_ago = current - datetime.timedelta(minutes=app.config['LAST_ACTION_OFFSET'])
+    mins_ago = current - datetime.timedelta(
+        minutes=app.config['LAST_ACTION_OFFSET'])
+
     if g.user and g.user.last_action < mins_ago:
         g.user.last_action = current
         g.user.put()

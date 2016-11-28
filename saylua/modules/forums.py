@@ -1,14 +1,14 @@
 from saylua import app, admin_access_required
-from flask import (render_template, redirect, g,
-                   url_for, flash, session, abort, request)
+from flask import render_template, redirect, g, flash, request
 from google.appengine.ext import ndb
-from saylua.utils import make_ndb_key, urlize
+from saylua.utils import urlize
 import math
 
 from saylua.models.forum import Board, BoardCategory, ForumThread, ForumPost
 from google.appengine.datastore.datastore_query import Cursor
 THREADS_PER_PAGE = 10
 POSTS_PER_PAGE = 10
+
 
 @app.route('/admin/forums/newcategory/', methods=['GET', 'POST'])
 @admin_access_required
@@ -19,6 +19,7 @@ def new_board_category():
         new_category.put()
         flash("New category: " + category + " successfully created.")
     return render_template("/admin/forums/newcategory.html")
+
 
 @app.route('/admin/forums/newboard/', methods=['GET', 'POST'])
 @admin_access_required
@@ -35,9 +36,9 @@ def new_board():
         flash("New board: \"" + title + "\" successfully created!")
     return render_template("/admin/forums/newboard.html", categories=categories)
 
+
 @app.route('/forums/')
 def forums_home():
-    #flash(g.user.get_role().can_edit_roles)
     categories = BoardCategory.query().fetch()
     blocks = []
     for category in categories:
@@ -47,6 +48,7 @@ def forums_home():
         block.append(boards)
         blocks.append(block)
     return render_template("forums/main.html", forum_blocks=blocks)
+
 
 @app.route('/forums/board/<board_id>/', methods=['GET', 'POST'])
 def forums_board(board_id):
@@ -72,13 +74,17 @@ def forums_board(board_id):
         page_number = request.args.get('page')
         if page_number is None:
             page_number = 1
+
         page_number = int(page_number)
         thread_query = ForumThread.query(ForumThread.board_id==board.key.id()).order(
-                -ForumThread.is_pinned, -ForumThread.last_action)
+            -ForumThread.is_pinned, -ForumThread.last_action)
         threads = thread_query.fetch(limit=THREADS_PER_PAGE,
-                offset=((page_number - 1) * THREADS_PER_PAGE))
-        page_count = int(math.ceil(len(thread_query.fetch(keys_only=True))/float(THREADS_PER_PAGE)))
+            offset=((page_number - 1) * THREADS_PER_PAGE))
+
+        total_threads = len(thread_query.fetch(keys_only=True))
+        page_count = int(math.ceil(total_threads / float(THREADS_PER_PAGE)))
     return render_template("forums/board.html", board=board, threads=threads, page_count=page_count)
+
 
 @app.route('/forums/thread/<thread_id>/', methods=['GET', 'POST'])
 def forums_thread(thread_id):

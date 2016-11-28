@@ -2,12 +2,14 @@ from google.appengine.ext import ndb
 from dateutil import tz
 import re
 
+
 def make_ndb_key(key_string):
     try:
         key = ndb.Key(urlsafe=key_string)
     except Exception:
         return None
     return key
+
 
 def pluralize(count, singular_noun, plural_noun=None):
     if not plural_noun:
@@ -16,11 +18,13 @@ def pluralize(count, singular_noun, plural_noun=None):
         return str(count) + ' ' + singular_noun
     return str(count) + ' ' + plural_noun
 
+
 def saylua_time(time):
     from_zone = tz.gettz('UTC')
     to_zone = tz.gettz('America/New_York')
-    time = time.replace(tzinfo = from_zone)
+    time = time.replace(tzinfo=from_zone)
     return time.astimezone(to_zone)
+
 
 def get_from_request(request, key, form_key=None, args_key=None):
     if not args_key:
@@ -33,6 +37,7 @@ def get_from_request(request, key, form_key=None, args_key=None):
     elif request.args.get(args_key):
         result = request.args.get(args_key)
     return result
+
 
 def urlize(s):
     s = re.sub('[^0-9a-zA-Z]+', '_', s).lower()

@@ -4,16 +4,14 @@ from google.appengine.api import memcache
 from saylua.utils.terrain import Terrain
 from saylua.utils.terrain.TileGrid import TileGrid
 from saylua.utils.terrain.EntityContainer import EntityContainer
-from saylua.utils.terrain.helpers import diff
 
-from saylua.utils import saylua_time
-
-from flask import (url_for, session, abort, request, g)
+from flask import request, g
 
 from datetime import datetime
 from random import shuffle
 
 import json
+
 
 def generate_dungeon():
   # Grab a random dungeon type
@@ -51,7 +49,7 @@ def api_dungeon_request():
   # Acquire our dungeon
   dungeon = memcache.get('dungeon-%s' % g.user_key.urlsafe())
 
-  if not dungeon or (debug.get('regenerate') == True and app.debug):
+  if not dungeon or (debug.get('regenerate') and app.debug):
     # Initialize the user's very first dungeon.
     name, grid, entities = generate_dungeon()
     dungeon = Dungeon()
@@ -105,6 +103,7 @@ def api_dungeon_request():
       "entityLayer": entities_visible,
       "eventLog": event_log
     })
+
 
 class Dungeon:
     pass

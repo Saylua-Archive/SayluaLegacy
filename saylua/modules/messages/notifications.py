@@ -1,9 +1,9 @@
 from saylua import app, login_required
 from saylua.utils import make_ndb_key, pluralize
-from flask import (render_template, redirect, make_response,
-                   url_for, flash, session, abort, request, g)
+from flask import render_template, redirect, flash, request, g
 from google.appengine.ext import ndb
 from saylua.models.notification import Notification
+
 
 @app.route('/notifications/', methods=['GET'])
 @login_required
@@ -21,6 +21,7 @@ def notifications_main():
         Notification.is_read, -Notification.time).fetch_page(per_page, offset=offset)
     return render_template("notifications/all.html",
         viewed_notifications=notifications, page=page, more_pages=more)
+
 
 @app.route('/notifications/', methods=['POST'])
 @login_required
@@ -51,6 +52,7 @@ def notifications_main_post():
         ndb.put_multi(notifications)
         flash(pluralize(len(keys), 'notification') + ' marked as read. ')
     return redirect('/notifications/', code=302)
+
 
 @app.route('/notification/<key>/')
 @login_required

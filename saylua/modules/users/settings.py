@@ -1,12 +1,12 @@
 from saylua import app, login_required
-from flask import (render_template, redirect, g,
-                   url_for, flash, session, abort, request)
+from flask import render_template, redirect, g, url_for, flash, request
 import datetime
 
 from saylua.utils.form import flash_errors
 from saylua.models.user import User
 from forms.settings import (GeneralSettingsForm, DetailsForm, UsernameForm,
     EmailForm, PasswordForm)
+
 
 # User Settings
 @app.route('/settings/', methods=['GET', 'POST'])
@@ -21,6 +21,7 @@ def user_settings():
     # Allows user to change general on/off settings
     return render_template('user/settings/main.html', form=form)
 
+
 @app.route('/settings/details/', methods=['GET', 'POST'])
 @login_required
 def user_settings_details():
@@ -32,6 +33,7 @@ def user_settings_details():
     flash_errors(form)
     return render_template('user/settings/details.html', form=form)
 
+
 @app.route('/settings/css/', methods=['GET', 'POST'])
 @login_required
 def user_settings_css():
@@ -40,6 +42,7 @@ def user_settings_css():
         g.user.put()
         flash('You have successfully changed your CSS. ')
     return render_template("user/settings/css.html")
+
 
 @app.route('/settings/username/', methods=['GET', 'POST'])
 @login_required
@@ -55,7 +58,6 @@ def user_settings_username():
             return redirect(url_for('user_settings_username'))
 
         username = form.display_name.data
-        user_key = User.key_by_username(username)
         if username.lower() in g.user.usernames:
             # If the user is changing to a name they already own, change case
             g.user.display_name = username
@@ -70,7 +72,8 @@ def user_settings_username():
             max_usernames = app.config['MAX_USERNAMES']
             if len(g.user.usernames) >= max_usernames:
                 # User cannot exceed maximum number of usernames.
-                flash('You cannot have more than %d usernames. Release some old usernames to change your name.' % max_usernames,
+                flash("""You cannot have more than %d usernames.
+                    Release some old usernames to change your name.""" % max_usernames,
                     'error')
                 return render_template('user/settings/username.html')
             g.user.display_name = username
@@ -88,7 +91,7 @@ def user_settings_username():
 @login_required
 def user_settings_username_release():
     username = request.form.get('username')
-    if not username or not username in g.user.usernames:
+    if not username or username not in g.user.usernames:
         flash('You are trying to release an invalid username!', 'error')
     elif username == g.user.display_name.lower():
         flash('You cannot release the username you are currently using!', 'error')
@@ -97,6 +100,7 @@ def user_settings_username_release():
         g.user.put()
         flash('You have successfully released the username ' + username)
     return redirect(url_for('user_settings_username'))
+
 
 @app.route('/settings/email/', methods=['GET', 'POST'])
 @login_required
@@ -113,6 +117,7 @@ def user_settings_email():
     flash_errors(form)
 
     return render_template('user/settings/email.html', form=form)
+
 
 @app.route('/settings/password/', methods=['GET', 'POST'])
 @login_required

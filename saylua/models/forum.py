@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 
+
 class Board(ndb.Model):
     title = ndb.StringProperty(indexed=True)
     url_title = ndb.StringProperty()
@@ -7,8 +8,10 @@ class Board(ndb.Model):
     category_key = ndb.StringProperty(indexed=True)
     description = ndb.TextProperty()
 
+
 class BoardCategory(ndb.Model):
     title = ndb.StringProperty(indexed=True)
+
 
 class ForumThread(ndb.Model):
     creator_key = ndb.StringProperty(indexed=True)
@@ -18,6 +21,7 @@ class ForumThread(ndb.Model):
     title = ndb.StringProperty()
     is_pinned = ndb.BooleanProperty(default=False)
     is_locked = ndb.BooleanProperty(default=False)
+
 
 class ForumPost(ndb.Model):
     creator_key = ndb.StringProperty(indexed=True)

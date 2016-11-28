@@ -1,9 +1,12 @@
 from saylua import app
-from flask import (render_template, redirect, send_file,
-                   url_for, session, abort, request)
+from flask import send_file
+
 from PIL import Image
 from StringIO import StringIO
-import os, imghdr, json
+import os
+import imghdr
+import json
+
 
 @app.route('/api/ha/wardrobe/')
 def api_ha_wardrobe():
@@ -12,9 +15,11 @@ def api_ha_wardrobe():
 
     return json.dumps(item_images)
 
+
 @app.route('/api/ha/<base>/')
 def api_ha_image_base(base):
     return api_ha_image(base, '')
+
 
 @app.route('/api/ha/<base>/<items>/')
 def api_ha_image(base, items):
@@ -39,6 +44,7 @@ def api_ha_image(base, items):
                 result.paste(curr_image, (0, 0), curr_image)
 
     return serve_pil_image(result)
+
 
 def serve_pil_image(pil_img):
     img_io = StringIO()

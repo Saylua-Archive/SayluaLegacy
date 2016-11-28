@@ -1,14 +1,13 @@
-from flask import (render_template, redirect, make_response,
-                   url_for, flash, session, abort, request, g)
+from flask import render_template, redirect, flash, request, g
 from google.appengine.ext import ndb
 
 from saylua import app, login_required
 from saylua.utils import make_ndb_key, pluralize, get_from_request
 from saylua.models.conversation import UserConversation, Conversation
-from saylua.models.user import User
 
 from forms import ConversationForm, ConversationReplyForm, recipient_check
 from saylua.utils.form import flash_errors
+
 
 # The main page where the user views all of their messages.
 @app.route('/messages/')
@@ -20,6 +19,7 @@ def messages_main():
     if not messages:
         messages = []
     return render_template('messages/all.html', viewed_messages=messages)
+
 
 # The submit action for the user to update their messages.
 @app.route('/messages/', methods=['POST'])
@@ -54,6 +54,7 @@ def messages_main_post():
         flash(pluralize(len(keys), 'message') + ' marked as read. ')
     return redirect('/messages/', code=302)
 
+
 # The page for a user to write new messages.
 @app.route('/messages/write/', methods=['GET', 'POST'])
 @login_required
@@ -71,6 +72,7 @@ def messages_write_new():
     flash_errors(form)
     return render_template('messages/write.html', form=form)
 
+
 # This route just marks a message as read and then redirects the user to the
 # message they were looking to read. We make it a separate route so that the
 # main "looking at a message" route doesn't have to bother with looking up
@@ -87,6 +89,7 @@ def messages_read(key):
             conversation.put()
             return redirect('/conversation/' + conversation_key.urlsafe() + '/', code=302)
     return render_template('messages/invalid.html')
+
 
 # The page to view a specific conversation.
 @app.route('/conversation/<key>/', methods=['GET', 'POST'])

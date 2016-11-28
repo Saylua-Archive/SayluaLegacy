@@ -1,14 +1,14 @@
 from google.appengine.ext import ndb
-from saylua.models.user import User
-from saylua.utils import make_ndb_key
 
 import datetime
+
 
 # StructuredProperty for Conversation
 class ConversationMessage(ndb.Model):
     user_key = ndb.KeyProperty()
     text = ndb.StringProperty()
     time = ndb.DateTimeProperty(auto_now_add=True)
+
 
 class Conversation(ndb.Model):
     title = ndb.StringProperty()
@@ -79,6 +79,7 @@ class Conversation(ndb.Model):
         sender.put()
 
         return result
+
 
 # Child
 class UserConversation(ndb.Model):

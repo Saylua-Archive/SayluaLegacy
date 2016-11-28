@@ -1,9 +1,10 @@
 from saylua import app
-from wtforms import Form, validators, TextField
+from wtforms import Form
 from saylua.utils.form import sl_validators, UserCheck
 from saylua.utils.form.fields import SlField, SlTextAreaField
 
 recipient_check = UserCheck()
+
 
 class ConversationForm(Form):
     recipient = SlField('Recipient Name', [
@@ -21,6 +22,7 @@ class ConversationForm(Form):
         sl_validators.Required(),
         sl_validators.NotBlank(),
         sl_validators.Min(2)])
+
 
 class ConversationReplyForm(Form):
     text = SlTextAreaField('Reply', [

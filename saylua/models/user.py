@@ -2,6 +2,7 @@ from google.appengine.ext import ndb
 from bcryptmaster import bcrypt
 from saylua.models.role import Role
 
+
 class User(ndb.Model):
     # An exception thrown if an operation would make a user's currency negative
     class InvalidCurrencyException(Exception):
@@ -29,7 +30,7 @@ class User(ndb.Model):
     permabanned = ndb.BooleanProperty(default=False)
     banned_until = ndb.DateTimeProperty(auto_now_add=True)
 
-    #Privilege Role
+    # Privilege Role
     role_id = ndb.StringProperty(default='user')
 
     # Currency
@@ -103,6 +104,7 @@ class User(ndb.Model):
     def except_if_currency_invalid(cls, user):
         if user.star_shards < 0 or user.cloud_coins < 0:
             raise cls.InvalidCurrencyException('Currency cannot be negative!')
+
 
 class LoginSession(ndb.Model):
     user_key = ndb.StringProperty(indexed=True)

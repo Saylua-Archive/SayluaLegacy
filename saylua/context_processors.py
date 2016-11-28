@@ -1,10 +1,10 @@
 from saylua import app
-from dateutil import tz
 import datetime
-from flask import request, g
+from flask import g
 from saylua.models.conversation import UserConversation
 from saylua.models.notification import Notification
 from saylua.models.user import User
+
 
 @app.context_processor
 def inject_notifications():
@@ -18,12 +18,15 @@ def inject_notifications():
         notifications = []
     return dict(notifications_count=notifications_count, notifications=notifications)
 
+
 @app.context_processor
 def inject_messages():
     if not g.logged_in:
         return {}
-    messages_count = UserConversation.query(UserConversation.user_key==g.user.key,
-        UserConversation.is_read==False, UserConversation.is_deleted==False).count(limit=100)
+    messages_count = UserConversation.query(
+        UserConversation.user_key==g.user.key,
+        UserConversation.is_read==False,
+        UserConversation.is_deleted==False).count(limit=100)
     messages = UserConversation.query(UserConversation.user_key==g.user.key,
         UserConversation.is_deleted==False).order(
         UserConversation.is_read, -UserConversation.time).fetch(limit=5)
@@ -31,12 +34,15 @@ def inject_messages():
         messages = []
     return dict(messages_count=messages_count, messages=messages)
 
+
 @app.context_processor
 def inject_time():
     return dict(saylua_time=datetime.datetime.now())
 
+
 @app.context_processor
 def inject_users_online():
-    mins_ago = datetime.datetime.now() - datetime.timedelta(minutes=app.config['USERS_ONLINE_RANGE'])
+    mins_ago = datetime.datetime.now() - datetime.timedelta(
+        minutes=app.config['USERS_ONLINE_RANGE'])
     user_count = User.query(User.last_action >= mins_ago).count()
     return dict(users_online_count=user_count)

@@ -3,6 +3,7 @@ from wtforms import validators
 
 from saylua.models.user import User
 
+
 # Base class for other validators
 class SayluaValidator:
     def __init__(self, message=None):
@@ -33,6 +34,7 @@ class SayluaValidator:
     def clientValidatorMessage(self):
         return self.message
 
+
 class Required(SayluaValidator):
     def __init__(self, message=None):
         self.message = message
@@ -43,6 +45,7 @@ class Required(SayluaValidator):
 
     def clientValidatorName(self):
         return 'required'
+
 
 class NotBlank(SayluaValidator):
     def __init__(self, message=None):
@@ -55,6 +58,7 @@ class NotBlank(SayluaValidator):
     def clientValidatorName(self):
         return 'notblank'
 
+
 class EqualTo(SayluaValidator):
     def __init__(self, fieldname, message=None):
         self.fieldname = fieldname
@@ -64,7 +68,8 @@ class EqualTo(SayluaValidator):
         try:
             other = form[self.fieldname]
         except KeyError:
-            raise ValidationError(field.gettext("Invalid field name '%s'.") % self.fieldname)
+            raise validators.ValidationError(field.gettext(
+                "Invalid field name '%s'.") % self.fieldname)
 
         self.defaultMessage = '<field> must match %s!' % other.label.text
         return field.data == other.data
@@ -74,6 +79,7 @@ class EqualTo(SayluaValidator):
 
     def clientValidatorValue(self):
         return self.fieldname
+
 
 class Min(SayluaValidator):
     def __init__(self, length, message=None):
@@ -106,6 +112,7 @@ class Max(SayluaValidator):
     def clientValidatorValue(self):
         return self.length
 
+
 class IsNot(SayluaValidator):
     def __init__(self, pattern, message=None):
         self.pattern = pattern
@@ -120,6 +127,7 @@ class IsNot(SayluaValidator):
 
     def clientValidatorValue(self):
         return self.pattern
+
 
 class MatchesRegex(SayluaValidator):
     def __init__(self, regex, message=None):
@@ -147,14 +155,16 @@ class Email(MatchesRegex):
     def clientValidatorMessage(self):
         return self.message or self.defaultMessage
 
+
 class Username(MatchesRegex):
     def __init__(self, message=None):
         self.regex = '^[A-Za-z0-9+~._-]+$'
         self.message = message
-        self.defaultMessage = 'Usernames may only contain letters, numbers, and these characters: +~._-'
+        self.defaultMessage = 'Usernames may only contain letters, numbers, and +~._-'
 
     def clientValidatorMessage(self):
         return self.message or self.defaultMessage
+
 
 class UsernameUnique(SayluaValidator):
     def __init__(self, whitelist=None, message=None):

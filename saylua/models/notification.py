@@ -1,5 +1,5 @@
 from google.appengine.ext import ndb
-import user
+
 
 class Notification(ndb.Model):
     user_key = ndb.KeyProperty(indexed=True)

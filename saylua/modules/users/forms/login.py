@@ -3,9 +3,8 @@ from wtforms import Form
 from saylua.utils.form import sl_validators, UserCheck
 from saylua.utils.form.fields import SlField, SlPasswordField, SlBooleanField
 
-from saylua.models.user import User
-
 login_check = UserCheck()
+
 
 class LoginForm(Form):
     username = SlField('Username', [
@@ -15,6 +14,7 @@ class LoginForm(Form):
     password = SlPasswordField('Password', [
         sl_validators.Required(),
         login_check.PasswordValid])
+
 
 class RegisterForm(Form):
     username = SlField('Username', [
@@ -33,5 +33,6 @@ class RegisterForm(Form):
         sl_validators.EqualTo('confirm_password', message='Passwords must match.')
     ])
     confirm_password = SlPasswordField('Confirm Password')
-    accept_tos = SlBooleanField('I agree to the <a href="/terms/" target="_blank">Terms of Service</a>',
+    accept_tos = SlBooleanField(
+        'I agree to the <a href="/terms/" target="_blank">Terms of Service</a>',
         [sl_validators.Required(message='You must agree to the Terms of Service!')])

@@ -1,13 +1,12 @@
 from saylua import app, login_required
-from flask import (render_template, redirect, make_response,
-                   url_for, flash, session, abort, request, g)
+from flask import render_template, redirect, make_response, url_for, request, g
 from google.appengine.ext import ndb
-import random, string
 import datetime
 
 from saylua.utils.form import flash_errors
 from saylua.models.user import LoginSession, User
 from forms.login import LoginForm, RegisterForm, login_check
+
 
 @app.context_processor
 def inject_sidebar_login_form():
@@ -20,6 +19,7 @@ def inject_sidebar_login_form():
     form = LoginForm()
     return dict(sidebar_form=form)
 
+
 # Login form shown to the user
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -29,13 +29,13 @@ def login():
         found = login_check.user
         found_key = found.key.urlsafe()
 
-        #Add a session to the datastore
+        # Add a session to the datastore
         expires = datetime.datetime.utcnow()
         expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
         new_session = LoginSession(user_key=found_key, expires=expires)
         session_key = new_session.put().urlsafe()
 
-        #Generate a matching cookie and redirct
+        # Generate a matching cookie and redirct
         resp = make_response(redirect(url_for('home')))
         resp.set_cookie("user_key", found_key, expires=expires)
         resp.set_cookie("session_key", session_key, expires=expires)
@@ -50,22 +50,26 @@ def login():
 def recover_login():
     return render_template('user/login/recover.html')
 
+
 @app.route('/login/reset/<user>/<code>/')
 def reset_password(user, code):
     return render_template('user/login/recover.html')
 
+
 @app.route('/logout/')
+@login_required
 def logout():
     user_key = request.cookies.get('user_key')
     session_key = request.cookies.get('session_key')
     key = ndb.Key(urlsafe=session_key)
     found = key.get()
-    if found != None and found.user_key == user_key:
+    if found is not None and found.user_key == user_key:
         found.key.delete()
     resp = make_response(redirect(url_for('home')))
     resp.set_cookie('user_key', '', expires=0)
     resp.set_cookie('session_key', '', expires=0)
     return resp
+
 
 # Registration form shown to the user
 @app.route('/register/', methods=['GET', 'POST'])

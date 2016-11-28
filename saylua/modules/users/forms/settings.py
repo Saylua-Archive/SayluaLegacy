@@ -4,15 +4,16 @@ from wtforms import Form, RadioField
 from saylua.utils.form import sl_validators, UserCheck
 from saylua.utils.form.fields import SlField, SlTextAreaField, SlPasswordField
 
+
 class GeneralSettingsForm(Form):
     notified_on_pings = RadioField('Receive notifications for pings?',
-        choices=[('True', 'Yes'),('False', 'No')])
+        choices=[('True', 'Yes'), ('False', 'No')])
     ha_disabled = RadioField('Disable Human Avatars?',
-        choices=[('True', 'Yes'),('False', 'No')])
+        choices=[('True', 'Yes'), ('False', 'No')])
     autosubscribe_threads = RadioField('Autosubscribe to your own threads?',
-        choices=[('True', 'Yes'),('False', 'No')])
+        choices=[('True', 'Yes'), ('False', 'No')])
     autosubscribe_posts = RadioField('Autosubscribe to threads you post on?',
-        choices=[('True', 'Yes'),('False', 'No')])
+        choices=[('True', 'Yes'), ('False', 'No')])
 
     def populate_obj(self, obj):
         obj.notified_on_pings = self.notified_on_pings.data == 'True'
@@ -20,11 +21,13 @@ class GeneralSettingsForm(Form):
         obj.autosubscribe_threads = self.autosubscribe_threads.data == 'True'
         obj.autosubscribe_posts = self.autosubscribe_posts.data == 'True'
 
+
 class DetailsForm(Form):
     status = SlField('Status', [sl_validators.Max(app.config['MAX_USER_STATUS_LENGTH'])])
     gender = SlField('Gender')
     pronouns = SlField('Pronouns')
     bio = SlTextAreaField('About Me')
+
 
 class UsernameForm(Form):
     IsNot = sl_validators.IsNot('',
@@ -42,6 +45,7 @@ class UsernameForm(Form):
     def setUser(self, user):
         self.IsNot.pattern = user.display_name
         self.UsernameUnique.whitelist = user.usernames
+
 
 class EmailForm(Form):
     IsNot = sl_validators.IsNot('',

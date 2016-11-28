@@ -1,9 +1,8 @@
-from saylua import app, login_required, admin_access_required
-from flask import (render_template, redirect, make_response,
-                   url_for, flash, session, abort, request, g)
+from saylua import app, admin_access_required
+from flask import render_template, redirect, flash, request
 
-from saylua.utils import get_from_request
 from saylua.models.role import Role
+
 
 @app.route('/admin/roles/add/', methods=['GET', 'POST'])
 @admin_access_required
@@ -17,9 +16,11 @@ def admin_panel_roles_add():
         new_role.put()
         flash('New Role successfully created!')
         return redirect("/admin/roles/add/")
+
     privs = Role().to_dict().keys()
     privs.sort()
     return render_template('admin/roles/add.html', privs=privs)
+
 
 @app.route('/admin/roles/edit/', methods=['GET', 'POST'])
 @admin_access_required
