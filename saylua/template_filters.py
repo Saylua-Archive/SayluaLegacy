@@ -128,7 +128,7 @@ def user_from_key_string(user_key):
 
 @app.template_filter('last_post_thread')
 def last_post_thread(thread_id):
-    post_query = ForumPost.query(ForumPost.thread_id==thread_id).order(
+    post_query = ForumPost.query(ForumPost.thread_id == thread_id).order(
         -ForumPost.created_time)
     post = post_query.fetch(1)
     if len(post) > 0:
@@ -138,7 +138,7 @@ def last_post_thread(thread_id):
 
 @app.template_filter('last_post_board')
 def last_post_board(board_id):
-    post_query = ForumPost.query(ForumPost.board_id==board_id).order(
+    post_query = ForumPost.query(ForumPost.board_id == board_id).order(
         -ForumPost.created_time)
     post = post_query.fetch(1)
     if len(post) > 0:
@@ -154,17 +154,17 @@ def thread_by_id(thread_id):
 
 @app.template_filter('count_thread_posts')
 def count_thread_posts(thread_id):
-    return len(ForumPost.query(ForumPost.thread_id==thread_id).fetch(
+    return len(ForumPost.query(ForumPost.thread_id == thread_id).fetch(
         keys_only=True))
 
 
 @app.template_filter('count_board_posts')
 def count_board_posts(board_id):
-    return len(ForumPost.query(ForumPost.board_id==board_id).fetch(
+    return len(ForumPost.query(ForumPost.board_id == board_id).fetch(
         keys_only=True))
 
 
 @app.template_filter('count_board_threads')
 def count_board_threads(board_id):
-    return len(ForumThread.query(ForumThread.board_id==board_id).fetch(
+    return len(ForumThread.query(ForumThread.board_id == board_id).fetch(
         keys_only=True))

@@ -13,8 +13,8 @@ from saylua.utils.form import flash_errors
 @app.route('/messages/')
 @login_required
 def messages_main():
-    messages = UserConversation.query(UserConversation.user_key==g.user.key,
-        UserConversation.is_deleted==False).order(
+    messages = UserConversation.query(UserConversation.user_key == g.user.key,
+        UserConversation.is_deleted == False).order(
         UserConversation.is_read, -UserConversation.time).fetch()
     if not messages:
         messages = []
@@ -82,8 +82,8 @@ def messages_write_new():
 def messages_read(key):
     conversation_key = make_ndb_key(key)
     if conversation_key:
-        conversation = UserConversation.query(UserConversation.user_key==g.user.key,
-            UserConversation.conversation_key==conversation_key).get()
+        conversation = UserConversation.query(UserConversation.user_key == g.user.key,
+            UserConversation.conversation_key == conversation_key).get()
         if conversation:
             conversation.is_read = True
             conversation.put()

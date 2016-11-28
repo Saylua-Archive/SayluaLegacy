@@ -10,33 +10,29 @@
     </tr>
     <tr>
       <th class="label">
-        <label for="transfer-post-recipient">Recipient</label>
+        {{ form.recipient.label }}
       </th>
       <td>
-        <input placeholder="Recipient's Username" id="transfer-post-recipient" type="text"
-          data-validators="required min:{{config['MIN_USERNAME_LENGTH']}} max:{{config['MAX_USERNAME_LENGTH']}} username_chars"
-          value="{{ recipient }}" name="recipient" />
+        {{ form.recipient() }}
         <small class="form-tip">Enter the username of the person who will receive the currency</small>
       </td>
     </tr>
     <tr>
       <th class="label">
-        <label for="transfer-post-cc">Cloud Coins <img src="/static/img/icons/weather_clouds.png"></label>
+        {{ form.cloud_coins.label }} <img src="/static/img/icons/weather_clouds.png">
       </th>
       <td>
-        <input placeholder="Number of Cloud Coins to Send" id="transfer-post-cc" name="cloud_coins" type="number"
-          value="{{ cc }}" data-validators="number" />
-          <small class="form-tip">Leave blank if you are not sending any cloud coins</small>
+        {{ form.cloud_coins() }}
+        <small class="form-tip">Leave blank if you are not sending any Cloud Coins</small>
       </td>
     </tr>
     <tr>
       <th class="label">
-        <label for="transfer-post-ss">Star Shards <img src="/static/img/icons/star_1.png"></label>
+        {{ form.star_shards.label }} <img src="/static/img/icons/star_1.png">
       </th>
       <td>
-        <input placeholder="Number of Star Shards to Send" id="transfer-post-ss" name="star_shards" type="number"
-          value="{{ ss }}" data-validators="number" />
-          <small class="form-tip">Leave blank if you are not sending any star shards</small>
+        {{ form.star_shards() }}
+        <small class="form-tip">Leave blank if you are not sending any Star Shards</small>
       </td>
     </tr>
     <tr>

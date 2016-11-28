@@ -47,6 +47,32 @@ class Required(SayluaValidator):
         return 'required'
 
 
+class AtLeast(SayluaValidator):
+    def __init__(self, minval, message=None):
+        self.message = message
+        self.defaultMessage = '<field> must be at least %d.' % min
+        self.min = minval
+
+    def validate(self, form, field):
+        return field.data >= self.min
+
+    def clientValidatorValue(self):
+        return str(self.min)
+
+    def clientValidatorName(self):
+        return 'atleast'
+
+
+class NotNegative(AtLeast):
+    def __init__(self, message=None):
+        self.message = message
+        self.defaultMessage = '<field> cannot be negative.'
+        self.min = 0
+
+    def clientValidatorMessage(self):
+        return self.message or self.defaultMessage
+
+
 class NotBlank(SayluaValidator):
     def __init__(self, message=None):
         self.message = message
@@ -94,7 +120,7 @@ class Min(SayluaValidator):
         return 'min'
 
     def clientValidatorValue(self):
-        return self.length
+        return str(self.length)
 
 
 class Max(SayluaValidator):
@@ -110,7 +136,7 @@ class Max(SayluaValidator):
         return 'max'
 
     def clientValidatorValue(self):
-        return self.length
+        return str(self.length)
 
 
 class IsNot(SayluaValidator):

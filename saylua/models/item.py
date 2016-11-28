@@ -33,7 +33,7 @@ class Item(ndb.Model):
 
     @classmethod
     def by_url_name(cls, name):
-        return cls.query(cls.url_name==name.lower()).get()
+        return cls.query(cls.url_name == name.lower()).get()
 
     @classmethod
     def update_item(cls, item, name, image_url, description):
@@ -74,4 +74,4 @@ class InventoryItem(ndb.Model):
 
     @classmethod
     def by_user_item(cls, user_key, item_key):
-        return cls.query(cls.user_key==user_key, cls.item_key==item_key).get()
+        return cls.query(cls.user_key == user_key, cls.item_key == item_key).get()

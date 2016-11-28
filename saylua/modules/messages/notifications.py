@@ -17,7 +17,7 @@ def notifications_main():
     offset = per_page * (page - 1)
 
     # TODO: Find a way to use cursors instead of offsets
-    notifications, cursor, more = Notification.query(Notification.user_key==g.user.key).order(
+    notifications, cursor, more = Notification.query(Notification.user_key == g.user.key).order(
         Notification.is_read, -Notification.time).fetch_page(per_page, offset=offset)
     return render_template("notifications/all.html",
         viewed_notifications=notifications, page=page, more_pages=more)

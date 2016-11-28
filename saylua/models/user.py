@@ -56,11 +56,11 @@ class User(ndb.Model):
 
     @classmethod
     def by_username(cls, username):
-        return cls.query(cls.usernames==username.lower()).get()
+        return cls.query(cls.usernames == username.lower()).get()
 
     @classmethod
     def key_by_username(cls, username):
-        return cls.query(cls.usernames==username.lower()).get(keys_only=True)
+        return cls.query(cls.usernames == username.lower()).get(keys_only=True)
 
     @classmethod
     def hash_password(cls, password, salt=None):

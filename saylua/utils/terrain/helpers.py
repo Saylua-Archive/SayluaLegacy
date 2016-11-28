@@ -1,51 +1,64 @@
-import copy, math
+import copy
+import math
+
 
 def distance(p0, p1):
     return math.sqrt(math.pow(p0[0] - p1[0], 2) + math.pow(p0[1] - p1[1], 2))
 
+
 ##############################################################################
 # Diffing code from:
 # http://stackoverflow.com/a/6333972/784831
-
-def dict_diff (merge, lhs, rhs):
+def dict_diff(merge, lhs, rhs):
     """Generic dictionary difference."""
     diff = {}
     for key in lhs.keys():
           # auto-merge for missing key on right-hand-side.
-        if (not rhs.has_key(key)):
+        if (key not in rhs):
             diff[key] = lhs[key]
           # on collision, invoke custom merge function.
         elif (lhs[key] != rhs[key]):
             diff[key] = merge(lhs[key], rhs[key])
     for key in rhs.keys():
           # auto-merge for missing key on left-hand-side.
-        if (not lhs.has_key(key)):
+        if (key not in lhs):
             diff[key] = rhs[key]
     return diff
 
-def keep_diff (lhs, rhs):
+
+def keep_diff(lhs, rhs):
     """Merge dictionaries using value from right-hand-side on conflict."""
-    merge = lambda l,r: r
+    merge = lambda l, r: r
     return dict_diff(merge, lhs, rhs)
 
-def push (x, k, v):
+
+def push(x, k, v):
     """Returns copy of dict `x` with key `k` set to `v`."""
-    x = copy.copy(x); x[k] = v; return x
+    x = copy.copy(x)
+    x[k] = v
+    return x
 
-def pop (x, k):
+
+def pop(x, k):
     """Returns copy of dict `x` without key `k`."""
-    x = copy.copy(x); del x[k]; return x
+    x = copy.copy(x)
+    del x[k]
+    return x
 
-def diff (lhs, rhs, k):
+
+def diff(lhs, rhs, k):
     # transform list of dicts into 2 levels of dicts, 1st level index by k.
-    lhs = dict([(D[k],pop(D,k)) for D in lhs])
-    rhs = dict([(D[k],pop(D,k)) for D in rhs])
-      # diff at the 1st level.
+    lhs = dict([(D[k], pop(D, k)) for D in lhs])
+    rhs = dict([(D[k], pop(D, k)) for D in rhs])
+
+    # diff at the 1st level.
     c = dict_diff(keep_diff, lhs, rhs)
+
     # transform to back to initial format.
-    return [push(D,k,K) for (K,D) in c.items()]
+    return [push(D, k, K) for (K, D) in c.items()]
 
 ##############################################################################
+
 
 """
     Author:         Aaron MacDonald
@@ -62,7 +75,9 @@ def diff (lhs, rhs, k):
     included.
     This code is released without warranty.
 """
-def fieldOfView(startX, startY, mapWidth, mapHeight, radius, \
+
+
+def fieldOfView(startX, startY, mapWidth, mapHeight, radius,
   funcVisitTile, funcTileBlocked):
     """
         Determines which coordinates on a 2D grid are visible from a
@@ -89,8 +104,8 @@ def fieldOfView(startX, startY, mapWidth, mapHeight, radius, \
                                 sight to coordinates "behind" it.
     """
 
-    visited = set() # Keep track of what tiles have been visited so
-                    # that no tile will be visited twice.
+    visited = set()  # Keep track of what tiles have been visited so
+                     # that no tile will be visited twice.
 
     # Will always see the centre.
     funcVisitTile(startX, startY)
@@ -120,26 +135,27 @@ def fieldOfView(startX, startY, mapWidth, mapHeight, radius, \
         maxExtentY = radius
 
     # Northeast quadrant
-    __checkQuadrant(visited, startX, startY, 1, 1, \
-      maxExtentX, maxExtentY, \
+    __checkQuadrant(visited, startX, startY, 1, 1,
+      maxExtentX, maxExtentY,
       funcVisitTile, funcTileBlocked)
 
     # Southeast quadrant
-    __checkQuadrant(visited, startX, startY, 1, -1, \
-      maxExtentX, minExtentY, \
+    __checkQuadrant(visited, startX, startY, 1, -1,
+      maxExtentX, minExtentY,
       funcVisitTile, funcTileBlocked)
 
     # Southwest quadrant
-    __checkQuadrant(visited, startX, startY, -1, -1, \
-      minExtentX, minExtentY, \
+    __checkQuadrant(visited, startX, startY, -1, -1,
+      minExtentX, minExtentY,
       funcVisitTile, funcTileBlocked)
 
     # Northwest quadrant
-    __checkQuadrant(visited, startX, startY, -1, 1, \
-      minExtentX, maxExtentY, \
+    __checkQuadrant(visited, startX, startY, -1, 1,
+      minExtentX, maxExtentY,
       funcVisitTile, funcTileBlocked)
 
-#-------------------------------------------------------------
+# -------------------------------------------------------------
+
 
 class __Line(object):
         def __init__(self, xi, yi, xf, yf):
@@ -148,8 +164,8 @@ class __Line(object):
             self.xf = xf
             self.yf = yf
 
-        dx = property(fget = lambda self: self.xf - self.xi)
-        dy = property(fget = lambda self: self.yf - self.yi)
+        dx = property(fget=lambda self: self.xf - self.xi)
+        dy = property(fget=lambda self: self.yf - self.yi)
 
         def pBelow(self, x, y):
             return self.relativeSlope(x, y) > 0
@@ -174,11 +190,13 @@ class __Line(object):
             return (self.dy * (self.xf - x)) \
               - (self.dx * (self.yf - y))
 
+
 class __ViewBump:
     def __init__(self, x, y, parent):
         self.x = x
         self.y = y
         self.parent = parent
+
 
 class __View:
     def __init__(self, shallowLine, steepLine):
@@ -188,14 +206,15 @@ class __View:
         self.shallowBump = None
         self.steepBump = None
 
-def __checkQuadrant(visited, startX, startY, dx, dy, \
+
+def __checkQuadrant(visited, startX, startY, dx, dy,
   extentX, extentY, funcVisitTile, funcTileBlocked):
     activeViews = []
 
     shallowLine = __Line(0, 1, extentX, 0)
     steepLine = __Line(1, 0, 0, extentY)
 
-    activeViews.append( __View(shallowLine, steepLine) )
+    activeViews.append(__View(shallowLine, steepLine))
     viewIndex = 0
 
     # Visit the tiles diagonally and going outwards
@@ -224,29 +243,28 @@ def __checkQuadrant(visited, startX, startY, dx, dy, \
         while j != maxJ + 1 and viewIndex < len(activeViews):
             x = i - j
             y = j
-            __visitCoord(visited, startX, startY, x, y, dx, dy, \
-              viewIndex, activeViews, \
+            __visitCoord(visited, startX, startY, x, y, dx, dy,
+              viewIndex, activeViews,
               funcVisitTile, funcTileBlocked)
 
             j += 1
 
         i += 1
 
-def __visitCoord(visited, startX, startY, x, y, dx, dy, viewIndex, \
+
+def __visitCoord(visited, startX, startY, x, y, dx, dy, viewIndex,
   activeViews, funcVisitTile, funcTileBlocked):
     # The top left and bottom right corners of the current coordinate.
     topLeft = (x, y + 1)
     bottomRight = (x + 1, y)
 
-    while viewIndex < len(activeViews) \
-      and activeViews[viewIndex].steepLine.pBelowOrCollinear( \
+    while viewIndex < len(activeViews) and activeViews[viewIndex].steepLine.pBelowOrCollinear(
        bottomRight[0], bottomRight[1]):
         # The current coordinate is above the current view and is
         # ignored.  The steeper fields may need it though.
         viewIndex += 1
 
-    if viewIndex == len(activeViews) \
-      or activeViews[viewIndex].shallowLine.pAboveOrCollinear( \
+    if viewIndex == len(activeViews) or activeViews[viewIndex].shallowLine.pAboveOrCollinear(
        topLeft[0], topLeft[1]):
         # Either the current coordinate is above all of the fields
         # or it is below all of the fields.
@@ -275,25 +293,24 @@ def __visitCoord(visited, startX, startY, x, y, dx, dy, viewIndex, \
         # has no effect on the view.
         return
 
-    if activeViews[viewIndex].shallowLine.pAbove( \
-       bottomRight[0], bottomRight[1]) \
-      and activeViews[viewIndex].steepLine.pBelow( \
+    if activeViews[viewIndex].shallowLine.pAbove(bottomRight[0],
+       bottomRight[1]) and activeViews[viewIndex].steepLine.pBelow(
        topLeft[0], topLeft[1]):
         # The current coordinate is intersected by both lines in the
         # current view.  The view is completely blocked.
         del activeViews[viewIndex]
-    elif activeViews[viewIndex].shallowLine.pAbove( \
+    elif activeViews[viewIndex].shallowLine.pAbove(
       bottomRight[0], bottomRight[1]):
         # The current coordinate is intersected by the shallow line of
         # the current view.  The shallow line needs to be raised.
-        __addShallowBump(topLeft[0], topLeft[1], \
+        __addShallowBump(topLeft[0], topLeft[1],
           activeViews, viewIndex)
         __checkView(activeViews, viewIndex)
-    elif activeViews[viewIndex].steepLine.pBelow( \
+    elif activeViews[viewIndex].steepLine.pBelow(
       topLeft[0], topLeft[1]):
         # The current coordinate is intersected by the steep line of
         # the current view.  The steep line needs to be lowered.
-        __addSteepBump(bottomRight[0], bottomRight[1], activeViews, \
+        __addSteepBump(bottomRight[0], bottomRight[1], activeViews,
           viewIndex)
         __checkView(activeViews, viewIndex)
     else:
@@ -305,50 +322,53 @@ def __visitCoord(visited, startX, startY, x, y, dx, dy, viewIndex, \
         viewIndex += 1
         steepViewIndex = viewIndex
 
-        activeViews.insert(shallowViewIndex, \
+        activeViews.insert(shallowViewIndex,
           copy.deepcopy(activeViews[shallowViewIndex]))
 
-        __addSteepBump(bottomRight[0], bottomRight[1], \
+        __addSteepBump(bottomRight[0], bottomRight[1],
           activeViews, shallowViewIndex)
         if not __checkView(activeViews, shallowViewIndex):
             viewIndex -= 1
             steepViewIndex -= 1
 
-        __addShallowBump(topLeft[0], topLeft[1], activeViews, \
+        __addShallowBump(topLeft[0], topLeft[1], activeViews,
           steepViewIndex)
         __checkView(activeViews, steepViewIndex)
+
 
 def __addShallowBump(x, y, activeViews, viewIndex):
     activeViews[viewIndex].shallowLine.xf = x
     activeViews[viewIndex].shallowLine.yf = y
 
-    activeViews[viewIndex].shallowBump = __ViewBump(x, y, \
+    activeViews[viewIndex].shallowBump = __ViewBump(x, y,
       activeViews[viewIndex].shallowBump)
 
     curBump = activeViews[viewIndex].steepBump
     while curBump is not None:
-        if activeViews[viewIndex].shallowLine.pAbove( \
+        if activeViews[viewIndex].shallowLine.pAbove(
           curBump.x, curBump.y):
             activeViews[viewIndex].shallowLine.xi = curBump.x
             activeViews[viewIndex].shallowLine.yi = curBump.y
 
         curBump = curBump.parent
 
+
 def __addSteepBump(x, y, activeViews, viewIndex):
     activeViews[viewIndex].steepLine.xf = x
     activeViews[viewIndex].steepLine.yf = y
 
-    activeViews[viewIndex].steepBump = __ViewBump(x, y, \
+    activeViews[viewIndex].steepBump = __ViewBump(x, y,
       activeViews[viewIndex].steepBump)
 
     curBump = activeViews[viewIndex].shallowBump
     while curBump is not None:
-        if activeViews[viewIndex].steepLine.pBelow( \
+        if activeViews[viewIndex].steepLine.pBelow(
           curBump.x, curBump.y):
             activeViews[viewIndex].steepLine.xi = curBump.x
             activeViews[viewIndex].steepLine.yi = curBump.y
 
         curBump = curBump.parent
+
 
 def __checkView(activeViews, viewIndex):
     """
@@ -360,9 +380,8 @@ def __checkView(activeViews, viewIndex):
     shallowLine = activeViews[viewIndex].shallowLine
     steepLine = activeViews[viewIndex].steepLine
 
-    if shallowLine.lineCollinear(steepLine) \
-      and ( shallowLine.pCollinear(0, 1) \
-       or shallowLine.pCollinear(1, 0) ):
+    if (shallowLine.lineCollinear(steepLine) and (
+            shallowLine.pCollinear(0, 1) or shallowLine.pCollinear(1, 0))):
         del activeViews[viewIndex]
         return False
     else:
