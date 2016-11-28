@@ -12,7 +12,7 @@ def saylua_pluralize(count, singular_noun, plural_noun=None):
     return pluralize(count, singular_noun, plural_noun)
 
 
-# Convert key to urlsafe String
+# Convert key to urlsafe string
 @app.template_filter('make_urlsafe')
 def saylua_make_urlsafe(key):
     return key.urlsafe()
