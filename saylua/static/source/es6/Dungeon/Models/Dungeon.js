@@ -1,3 +1,4 @@
+/*eslint no-console: ["off"]*/
 import Reqwest from "reqwest";
 
 // Dungeon -> Required by DungeonClient.
@@ -84,7 +85,7 @@ export default class Dungeon {
         "debug": JSON.stringify(debug)
       },
       "error": (error) => {
-        console.log("Error syncing with Dungeon API.");
+        console.error(`Error syncing with Dungeon API": ${error}`);
       },
       "success": (response) => {
         if (this.state.initialized === false) {
@@ -96,7 +97,7 @@ export default class Dungeon {
       }
     });
 
-    promise.always((response) => {
+    promise.always((_response) => {
       this.state.lock = false;
       if (this.state.initialized && this.state.component !== undefined) {
         let triggerUpdate = (this.state.component.triggerUpdate == undefined) ? true : !this.state.component.triggerUpdate;
@@ -130,15 +131,15 @@ export default class Dungeon {
     // modified attributes, if performance becomes an issue.
 
     // -- Might be a good idea to consider indexing this.
-    newModel.entityLayer = newModel.entityLayer.map((e, i, a) => {
+    newModel.entityLayer = newModel.entityLayer.map((e) => {
       let changedEntity = diff.entityLayer.filter((_e) => _e.id === e.id)[0];
       return changedEntity ? changedEntity : e;
     });
 
     // Does not diff deeply, checks for changes and replaces the entire cell.
     // Unseen cells are represented as empty objects.
-    diff.tileLayer.map((row, y , a) => {
-      row.map((cell, x, a) => {
+    diff.tileLayer.map((row, y) => {
+      row.map((cell, x) => {
         if (Object.keys(cell).length !== 0) {
           newModel.tileLayer[y][x] = cell;
         } else {

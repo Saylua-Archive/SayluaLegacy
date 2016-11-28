@@ -37,7 +37,7 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -y nodejs
 
     # Install Global deps
-    sudo npm install -g gulp webpack
+    sudo npm install -g gulp eslint eslint-plugin-react webpack
 
     cd /vagrant/
     npm install

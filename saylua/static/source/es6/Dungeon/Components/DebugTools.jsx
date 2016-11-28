@@ -9,7 +9,7 @@ export default class DebugTools extends Component {
 
   render() {
     return (
-      <div class="dungeon-debug-tools">
+      <div className="dungeon-debug-tools">
         <p>IT'S DEBUGGING TIME, BABY</p> <br />
         <button onClick={ this.props.regenerate }>Regenerate Dungeon</button>
         <button onClick={ this.props.reveal }>Reveal Dungeon</button>

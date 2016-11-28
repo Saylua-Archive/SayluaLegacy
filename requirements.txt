@@ -11,3 +11,4 @@ py2casefold
 python-dateutil
 Flask-WTF
 pillow
+flake8

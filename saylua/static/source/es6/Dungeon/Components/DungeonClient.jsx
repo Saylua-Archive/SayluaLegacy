@@ -44,7 +44,7 @@ export default class DungeonClient extends Component {
     this.props.model.bindComponent(this);
 
     // Match keyboard presses to events.
-    this.state.eventListener = window.addEventListener("keydown", this.handleKeyPress.bind(this));
+    this.eventListener = window.addEventListener("keydown", this.handleKeyPress.bind(this));
   }
 
   handleKeyPress(event) {
