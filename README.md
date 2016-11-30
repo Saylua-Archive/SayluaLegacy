@@ -37,7 +37,7 @@ If you are on Windows, it is heavily suggested you use Vagrant.
 
 7. Install NodeJS dependencies.
 
-      `npm install && npm install -g gulp`
+      `npm install && npm install -g gulp eslint eslint-plugin-react webpack`
 
 
 8. Run this project locally from the command line:
@@ -87,7 +87,6 @@ Making the following change reduces startup time exponentially, and gets rid of 
                   """Skip directories that should not be watched."""
 
                   _remove_pred(dirs, lambda d: d.startswith(_IGNORED_PREFIX) or d in _IGNORED_DIRS)
-
 
 ## Author
 Tiffany Zhang

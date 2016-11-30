@@ -13,7 +13,7 @@ export default class DungeonInfo extends Component {
 
   render() {
     return (
-      <div class="dungeon-info-wrapper">
+      <div className="dungeon-info-wrapper">
         <img className='testing-image' src="/static/img/habitats/flat-bambooforest.jpg"/>
         <div className='dungeon-mini-map'>{ this.props.miniMap.get() }</div>
         <p>
