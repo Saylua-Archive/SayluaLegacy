@@ -21,8 +21,8 @@ def bank_transfer():
     form.recipient.data = get_from_request(request, 'recipient', args_key='to')
 
     if request.method == 'POST' and form.validate():
-        ss = form.star_shards.data
-        cc = form.cloud_coins.data
+        ss = form.star_shards.data or 0
+        cc = form.cloud_coins.data or 0
 
         if not ss and not cc:
             flash('You must enter at least one currency to send. ', 'error')
