@@ -122,12 +122,16 @@ gulp.task('build', ['build-js', 'build-es6', 'build-sass']);
 gulp.task('watch', function() {
   process.env.NODE_ENV = "dev";
 
-  gulp.watch(paths.js + "/**/*", ['build-js']);
-  gulp.watch(paths.es6 + "/**/*", ['build-es6']);
-  gulp.watch(paths.sass + "/**/*", ['build-sass']);
+  var reportChange = function(change) {
+    process.stdout.write("\033[33m[Watching]\033[0m Changed: " + change.path + "\n");
+  };
+
+  gulp.watch(paths.js + "/**/*", ['build-js']).on("change", reportChange);
+  gulp.watch(paths.es6 + "/**/*", ['build-es6']).on("change", reportChange);
+  gulp.watch(paths.sass + "/**/*", ['build-sass']).on("change", reportChange);
 
   var _paths = Object.keys(paths).map(function(key) { return paths[key]; });
-  console.log("\n" + "Watching:" + "\n========================\n" + _paths.join("\n") + "\n");
+  process.stdout.write("\n" + "Watching:" + "\n========================\n" + _paths.join("\n") + "\n\n");
 
   // Purely for aesthetic reasons.
   // Prevents the "Finished" line from printing.
