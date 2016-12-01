@@ -11,7 +11,7 @@ html {
 }
 
 body {
-  font-family: Arial, 'san serif';
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   line-height: 22px;
   box-sizing: border-box;
@@ -43,11 +43,20 @@ h1 {
   padding: 0.5em 0px;
 }
 
-p {
+p, pre {
   font-size: 1em;
   display: block;
   margin: 1em 0px;
   padding: 0px;
+}
+
+pre.wrapped-pre {
+  color: $notQuiteBlack;
+  font-family: Arial, Helvetica, sans-serif; // Must be reapplied due to UA stylesheets.
+  line-height: 1.6em;
+
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 a, a:active, a:visited, button.link-button, button.link-button:active {
