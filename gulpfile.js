@@ -1,21 +1,22 @@
 var gulp = require('gulp');
+var sass = require('gulp-sass');
 var gutil = require('gulp-util');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
-var sourcemaps = require('gulp-sourcemaps');
-var sass = require('gulp-sass');
 var cleanCSS = require('gulp-clean-css');
+var sourcemaps = require('gulp-sourcemaps');
 
 var glob = require('glob');
+var stream = require('stream');
 
 var _webpack = require('webpack');
 var webpack = require('webpack-stream');
 var webpackConfig = require('./webpack.config.js');
 
 var paths = {
-  js: 'saylua/static/source/js/*/',
-  es6: 'saylua/static/source/es6/*/',
-  sass: 'saylua/static/source/css/**/*.scss'
+  js: 'saylua/static/source/js',
+  es6: 'saylua/static/source/es6',
+  sass: 'saylua/static/source/css'
 };
 
 var dests = {
@@ -24,7 +25,9 @@ var dests = {
 };
 
 gulp.task('build-sass', function () {
-  gulp.src(paths.sass)
+  var filesGlob = paths.sass + "/**/*.scss";
+
+  gulp.src(filesGlob)
     .pipe(sass.sync().on('error', sass.logError))
     .pipe(concat('styles.min.css'))
     .pipe(sourcemaps.init())
@@ -36,18 +39,23 @@ gulp.task('build-sass', function () {
 gulp.task('build-js', [], function() {
   // Minify and copy all JavaScript (except vendor scripts)
   // with sourcemaps all the way down
-  var jsFolder = glob.sync(paths.js);
+  var pkgGlob = paths.js + "/*";
+  var folders = glob.sync(pkgGlob);
 
-  jsFolder.forEach(function(folder) {
-    var pkgName = folder.match(/.+\/(.+)\/$/)[1];
+  folders.forEach(function(folder) {
+    var pkgName = folder.split("/").splice(-1)[0];
+    var pkg = gulp.src([folder + '**/*.js']);
 
-    var out = gulp.src([folder + '**/*.js']);
+    // Filter deprecated / hidden packages
+    if (pkgName.startsWith("_")) {
+      return;
+    }
 
     if (process.env.NODE_ENV === "dev") {
-      out.pipe(concat(pkgName + '.min.js'))
+      pkg.pipe(concat(pkgName + '.min.js'))
         .pipe(gulp.dest(dests.scripts));
     } else {
-      out.pipe(sourcemaps.init())
+      pkg.pipe(sourcemaps.init())
         .pipe(uglify())
         .pipe(concat(pkgName + '.min.js'))
         .pipe(sourcemaps.write())
@@ -56,33 +64,55 @@ gulp.task('build-js', [], function() {
   });
 });
 
+gulp.task('build-es', ['build-es6']);
 gulp.task('build-es6', [], function() {
   // Look for Main.jsx within <FolderName>, compile to <FolderName>.min.js
-  var esFolders = glob.sync(paths.es6);
+  var pkgGlob = paths.es6 + "/**/Main.jsx";
+  var packages = glob.sync(pkgGlob);
 
-  esFolders.forEach(function(folder) {
-    var pkgName = folder.match(/.+\/(.+)\/$/)[1];
-    var pkgPath = folder + "Main.jsx";
+  // Compile hashmap from paths
+  var hashmap = {};
 
-    // Set additional dev options
-    if (process.env.NODE_ENV === "dev") {
-      //webpackConfig['devtool'] = 'inline-source-map';
-    } else {
-      webpackConfig['plugins'] = [
-        new _webpack.optimize.DedupePlugin(),
-        new _webpack.optimize.UglifyJsPlugin({
-          "compress": {
-            "warnings": false
-          }
-        })
-      ];
+  packages.forEach(function(pkg) {
+    var pkgName = pkg.split("/").splice(-2)[0];
+
+    // Filter deprecated / hidden packages
+    if (pkgName.indexOf("_") == -1) {
+      hashmap[pkgName] = "./" + pkg;
     }
-
-    gulp.src(pkgPath)
-      .pipe(webpack(webpackConfig)).on('error', gutil.log)
-      .pipe(concat(pkgName + '.min.js'))
-      .pipe(gulp.dest(dests.scripts));
   });
+
+  webpackConfig['entry'] = hashmap;
+
+  // Always display progress.
+  webpackConfig['plugins'] = [
+    new _webpack.ProgressPlugin(function (percentage, message) {
+      var percent = Math.round(percentage * 100);
+      var ending = (percent == 100) ? "\n" : "";
+
+      process.stderr.clearLine();
+      process.stderr.cursorTo(0);
+      process.stderr.write("\033[33m[Building] ... " + percent + '% ' + message + "\033[0m" + ending);
+    })
+  ];
+
+  // Set additional dev options
+  if (process.env.NODE_ENV === "dev") {
+    webpackConfig['devtool'] = 'inline-source-map';
+  } else {
+    webpackConfig['plugins'].push(new _webpack.optimize.DedupePlugin());
+    webpackConfig['plugins'].push(
+      new _webpack.optimize.UglifyJsPlugin({
+        "compress": {
+          "warnings": false
+        }
+      })
+    );
+  }
+
+  return gulp.src("")
+    .pipe(webpack(webpackConfig)).on('error', gutil.log)
+    .pipe(gulp.dest(dests.scripts));
 });
 
 // Build everything. Check under every stone. Leave no survivors.
@@ -92,14 +122,16 @@ gulp.task('build', ['build-js', 'build-es6', 'build-sass']);
 gulp.task('watch', function() {
   process.env.NODE_ENV = "dev";
 
-  gulp.watch(paths.js, ['build-js']);
-  gulp.watch(paths.js + "**/*.*", ['build-js']);
+  gulp.watch(paths.js + "/**/*", ['build-js']);
+  gulp.watch(paths.es6 + "/**/*", ['build-es6']);
+  gulp.watch(paths.sass + "/**/*", ['build-sass']);
 
-  gulp.watch(paths.es6, ['build-es6']);
-  gulp.watch(paths.es6 + "**/*.*", ['build-es6']);
+  var _paths = Object.keys(paths).map(function(key) { return paths[key]; });
+  console.log("\n" + "Watching:" + "\n========================\n" + _paths.join("\n") + "\n");
 
-  gulp.watch(paths.sass, ['build-sass']);
-  gulp.watch(paths.sass + "**/*.*", ['build-sass']);
+  // Purely for aesthetic reasons.
+  // Prevents the "Finished" line from printing.
+  return new stream.Stream();
 });
 
 // The default task (called when you run `gulp` from cli)

@@ -7,6 +7,9 @@ module.exports = {
       }
     ]
   },
+  "output": {
+    "filename": "[name].min.js",
+  },
   "resolve": {
     "extensions": ["", ".js", ".min.js", ".jsx"],
     "modulesDirectories": ["./saylua/static/js/lib", "./node_modules"],
