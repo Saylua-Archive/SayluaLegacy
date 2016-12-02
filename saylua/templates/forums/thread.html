@@ -25,7 +25,7 @@
   </div>
 </div>
 
-<form method="post">
+<form method="post" class="center">
   <select name="destination" required>
     <option value="" disabled selected>Move Thread To Board</option>
     {% for other_board in other_boards %}
@@ -56,7 +56,7 @@
       <a href="/ha"><img src="{{ creator.ha_url }}"></a>
     </td>
     <td class="forum-post-body">
-      <pre class="wrapped-pre">{{ post.body }}</pre>
+      {{ post.body|markdown }}
       <div class="divider"></div>
       {{ creator.display_name }} hasn't set a signature yet.
     </td>
