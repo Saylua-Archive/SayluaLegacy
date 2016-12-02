@@ -14,9 +14,9 @@ var webpack = require('webpack-stream');
 var webpackConfig = require('./webpack.config.js');
 
 var paths = {
-  js: 'saylua/static/source/js',
-  es6: 'saylua/static/source/es6',
-  sass: 'saylua/static/source/css'
+  js: 'saylua/static-source/js',
+  es6: 'saylua/static-source/es6',
+  sass: 'saylua/static-source/scss'
 };
 
 var dests = {
