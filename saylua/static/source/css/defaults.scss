@@ -53,6 +53,7 @@ p, pre {
 pre.wrapped-pre {
   color: $notQuiteBlack;
   font-family: Arial, Helvetica, sans-serif; // Must be reapplied due to UA stylesheets.
+  font-size: 1.1em;
   line-height: 1.6em;
 
   word-wrap: break-word;

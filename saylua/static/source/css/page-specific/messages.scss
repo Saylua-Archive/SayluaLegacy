@@ -1,6 +1,10 @@
 @import '../assets/variables';
 @import '../assets/transitions';
 
+table.form-table {
+  margin-bottom: 35px;
+}
+
 .conversation-message {
   box-sizing: border-box;
   width: 98%;
@@ -18,4 +22,10 @@
   width: 120px;
   text-align: center;
   background: $neutralColor;
+
+  padding: 15px 10px;
+}
+
+.conversation-message td.message-body {
+  padding: 10px 25px;
 }
