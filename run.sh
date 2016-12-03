@@ -7,7 +7,7 @@
 echo " "
 echo "%% Running Gulp . . ."
 echo "========================================"
-gulp scripts && gulp sass
+gulp build
 
 # If a .vagrant folder exists, assume we're inside of a Vagrant machine.
 if [ -d \.vagrant ]; then
