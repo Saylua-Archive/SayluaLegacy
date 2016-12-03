@@ -1,13 +1,28 @@
 #!/bin/sh
 ##################################
-## Run startup scripts, check if user is running Vagrant, launch.
+## Update dependencies, Run startup scripts, check if user is running Vagrant, launch.
 ##################################
+
+# Update Node dependencies
+echo " "
+echo "%% Updating Node Dependencies . . ."
+echo "========================================"
+npm install
+echo "Done."
+
+# Update Python dependencies
+echo " "
+echo "%% Updating Python Dependencies . . ."
+echo "========================================"
+pip install -r requirements.txt -t lib -q --cache-dir lib/cache
+echo "Done."
 
 # Run gulp
 echo " "
 echo "%% Running Gulp . . ."
 echo "========================================"
 gulp build
+echo "Done."
 
 # If a .vagrant folder exists, assume we're inside of a Vagrant machine.
 if [ -d \.vagrant ]; then
