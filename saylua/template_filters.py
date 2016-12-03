@@ -5,6 +5,11 @@ from saylua.models.forum import ForumPost, ForumThread
 import datetime
 from google.appengine.ext import ndb
 from saylua.utils import make_ndb_key
+from flaskext.markdown import Markdown
+
+
+# Attach Flask Markdown to our app.
+Markdown(app, auto_reset=True, extensions=["linkify"])
 
 
 @app.template_filter('pluralize')
@@ -41,7 +46,7 @@ def saylua_show_datetime(time):
 def saylua_expanded_relative_time(d):
     diff = datetime.datetime.now() - d
     result = saylua_show_datetime(d)
-    if diff.days >= 0 or diff.days <= 7:
+    if diff.days >= 0 and diff.days <= 7:
         result += ' (' + saylua_relative_time(d) + ')'
     return result
 

@@ -8,7 +8,7 @@
   max-width: 1700px;
 }
 
-$navHeight: 38px;
+$navHeight: 40px;
 
 @mixin theme($name, $mainSoftColor, $mainColor, $mainDarkColor, $mainDarkerColor, $neutralColor, $neutralDarkColor) {
   .#{$name} {
@@ -27,19 +27,19 @@ $navHeight: 38px;
       padding: 10px 0;
     }
 
-    .content h2 {
+    h2 {
       color: $mainDarkColor;
       background: $mainSoftColor;
 
-      font-size: 23px;
-      line-height: 35px;
+      font-size: 22px;
+      line-height: 27px;
       text-align: center;
 
       margin: 0;
-      margin-bottom: 25px;
-      padding: 8px 0px;
+      margin-bottom: 10px;
+      padding: 6px 0px;
 
-      height: 35px;
+      height: 27px;
       width: 100%;
     }
 
@@ -227,7 +227,7 @@ $navHeight: 38px;
 
     #navbar a.block-link, #navbar a.block-link:visited {
       @include slow-color-trans;
-      font-size: 19px;
+      font-size: 18px;
       line-height: $navHeight;
       display: inline-block;
       height: $navHeight;

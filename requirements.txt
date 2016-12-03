@@ -10,5 +10,7 @@ Flask==0.10
 py2casefold
 python-dateutil
 Flask-WTF
+git+https://github.com/brmullikin/flask-markdown
 pillow
 flake8
+mdx_linkify
