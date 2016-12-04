@@ -5,10 +5,10 @@ from flask import render_template
 from random import randint
 
 @login_required
-def explore_home():
+def home():
     return render_template("map.html")
 
 
 @login_required
-def explore_battle():
+def battle():
     return render_template("battle.html", bg_num=randint(1, 21))
