@@ -9,16 +9,14 @@
 from saylua.routing import SayluaRouter
 from . import urls
 
-import os
-
-module_name = os.path.basename(os.getcwd())
-import_name = __name__
+MODULE_NAME = 'explore'
 
 blueprint = SayluaRouter(
-  module_name,
-  import_name,
+  MODULE_NAME,
+  __name__,
   static_folder='static',
   template_folder='templates',
+  static_url_path='/static/{}'.format(MODULE_NAME),
   url_prefix=None
 )
 

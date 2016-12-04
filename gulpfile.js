@@ -7,6 +7,7 @@ var cleanCSS = require('gulp-clean-css');
 var sourcemaps = require('gulp-sourcemaps');
 
 var glob = require('glob');
+var path = require('path');
 var stream = require('stream');
 
 var _webpack = require('webpack');
@@ -14,8 +15,8 @@ var webpack = require('webpack-stream');
 var webpackConfig = require('./webpack.config.js');
 
 var paths = {
-  js: 'saylua/static-source/js',
-  es6: 'saylua/static-source/es6',
+  js: 'saylua/**/static-source/js',
+  es6: 'saylua/**/static-source/es6',
   sass: 'saylua/static-source/scss'
 };
 
@@ -50,15 +51,16 @@ gulp.task('build-js', [], function() {
     if (pkgName.startsWith("_")) {
       return;
     }
+    console.log("My folder is " + folder);
 
     if (process.env.NODE_ENV === "dev") {
       pkg.pipe(concat(pkgName + '.min.js'))
+        .pipe(sourcemaps.write())
         .pipe(gulp.dest(dests.scripts));
     } else {
       pkg.pipe(sourcemaps.init())
         .pipe(uglify())
         .pipe(concat(pkgName + '.min.js'))
-        .pipe(sourcemaps.write())
         .pipe(gulp.dest(dests.scripts));
     }
   });
@@ -74,11 +76,18 @@ gulp.task('build-es6', [], function() {
   var hashmap = {};
 
   packages.forEach(function(pkg) {
+    // First, we grab the name of the package
     var pkgName = pkg.split("/").splice(-2)[0];
+
+    // Then, we separate the module path from the absolute path.
+    var modulePath = pkg.split("/static-source/")[0];
+
+    // Then, we combine the two to obtain a static path location.
+    var pkgPath = path.join(modulePath, 'static/js', pkgName);
 
     // Filter deprecated / hidden packages
     if (pkgName.indexOf("_") == -1) {
-      hashmap[pkgName] = "./" + pkg;
+      hashmap[pkgPath] = "./" + pkg;
     }
   });
 
@@ -112,7 +121,7 @@ gulp.task('build-es6', [], function() {
 
   return gulp.src("")
     .pipe(webpack(webpackConfig)).on('error', gutil.log)
-    .pipe(gulp.dest(dests.scripts));
+    .pipe(gulp.dest("./"));
 });
 
 // Build everything. Check under every stone. Leave no survivors.
