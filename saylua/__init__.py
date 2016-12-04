@@ -5,37 +5,24 @@ from flask import Flask
 # the App Engine WSGI application server.
 
 from os.path import join
-from flask import g, redirect, url_for, send_from_directory, render_template
-from functools import wraps
+from flask import send_from_directory, render_template
 
 app = Flask(__name__)
 app.config.from_pyfile('config/secure.py')
 app.config.from_pyfile('config/settings.py')
 
+import routing
+import wrappers
 import g_globals
 import context_processors
 import template_filters
 
+# Populate app with blueprints
+enabled_modules = [
+    'explore'
+]
 
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not g.logged_in:
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated_function
-
-
-def admin_access_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not g.logged_in:
-            return redirect(url_for('login'))
-        if not g.user.get_role().can_access_admin:
-            return render_template('403.html'), 403
-        return f(*args, **kwargs)
-    return decorated_function
-
+routing.register_urls(app, enabled_modules)
 
 @app.route('/favicon.ico')
 def favicon():

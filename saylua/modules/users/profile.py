@@ -1,6 +1,8 @@
-from saylua import app, login_required
-from flask import render_template, redirect, g
+from saylua import app
 from saylua.models.user import User
+from saylua.wrappers import login_required
+
+from flask import render_template, redirect, g
 
 
 # User Profiles

@@ -1,4 +1,5 @@
-from saylua import app, login_required
+from saylua import app
+from saylua.wrappers import login_required
 from google.appengine.api import memcache
 
 from saylua.utils.terrain import Terrain

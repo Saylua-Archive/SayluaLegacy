@@ -1,4 +1,5 @@
-from saylua import app, admin_access_required
+from saylua import app
+from saylua.wrappers import admin_access_required
 from flask import render_template, redirect, flash, request
 
 from saylua.models.role import Role

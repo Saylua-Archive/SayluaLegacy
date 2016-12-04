@@ -1,4 +1,5 @@
-from saylua import app, login_required
+from saylua import app
+from saylua.wrappers import login_required
 from saylua.utils import make_ndb_key, pluralize
 from flask import render_template, redirect, flash, request, g
 from google.appengine.ext import ndb

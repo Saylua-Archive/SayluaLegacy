@@ -5,7 +5,7 @@ from saylua.models.forum import ForumPost, ForumThread
 import datetime
 from google.appengine.ext import ndb
 from saylua.utils import make_ndb_key
-from flaskext.markdown import Markdown
+from flask_markdown import Markdown
 
 
 # Attach Flask Markdown to our app.
