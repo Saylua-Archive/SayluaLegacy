@@ -1,5 +1,6 @@
 # Import the Flask Framework
-from flask import Flask
+# from flask import Flask
+from routing import SayluaApp
 
 # Note: We don't need to call run() since our application is embedded within
 # the App Engine WSGI application server.
@@ -7,7 +8,7 @@ from flask import Flask
 from os.path import join
 from flask import send_from_directory, render_template
 
-app = Flask(__name__)
+app = SayluaApp(__name__)
 app.config.from_pyfile('config/secure.py')
 app.config.from_pyfile('config/settings.py')
 

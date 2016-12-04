@@ -10,14 +10,7 @@ from saylua.routing import SayluaRouter
 from . import urls
 
 MODULE_NAME = 'explore'
+IMPORT_NAME = __name__
 
-blueprint = SayluaRouter(
-  MODULE_NAME,
-  __name__,
-  static_folder='static',
-  template_folder='templates',
-  static_url_path='/static/{}'.format(MODULE_NAME),
-  url_prefix=None
-)
-
+blueprint = SayluaRouter.create_blueprint(MODULE_NAME, IMPORT_NAME)
 blueprint.register_urls(urls.urlpatterns)
