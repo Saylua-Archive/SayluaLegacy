@@ -1,12 +1,14 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
 var gutil = require('gulp-util');
+var watch = require('gulp-watch');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var cleanCSS = require('gulp-clean-css');
 var sourcemaps = require('gulp-sourcemaps');
 
 var glob = require('glob');
+var path = require('path');
 var stream = require('stream');
 
 var _webpack = require('webpack');
@@ -14,14 +16,14 @@ var webpack = require('webpack-stream');
 var webpackConfig = require('./webpack.config.js');
 
 var paths = {
-  js: 'saylua/static-source/js',
-  es6: 'saylua/static-source/es6',
-  sass: 'saylua/static-source/scss'
+  js: 'saylua/**/static-source/js',
+  es6: 'saylua/**/static-source/es6',
+  sass: 'saylua/**/static-source/scss'
 };
 
 var dests = {
-  scripts: 'saylua/static/js/',
-  sass: 'saylua/static/css/'
+  scripts: 'static/js',           // Relative to script location
+  sass: 'saylua/static/css/'      // All sass styles compile to style.min.css at the application root.
 };
 
 gulp.task('build-sass', function () {
@@ -44,22 +46,26 @@ gulp.task('build-js', [], function() {
 
   folders.forEach(function(folder) {
     var pkgName = folder.split("/").splice(-1)[0];
-    var pkg = gulp.src([folder + '**/*.js']);
+    var pkg = gulp.src(folder + '**/*.js', { base: process.cwd() });
 
     // Filter deprecated / hidden packages
     if (pkgName.startsWith("_")) {
       return;
     }
 
+    // Find our module path
+    var modulePath = folder.split('/static-source/')[0]
+
+    // Generate output path
+    var pkgPath = path.join(modulePath, dests.scripts);
+
     if (process.env.NODE_ENV === "dev") {
       pkg.pipe(concat(pkgName + '.min.js'))
-        .pipe(gulp.dest(dests.scripts));
+        .pipe(gulp.dest(pkgPath));
     } else {
-      pkg.pipe(sourcemaps.init())
-        .pipe(uglify())
+      pkg.pipe(uglify())
         .pipe(concat(pkgName + '.min.js'))
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest(dests.scripts));
+        .pipe(gulp.dest(pkgPath));
     }
   });
 });
@@ -74,11 +80,18 @@ gulp.task('build-es6', [], function() {
   var hashmap = {};
 
   packages.forEach(function(pkg) {
+    // First, we grab the name of the package
     var pkgName = pkg.split("/").splice(-2)[0];
+
+    // Then, we separate the module path from the absolute path.
+    var modulePath = pkg.split("/static-source/")[0];
+
+    // Then, we combine the two to obtain a static path location.
+    var pkgPath = path.join(modulePath, dests.scripts, pkgName);
 
     // Filter deprecated / hidden packages
     if (pkgName.indexOf("_") == -1) {
-      hashmap[pkgName] = "./" + pkg;
+      hashmap[pkgPath] = "./" + pkg;
     }
   });
 
@@ -112,7 +125,7 @@ gulp.task('build-es6', [], function() {
 
   return gulp.src("")
     .pipe(webpack(webpackConfig)).on('error', gutil.log)
-    .pipe(gulp.dest(dests.scripts));
+    .pipe(gulp.dest("./"));
 });
 
 // Build everything. Check under every stone. Leave no survivors.
@@ -122,13 +135,27 @@ gulp.task('build', ['build-js', 'build-es6', 'build-sass']);
 gulp.task('watch', function() {
   process.env.NODE_ENV = "dev";
 
-  var reportChange = function(change) {
-    process.stdout.write("\033[33m[Watching]\033[0m Changed: " + change.path + "\n");
+  var reportChange = function(vinyl) {
+    var event = vinyl.event;
+    event = event[0].toUpperCase() + event.slice(1);
+
+    process.stdout.write("\033[33m[Watching]\033[0m " + event + ": " + vinyl.path + "\n");
   };
 
-  gulp.watch(paths.js + "/**/*", ['build-js']).on("change", reportChange);
-  gulp.watch(paths.es6 + "/**/*", ['build-es6']).on("change", reportChange);
-  gulp.watch(paths.sass + "/**/*", ['build-sass']).on("change", reportChange);
+  watch([paths.js + "/**/*"], { 'usePolling': true }, function(vinyl) {
+    reportChange(vinyl);
+    gulp.start('build-js');
+  });
+
+  watch([paths.es6 + "/**/*"], { 'usePolling': true }, function(vinyl) {
+    reportChange(vinyl);
+    gulp.start('build-es6');
+  });
+
+  watch([paths.sass + "/**/*"], { 'usePolling': true }, function(vinyl) {
+    reportChange(vinyl);
+    gulp.start('build-sass');
+  });
 
   var _paths = Object.keys(paths).map(function(key) { return paths[key]; });
   process.stdout.write("\n" + "Watching:" + "\n========================\n" + _paths.join("\n") + "\n\n");
@@ -139,4 +166,4 @@ gulp.task('watch', function() {
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['watch', 'build']);
+gulp.task('default', ['build']);

@@ -1,11 +1,14 @@
-from saylua import app, login_required
-from flask import render_template, redirect, g, url_for, flash, request
-import datetime
-
-from saylua.utils.form import flash_errors
+from saylua import app
 from saylua.models.user import User
+from saylua.wrappers import login_required
+from saylua.utils.form import flash_errors
+
+from flask import render_template, redirect, g, url_for, flash, request
+
 from forms.settings import (GeneralSettingsForm, DetailsForm, UsernameForm,
     EmailForm, PasswordForm)
+
+import datetime
 
 
 # User Settings

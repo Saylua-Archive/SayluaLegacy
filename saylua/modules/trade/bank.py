@@ -1,5 +1,6 @@
-from saylua import app, login_required
+from saylua import app
 from saylua.utils import get_from_request
+from saylua.wrappers import login_required
 from saylua.models.user import User
 from saylua.models.notification import Notification
 from flask import render_template, redirect, g, url_for, flash, request
