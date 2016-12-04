@@ -1,4 +1,4 @@
-from saylua.utils.terrain import default_entities
+from . import default_entities
 from random import shuffle
 
 # Cave -> Required by Terrain
@@ -17,7 +17,7 @@ from random import shuffle
 
 def generate(options):
   # Prevent circular import issues
-  from saylua.utils.terrain import TileGrid
+  from . import TileGrid
 
   # Reasons
   width, height = options.get("size")
@@ -122,7 +122,7 @@ def finalize(options, grid):
 
 def populate(options, grid):
   # Prevent circular import issues
-  from saylua.utils.terrain import EntityContainer
+  from . import EntityContainer
 
   # Find a non-wall location and insert the player.
   non_walls = grid.find(lambda x: x['tile'] == '0x00')

@@ -1,4 +1,4 @@
-from saylua.utils.terrain import Cave
+from . import Cave
 
 import json
 

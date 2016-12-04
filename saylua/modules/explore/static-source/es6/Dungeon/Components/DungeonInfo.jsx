@@ -18,7 +18,7 @@ export default class DungeonInfo extends Component {
         <div className='dungeon-mini-map'>{ this.props.miniMap.get() }</div>
         <p>
           This place is truly beautiful. You look around and revel in the beauty that surrounds you.
-          You become one with the beauty. The beauty conquers all { this.props.triggerUpdate ? "true": "false" }.
+          You become one with the beauty. The beauty conquers all.
         </p>
         <p>
           You found a pile of rocks.

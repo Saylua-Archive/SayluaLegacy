@@ -26,6 +26,10 @@ var dests = {
   sass: 'saylua/static/css/'      // All sass styles compile to style.min.css at the application root.
 };
 
+gulp.task('lint', function () {
+  console.log("Go away!");
+});
+
 gulp.task('build-sass', function () {
   var filesGlob = paths.sass + "/**/*.scss";
 

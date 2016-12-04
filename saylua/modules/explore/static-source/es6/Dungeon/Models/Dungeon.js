@@ -1,3 +1,4 @@
+/*eslint no-console: ["off"]*/
 import BaseModel from "./BaseModel";
 import Reqwest from "reqwest";
 

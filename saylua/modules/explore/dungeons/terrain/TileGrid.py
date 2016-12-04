@@ -1,5 +1,5 @@
-from saylua.utils.terrain import Terrain
-from saylua.utils.terrain import helpers
+from . import Terrain
+from . import helpers
 
 import cPickle
 import copy
