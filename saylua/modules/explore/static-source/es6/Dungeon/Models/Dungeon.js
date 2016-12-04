@@ -1,4 +1,4 @@
-/*eslint no-console: ["off"]*/
+import BaseModel from "./BaseModel";
 import Reqwest from "reqwest";
 
 // Dungeon -> Required by DungeonClient.
@@ -6,10 +6,11 @@ import Reqwest from "reqwest";
 // Describes the schema and location of all tiles and entities on the client.
 // Optimize here first if performance becomes an issue in the future.
 
-export default class Dungeon {
+export default class Dungeon extends BaseModel {
   constructor() {
+    super();
+
     this.state = {
-      "component": undefined,
       "initialized": false,
       "lock": false,
       "model": this.defaults()
@@ -34,18 +35,6 @@ export default class Dungeon {
       "tileLayer": [],
       "entityLayer": []
     };
-  }
-
-  bindComponent(component) {
-    // Slight amount of magic necessary in order to make sure
-    // that when this model updates, our Component will also update.
-    //
-    // Our model will not appear to have updated if we only change it's attributes.
-    // Therefore, we will component.setState() when a change is made.
-
-    this.state.component = component;
-    // Initial .setState() deferred to this.fetch() to prevent double rendering on first initialize.
-    // A better solution would be to use shouldComponentUpdate().
   }
 
   _debug_regenerate(bind) {
@@ -85,7 +74,7 @@ export default class Dungeon {
         "debug": JSON.stringify(debug)
       },
       "error": (error) => {
-        console.error(`Error syncing with Dungeon API": ${error}`);
+        console.log("Error syncing with Dungeon API.");
       },
       "success": (response) => {
         if (this.state.initialized === false) {
@@ -97,13 +86,10 @@ export default class Dungeon {
       }
     });
 
-    promise.always((_response) => {
+    promise.always((response) => {
       this.state.lock = false;
-      if (this.state.initialized && this.state.component !== undefined) {
-        let triggerUpdate = (this.state.component.triggerUpdate == undefined) ? true : !this.state.component.triggerUpdate;
-        this.state.component.setState({
-          "triggerUpdate": triggerUpdate
-        });
+      if (this.state.initialized) {
+        this.triggerUpdate();
       }
     });
 
@@ -131,15 +117,15 @@ export default class Dungeon {
     // modified attributes, if performance becomes an issue.
 
     // -- Might be a good idea to consider indexing this.
-    newModel.entityLayer = newModel.entityLayer.map((e) => {
+    newModel.entityLayer = newModel.entityLayer.map((e, i, a) => {
       let changedEntity = diff.entityLayer.filter((_e) => _e.id === e.id)[0];
       return changedEntity ? changedEntity : e;
     });
 
     // Does not diff deeply, checks for changes and replaces the entire cell.
     // Unseen cells are represented as empty objects.
-    diff.tileLayer.map((row, y) => {
-      row.map((cell, x) => {
+    diff.tileLayer.map((row, y , a) => {
+      row.map((cell, x, a) => {
         if (Object.keys(cell).length !== 0) {
           newModel.tileLayer[y][x] = cell;
         } else {
