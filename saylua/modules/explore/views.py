@@ -22,6 +22,7 @@ def home():
 def battle():
     return render_template("battle.html", bg_num=randint(1, 21))
 
+
 ## TEMPORARY CODE SHUFFLE PRIOR TO REWRITE ###
 
 def generate_dungeon():
@@ -114,6 +115,7 @@ def api_dungeon_request():
       "entityLayer": entities_visible,
       "eventLog": event_log
     })
+
 
 class Dungeon:
   pass

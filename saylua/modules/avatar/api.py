@@ -9,7 +9,7 @@ import json
 
 
 @app.route('/api/ha/wardrobe/')
-def api_ha_wardrobe():
+def wardrobe():
     image_url_base = os.path.join(app.static_folder, 'img/ha')
     item_images = os.listdir(image_url_base)
 
@@ -17,12 +17,12 @@ def api_ha_wardrobe():
 
 
 @app.route('/api/ha/<base>/')
-def api_ha_image_base(base):
-    return api_ha_image(base, '')
+def image_base(base):
+    return image(base, '')
 
 
 @app.route('/api/ha/<base>/<items>/')
-def api_ha_image(base, items):
+def image(base, items):
     items = items.split(',')
 
     # This will be replaced with calls to the database later

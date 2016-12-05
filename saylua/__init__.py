@@ -20,7 +20,8 @@ import template_filters
 
 # Populate app with blueprints
 enabled_modules = [
-    'explore'
+    'explore',
+    'avatar'
 ]
 
 routing.register_urls(app, enabled_modules)
@@ -42,5 +43,4 @@ def application_error(e):
 
 
 # Make sure imports for other modules are at the bottom of the file
-import api
 import modules
