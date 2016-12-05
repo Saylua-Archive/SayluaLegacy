@@ -2,7 +2,7 @@
   <div class="sidebar left" id="left-bar">
     {% if g.logged_in %}
     <div class="sidebar-section" id="ha-panel">
-      <a href="/ha/"><img src="{{g.user.ha_url}}"></a>
+      <a href="/avatar/"><img src="{{g.user.ha_url}}"></a>
     </div>
     <div class="sidebar-section">
       <p>You are <a href="{{g.user|user_url}}">{{g.user.display_name}}</a></p>

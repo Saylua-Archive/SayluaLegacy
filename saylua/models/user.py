@@ -51,8 +51,8 @@ class User(ndb.Model):
     pronouns = ndb.StringProperty(default='')
     bio = ndb.StringProperty(default='')
 
-    def get_role(this):
-        return Role.get_by_id(this.role_id)
+    def get_role(self):
+        return Role.get_by_id(self.role_id)
 
     @classmethod
     def by_username(cls, username):

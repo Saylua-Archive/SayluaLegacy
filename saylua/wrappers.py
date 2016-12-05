@@ -1,6 +1,7 @@
 from flask import redirect as _redirect, url_for, render_template, g
 from functools import wraps
 
+
 def login_required(f, redirect='login'):
   """Redirects non-logged in users to a specified location.
 

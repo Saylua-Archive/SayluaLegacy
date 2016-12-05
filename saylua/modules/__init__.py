@@ -1,8 +1,8 @@
+import avatar
 import books
 import explore
 import forums
 import games
-import ha
 import home
 import search
 
