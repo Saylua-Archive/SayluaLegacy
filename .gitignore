@@ -1,9 +1,9 @@
 *.pyc
 .DS_Store
 node_modules
-saylua/static/js/*
-saylua/static/css/*
-!saylua/static/js/lib
+**/static/js/*
+**/static/css/*
+!**/static/js/lib
 .vagrant
 build
 yarn.lock
