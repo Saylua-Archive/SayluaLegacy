@@ -1,6 +1,15 @@
 from google.appengine.ext import ndb
 from dateutil import tz
 import re
+import os
+
+
+def is_devserver():
+    return os.environ['SERVER_SOFTWARE'].startswith('Development')
+
+
+def get_gae_version():
+    return os.environ['CURRENT_VERSION_ID']
 
 
 def make_ndb_key(key_string):

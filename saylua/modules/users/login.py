@@ -1,6 +1,6 @@
 from saylua import app
 from saylua.wrappers import login_required
-from flask import render_template, redirect, make_response, url_for, request, g
+from flask import render_template, redirect, make_response, request, g
 from google.appengine.ext import ndb
 import datetime
 
@@ -37,7 +37,7 @@ def login():
         session_key = new_session.put().urlsafe()
 
         # Generate a matching cookie and redirct
-        resp = make_response(redirect(url_for('home')))
+        resp = make_response(redirect('/'))
         resp.set_cookie("user_key", found_key, expires=expires)
         resp.set_cookie("session_key", session_key, expires=expires)
 
@@ -66,7 +66,7 @@ def logout():
     found = key.get()
     if found is not None and found.user_key == user_key:
         found.key.delete()
-    resp = make_response(redirect(url_for('home')))
+    resp = make_response(redirect('/'))
     resp.set_cookie('user_key', '', expires=0)
     resp.set_cookie('session_key', '', expires=0)
     return resp
@@ -94,7 +94,7 @@ def register():
         session_key = new_session.put().urlsafe()
 
         # Generate a matching cookie and redirct
-        resp = make_response(redirect(url_for('home')))
+        resp = make_response(redirect('/'))
         resp.set_cookie('user_key', user_key, expires=expires)
         resp.set_cookie('session_key', session_key, expires=expires)
         return resp

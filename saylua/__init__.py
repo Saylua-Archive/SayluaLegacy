@@ -20,11 +20,13 @@ import template_filters
 
 # Populate app with blueprints
 enabled_modules = [
+    'home',
     'explore',
     'avatar'
 ]
 
 routing.register_urls(app, enabled_modules)
+
 
 @app.route('/favicon.ico')
 def favicon():

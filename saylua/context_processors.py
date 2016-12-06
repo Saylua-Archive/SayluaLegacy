@@ -4,6 +4,15 @@ from flask import g
 from saylua.models.conversation import UserConversation
 from saylua.models.notification import Notification
 from saylua.models.user import User
+from saylua.utils import is_devserver, get_gae_version
+
+
+@app.context_processor
+def inject_version_id():
+    version = datetime.datetime.utcnow()
+    if not is_devserver():
+        version = get_gae_version()
+    return dict(version_id=version)
 
 
 @app.context_processor
