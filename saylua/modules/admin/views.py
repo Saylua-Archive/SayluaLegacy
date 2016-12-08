@@ -21,7 +21,7 @@ def admin_panel_roles_add():
                 setattr(new_role, priv, request.form.get(priv) == 'True')
         new_role.put()
         flash('New Role successfully created!')
-        return redirect("/roles/add/")
+        return redirect("/admin/roles/add/")
 
     privs = Role().to_dict().keys()
     privs.sort()
