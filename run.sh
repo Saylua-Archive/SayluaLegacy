@@ -33,7 +33,7 @@ if [ -d \.vagrant ]; then
   echo " "
   echo "%% Launching with Vagrant bindings . . ."
   echo "========================================"
-  dev_appserver.py --host=0.0.0.0 --admin_host=0.0.0 --port=8080 --use_mtime_file_watcher=True .
+  dev_appserver.py --host=0.0.0.0 --admin_host=0.0.0.0 --port=8080 --use_mtime_file_watcher=True .
 else
   echo " "
   echo "%% Launching dev server . . ."

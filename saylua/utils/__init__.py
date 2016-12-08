@@ -5,7 +5,7 @@ import os
 
 
 def is_devserver():
-    return os.environ['SERVER_SOFTWARE'].startswith('Development')
+    return os.environ['SERVER_SOFTWARE'].lower().startswith('development')
 
 
 def get_gae_version():
