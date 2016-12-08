@@ -11,7 +11,7 @@ class User(ndb.Model):
     # A user can have multiple unique usernames. Usernames are NOT case sensitive.
     usernames = ndb.StringProperty(repeated=True)
 
-    # A user's display name must be one of their usernames. Display names are care sensitive.
+    # A user's display name must be one of their usernames. Display names are case sensitive.
     display_name = ndb.StringProperty()
 
     last_username_change = ndb.DateTimeProperty(auto_now_add=True)

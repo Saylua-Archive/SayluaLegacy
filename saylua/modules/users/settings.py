@@ -12,7 +12,6 @@ import datetime
 
 
 # User Settings
-@app.route('/settings/', methods=['GET', 'POST'])
 @login_required
 def user_settings():
     form = GeneralSettingsForm(request.form, obj=g.user)
@@ -22,10 +21,9 @@ def user_settings():
         flash('Your settings have successfully been saved. ')
 
     # Allows user to change general on/off settings
-    return render_template('user/settings/main.html', form=form)
+    return render_template('settings/main.html', form=form)
 
 
-@app.route('/settings/details/', methods=['GET', 'POST'])
 @login_required
 def user_settings_details():
     form = DetailsForm(request.form, obj=g.user)
@@ -34,20 +32,18 @@ def user_settings_details():
         g.user.put()
         flash('Your user details have successfully been saved. ')
     flash_errors(form)
-    return render_template('user/settings/details.html', form=form)
+    return render_template('settings/details.html', form=form)
 
 
-@app.route('/settings/css/', methods=['GET', 'POST'])
 @login_required
 def user_settings_css():
     if request.method == 'POST':
         g.user.css = request.form.get('css')
         g.user.put()
         flash('You have successfully changed your CSS. ')
-    return render_template("user/settings/css.html")
+    return render_template("settings/css.html")
 
 
-@app.route('/settings/username/', methods=['GET', 'POST'])
 @login_required
 def user_settings_username():
     form = UsernameForm(request.form, obj={'username': g.user.display_name})
@@ -87,10 +83,9 @@ def user_settings_username():
             return redirect(url_for('user_settings_username'))
     flash_errors(form)
 
-    return render_template('user/settings/username.html', form=form)
+    return render_template('settings/username.html', form=form)
 
 
-@app.route('/settings/username/release/', methods=['POST'])
 @login_required
 def user_settings_username_release():
     username = request.form.get('username')
@@ -105,7 +100,6 @@ def user_settings_username_release():
     return redirect(url_for('user_settings_username'))
 
 
-@app.route('/settings/email/', methods=['GET', 'POST'])
 @login_required
 def user_settings_email():
     form = EmailForm(request.form, obj=g.user)
@@ -119,10 +113,9 @@ def user_settings_email():
         # TODO Send new validation email here.
     flash_errors(form)
 
-    return render_template('user/settings/email.html', form=form)
+    return render_template('settings/email.html', form=form)
 
 
-@app.route('/settings/password/', methods=['GET', 'POST'])
 @login_required
 def user_settings_password():
     form = PasswordForm(request.form)
@@ -137,4 +130,4 @@ def user_settings_password():
         return redirect(url_for('user_settings_password'))
     flash_errors(form)
 
-    return render_template('user/settings/password.html', form=form)
+    return render_template('settings/password.html', form=form)

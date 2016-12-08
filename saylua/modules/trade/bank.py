@@ -1,21 +1,19 @@
 from saylua import app
-from saylua.utils import get_from_request
-from saylua.wrappers import login_required
 from saylua.models.user import User
-from saylua.models.notification import Notification
-from flask import render_template, redirect, g, url_for, flash, request
-
-from forms import BankTransferForm, recipient_check
+from saylua.utils import get_from_request
 from saylua.utils.form import flash_errors
+from saylua.wrappers import login_required
+from saylua.modules.messages.models.db import Notification
+
+from flask import render_template, redirect, g, url_for, flash, request
+from forms import BankTransferForm, recipient_check
 
 
-@app.route('/bank/', methods=['GET', 'POST'])
 @login_required
 def bank_main():
     return render_template('bank/main.html')
 
 
-@app.route('/bank/transfer/', methods=['GET', 'POST'])
 @login_required
 def bank_transfer():
     form = BankTransferForm(request.form)

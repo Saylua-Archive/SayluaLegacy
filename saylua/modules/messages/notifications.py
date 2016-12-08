@@ -6,7 +6,6 @@ from google.appengine.ext import ndb
 from .models.db import Notification
 
 
-@app.route('/notifications/', methods=['GET'])
 @login_required
 def notifications_main():
     per_page = 100
@@ -24,7 +23,6 @@ def notifications_main():
         viewed_notifications=notifications, page=page, more_pages=more)
 
 
-@app.route('/notifications/', methods=['POST'])
 @login_required
 def notifications_main_post():
     notification_ids = request.form.getlist('notification_id')
@@ -55,7 +53,6 @@ def notifications_main_post():
     return redirect('/notifications/', code=302)
 
 
-@app.route('/notification/<key>/')
 @login_required
 def notification_follow(key):
     key = make_ndb_key(key)

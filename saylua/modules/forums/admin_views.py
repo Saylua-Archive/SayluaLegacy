@@ -12,7 +12,7 @@ def new_board_category():
         new_category = BoardCategory(title=category)
         new_category.put()
         flash("New category: " + category + " successfully created.")
-    return render_template("/admin/forums/newcategory.html")
+    return render_template("admin/newcategory.html")
 
 
 @admin_access_required
@@ -27,4 +27,4 @@ def new_board():
                 category_key=category, description=description)
         new_board.put()
         flash("New board: \"" + title + "\" successfully created!")
-    return render_template("/admin/forums/newboard.html", categories=categories)
+    return render_template("admin/newboard.html", categories=categories)

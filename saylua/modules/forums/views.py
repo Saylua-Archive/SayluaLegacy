@@ -19,7 +19,7 @@ def forums_home():
         boards = Board.query(Board.category_key == category.key.urlsafe()).fetch()
         block.append(boards)
         blocks.append(block)
-    return render_template("forums/main.html", forum_blocks=blocks)
+    return render_template("main.html", forum_blocks=blocks)
 
 
 def forums_board(board_id):
@@ -54,7 +54,7 @@ def forums_board(board_id):
 
         total_threads = len(thread_query.fetch(keys_only=True))
         page_count = int(math.ceil(total_threads / float(THREADS_PER_PAGE)))
-    return render_template("forums/board.html", board=board, threads=threads, page_count=page_count)
+    return render_template("board.html", board=board, threads=threads, page_count=page_count)
 
 
 def forums_thread(thread_id):
@@ -94,5 +94,5 @@ def forums_thread(thread_id):
             offset=((page_number - 1) * POSTS_PER_PAGE))
     page_count = int(math.ceil(len(post_query.fetch(keys_only=True)) / float(POSTS_PER_PAGE)))
     other_boards = Board.query().fetch()
-    return render_template("forums/thread.html", board=board, thread=thread, posts=posts,
+    return render_template("thread.html", board=board, thread=thread, posts=posts,
             page_count=page_count, other_boards=other_boards)

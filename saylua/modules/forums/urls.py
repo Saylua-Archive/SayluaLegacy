@@ -11,5 +11,5 @@ urlpatterns = [
   # Primary Views
   url('/forums/', view_func=views.forums_home, name='forum_home'),
   url('/forums/board/<board_id>/', view_func=views.forums_board, name='forum_board', methods=['GET', 'POST']),
-  url('/forums/board/<thread_id>/', view_func=views.forums_thread, name='forum_thread', methods=['GET', 'POST'])
+  url('/forums/thread/<thread_id>/', view_func=views.forums_thread, name='forum_thread', methods=['GET', 'POST'])
 ]

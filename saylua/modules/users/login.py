@@ -1,12 +1,15 @@
 from saylua import app
-from saylua.wrappers import login_required
-from flask import render_template, redirect, make_response, request, g
-from google.appengine.ext import ndb
-import datetime
 
 from saylua.utils.form import flash_errors
 from saylua.models.user import LoginSession, User
-from forms.login import LoginForm, RegisterForm, login_check
+from saylua.wrappers import login_required
+
+from .forms.login import LoginForm, RegisterForm, login_check
+
+from google.appengine.ext import ndb
+from flask import render_template, redirect, make_response, request, g
+
+import datetime
 
 
 @app.context_processor
@@ -22,7 +25,6 @@ def inject_sidebar_login_form():
 
 
 # Login form shown to the user
-@app.route('/login/', methods=['GET', 'POST'])
 def login():
     form = LoginForm(request.form)
 
@@ -44,20 +46,17 @@ def login():
         return resp
 
     flash_errors(form)
-    return render_template('user/login/login.html', form=form)
+    return render_template('login/login.html', form=form)
 
 
-@app.route('/login/recover/')
 def recover_login():
-    return render_template('user/login/recover.html')
+    return render_template('login/recover.html')
 
 
-@app.route('/login/reset/<user>/<code>/')
 def reset_password(user, code):
-    return render_template('user/login/recover.html')
+    return render_template('login/recover.html')
 
 
-@app.route('/logout/')
 @login_required
 def logout():
     user_key = request.cookies.get('user_key')
@@ -73,7 +72,6 @@ def logout():
 
 
 # Registration form shown to the user
-@app.route('/register/', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -99,4 +97,4 @@ def register():
         resp.set_cookie('session_key', session_key, expires=expires)
         return resp
     flash_errors(form)
-    return render_template('user/login/register.html', form=form)
+    return render_template('login/register.html', form=form)

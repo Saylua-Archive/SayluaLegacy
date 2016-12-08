@@ -1,9 +1,11 @@
 from saylua import app
+from saylua.models.role import Role
+from saylua.models.user import User
+from saylua.utils import is_devserver
 from saylua.wrappers import admin_access_required
 
-from flask import render_template, redirect, flash, request
+from flask import render_template, redirect, flash, request, g
 
-from .models.db import Role
 
 @admin_access_required
 def admin_panel():
@@ -19,7 +21,7 @@ def admin_panel_roles_add():
                 setattr(new_role, priv, request.form.get(priv) == 'True')
         new_role.put()
         flash('New Role successfully created!')
-        return redirect("/admin/roles/add/")
+        return redirect("/roles/add/")
 
     privs = Role().to_dict().keys()
     privs.sort()
@@ -47,6 +49,11 @@ def setup_db():
     for entry in admin_dict:
         setattr(admin_role, entry, True)
     admin_role.put()
+
+    if is_devserver():
+        if g.user:
+            g.user.role_id = 'admin'
+            g.user.put()
 
     flash("Database Setup Complete")
     return redirect("/admin/")

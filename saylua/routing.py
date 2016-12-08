@@ -1,13 +1,22 @@
 from flask import Blueprint, Flask
+from flask.globals import _request_ctx_stack
 from flask.helpers import send_from_directory
+from flask.templating import DispatchingJinjaLoader
 
 from collections import namedtuple
 from importlib import import_module
 
+import jinja2
 import os.path
+
 
 class SayluaApp(Flask):
   """Extends the default Flask app to attempt to locate static files from Blueprints before 404'ing."""
+  def __init__(self, name):
+    super(SayluaApp, self).__init__(name)
+    self.jinja_options = Flask.jinja_options.copy()
+    self.jinja_options['loader'] = SayluaLoader(self)
+
   def send_static_file(self, filename):
     for blueprint_name, blueprint in self.blueprints.items():
       filepath = os.path.join(blueprint.static_folder, filename)
@@ -16,6 +25,7 @@ class SayluaApp(Flask):
         return send_from_directory(blueprint.static_folder, filename)
 
     return super(SayluaApp, self).send_static_file(filename)
+
 
 class SayluaRouter(Blueprint):
   """URL Routing syntas xugar."""
@@ -34,6 +44,25 @@ class SayluaRouter(Blueprint):
   def register_urls(self, urls):
     for _url in urls:
       self.add_url_rule(rule=_url.rule, endpoint=_url.name, view_func=_url.view_func, methods=_url.methods)
+
+
+class SayluaLoader(DispatchingJinjaLoader):
+  """Prevent template namespace collisions between modules.
+
+  Additionally, prefer local templates to global templates.
+  This means that global templates will no longer override local templates.
+  """
+  def _iter_loaders(self, template):
+    blueprint = _request_ctx_stack.top.request.blueprint
+    if blueprint is not None and blueprint in self.app.blueprints:
+      loader = self.app.blueprints[blueprint].jinja_loader
+      if loader is not None:
+        yield loader, template
+
+    loader = self.app.jinja_loader
+    if loader is not None:
+        yield loader, template
+
 
 def url(rule, view_func, name=None, methods=["GET"]):
   """Simple URL wrapper for SayluaRouter.

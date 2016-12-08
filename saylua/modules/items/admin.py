@@ -1,12 +1,11 @@
 from saylua import app
-from saylua.wrappers import admin_access_required
-from flask import render_template, redirect, url_for, flash, request
-
 from saylua.utils import get_from_request
 from saylua.utils.form import flash_errors
+from saylua.wrappers import admin_access_required
 
-from saylua.models.item import Item
+from .models.db import Item
 
+from flask import render_template, redirect, url_for, flash, request
 from forms import ItemUploadForm
 
 
