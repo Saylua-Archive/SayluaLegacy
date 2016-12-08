@@ -4,7 +4,7 @@ from google.appengine.ext import ndb
 from saylua import app
 from saylua.wrappers import login_required
 from saylua.utils import make_ndb_key, pluralize, get_from_request
-from saylua.models.conversation import UserConversation, Conversation
+from .models.db import UserConversation, Conversation
 
 from forms import ConversationForm, ConversationReplyForm, recipient_check
 from saylua.utils.form import flash_errors

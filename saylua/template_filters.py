@@ -1,11 +1,12 @@
 from saylua import app
-from saylua.utils import saylua_time, pluralize
 from saylua.models.user import User
-from saylua.models.forum import ForumPost, ForumThread
-import datetime
+from saylua.utils import make_ndb_key, pluralize, saylua_time
+from saylua.modules.forums.models.db import ForumPost, ForumThread
+
 from google.appengine.ext import ndb
-from saylua.utils import make_ndb_key
 from flask_markdown import Markdown
+
+import datetime
 
 
 # Attach Flask Markdown to our app.

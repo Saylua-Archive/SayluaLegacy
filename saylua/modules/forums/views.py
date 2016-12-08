@@ -3,14 +3,13 @@ from flask import render_template, redirect, g, flash, request
 from google.appengine.ext import ndb
 import math
 
-from saylua.models.forum import Board, BoardCategory, ForumThread, ForumPost
+from .models.db import Board, BoardCategory, ForumThread, ForumPost
 
 
 THREADS_PER_PAGE = 10
 POSTS_PER_PAGE = 10
 
 
-@app.route('/forums/')
 def forums_home():
     categories = BoardCategory.query().fetch()
     blocks = []
@@ -23,7 +22,6 @@ def forums_home():
     return render_template("forums/main.html", forum_blocks=blocks)
 
 
-@app.route('/forums/board/<board_id>/', methods=['GET', 'POST'])
 def forums_board(board_id):
     boards = Board.query(Board.url_title == board_id).fetch()
     if len(boards) != 1:
@@ -59,7 +57,6 @@ def forums_board(board_id):
     return render_template("forums/board.html", board=board, threads=threads, page_count=page_count)
 
 
-@app.route('/forums/thread/<thread_id>/', methods=['GET', 'POST'])
 def forums_thread(thread_id):
     thread_id = int(thread_id)
     thread = ndb.Key(ForumThread, thread_id).get()

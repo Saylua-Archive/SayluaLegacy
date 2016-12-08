@@ -3,7 +3,7 @@ from saylua.wrappers import login_required
 from saylua.utils import make_ndb_key, pluralize
 from flask import render_template, redirect, flash, request, g
 from google.appengine.ext import ndb
-from saylua.models.notification import Notification
+from .models.db import Notification
 
 
 @app.route('/notifications/', methods=['GET'])

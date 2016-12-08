@@ -9,7 +9,7 @@
 from saylua.routing import SayluaRouter
 from . import urls
 
-MODULE_NAME = 'hom'
+MODULE_NAME = 'home'
 IMPORT_NAME = __name__
 
 blueprint = SayluaRouter.create_blueprint(MODULE_NAME, IMPORT_NAME)
