@@ -1,11 +1,12 @@
 from saylua import app
-import datetime
-from flask import g
-from saylua.models.conversation import UserConversation
-from saylua.models.notification import Notification
 from saylua.models.user import User
+from saylua.modules.messages.models.db import UserConversation
+from saylua.modules.messages.models.db import Notification
 from saylua.utils import is_devserver, get_gae_version
 
+from flask import g
+
+import datetime
 
 @app.context_processor
 def inject_version_id():

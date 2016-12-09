@@ -1,15 +1,15 @@
 # =======================================================
 #
-#  Items -- Item Management
+#  Books -- Books
 #  ---------------------------------
-#  Item bibliotheque, inventory management.
+#  Books?
 #
 # =======================================================
 
 from saylua.routing import SayluaRouter
 from . import urls
 
-MODULE_NAME = 'items'
+MODULE_NAME = 'books'
 IMPORT_NAME = __name__
 
 blueprint = SayluaRouter.create_blueprint(MODULE_NAME, IMPORT_NAME)

@@ -3,10 +3,8 @@ from saylua.wrappers import admin_access_required
 from flask import render_template, flash, request
 from saylua.utils import urlize
 
-from saylua.models.forum import Board, BoardCategory
+from .models.db import Board, BoardCategory
 
-
-@app.route('/admin/forums/newcategory/', methods=['GET', 'POST'])
 @admin_access_required
 def new_board_category():
     if request.method == 'POST':
@@ -14,10 +12,9 @@ def new_board_category():
         new_category = BoardCategory(title=category)
         new_category.put()
         flash("New category: " + category + " successfully created.")
-    return render_template("/admin/forums/newcategory.html")
+    return render_template("admin/newcategory.html")
 
 
-@app.route('/admin/forums/newboard/', methods=['GET', 'POST'])
 @admin_access_required
 def new_board():
     categories = BoardCategory.query().fetch()
@@ -30,4 +27,4 @@ def new_board():
                 category_key=category, description=description)
         new_board.put()
         flash("New board: \"" + title + "\" successfully created!")
-    return render_template("/admin/forums/newboard.html", categories=categories)
+    return render_template("admin/newboard.html", categories=categories)

@@ -1,11 +1,16 @@
 from saylua import app
-from saylua.wrappers import admin_access_required
-from flask import render_template, redirect, flash, request
-
 from saylua.models.role import Role
+from saylua.models.user import User
+from saylua.utils import is_devserver
+from saylua.wrappers import admin_access_required
+
+from flask import render_template, redirect, flash, request, g
 
 
-@app.route('/admin/roles/add/', methods=['GET', 'POST'])
+@admin_access_required
+def admin_panel():
+    return render_template('admin/main.html')
+
 @admin_access_required
 def admin_panel_roles_add():
     if request.method == 'POST':
@@ -23,7 +28,6 @@ def admin_panel_roles_add():
     return render_template('admin/roles/add.html', privs=privs)
 
 
-@app.route('/admin/roles/edit/', methods=['GET', 'POST'])
 @admin_access_required
 def admin_panel_roles_edit():
     roles = Role.query().fetch()
@@ -36,3 +40,20 @@ def admin_panel_roles_edit():
         flash("Roles successfully updated!")
     privs.sort()
     return render_template('admin/roles/edit.html', roles=roles, privs=privs)
+
+
+def setup_db():
+    # Create the role 'admin' with all privileges
+    admin_role = Role(id='admin')
+    admin_dict = admin_role.to_dict()
+    for entry in admin_dict:
+        setattr(admin_role, entry, True)
+    admin_role.put()
+
+    if is_devserver():
+        if g.user:
+            g.user.role_id = 'admin'
+            g.user.put()
+
+    flash("Database Setup Complete")
+    return redirect("/admin/")

@@ -3,14 +3,13 @@ from flask import render_template, redirect, g, flash, request
 from google.appengine.ext import ndb
 import math
 
-from saylua.models.forum import Board, BoardCategory, ForumThread, ForumPost
+from .models.db import Board, BoardCategory, ForumThread, ForumPost
 
 
 THREADS_PER_PAGE = 10
 POSTS_PER_PAGE = 10
 
 
-@app.route('/forums/')
 def forums_home():
     categories = BoardCategory.query().fetch()
     blocks = []
@@ -20,10 +19,9 @@ def forums_home():
         boards = Board.query(Board.category_key == category.key.urlsafe()).fetch()
         block.append(boards)
         blocks.append(block)
-    return render_template("forums/main.html", forum_blocks=blocks)
+    return render_template("main.html", forum_blocks=blocks)
 
 
-@app.route('/forums/board/<board_id>/', methods=['GET', 'POST'])
 def forums_board(board_id):
     boards = Board.query(Board.url_title == board_id).fetch()
     if len(boards) != 1:
@@ -56,10 +54,9 @@ def forums_board(board_id):
 
         total_threads = len(thread_query.fetch(keys_only=True))
         page_count = int(math.ceil(total_threads / float(THREADS_PER_PAGE)))
-    return render_template("forums/board.html", board=board, threads=threads, page_count=page_count)
+    return render_template("board.html", board=board, threads=threads, page_count=page_count)
 
 
-@app.route('/forums/thread/<thread_id>/', methods=['GET', 'POST'])
 def forums_thread(thread_id):
     thread_id = int(thread_id)
     thread = ndb.Key(ForumThread, thread_id).get()
@@ -97,5 +94,5 @@ def forums_thread(thread_id):
             offset=((page_number - 1) * POSTS_PER_PAGE))
     page_count = int(math.ceil(len(post_query.fetch(keys_only=True)) / float(POSTS_PER_PAGE)))
     other_boards = Board.query().fetch()
-    return render_template("forums/thread.html", board=board, thread=thread, posts=posts,
+    return render_template("thread.html", board=board, thread=thread, posts=posts,
             page_count=page_count, other_boards=other_boards)

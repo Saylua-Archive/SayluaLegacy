@@ -4,14 +4,13 @@ from google.appengine.ext import ndb
 from saylua import app
 from saylua.wrappers import login_required
 from saylua.utils import make_ndb_key, pluralize, get_from_request
-from saylua.models.conversation import UserConversation, Conversation
+from .models.db import UserConversation, Conversation
 
 from forms import ConversationForm, ConversationReplyForm, recipient_check
 from saylua.utils.form import flash_errors
 
 
 # The main page where the user views all of their messages.
-@app.route('/messages/')
 @login_required
 def messages_main():
     messages = UserConversation.query(UserConversation.user_key == g.user.key,
@@ -23,7 +22,6 @@ def messages_main():
 
 
 # The submit action for the user to update their messages.
-@app.route('/messages/', methods=['POST'])
 @login_required
 def messages_main_post():
     user_message_ids = request.form.getlist('user_conversation_id')
@@ -57,7 +55,6 @@ def messages_main_post():
 
 
 # The page for a user to write new messages.
-@app.route('/messages/write/', methods=['GET', 'POST'])
 @login_required
 def messages_write_new():
     form = ConversationForm(request.form)
@@ -78,7 +75,6 @@ def messages_write_new():
 # message they were looking to read. We make it a separate route so that the
 # main "looking at a message" route doesn't have to bother with looking up
 # the user's message metadata.
-@app.route('/conversation_read/<key>/')
 @login_required
 def messages_read(key):
     conversation_key = make_ndb_key(key)
@@ -93,7 +89,6 @@ def messages_read(key):
 
 
 # The page to view a specific conversation.
-@app.route('/conversation/<key>/', methods=['GET', 'POST'])
 @login_required
 def messages_view_conversation(key):
     key = make_ndb_key(key)
