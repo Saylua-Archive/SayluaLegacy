@@ -1,6 +1,4 @@
-from saylua import app
 from saylua.models.role import Role
-from saylua.models.user import User
 from saylua.utils import is_devserver
 from saylua.wrappers import admin_access_required
 
@@ -10,6 +8,7 @@ from flask import render_template, redirect, flash, request, g
 @admin_access_required
 def admin_panel():
     return render_template('admin/main.html')
+
 
 @admin_access_required
 def admin_panel_roles_add():

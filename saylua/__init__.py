@@ -20,7 +20,7 @@ import template_filters
 
 # Populate app with blueprints
 enabled_modules = [
-    'admin' ,
+    'admin',
     'arcade',
     'avatar',
     'books',
@@ -32,7 +32,8 @@ enabled_modules = [
     'pets',
     'search',
     'trade',
-    'users'
+    'users',
+    'world'
 ]
 
 routing.register_urls(app, enabled_modules)
