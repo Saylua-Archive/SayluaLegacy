@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "saylua",
   "main": "gulpfile.js",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://bitbucket.org/saylua/saylua.git"
@@ -37,9 +36,13 @@
     "babel-preset-es2015": "^6.16.0",
     "eslint": "^3.8.1",
     "eslint-plugin-react": "^6.4.1",
+    "howler": "^2.0.2",
     "inferno": "^0.7.27",
     "inferno-component": "^0.7.27",
     "inferno-dom": "^0.7.27",
+    "inferno-redux": "^0.7.27",
+    "pixi": "^0.3.1",
+    "redux": "^3.6.0",
     "sass-loader": "^4.0.2",
     "webpack": "^1.13.2",
     "webpack-stream": "^3.2.0"
