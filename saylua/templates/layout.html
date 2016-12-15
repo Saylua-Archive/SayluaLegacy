@@ -14,12 +14,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.5">
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/static/css/styles.min.css?v={{ version_id }}">
+  <link rel="stylesheet" href="{{ include_static('css/styles.min.css') }}">
 
   <link rel="icon" type="image/png" href="/static/favicon.png" />
 
   <script src="/static/js/lib/reqwest.min.js"></script>
-  <script src="/static/js/main.min.js?v={{ version_id }}"></script>
+  <script src="{{ include_static('js/main.min.js') }}"></script>
   {% block header_scripts %}{% endblock %}
 
   <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">

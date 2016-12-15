@@ -2,18 +2,21 @@ from saylua import app
 from saylua.models.user import User
 from saylua.modules.messages.models.db import UserConversation
 from saylua.modules.messages.models.db import Notification
-from saylua.utils import is_devserver, get_gae_version
+from saylua.utils import get_static_version_id, include_static
 
 from flask import g
 
 import datetime
 
+
 @app.context_processor
 def inject_version_id():
-    version = datetime.datetime.utcnow()
-    if not is_devserver():
-        version = get_gae_version()
-    return dict(version_id=version)
+    return dict(version_id=get_static_version_id())
+
+
+@app.context_processor
+def inject_include_static():
+    return dict(include_static=include_static)
 
 
 @app.context_processor

@@ -1,10 +1,17 @@
 {% extends "layout.html" %}
 {% set page_title = "Line Blocks" %}
+{% block header_scripts %}
+<script src="/static/js/LineBlocks.min.js"></script>
+{% endblock %}
 {% block body %}
 <h2>Line Blocks</h2>
 
 <div id="line-blocks">
   <div id="line-blocks-info">
+    <div id="line-blocks-next">
+    </div>
+    <div id="line-blocks-text">
+    </div>
   </div>
   <div id="line-blocks-grid">
   </div>
