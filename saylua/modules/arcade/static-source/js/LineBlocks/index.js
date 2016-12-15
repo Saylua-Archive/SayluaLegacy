@@ -57,7 +57,7 @@ function init() {
 	block = createBlock();
 	nextBlock = createBlock();
 
-	for (let i = 0; i < height; i++){
+	for (var i = 0; i < height; i++){
 		matrix[i] = new Array(width);
 	}
 
