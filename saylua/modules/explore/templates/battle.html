@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
 {% set page_title = "Battle" %}
 {% set fullscreen = True %}
+{% block header_scripts %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/explore.min.css' ) }}?v=0.0.1">
+{% endblock %}
 {% block body %}
 <h2>You are in a battle! </h2>
 <div id="battle-screen" style="background-image: url('/static/img/bg/{{bg_num}}.jpg'); ">

@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
 {% set page_title = "Exploring" %}
 {% block header_scripts %}
-<script src="{{ url_for('static', filename='js/Dungeon.min.js' ) }}?v=0.0.1"></script>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/explore.min.css' ) }}?v=0.0.1">
+  <script src="{{ url_for('static', filename='js/Dungeon.min.js' ) }}?v=0.0.1"></script>
 {% endblock %}
 {% block body %}
-<h2>Exploring</h2>
-<div id="dungeon-wrapper">
-  <div id="dungeon-client-mount"></div>
-  <div id="dungeon-info-mount"></div>
-  <div id="dungeon-debug-mount"></div>
-</div>
+  <div id="dungeon-wrapper">
+    <div id="dungeon-client-mount"></div>
+    <div id="dungeon-info-mount"></div>
+    <div id="dungeon-debug-mount"></div>
+  </div>
 {% endblock %}

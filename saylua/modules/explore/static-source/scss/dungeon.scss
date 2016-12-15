@@ -1,5 +1,5 @@
-@import 'dungeon/cells';
-@import 'dungeon/entities';
+@import 'map/cells';
+@import 'map/entities';
 
 #dungeon-wrapper, #dungeon-wrapper > * {
   box-sizing: border-box;

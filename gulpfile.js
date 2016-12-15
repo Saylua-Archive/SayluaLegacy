@@ -31,21 +31,46 @@ gulp.task('lint', function () {
 });
 
 gulp.task('build-sass', function () {
-  var filesGlob = paths.sass + "/**/*.scss";
+  // Compile our initial, root level styles
+  var rootGlob = "saylua/static-source/scss/**/*.scss";
 
-  gulp.src(filesGlob)
-    .pipe(sass.sync().on('error', sass.logError))
+  gulp.src(rootGlob)
+    .pipe(sass().on('error', sass.logError))
     .pipe(concat('styles.min.css'))
     .pipe(sourcemaps.init())
     .pipe(cleanCSS())
     .pipe(sourcemaps.write())
     .pipe(gulp.dest(dests.sass));
+
+  // Compile our module SCSS into separate payloads.
+  var moduleGlob = "saylua/modules/*/"
+  var moduleFolders = glob.sync(moduleGlob);
+
+  moduleFolders.forEach(function(folder) {
+    var moduleFilesGlob = folder + "/static-source/scss/**/*.scss";
+    var moduleFiles = glob.sync(moduleFilesGlob);
+
+    var packageName = folder.split("/").splice(-2)[0];
+
+    var outputName = packageName + '.min.css';
+    var outputPath = "saylua/modules/" + packageName + "/static/css/";
+
+    gulp.src(moduleFilesGlob)
+      .pipe(sass({
+        'includePaths': "saylua/static-source/scss/"
+      }).on('error', sass.logError))
+      .pipe(concat(outputName))
+      .pipe(sourcemaps.init())
+      .pipe(cleanCSS())
+      .pipe(sourcemaps.write())
+      .pipe(gulp.dest(outputPath));
+  });
 });
 
 gulp.task('build-js', [], function() {
   // Minify and copy all JavaScript (except vendor scripts)
   // with sourcemaps all the way down
-  var pkgGlob = paths.js + "/*";
+  var pkgGlob = paths.js + "/*/";
   var folders = glob.sync(pkgGlob);
 
   folders.forEach(function(folder) {
