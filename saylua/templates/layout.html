@@ -184,21 +184,23 @@
 </div>
 <div class="container">
   <div class="content">
-    {% if not fullscreen %}
-      {% include "sidebars.html" %}
-    {% endif %}
-    <div class="page-area">
+    <div class="notifications-container">
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
           {% for category, message in messages %}
             {% if category == 'error' %}
-              <div class="notification error">Error: {{ message }} </div>
+              <div class="notification error">Error: {{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
             {% else %}
-              <div class="notification">{{ message }} </div>
+              <div class="notification">{{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
             {% endif %}
           {% endfor %}
         {% endif %}
       {% endwith %}
+    </div>
+    {% if not fullscreen %}
+      {% include "sidebars.html" %}
+    {% endif %}
+    <div class="page-area">
       {% block body %}{% endblock %}
     </div>
   </div>
