@@ -1,5 +1,8 @@
 {% extends "layout.html" %}
 {% set page_title = "Line Blocks" %}
+{% block header_scripts %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/arcade.min.css' ) }}?v={{ version_id }}">
+{% endblock %}
 {% block body %}
 <h2>Line Blocks</h2>
 
