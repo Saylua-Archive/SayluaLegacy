@@ -74,7 +74,7 @@ gulp.task('build-js', [], function() {
   var folders = glob.sync(pkgGlob);
 
   folders.forEach(function(folder) {
-    var pkgName = folder.split("/").splice(-1)[0];
+    var pkgName = folder.split("/").splice(-2)[0];
     var pkg = gulp.src(folder + '**/*.js', { base: process.cwd() });
 
     // Filter deprecated / hidden packages
@@ -92,7 +92,7 @@ gulp.task('build-js', [], function() {
       pkg.pipe(concat(pkgName + '.min.js'))
         .pipe(gulp.dest(pkgPath));
     } else {
-      pkg.pipe(uglify())
+      pkg.pipe(uglify()).on('error', gutil.log)
         .pipe(concat(pkgName + '.min.js'))
         .pipe(gulp.dest(pkgPath));
     }
