@@ -1,4 +1,4 @@
-from . import Terrain
+#from . import Terrain
 from . import helpers
 
 import cPickle
@@ -6,37 +6,9 @@ import copy
 
 
 # TileGrid -> Required by dungeon(s)
-# Utility class for the terrain generators.
+# Utility class for the map generators.
 # ===================================================
-# Note:
-# A tile with an unset meta.visibility value is treated as unseen.
-# A tile with a set but falsey meta.visibility value will be
-# treated as seen but hidden.
-#
-# Sample 1x3 map:
-# [
-#   {
-#     'tile': '0x00',
-#     'meta': {
-#       'elevation': 1,
-#       'visible': True
-#     }
-#   },
-#   {
-#     'tile': '0x05',
-#     'meta': {
-#       'message': "THE FLOOR IS LAVA!"
-#       'elevation': 0
-#     }
-#   },
-#   {
-#     'tile': '0x00',
-#     'meta': {
-#       'elevation': 1,
-#       'visible': False
-#     }
-#   }
-# ]
+
 
 class TileGrid():
   def __init__(self, width, height, cell_map=None, default_tile=None):
@@ -269,6 +241,9 @@ class TileGrid():
         cell_map[y][x] = cell
 
     return cell_map
+
+  def render(self):
+    return self.cell_map
 
   def to_string(self):
     return cPickle.dumps(self.cell_map)

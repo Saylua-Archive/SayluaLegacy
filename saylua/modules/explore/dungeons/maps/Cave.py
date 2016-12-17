@@ -1,7 +1,11 @@
-from . import default_entities
+from meta.EntityContainer import EntityContainer
+from meta.APIWrapper import APIWrapper
+from meta.TileGrid import TileGrid
+from meta import default_entities
+
 from random import shuffle
 
-# Cave -> Required by Terrain
+# Cave Map -> Dungeon Terrain Type
 # ===================================================
 # In the future, have this dungeon make itself more dangerous over time.
 # Continuously generating low level slimes that grow in size (And therefore strength)
@@ -16,14 +20,11 @@ from random import shuffle
 
 
 def generate(options):
-  # Prevent circular import issues
-  from . import TileGrid
-
   # Reasons
   width, height = options.get("size")
 
   # Prepare empty map
-  grid = TileGrid.TileGrid(width=width, height=height, default_tile='0x00')
+  grid = TileGrid(width=width, height=height, default_tile='0x00')
 
   # Seed with cells. Enforce an exact fill percentage, with no overlap.
   cells_to_fill = int(round(options.get("fill_percentage") * (width * height)))
@@ -121,20 +122,14 @@ def finalize(options, grid):
 
 
 def populate(options, grid):
-  # Prevent circular import issues
-  from . import EntityContainer
-
   # Find a non-wall location and insert the player.
   non_walls = grid.find(lambda x: x['tile'] == '0x00')
   shuffle(non_walls)
 
-  # An additional step must be added to ensure that the player
-  # and portal are not inserted into a non-pathable location.
-  # See: "The Dungeon Update" commit notes for details
   player_location = non_walls[0]
   portal_location = non_walls[1]
 
-  entities = EntityContainer.EntityContainer()
+  entities = EntityContainer()
   entities.add(parent='0x1000', location=player_location)
   entities.add(parent='0x1001', location=portal_location)
 
@@ -147,8 +142,7 @@ def populate(options, grid):
 
   return entities
 
-
-API = {
+API = APIWrapper({
   "generate": generate,
   "finalize": finalize,
   "iterate": iterate,
@@ -163,15 +157,17 @@ API = {
     {
       'id': '0x00',
       'description': 'Ugh, gross. What did you just step in?',
+      'slug': 'tile_cave_ground',
       'type': 'ground',
       'meta': {}
     },
     {
       'id': '0x01',
       'description': 'The mottled walls of this cavern somehow manage to feel both rough and slimy simultaneously. You also feel a slow, heartbeat like thrumming. Curious.',
+      'slug': 'tile_cave_wall',
       'type': 'wall',
       'meta': {}
     }
   ],
   "entity_set": default_entities
-}
+})

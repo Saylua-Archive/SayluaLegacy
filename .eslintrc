@@ -4,6 +4,9 @@
     "es6": true,
     "node": true
   },
+  "globals": {
+    "PIXI": true
+  },
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "parserOptions": {
     "ecmaFeatures": {

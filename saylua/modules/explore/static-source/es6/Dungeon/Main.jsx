@@ -1,29 +1,23 @@
 import Inferno from "inferno";
 import InfernoDOM from "inferno-dom";
+import { createStore } from 'redux';
 
+import { getInitialGameState, GameStore } from "./Reducers/GameStore";
 import DungeonClient from "./Components/DungeonClient";
-import DungeonInfo from "./Components/DungeonInfo";
 import DebugTools from "./Components/DebugTools";
-import Dungeon from "./Models/Dungeon";
-import MiniMap from "./Models/MiniMap";
+
 
 export default function Main() {
-  let model = new Dungeon();
-  let miniMap = new MiniMap();
+  getInitialGameState().then((initialState) => {
+    let store = createStore(GameStore, initialState);
 
-  model.fetch().then(() => {
     InfernoDOM.render(
-      <DungeonClient model={ model } miniMap={ miniMap } />,
+      <DungeonClient store={ store } />,
       document.getElementById("dungeon-client-mount")
     );
 
     InfernoDOM.render(
-      <DungeonInfo miniMap={ miniMap } />,
-      document.getElementById("dungeon-info-mount")
-    );
-
-    InfernoDOM.render(
-      <DebugTools regenerate={ model._debug_regenerate(true) } reveal={ model._debug_reveal(true) } />,
+      <DebugTools store={ store } />,
       document.getElementById("dungeon-debug-mount")
     );
   });

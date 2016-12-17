@@ -2,7 +2,7 @@ from flask import redirect as _redirect, url_for, render_template, g
 from functools import wraps
 
 
-def login_required(f, redirect='login'):
+def login_required(f, redirect='users.login'):
   """Redirects non-logged in users to a specified location.
 
   Usage: `@login_required`, `@login_required(redirect=<url>)`
@@ -22,7 +22,7 @@ def admin_access_required(f):
   @wraps(f)
   def decorated_function(*args, **kwargs):
     if not g.logged_in:
-      return _redirect(url_for('login'))
+      return _redirect(url_for('users.login'))
 
     if not g.user.get_role().can_access_admin:
       return render_template('403.html'), 403

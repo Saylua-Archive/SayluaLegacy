@@ -2,7 +2,7 @@ from uuid import uuid4
 import cPickle
 
 # EntityContainer -> Required by dungeon(s)
-# Utility class for the terrain generators.
+# Utility class for the map generators.
 # ===================================================
 
 
@@ -59,6 +59,9 @@ class EntityContainer():
     # This is deliberately not a filter, as the player
     # should always be the first entity.
     return self.entities[0]
+
+  def render(self):
+    return self.entities
 
   def update_entity(self, entity):
     # Replace entity with an updated copy of itself

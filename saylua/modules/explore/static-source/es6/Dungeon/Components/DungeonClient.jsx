@@ -1,56 +1,57 @@
 import Inferno from "inferno";
+import onDomReady from "ondomready";
 import Component from "inferno-component";
 
-import DungeonMap from "./DungeonMap";
+import * as CanvasUtils from "../Utils/canvas";
+import Game from "../Core/Game";
 
 // DungeonClient -> Required by Main
 // --------------------------------------
 // The actual client. This handles input and renders the map.
 // Technically, this can and should be a stateless component
 // instead of a traditional one.
-//
-// Address that if performance ever becomes a concern.
-
-// Fisher-Price's My-First-React notes
-// --------------------------------------
-// Generally, in a component, I write functions in the following order.
-// 1. Constructor
-// 2. Lifecycle functions
-//    https://facebook.github.io/react/docs/react-component.html#the-component-lifecycle
-// 3. Internal functions that are only called by other functions.
-// 4. Functions that handle user input.
-// 5. Functions that generate DOM elements from data.
-//    (In 90% of cases these should not exist, and indicate you should write a new component)
-// 6. The actual render() function
-//
-// The name of the game is to keep your functions as pure as possible, and your components minimal.
-// - You should have little to no logic in your render() call.
-// - Avoid having components manage their own state, leave that to the component at the top of the food chain.
-//   Data in, data out is the mantra.
-// - With the above said, do not be afraid to break your mega-component into multiple
-//   smaller mega-components with multiple mount points.
 
 export default class DungeonClient extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      "domLoaded": true,
-      "transitioning": false
-    };
+    this.state = {};
   }
 
-  componentWillMount() {
-    // Make sure that when our model updates, we do too.
-    this.props.model.bindComponent(this);
+  componentDidMount() {
+    // Start rendering Pixi canvas once our component has mounted.
+    onDomReady(() => {
+      // Store client wrapper, canvas wrapper.
+      this.clientWrapper = document.querySelectorAll(".dungeon-client-wrapper")[0];
+      this.canvasWrapper = this.refs.pixiCanvas;
 
-    // Match keyboard presses to events.
-    this.eventListener = window.addEventListener("keydown", this.handleKeyPress.bind(this));
+      // Calculate the height, width of our canvas from the window size.
+      let [renderWidth, renderHeight] = CanvasUtils.calculateSize();
+
+      // Resize container
+      this.clientWrapper.style.height = renderHeight + "px";
+      this.clientWrapper.style.width = renderWidth + "px";
+      this.canvasWrapper.style.height = renderHeight + "px";
+      this.canvasWrapper.style.width = renderWidth + "px";
+
+      // Start Game, attach renderer to DOM
+      this.game = new Game(renderWidth, renderHeight, this.props.store);
+      this.refs.pixiCanvas.appendChild(this.game.getRenderer());
+
+      // Bind to the window.resize event.
+      window.addEventListener("resize", this.handleWindowResize.bind(this));
+
+      // Match keyboard presses to events.
+      this.eventListener = window.addEventListener("keydown", this.handleKeyPress.bind(this));
+
+      // Start looping.
+      this.animate();
+    });
   }
 
-  handleForceTransition(event) {
-    event.preventDefault();
-    this.handleKeyPress(undefined, true);
+  animate() {
+    this.game.loop();
+    this.frame = requestAnimationFrame(this.animate.bind(this));
   }
 
   handleKeyPress(event, synthetic) {
@@ -106,10 +107,18 @@ export default class DungeonClient extends Component {
     }
   }
 
+  handleWindowResize(e) {
+    let [renderWidth, renderHeight] = CanvasUtils.calculateSize();
+
+    this.clientWrapper.style.height = renderHeight + "px";
+    this.clientWrapper.style.width = renderWidth + "px";
+    this.canvasWrapper.style.height = renderHeight + "px";
+    this.canvasWrapper.style.width = renderWidth + "px";
+  }
+
   render() {
     return (
-      <div className="dungeon-wrapper">
-        <DungeonMap miniMap={ this.props.miniMap } model={ this.props.model } />
+      <div className="dungeon-wrapper" ref="pixiCanvas">
       </div>
     );
   }
