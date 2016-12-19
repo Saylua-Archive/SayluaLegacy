@@ -2,7 +2,15 @@ import * as GameUtils from "../Utils/game";
 import * as MathUtils from "../Utils/math";
 
 export default class Game {
-  constructor(renderWidth, renderHeight) {
+  constructor(renderWidth, renderHeight, store) {
+    // Store store
+    this.store = store.getState();
+
+    // Store store store store.
+    this.unsubscribe = store.subscribe(() => {
+      this.store = store.getState();
+    });
+
     // Initialize Pixi renderer
     this.renderer = PIXI.autoDetectRenderer(renderWidth, renderHeight);
 
@@ -77,8 +85,16 @@ export default class Game {
   loop() {
     if (this.state.shouldReRender === true) {
       console.log("THE WORLD HAS CHANGED");
-      //this.tileStage.cacheAsBitmap = false;
-      //let tileMap = GameUtils.renderMap();
+
+      // Edit our tilemap in place.
+      GameUtils.renderMap(
+        this.store.entitySet,
+        this.store.entityLayer,
+        this.store.tileSet,
+        this.store.tileLayer,
+        this.state.tileSprites
+      );
+
       //this.tileStage.cacheAsBitmap = true;
       this.state.shouldReRender = false;
     }

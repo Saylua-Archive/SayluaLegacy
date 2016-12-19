@@ -1,18 +1,21 @@
 import Reqwest from "reqwest";
 
-function getDataURI(url, callback) {
-  var image = new Image();
-
-  image.onload = () => {
-    var canvas = document.createElement('canvas');
-    canvas.width = this.naturalWidth;
-    canvas.height = this.naturalHeight;
-
-    canvas.getContext('2d').drawImage(this, 0, 0);
-    callback(canvas.toDataURL('image/png'));
-  };
-
+function getDataURI(url) {
+  let image = new Image();
   image.src = url;
+
+  return new Promise((resolve, reject) => {
+    image.onload = () => {
+      let canvas = document.createElement('canvas');
+
+      canvas.width = image.naturalWidth;
+      canvas.height = image.naturalHeight;
+      canvas.getContext('2d').drawImage(image, 0, 0);
+
+      let dataURI = canvas.toDataURL('image/png');
+      resolve(dataURI);
+    };
+  });
 }
 
 function resolveImage(itemSlug) {
@@ -23,12 +26,12 @@ function resolveImage(itemSlug) {
     return "/static/img/loxi.png";
   } else if (type == "entity") {
     if (parts[0] == "item") {
-      return "/static/img/item/" + parts.slice(-1) + ".png";
+      return `/static/img/item/${ parts.slice(-1) }.png`;
     } else if (parts[0] == "enemy") {
-      return "/static/img/enemies/" + parts.slice(-1) + ".png";
+      return `/static/img/enemies/${ parts.slice(-1) }.png`;
     }
   } else if (type == "tile") {
-    return "/static/img/tiles/test/" + parts.join("_");
+    return `/static/img/tiles/test/${ parts.join("_") }.png`;
   }
 }
 
@@ -57,12 +60,19 @@ export function getTexture(itemSlug) {
   // Our Texture has never been loaded.
   let imageURL = resolveImage(itemSlug);
   let texture = PIXI.Texture.fromImage(imageURL);
+
+  if (texture === undefined) {
+    throw(`Error locating texture: ${ itemSlug }`);
+  }
+
   window.textures[itemSlug] = texture;
 
   // Try to store in localStorage for next time.
   if (typeof(Storage) !== "undefined") {
-    let dataURI = getDataURI(imageURL);
-    localStorage.setItem("saylua_item_" + itemSlug, dataURI);
+    let promise = getDataURI(imageURL);
+    promise.then((dataURI) => {
+      localStorage.setItem("saylua_item_" + itemSlug, dataURI);
+    });
   }
 
   // Return image.
