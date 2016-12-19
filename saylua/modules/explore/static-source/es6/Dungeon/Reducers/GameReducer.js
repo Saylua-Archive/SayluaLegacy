@@ -20,7 +20,7 @@ export function getInitialGameState() {
   });
 }
 
-export const GameStore = (state, action) => {
+export const GameReducer = (state, action) => {
   switch (action.type) {
     case 'MOVE_PLAYER':
       var player = cloneDeep(state.entityLayer[0]);

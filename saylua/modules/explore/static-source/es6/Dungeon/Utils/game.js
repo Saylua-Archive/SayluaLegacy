@@ -1,4 +1,5 @@
 import * as EngineUtils from "./engine";
+import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from "../Core/Game";
 
 const obstructions = [
   'wall'
@@ -54,7 +55,8 @@ export function translatePlayerLocation(player, tileLayer, tileSet, direction) {
 // Not a pure function because we're not sadistic bastards.
 // Not pure and not located within the core code because we ARE sadistic bastards.
 // Or I am, at least.
-export function renderMap(entitySet, entityLayer, tileSet, tileLayer, tileSprites, radius=8) {
+export function renderMap(entitySet, entityLayer, tileSet, tileLayer, tileSprites) {
+
   let entityLookupTable = [];
 
   for (let entity of entityLayer) {
@@ -81,28 +83,26 @@ export function renderMap(entitySet, entityLayer, tileSet, tileLayer, tileSprite
   // Points 'a'[x, y] and 'b'[x, y] define the top left and bottom right corners of our visible 'viewport' tiles.
 
   let a_x, b_x, x_pool;
-  x_pool = radius * 2;
+  x_pool = VIEWPORT_WIDTH - 1;
 
-  a_x = Math.max(p_x - radius, 0);                                    // console.log(`a_x is ${a_x}`);
-  x_pool -= (p_x - a_x);                                              // console.log(`Units left in the pool: is ${x_pool}`);
-  b_x = Math.min(p_x + x_pool, mapWidth - 1);                         // console.log(`b_x is ${b_x}`);
-  x_pool -= (b_x - p_x);                                              // console.log(`Units left in the pool: is ${x_pool}`);
-  a_x = (b_x === mapWidth - 1) ? (a_x - x_pool) : (a_x + x_pool);     // console.log(`Adding ${x_pool} to a_x makes: ${a_x}`);
+  a_x = Math.max(p_x - Math.round(VIEWPORT_WIDTH / 2), 0);                                  // console.log(`a_x is ${a_x}`);
+  x_pool -= (p_x - a_x);                                                    // console.log(`Units left in the pool: is ${x_pool}`);
+  b_x = Math.min(p_x + x_pool, VIEWPORT_WIDTH - 1);             // console.log(`b_x is ${b_x}`);
+  x_pool -= (b_x - p_x);                                                    // console.log(`Units left in the pool: is ${x_pool}`);
+  a_x = (b_x === VIEWPORT_WIDTH - 1) ? (a_x - x_pool) : (a_x + x_pool);     // console.log(`Adding ${x_pool} to a_x makes: ${a_x}`);
 
   let a_y, b_y, y_pool;
-  y_pool = radius * 2;
+  y_pool = VIEWPORT_HEIGHT - 1;
 
-  a_y = Math.max(p_y - radius, 0);
+  a_y = Math.max(p_y - Math.round(VIEWPORT_HEIGHT / 2), 0);
   y_pool -= (p_y - a_y);
-  b_y = Math.min(p_y + y_pool, mapHeight - 1);
+  b_y = Math.min(p_y + y_pool, VIEWPORT_HEIGHT - 1);
   y_pool -= (b_y - p_y);
-  a_y = (b_y === mapHeight - 1) ? (a_y - y_pool) : (a_y + y_pool);
+  a_y = (b_y === VIEWPORT_HEIGHT - 1) ? (a_y - y_pool) : (a_y + y_pool);
 
   // Provide ourselves with some utility functions.
   let within_x_bounds = (x) => (a_x <= x) && (x <= b_x);
   let within_y_bounds = (y) => (a_y <= y) && (y <= b_y);
-
-  console.log(`Our viewport is ${a_x}, ${a_y} -- ${b_x}, ${b_y}`);
 
   // There are MUCH prettier ways to do this.
   // This, however, is the fastest. Blame Javascript's expensive array operations.
@@ -121,10 +121,8 @@ export function renderMap(entitySet, entityLayer, tileSet, tileLayer, tileSprite
           return tile.id == currentTile.tile;
         })[0];
 
-        let linearPosition = normal_x + ((radius * 2 + 1) * normal_y);
+        let linearPosition = normal_x + (VIEWPORT_WIDTH * normal_y);
         tileSprites[linearPosition].texture = EngineUtils.getTexture(parentTile.slug);
-
-        console.log(`${_x}, ${_y} within mapview. Normalized to ${normal_x}, ${normal_y}, or ${linearPosition}`);
       }
     }
   }

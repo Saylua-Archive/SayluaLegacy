@@ -100,9 +100,9 @@ export default class DungeonClient extends Component {
       // If we've gotten this far, prevent default behavior.
       event.preventDefault();
 
-      this.props.model.mutate({
-        'action': "move",
-        'data': keyName
+      this.props.store.dispatch({
+        'type': "MOVE_PLAYER",
+        'direction': keyName
       });
     }
   }

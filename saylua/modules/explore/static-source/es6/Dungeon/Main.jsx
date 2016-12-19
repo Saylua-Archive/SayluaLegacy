@@ -2,14 +2,14 @@ import Inferno from "inferno";
 import InfernoDOM from "inferno-dom";
 import { createStore } from 'redux';
 
-import { getInitialGameState, GameStore } from "./Reducers/GameStore";
+import { getInitialGameState, GameReducer } from "./Reducers/GameReducer";
 import DungeonClient from "./Components/DungeonClient";
 import DebugTools from "./Components/DebugTools";
 
 
 export default function Main() {
   getInitialGameState().then((initialState) => {
-    let store = createStore(GameStore, initialState);
+    let store = createStore(GameReducer, initialState);
 
     InfernoDOM.render(
       <DungeonClient store={ store } />,
