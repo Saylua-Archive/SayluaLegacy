@@ -15,7 +15,7 @@ default_entities = [
     'id':          '0x2000',
     'name':        'Primordial Ooze',
     'description': 'Sluggish beastie. Nasty things.',
-    'slug':        'entity_slime',
+    'slug':        'entity_enemy_slime',
     'type':        'enemy',
     'meta':        {}
   },

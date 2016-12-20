@@ -22,10 +22,12 @@ function resolveImage(itemSlug) {
   let [type, ...parts] = itemSlug.split("_");
 
   // Hardcoded for now, these should use a resolving API in the future.
-  if (type == "player") {
-    return "/static/img/loxi.png";
-  } else if (type == "entity") {
-    if (parts[0] == "item") {
+  if (type == "entity") {
+    if (parts[0] == "player") {
+      return `/static/img/velbird.png`;
+    } else if (parts[0] == "portal") {
+      return `/static/img/tiles/test/portal.png`;
+    } else if (parts[0] == "item") {
       return `/static/img/item/${ parts.slice(-1) }.png`;
     } else if (parts[0] == "enemy") {
       return `/static/img/enemies/${ parts.slice(-1) }.png`;
@@ -33,6 +35,8 @@ function resolveImage(itemSlug) {
   } else if (type == "tile") {
     return `/static/img/tiles/test/${ parts.join("_") }.png`;
   }
+
+  throw(`Couldn't resolve '${itemSlug}' to image.`);
 }
 
 
@@ -47,7 +51,7 @@ export function getTexture(itemSlug) {
 
   // Attempt to retrieve from localStorage
   if (typeof(Storage) !== "undefined") {
-    let result = localStorage.getItem("saylua_item_" +  itemSlug);
+    let result = localStorage.getItem("saylua_texture_" +  itemSlug);
 
     if (result !== null) {
       // Create a texture from the matching localStorage entry,
@@ -71,11 +75,10 @@ export function getTexture(itemSlug) {
   if (typeof(Storage) !== "undefined") {
     let promise = getDataURI(imageURL);
     promise.then((dataURI) => {
-      localStorage.setItem("saylua_item_" + itemSlug, dataURI);
+      localStorage.setItem("saylua_texture_" + itemSlug, dataURI);
     });
   }
 
   // Return image.
   return window.textures[itemSlug];
 }
-

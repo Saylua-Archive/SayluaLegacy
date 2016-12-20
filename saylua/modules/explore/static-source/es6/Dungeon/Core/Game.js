@@ -32,50 +32,35 @@ export default class Game {
     this.entityStage.on('click', this.test.bind(this));
     this.entityStage.on('tap', this.test.bind(this));
 
+    this.testLayer = new PIXI.Container();
+    this.stage.addChild(this.testLayer);
+    this.testLayer.interactive = true;
+    this.testLayer.on('click', this.test.bind(this));
+    this.testLayer.on('tap', this.test.bind(this));
+
     this.state = {
       "dimensions": [renderWidth, renderHeight],
       "shouldReRender": true,
-      "tileSprites": this.generateTileSprites(renderWidth, renderHeight)
+      "tileSprites": GameUtils.generateTileSprites(renderWidth, renderHeight),
+      "entitySprites": GameUtils.generateEntitySprites(
+        renderWidth,
+        renderHeight,
+        this.store.entityLayer,
+        this.store.entitySet
+      ),
     };
 
     this.state.tileSprites.map((sprite) => {
       this.tileStage.addChild(sprite);
+    });
+    this.state.entitySprites.map((sprite) => {
+      this.entityStage.addChild(sprite);
     });
     this.test();
   }
 
   getRenderer() {
     return this.renderer.view;
-  }
-
-  generateTileSprites(stageWidth, stageHeight) {
-    // Initialize window textures if necessary.
-    window.textures = window.textures || {};
-    window.textures['null'] = PIXI.Texture.fromImage("/static/img/tiles/test/null.png");
-
-    let spriteLayer = [];
-    let nullTexture = window.textures['null'];
-
-    let spriteHeight = stageHeight / VIEWPORT_HEIGHT;
-    let spriteWidth = stageWidth / VIEWPORT_WIDTH;
-
-    console.log(`view ${spriteHeight}px ${spriteWidth}px`);
-
-    for (let row = 0; row < VIEWPORT_HEIGHT; row++) {
-      for (let col = 0; col < VIEWPORT_WIDTH; col++) {
-        let sprite = new PIXI.Sprite(nullTexture);
-
-        sprite.height = spriteHeight;
-        sprite.width = spriteWidth;
-
-        sprite.x = (col * spriteWidth);
-        sprite.y = (row * spriteHeight);
-
-        spriteLayer.push(sprite);
-      }
-    }
-
-    return spriteLayer;
   }
 
   test() {
@@ -88,7 +73,7 @@ export default class Game {
     sprite.height = 150;
     sprite.width = 150;
 
-    this.entityStage.addChild(sprite);
+    this.testLayer.addChild(sprite);
   }
 
   loop() {
@@ -101,7 +86,9 @@ export default class Game {
         this.store.entityLayer,
         this.store.tileSet,
         this.store.tileLayer,
-        this.state.tileSprites
+        this.state.tileSprites,
+        this.state.entitySprites,
+        this.state.dimensions
       );
 
       this.state.shouldReRender = false;

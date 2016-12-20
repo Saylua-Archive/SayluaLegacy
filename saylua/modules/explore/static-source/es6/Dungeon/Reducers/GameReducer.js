@@ -15,7 +15,21 @@ export function getInitialGameState() {
     "type": 'json',
     "method": 'post',
     "error": (error) => {
-      console.log("Error contacting the Dungeon API.");
+      throw("Error contacting the Dungeon API.");
+    },
+    "success": (result) => {
+      let newTileSet = {};
+      result.tileSet.map((tile) => {
+        newTileSet[tile.id] = tile;
+      });
+
+      let newEntitySet = {};
+      result.entitySet.map((entity) => {
+        newEntitySet[entity.id] = entity;
+      });
+
+      result.tileSet = newTileSet;
+      result.entitySet = newEntitySet;
     }
   });
 }
@@ -23,16 +37,16 @@ export function getInitialGameState() {
 export const GameReducer = (state, action) => {
   switch (action.type) {
     case 'MOVE_PLAYER':
+
       var player = cloneDeep(state.entityLayer[0]);
       var entities = state.entityLayer.slice(1);
-      var [p_x, p_y] = GameUtils.translatePlayerLocation(player, state.tileLayer, state.tileSet, action.direction);
+      var translation = GameUtils.translatePlayerLocation(player, state.tileLayer, state.tileSet, action.direction);
 
-      player.location.x = p_x;
-      player.location.y = p_y;
-
+      player.location = translation;
       entities.unshift(player);
 
       return { ...state, 'entityLayer': entities };
+
     default:
       return state;
   }
