@@ -1,4 +1,8 @@
-import Reqwest from "reqwest";
+import * as FOVTools from "./engine_fov";
+
+export function calculateFOV(...args) {
+  FOVTools.calculateFOV(...args);
+}
 
 function getDataURI(url) {
   let image = new Image();
@@ -33,6 +37,10 @@ function resolveImage(itemSlug) {
       return `/static/img/enemies/${ parts.slice(-1) }.png`;
     }
   } else if (type == "tile") {
+    if (parts[0] == "fog") {
+      return `/static/img/tiles/test/null.png`;
+    }
+
     return `/static/img/tiles/test/${ parts.join("_") }.png`;
   }
 
