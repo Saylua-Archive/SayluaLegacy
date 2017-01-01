@@ -88,5 +88,7 @@ Making the following change reduces startup time exponentially, and gets rid of 
 
                   _remove_pred(dirs, lambda d: d.startswith(_IGNORED_PREFIX) or d in _IGNORED_DIRS)
 
-## Author
+## Authors
+Michael Bradley
+Noi Sek
 Tiffany Zhang
