@@ -1,27 +1,27 @@
-#line-blocks {
+#blocks-mount {
   width: 500px;
   height: 500px;
   margin: auto;
   background: #222;
 
-  #line-blocks-info {
+  .blocks-info {
     float: left;
     width: 188px;
     height: 500px;
+    color: #fff;
   }
 
-  #line-blocks-grid {
+  .blocks-grid {
     margin-top: 1px;
     float: left;
-    width: 311px;
-    height: 497px;
-    background-image: repeating-linear-gradient(0deg,transparent,transparent 30px,#444 30px,#444 31px),
-    repeating-linear-gradient(-90deg,transparent,transparent 30px,#444 30px,#444 31px);
-    background-size: 31px 31px;
   }
 
-  td {
-    width: 15px;
-    height: 15px;
+  .grid-container {
+    border-spacing: 1px;
+  }
+
+  .grid-square {
+    width: 24px;
+    height: 24px;
   }
 }
