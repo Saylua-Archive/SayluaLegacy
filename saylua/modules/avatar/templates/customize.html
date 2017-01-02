@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% set page_title = "Human Avatar" %}
 {% block header_scripts %}
-<script src="/static/js/avatar.min.js"></script>
+<script src="{{ include_static('js/Avatar.min.js') }}"></script>
 {% endblock %}
 {% block body %}
 <h2>Customize Your Avatar</h2>

@@ -73,7 +73,7 @@ export default class GameState extends BaseModel {
       t = 10;
     }
 
-    // HACK. Speedup in timeout. Awful, truly awful. Much hackish. 
+    // HACK. Speedup in timeout. Awful, truly awful. Much hackish
     setTimeout(this.timeStep.bind(this), t);
   }
 
