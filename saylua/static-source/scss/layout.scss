@@ -43,11 +43,12 @@ $navHeight: 40px;
       width: 100%;
     }
 
-    .content .page-area {
+    .page-area {
       overflow: hidden;
       box-sizing: border-box;
       padding: 8px 8px 20px;
       background: $white;
+      margin-top: 5px;
     }
 
     .breadcrumb {
@@ -108,17 +109,17 @@ $navHeight: 40px;
       background-size: cover;
     }
 
-    a#logo {
+    #logo {
       font-size: 40px;
       font-weight: bold;
     }
 
-    a#logo img {
+    #logo img {
       @include filter-trans;
       height: 40px;
     }
 
-    a#logo:hover img {
+    #logo:hover img {
       filter: drop-shadow(0px 0px 5px #eceb72);
       filter: 'progid:DXImageTransform.Microsoft.Dropshadow(OffX=0, OffY=0, Color=\'#ECEB72\')';
       -ms-filter: 'progid:DXImageTransform.Microsoft.Dropshadow(OffX=0, OffY=0, Color=\'#ECEB72\')';
@@ -262,7 +263,7 @@ $navHeight: 40px;
       background: $accentColor;
     }
 
-    #navbar form.search {
+    #navbar .search {
       display: inline-block;
       height: $navHeight;
       padding: 0 7px;
@@ -355,6 +356,7 @@ $navHeight: 40px;
     }
   }
 }
+
 @include theme(theme-main, $mainSoftColor, $mainColor, $mainDarkColor, $mainDarkerColor, $neutralColor, $neutralDarkColor);
 @include theme(theme-admin, $adminSoftColor, $adminColor, $adminDarkColor, $adminDarkerColor, $adminNeutralColor, $adminNeutralColor);
 .theme-admin #banner {
