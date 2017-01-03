@@ -24,7 +24,7 @@ def admin_access_required(f):
     if not g.logged_in:
       return _redirect(url_for('login'))
 
-    if not g.user.get_role().can_access_admin:
+    if not g.user.get_role() or not g.user.get_role().can_access_admin:
       return render_template('403.html'), 403
 
     return f(*args, **kwargs)
