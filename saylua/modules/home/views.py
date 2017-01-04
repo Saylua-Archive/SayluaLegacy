@@ -10,3 +10,7 @@ def home():
 
 def news():
     return render_template("news.html")
+
+
+def puzzle():
+    return render_template("puzzle.html")
