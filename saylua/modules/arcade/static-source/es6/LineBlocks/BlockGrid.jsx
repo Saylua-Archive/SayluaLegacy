@@ -7,12 +7,6 @@ export default class BlockGrid extends Component {
     super(props);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      "triggerUpdate": true
-    });
-  }
-
   getColor(value) {
   	switch(value) {
   		case 1: return "#FFF";
@@ -29,15 +23,16 @@ export default class BlockGrid extends Component {
   render() {
     let model = this.props.matrix;
     let getColor = this.getColor;
+    let rows = model.rows().map(function(col) {
+      return (
+        <tr className="grid-row">{col.map(function(num) {
+          return <td className="grid-square" style={{backgroundColor: getColor(num)}} />;
+        })}</tr>
+      );
+    });
     return (
       <table className="grid-container">
-        {model.rows().map(function(col) {
-          return (
-            <tr className="grid-row">{col.map(function(num) {
-              return <td className="grid-square" style={{backgroundColor: getColor(num)}} />;
-            })}</tr>
-          );
-        })}
+        { rows }
       </table>
     );
   }
