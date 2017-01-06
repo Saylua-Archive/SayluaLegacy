@@ -1,27 +1,67 @@
 #blocks-mount {
-  width: 500px;
-  height: 500px;
+  float: left;
+  width: 100%;
+  height: 600px;
+  background-image: url('/static/img/bg/21.jpg');
+  background-size: cover;
+}
+
+.blocks-container::before {
+  content: "";
+  display: block;
+}
+
+.blocks-container {
+  width: 400px;
   margin: auto;
-  background: #333;
+  margin-top: 50px;
 
   .blocks-info {
     float: left;
-    width: 188px;
+    width: 150px;
     height: 500px;
-    color: #fff;
   }
 
   .blocks-grid {
-    margin-top: 1px;
     float: left;
+    margin-top: 1px;
   }
 
   .grid-container {
     border-spacing: 1px;
+    background: rgba(255, 255, 255, 0.8);
   }
 
   .grid-square {
     width: 24px;
     height: 24px;
+  }
+
+  .grid-square-1 {
+    background: #d500f9;
+  }
+
+  .grid-square-2 {
+    background: #ec407a;
+  }
+
+  .grid-square-3 {
+    background: #3d5afe;
+  }
+
+  .grid-square-4 {
+    background: #29b6f6;
+  }
+
+  .grid-square-5 {
+    background: #f44336;
+  }
+
+  .grid-square-6 {
+    background: #00c853;
+  }
+
+  .grid-square-7 {
+    background: #ffa726;
   }
 }
