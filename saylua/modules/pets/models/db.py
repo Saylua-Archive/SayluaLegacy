@@ -26,8 +26,8 @@ class Pet(ndb.Model):
 
     # Personal profile information for the pet
     name = ndb.StringProperty()
-    css = ndb.TextProperty()
-    description = ndb.TextProperty()
+    css = ndb.TextProperty(indexed=False)
+    description = ndb.TextProperty(indexed=False)
 
     # If either of these is set to a number other than 0, the pet is for sale
     ss_price = ndb.IntegerProperty(default=0)
