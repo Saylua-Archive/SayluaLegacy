@@ -1,8 +1,10 @@
 import * as FOVTools from "./engine_fov";
 
+
 export function calculateFOV(...args) {
   FOVTools.calculateFOV(...args);
 }
+
 
 function getDataURI(url) {
   let image = new Image();
@@ -21,6 +23,7 @@ function getDataURI(url) {
     };
   });
 }
+
 
 function resolveImage(itemSlug) {
   let [type, ...parts] = itemSlug.split("_");

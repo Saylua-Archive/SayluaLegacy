@@ -1,8 +1,10 @@
-import * as GameUtils from "../Utils/game";
+import * as GameRender from "../Utils/game_render";
+import * as GameInit from "../Utils/game_init";
 import * as MathUtils from "../Utils/math";
 
 export const VIEWPORT_HEIGHT = 18;
 export const VIEWPORT_WIDTH = 32;
+
 
 export default class Game {
   constructor(renderWidth, renderHeight, store) {
@@ -10,6 +12,7 @@ export default class Game {
     this.store = store.getState();
 
     // Store store store store.
+    // This will be triggered any time the store state changes.
     this.unsubscribe = store.subscribe(() => {
       this.store = store.getState();
       this.state.shouldReRender = true;
@@ -28,10 +31,23 @@ export default class Game {
     // Entity layer sub-stage
     this.entityStage = new PIXI.Container();
     this.stage.addChild(this.entityStage);
-    this.entityStage.interactive = true;
-    this.entityStage.on('click', this.test.bind(this));
-    this.entityStage.on('tap', this.test.bind(this));
 
+    // Create HUD sub-stage and it's own sub-stages.
+    this.HUDStage = new PIXI.Container();
+
+    this.miniMap = new PIXI.Container();
+    this.playerStatus = new PIXI.Container();
+    this.gameLog = new PIXI.Container();
+    this.actionButtons = new PIXI.Container();
+
+    this.HUDStage.addChild(this.miniMap);
+    this.HUDStage.addChild(this.playerStatus);
+    this.HUDStage.addChild(this.gameLog);
+    this.HUDStage.addChild(this.actionButtons);
+
+    this.stage.addChild(this.entityStage);
+
+    // Final testing / debug layer.
     this.testLayer = new PIXI.Container();
     this.stage.addChild(this.testLayer);
     this.testLayer.interactive = true;
@@ -41,8 +57,8 @@ export default class Game {
     this.state = {
       "dimensions": [renderWidth, renderHeight],
       "shouldReRender": true,
-      "tileSprites": GameUtils.generateTileSprites(renderWidth, renderHeight),
-      "entitySprites": GameUtils.generateEntitySprites(
+      "tileSprites": GameInit.generateTileSprites(renderWidth, renderHeight),
+      "entitySprites": GameInit.generateEntitySprites(
         renderWidth,
         renderHeight,
         this.store.entityLayer,
@@ -59,9 +75,11 @@ export default class Game {
     this.test();
   }
 
+
   getRenderer() {
     return this.renderer.view;
   }
+
 
   test() {
     let sprite = new PIXI.Sprite.fromImage("/static/img/loxi.png");
@@ -76,19 +94,32 @@ export default class Game {
     this.testLayer.addChild(sprite);
   }
 
+
   loop() {
     if (this.state.shouldReRender === true) {
       console.log("THE WORLD HAS CHANGED");
 
-      // Edit our tilemap in place.
-      GameUtils.renderMap(
-        this.store.entitySet,
-        this.store.entityLayer,
+      let player = this.store.entityLayer[0];
+      let baseData = GameRender.getBaseData(
+        player,
         this.store.tileSet,
         this.store.tileLayer,
-        this.state.tileSprites,
-        this.state.entitySprites,
         this.state.dimensions
+      );
+
+      // Edit our sprite layers in-place. So gross.
+
+      GameRender.renderViewport(
+        baseData,
+        this.store.tileSet,
+        this.store.tileLayer,
+        this.state.tileSprites
+      );
+
+      GameRender.renderEntities(
+        baseData,
+        this.store.entityLayer,
+        this.state.entitySprites
       );
 
       this.state.shouldReRender = false;

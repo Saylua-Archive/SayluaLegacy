@@ -2,7 +2,7 @@
 import cloneDeep from "lodash.clonedeep";
 import Reqwest from "reqwest";
 
-import * as GameUtils from "../Utils/game";
+import * as GameLogic from "../Utils/game_logic";
 
 
 // GameStore -> Required by DungeonClient.
@@ -30,9 +30,13 @@ export function getInitialGameState() {
 
       result.tileSet = newTileSet;
       result.entitySet = newEntitySet;
+      result.UI = {
+        "showMinimap": false
+      };
     }
   });
 }
+
 
 export const GameReducer = (state, action) => {
   switch (action.type) {
@@ -40,12 +44,17 @@ export const GameReducer = (state, action) => {
 
       var player = cloneDeep(state.entityLayer[0]);
       var entities = state.entityLayer.slice(1);
-      var translation = GameUtils.translatePlayerLocation(player, state.tileLayer, state.tileSet, action.direction);
+      var translation = GameLogic.translatePlayerLocation(player, state.tileLayer, state.tileSet, action.direction);
 
       player.location = translation;
       entities.unshift(player);
 
       return { ...state, 'entityLayer': entities };
+
+    case 'TOGGLE_MINIMAP':
+      var showMinimap = !state.UI.showMinimap;
+      var newUIState = { ...state.UI, 'showMinimap': showMinimap };
+      return { ...state, 'UI': newUIState };
 
     default:
       return state;

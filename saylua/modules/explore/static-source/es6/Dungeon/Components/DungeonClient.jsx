@@ -18,6 +18,7 @@ export default class DungeonClient extends Component {
     this.state = {};
   }
 
+
   componentDidMount() {
     // Start rendering Pixi canvas once our component has mounted.
     onDomReady(() => {
@@ -49,10 +50,12 @@ export default class DungeonClient extends Component {
     });
   }
 
+
   animate() {
     this.game.loop();
     this.frame = requestAnimationFrame(this.animate.bind(this));
   }
+
 
   handleKeyPress(event, synthetic) {
     synthetic = synthetic ? synthetic : false;
@@ -64,27 +67,30 @@ export default class DungeonClient extends Component {
 
       // Key map. Time to pull out the dreaded switch statement.
       switch(key) {
-        case 13:
+        case 13: // Enter key
           keyName = "enter";
           break;
-        case 32:
+        case 32: // Space bar
           keyName = "space";
           break;
         case 38:
-        case 87:
+        case 87: // W, up arrow
           keyName = "up";
           break;
         case 40:
-        case 83:
+        case 83: // S, down arrow
           keyName = "down";
           break;
         case 37:
-        case 65:
+        case 65: // A, left arrow
           keyName = "left";
           break;
         case 39:
-        case 68:
+        case 68: // D, right arrow
           keyName = "right";
+          break;
+        case 77: // M Key
+          keyName = "minimap";
           break;
         default:
           // We are not capturing the key.
@@ -105,7 +111,17 @@ export default class DungeonClient extends Component {
         'direction': keyName
       });
     }
+
+    if (keyName === "minimap") {
+      // If we've gotten this far, prevent default behavior.
+      event.preventDefault();
+
+      this.props.store.dispatch({
+        'type': "TOGGLE_MINIMAP"
+      });
+    }
   }
+
 
   handleWindowResize(e) {
     let [renderWidth, renderHeight] = CanvasUtils.calculateSize();
@@ -115,6 +131,7 @@ export default class DungeonClient extends Component {
     this.canvasWrapper.style.height = renderHeight + "px";
     this.canvasWrapper.style.width = renderWidth + "px";
   }
+
 
   render() {
     return (
