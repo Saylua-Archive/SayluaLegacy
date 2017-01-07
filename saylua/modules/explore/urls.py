@@ -2,11 +2,11 @@ from saylua.routing import url
 from . import views
 
 urlpatterns = [
-  url('/explore/', view_func=views.home, name='explore_home', methods=['GET']),
-  url(
-    '/explore/api/generate_dungeon',
-    view_func=views.generate_dungeon,
-    methods=['POST']
-  ),
-  url('/battle/', view_func=views.battle, name='explore_battle', methods=['GET']),
+    url('/explore/', view_func=views.home, name='explore_home', methods=['GET']),
+    url(
+        '/explore/api/generate_dungeon',
+        view_func=views.generate_dungeon,
+        methods=['POST']
+    ),
+    url('/battle/', view_func=views.battle, name='explore_battle', methods=['GET']),
 ]

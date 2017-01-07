@@ -104,8 +104,8 @@ def fieldOfView(startX, startY, mapWidth, mapHeight, radius,
                                 sight to coordinates "behind" it.
     """
 
-    visited = set()  # Keep track of what tiles have been visited so
-                     # that no tile will be visited twice.
+    # Keep track of what tiles have been visited so that no tile will be visited twice.
+    visited = set()
 
     # Will always see the centre.
     funcVisitTile(startX, startY)

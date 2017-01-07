@@ -9,26 +9,26 @@ import json
 
 @login_required
 def home():
-  flash("Are we the kings?")
-  flash("Are we the queens?")
-  flash("We aren't the kings or the queens!", "error")
-  return render_template("map.html")
+    flash("Are we the kings?")
+    flash("Are we the queens?")
+    flash("We aren't the kings or the queens!", "error")
+    return render_template("map.html")
 
 
 @login_required
 def battle():
-  return render_template("battle.html", bg_num=randint(1, 21))
+    return render_template("battle.html", bg_num=randint(1, 21))
 
 
 @login_required
 def generate_dungeon():
-  # Acquire our dungeon
-  dungeon = Dungeon.Dungeon()
+    # Acquire our dungeon
+    dungeon = Dungeon.Dungeon()
 
-  return json.dumps({
-    "dungeonInfo": dungeon.get_info(),
-    "tileSet": dungeon.tile_set,
-    "entitySet": dungeon.entity_set,
-    "tileLayer": dungeon.grid.render(),
-    "entityLayer": dungeon.entities.render()
-  })
+    return json.dumps({
+      "dungeonInfo": dungeon.get_info(),
+      "tileSet": dungeon.tile_set,
+      "entitySet": dungeon.entity_set,
+      "tileLayer": dungeon.grid.render(),
+      "entityLayer": dungeon.entities.render()
+    })
