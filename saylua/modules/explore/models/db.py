@@ -10,15 +10,15 @@ from google.appengine.ext import ndb
 
 
 class Dungeon(ndb.Model):
-  user_key = ndb.KeyProperty(indexed=True)
-  name = ndb.StringProperty()
-  last_accessed = ndb.DateTimeProperty(auto_now_add=True)
-  tile_layer = ndb.BlobProperty()
-  entity_layer = ndb.BlobProperty()
+    user_key = ndb.KeyProperty(indexed=True)
+    name = ndb.StringProperty()
+    last_accessed = ndb.DateTimeProperty(auto_now_add=True)
+    tile_layer = ndb.BlobProperty()
+    entity_layer = ndb.BlobProperty()
 
-  # Usefulness of this method is questionable.
-  @classmethod
-  def create(cls, user_key, name, tile_layer, entity_layer):
-    dungeon = cls(user_key=user_key, name=name, tile_layer=tile_layer,
-                  entity_layer=entity_layer)
-    return dungeon.put()
+    # Usefulness of this method is questionable.
+    @classmethod
+    def create(cls, user_key, name, tile_layer, entity_layer):
+        dungeon = cls(user_key=user_key, name=name, tile_layer=tile_layer,
+                      entity_layer=entity_layer)
+        return dungeon.put()

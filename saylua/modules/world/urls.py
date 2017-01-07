@@ -3,6 +3,6 @@ from . import views
 
 
 urlpatterns = [
-  # Town Square.
-  url('/town/', view_func=views.town_main, name='town')
+    # Town Square.
+    url('/town/', view_func=views.town_main, name='town')
 ]

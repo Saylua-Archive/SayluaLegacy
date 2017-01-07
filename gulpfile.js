@@ -134,7 +134,9 @@ gulp.task('build-es6', [], function() {
 
       process.stderr.clearLine();
       process.stderr.cursorTo(0);
-      process.stderr.write("\033[33m[Building] ... " + percent + '% ' + message + "\033[0m" + ending);
+      process.stderr.moveCursor(0, -1);
+      process.stderr.clearLine();
+      process.stderr.write("\033[33m" + "[Building] ... " + percent + '% ' + message + "\033[0m" + "\n");
     })
   ];
 
@@ -153,7 +155,10 @@ gulp.task('build-es6', [], function() {
   }
 
   return gulp.src("")
-    .pipe(webpack(webpackConfig)).on('error', gutil.log)
+    .pipe(webpack(webpackConfig)).on('error', function(err) {
+      gutil.log(err);
+      this.emit('end');
+    })
     .pipe(gulp.dest("./"));
 });
 

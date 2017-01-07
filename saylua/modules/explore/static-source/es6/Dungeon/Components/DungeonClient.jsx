@@ -1,57 +1,61 @@
 import Inferno from "inferno";
+import onDomReady from "ondomready";
 import Component from "inferno-component";
 
-import DungeonMap from "./DungeonMap";
+import * as CanvasUtils from "../Utils/canvas";
+import Game from "../Core/Game";
 
 // DungeonClient -> Required by Main
 // --------------------------------------
 // The actual client. This handles input and renders the map.
 // Technically, this can and should be a stateless component
 // instead of a traditional one.
-//
-// Address that if performance ever becomes a concern.
-
-// Fisher-Price's My-First-React notes
-// --------------------------------------
-// Generally, in a component, I write functions in the following order.
-// 1. Constructor
-// 2. Lifecycle functions
-//    https://facebook.github.io/react/docs/react-component.html#the-component-lifecycle
-// 3. Internal functions that are only called by other functions.
-// 4. Functions that handle user input.
-// 5. Functions that generate DOM elements from data.
-//    (In 90% of cases these should not exist, and indicate you should write a new component)
-// 6. The actual render() function
-//
-// The name of the game is to keep your functions as pure as possible, and your components minimal.
-// - You should have little to no logic in your render() call.
-// - Avoid having components manage their own state, leave that to the component at the top of the food chain.
-//   Data in, data out is the mantra.
-// - With the above said, do not be afraid to break your mega-component into multiple
-//   smaller mega-components with multiple mount points.
 
 export default class DungeonClient extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      "domLoaded": true,
-      "transitioning": false
-    };
+    this.state = {};
   }
 
-  componentWillMount() {
-    // Make sure that when our model updates, we do too.
-    this.props.model.bindComponent(this);
 
-    // Match keyboard presses to events.
-    this.eventListener = window.addEventListener("keydown", this.handleKeyPress.bind(this));
+  componentDidMount() {
+    // Start rendering Pixi canvas once our component has mounted.
+    onDomReady(() => {
+      // Store client wrapper, canvas wrapper.
+      this.clientWrapper = document.querySelectorAll(".dungeon-client-wrapper")[0];
+      this.canvasWrapper = this.refs.pixiCanvas;
+
+      // Calculate the height, width of our canvas from the window size.
+      let [renderWidth, renderHeight] = CanvasUtils.calculateSize();
+
+      // Resize container
+      this.clientWrapper.style.height = renderHeight + "px";
+      this.clientWrapper.style.width = renderWidth + "px";
+      this.canvasWrapper.style.height = renderHeight + "px";
+      this.canvasWrapper.style.width = renderWidth + "px";
+
+      // Start Game, attach renderer to DOM
+      this.game = new Game(renderWidth, renderHeight, this.props.store);
+      this.refs.pixiCanvas.appendChild(this.game.getRenderer());
+
+      // Bind to the window.resize event.
+      window.addEventListener("resize", this.handleWindowResize.bind(this));
+
+      // Match keyboard presses to events.
+      this.eventListener = window.addEventListener("keydown", this.handleKeyPress.bind(this));
+
+      // Start looping.
+      this.animate();
+    });
   }
 
-  handleForceTransition(event) {
-    event.preventDefault();
-    this.handleKeyPress(undefined, true);
+
+  animate() {
+    this.game.loop();
+    this.frame = requestAnimationFrame(this.animate.bind(this));
   }
+
 
   handleKeyPress(event, synthetic) {
     synthetic = synthetic ? synthetic : false;
@@ -63,27 +67,30 @@ export default class DungeonClient extends Component {
 
       // Key map. Time to pull out the dreaded switch statement.
       switch(key) {
-        case 13:
+        case 13: // Enter key
           keyName = "enter";
           break;
-        case 32:
+        case 32: // Space bar
           keyName = "space";
           break;
         case 38:
-        case 87:
+        case 87: // W, up arrow
           keyName = "up";
           break;
         case 40:
-        case 83:
+        case 83: // S, down arrow
           keyName = "down";
           break;
         case 37:
-        case 65:
+        case 65: // A, left arrow
           keyName = "left";
           break;
         case 39:
-        case 68:
+        case 68: // D, right arrow
           keyName = "right";
+          break;
+        case 77: // M Key
+          keyName = "minimap";
           break;
         default:
           // We are not capturing the key.
@@ -99,17 +106,36 @@ export default class DungeonClient extends Component {
       // If we've gotten this far, prevent default behavior.
       event.preventDefault();
 
-      this.props.model.mutate({
-        'action': "move",
-        'data': keyName
+      this.props.store.dispatch({
+        'type': "MOVE_PLAYER",
+        'direction': keyName
+      });
+    }
+
+    if (keyName === "minimap") {
+      // If we've gotten this far, prevent default behavior.
+      event.preventDefault();
+
+      this.props.store.dispatch({
+        'type': "TOGGLE_MINIMAP"
       });
     }
   }
 
+
+  handleWindowResize(e) {
+    let [renderWidth, renderHeight] = CanvasUtils.calculateSize();
+
+    this.clientWrapper.style.height = renderHeight + "px";
+    this.clientWrapper.style.width = renderWidth + "px";
+    this.canvasWrapper.style.height = renderHeight + "px";
+    this.canvasWrapper.style.width = renderWidth + "px";
+  }
+
+
   render() {
     return (
-      <div className="dungeon-wrapper">
-        <DungeonMap miniMap={ this.props.miniMap } model={ this.props.model } />
+      <div className="dungeon-wrapper" ref="pixiCanvas">
       </div>
     );
   }

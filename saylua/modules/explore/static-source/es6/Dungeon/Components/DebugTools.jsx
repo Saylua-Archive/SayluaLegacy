@@ -1,11 +1,13 @@
 import Inferno from "inferno";
 import Component from "inferno-component";
 
+
 export default class DebugTools extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
+
 
   render() {
     return (

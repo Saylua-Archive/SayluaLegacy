@@ -1,48 +1,93 @@
+/*****************************************************************
+  --> Cells.scss
+  Perhaps would be more appropriately named 'tiles.scss',
+  as tiles are templates and cells are instances of those
+  templates.
+
+  TABLE OF CONTENTS:
+    -- #0.1a Temporary Experimental Changes (You are here)
+    -- #0.2a Main Layout
+
+*****************************************************************/
+
 @import 'map/cells';
 @import 'map/entities';
 
-#dungeon-wrapper, #dungeon-wrapper > * {
+html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
-#dungeon-wrapper {
-  background: #222;
-  width: 100%;
+*, *:before, *:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
 
+.theme-main #banner {
+  background-position-y: 56%;
+}
+
+.theme-main #navbar {
+  background: rgb(60, 46, 24);
+
+  &.fixed {
+    box-shadow: 0px 2px 6px 0px rgba(255, 61, 3, 0.45)
+  }
+}
+
+.theme-main #navbar .search input {
+  height: 25px;
+}
+
+
+/*****************************************************************
+  -- #0.2a Main Layout
+  ===============================================================
+  Basic dungeon layout.
+*****************************************************************/
+
+canvas {
+  background: #222;
+  height: 100%;
+  width: 100%;
+}
+
+.dungeon-theatre {
+  padding: 75px 0px;
+
+  //background: linear-gradient(to bottom, rgba(2, 255, 255, 0.31) 0%, rgba(255,255,255,0.7) 100%), url(/static/img/bg/21.jpg);
+  background: linear-gradient(to bottom, rgba(2, 255, 255, 0.31) 0%, rgba(64, 3, 3, 0.7) 100%), url(/static/img/bg/21.jpg);
+  background-size: cover;
+
+  width: 100%;
+}
+
+.dungeon-client-wrapper {
+  background: #fff;
+
+  margin: 0 auto;
   position: relative;
+
+  width: 65%;
+  max-width: 1400px;
+
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
-#dungeon-client-mount {
-  float: left;
-  width: 70%;
-}
-
-#dungeon-debug-mount {
-  float: left;
+.dungeon-client-wrapper .notifications-container {
+  position: absolute;
+  padding: 10px 15px;
   width: 100%;
 }
 
-#dungeon-info-mount {
-  float: left;
+.theme-main .container .page-area {
+  background: #fff;
 
-  width: 30%;
-}
+  padding: 25px;
+  margin: 25px auto;
 
-#dungeon-info-mount p {
-  padding: 0px 15px;
-}
-
-.dungeon-map {
-  background: #222;
-  position: relative;
-
-  height: 800px;
-  width: 100%;
-}
-
-.dungeon-mini-map {
-  background: #222;
-
-  // FIXME: Temporary Band-aid
-  margin-top: -6px;
+  width: 80%;
+  max-width: 1140px;
 }

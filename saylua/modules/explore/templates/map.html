@@ -1,13 +1,35 @@
 {% extends "layout.html" %}
+{% set fullscreen = True %}
 {% set page_title = "Exploring" %}
 {% block header_scripts %}
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/explore.min.css' ) }}?v=0.0.1">
-  <script src="{{ url_for('static', filename='js/Dungeon.min.js' ) }}?v=0.0.1"></script>
+  <link rel="stylesheet" type="text/css" href="{{ include_static('css/explore.min.css') }}">
+  <!--<script src="{{ include_static('js/lib/pixi.min.js') }}"></script>-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.3.0/pixi.min.js"></script>
+  <script src="{{ include_static('js/Dungeon.min.js') }}"></script>
 {% endblock %}
-{% block body %}
-  <div id="dungeon-wrapper">
-    <div id="dungeon-client-mount"></div>
-    <div id="dungeon-info-mount"></div>
-    <div id="dungeon-debug-mount"></div>
+
+{% block container %}
+  <div class="container">
+    <div class="dungeon-theatre">
+      <div class="dungeon-client-wrapper">
+        <div class="notifications-container">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                {% if category == 'error' %}
+                  <div class="notification error">Error: {{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
+                {% else %}
+                  <div class="notification">{{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+        </div>
+        <div id="dungeon-client-mount"></div>
+      </div>
+    </div>
+    <div class="page-area">
+      <div id="dungeon-debug-mount"></div>
+    </div>
   </div>
 {% endblock %}
