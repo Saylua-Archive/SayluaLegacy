@@ -3,6 +3,41 @@ import Matrix from "./Matrix";
 
 import cloneDeep from "lodash.clonedeep";
 
+var pieceData = [[0, 1, 0, 0, // i
+                  0, 1, 0, 0,
+                  0, 1, 0, 0,
+                  0, 1, 0, 0],
+
+                 [0, 0, 2, 0, // j
+                  0, 0, 2, 0,
+                  0, 2, 2, 0,
+                  0, 0, 0, 0],
+
+                 [0, 3, 0, 0, // l
+                  0, 3, 0, 0,
+                  0, 3, 3, 0,
+                  0, 0, 0, 0],
+
+                 [0, 0, 0, 0, // o
+                  0, 4, 4, 0,
+                  0, 4, 4, 0,
+                  0, 0, 0, 0],
+
+                 [0, 0, 0, 0, // t
+                  5, 5, 5, 0,
+                  0, 5, 0, 0,
+                  0, 0, 0, 0],
+
+                 [0, 0, 0, 0, // s
+                  0, 6, 6, 0,
+                  6, 6, 0, 0,
+                  0, 0, 0, 0],
+
+                 [0, 0, 0, 0, // z
+                  7, 7, 0, 0,
+                  0, 7, 7, 0,
+                  0, 0, 0, 0]];
+
 // GameState
 // --------------------------------------
 // Keeps track of the player's current tetris state.
@@ -10,13 +45,12 @@ import cloneDeep from "lodash.clonedeep";
 export default class GameState extends BaseModel {
   constructor() {
     super();
-
-    this.setDefaultState();
     this.start();
   }
 
-  setDefaultState() {
-    this.timeout = 200;
+  clearGameState() {
+    this.timeout = 300;
+    this.gameOver = false;
     this.paused = false;
     this.fast = false;
     this.score = 0;
@@ -24,50 +58,26 @@ export default class GameState extends BaseModel {
     this.placedPieces = new Matrix(18, 10);
     this.nextPiece = null;
     this.piece = {"matrix": new Matrix(4, 4), "r": -1, "c": 2};
-    this.pieceData = [[0, 1, 0, 0, // i
-                       0, 1, 0, 0,
-                       0, 1, 0, 0,
-                       0, 1, 0, 0],
-
-                      [0, 0, 2, 0, // j
-                       0, 0, 2, 0,
-                       0, 2, 2, 0,
-                       0, 0, 0, 0],
-
-                      [0, 3, 0, 0, // l
-                       0, 3, 0, 0,
-                       0, 3, 3, 0,
-                       0, 0, 0, 0],
-
-                      [0, 0, 0, 0, // o
-                       0, 4, 4, 0,
-                       0, 4, 4, 0,
-                       0, 0, 0, 0],
-
-                      [0, 0, 0, 0, // t
-                       5, 5, 5, 0,
-                       0, 5, 0, 0,
-                       0, 0, 0, 0],
-
-                      [0, 0, 0, 0, // s
-                       0, 6, 6, 0,
-                       6, 6, 0, 0,
-                       0, 0, 0, 0],
-
-                      [0, 0, 0, 0, // z
-                       7, 7, 0, 0,
-                       0, 7, 7, 0,
-                       0, 0, 0, 0]];
   }
 
   start() {
+    this.clearGameState();
+
     this.getNextPiece();
 
     setTimeout(this.timeStep.bind(this), this.timeout);
   }
 
+  endGame() {
+    this.gameOver = true;
+  }
+
   timeStep() {
+    if (this.paused || this.gameOver) return;
+
     this.movePieceDown();
+    this.draw();
+
     let t = this.timeout;
     if (this.fast) {
       t = 10;
@@ -78,14 +88,23 @@ export default class GameState extends BaseModel {
   }
 
   movePieceDown() {
-    if (this.paused) return;
-
     let p = this.piece;
     // Each time the clock ticks, we move the piece down if it's valid.
     if (this.validPlacement(p.matrix, p.r + 1, p.c)) {
       p.r++;
+      return true;
+    }
+    // If moving down is invalid, the piece cannot fall anymore.
+    let gameOver = false;
+    for (let i = 0; !gameOver && i + p.r < 0; i++) {
+      for (let j = 0; !gameOver && j < p.matrix.width; j++) {
+        gameOver = !!p.matrix.get(i, j);
+      }
+    }
+
+    if (gameOver) {
+      this.endGame();
     } else {
-      // If moving down is invalid, the piece has fallen to the bottom.
       this.placedPieces.addMatrix(p.matrix, p.r, p.c);
       this.getNextPiece();
 
@@ -95,8 +114,7 @@ export default class GameState extends BaseModel {
         this.timeout--;
       }
     }
-
-    this.draw();
+    return false;
   }
 
   clearLines(minRow, maxRow) {
@@ -148,7 +166,7 @@ export default class GameState extends BaseModel {
   }
 
   setNextPiece() {
-    let pieces = this.pieceData;
+    let pieces = pieceData;
     let i = Math.floor(Math.random() * pieces.length);
     this.nextPiece = new Matrix(4, 4, pieces[i]);
   }
@@ -170,7 +188,8 @@ export default class GameState extends BaseModel {
   }
 
   drop() {
-    if (this.paused) return;
+    if (this.paused || this.gameOver) return;
+    while (this.movePieceDown());
     this.draw();
   }
 
@@ -183,7 +202,7 @@ export default class GameState extends BaseModel {
   }
 
   rotate() {
-    if (this.paused) return;
+    if (this.paused || this.gameOver) return;
     let p = cloneDeep(this.piece);
     p.matrix.rotate();
     if (this.validPlacement(p.matrix, p.r, p.c)) {
@@ -193,7 +212,7 @@ export default class GameState extends BaseModel {
   }
 
   moveLeft() {
-    if (this.paused) return;
+    if (this.paused || this.gameOver) return;
     let p = this.piece;
     if (this.validPlacement(p.matrix, p.r, p.c - 1)) {
       p.c--;
@@ -202,7 +221,7 @@ export default class GameState extends BaseModel {
   }
 
   moveRight() {
-    if (this.paused) return;
+    if (this.paused || this.gameOver) return;
     let p = this.piece;
     if (this.validPlacement(p.matrix, p.r, p.c + 1)) {
       p.c++;
