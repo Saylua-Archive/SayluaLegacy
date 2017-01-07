@@ -15,6 +15,7 @@ export default class Game {
     // This will be triggered any time the store state changes.
     this.unsubscribe = store.subscribe(() => {
       this.store = store.getState();
+      this.miniMap.visible = this.store.UI.showMinimap;
       this.state.shouldReRender = true;
     });
 
@@ -45,7 +46,7 @@ export default class Game {
     this.HUDStage.addChild(this.gameLog);
     this.HUDStage.addChild(this.actionButtons);
 
-    this.stage.addChild(this.entityStage);
+    this.stage.addChild(this.HUDStage);
 
     // Final testing / debug layer.
     this.testLayer = new PIXI.Container();
@@ -54,16 +55,32 @@ export default class Game {
     this.testLayer.on('click', this.test.bind(this));
     this.testLayer.on('tap', this.test.bind(this));
 
+    // Generate the various sprite layers necessary.
+    let tileSprites = GameInit.generateTileSprites(
+      renderWidth,
+      renderHeight
+    );
+
+    let entitySprites = GameInit.generateEntitySprites(
+      renderWidth,
+      renderHeight,
+      this.store.entityLayer,
+      this.store.entitySet
+    );
+
+    let miniMapSprites = GameInit.generateMinimapSprites(
+      renderWidth,
+      renderHeight,
+      this.store.tileLayer[0].length, // Total map width
+      this.store.tileLayer.length // Total map height
+    );
+
     this.state = {
       "dimensions": [renderWidth, renderHeight],
       "shouldReRender": true,
-      "tileSprites": GameInit.generateTileSprites(renderWidth, renderHeight),
-      "entitySprites": GameInit.generateEntitySprites(
-        renderWidth,
-        renderHeight,
-        this.store.entityLayer,
-        this.store.entitySet
-      ),
+      tileSprites,
+      entitySprites,
+      miniMapSprites
     };
 
     this.state.tileSprites.map((sprite) => {
@@ -71,6 +88,9 @@ export default class Game {
     });
     this.state.entitySprites.map((sprite) => {
       this.entityStage.addChild(sprite);
+    });
+    this.state.miniMapSprites.map((sprite) => {
+      this.miniMap.addChild(sprite);
     });
     this.test();
   }
@@ -120,6 +140,13 @@ export default class Game {
         baseData,
         this.store.entityLayer,
         this.state.entitySprites
+      );
+
+      GameRender.renderMinimap(
+        baseData,
+        this.store.tileSet,
+        this.store.tileLayer,
+        this.state.miniMapSprites
       );
 
       this.state.shouldReRender = false;

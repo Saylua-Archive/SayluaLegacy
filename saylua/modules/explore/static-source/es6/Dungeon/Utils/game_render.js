@@ -136,3 +136,38 @@ export function renderEntities(baseData, entityLayer, entitySprites) {
     }
   });
 }
+
+
+export function renderMinimap(baseData, tileSet, tileLayer, minimapSprites) {
+  for (let y = 0; y < baseData.mapHeight; y++) {
+    for (let x = 0; x < baseData.mapWidth; x++) {
+      var currentTile = tileLayer[y][x];
+
+      // Why would you write this? Masochists and code hygienists. For opposite reasons, of course.
+      let tileVisible = (baseData.validTiles[y] === undefined) ? false : ( (baseData.validTiles[y][x] === true) ? true : false );
+      let tileSeen = (currentTile.meta.seen === true);
+
+      let parentTile = tileSet[currentTile.tile];
+
+      // All we have to do is change the texture of the sprite map, as the number of sprites never changes.
+      let linearPosition = x + (baseData.mapWidth * y);
+      let sprite = minimapSprites[linearPosition];
+
+      // Now, we change the tile state depending on whether or not we can see it, and whether or not we /have/ seen it.
+      let baseVisibility = 0.8;
+
+      if (tileVisible) {
+        sprite.alpha = 1 * baseVisibility;
+        sprite.texture = EngineUtils.getTexture(parentTile.slug);
+      } else {
+        if (tileSeen) {
+          sprite.alpha = 0.5 * baseVisibility;
+          sprite.texture = EngineUtils.getTexture(parentTile.slug);
+        } else {
+          sprite.alpha = 1 * baseVisibility;
+          sprite.texture = EngineUtils.getTexture('tile_fog');
+        }
+      }
+    }
+  }
+}
