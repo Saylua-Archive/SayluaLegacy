@@ -17,6 +17,7 @@ default_entities = [
         'description': 'Sluggish beastie. Nasty things.',
         'slug':        'entity_enemy_slime',
         'type':        'enemy',
+        'events':       { 'enter': '__log("HELLO I AM A SLIME! Here is my ID:" + $this.id);' },
         'meta':        {}
     },
     {

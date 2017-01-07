@@ -2,6 +2,8 @@ import * as GameRender from "../Utils/game_render";
 import * as GameInit from "../Utils/game_init";
 import * as MathUtils from "../Utils/math";
 
+import Engine from "./Engine";
+
 export const VIEWPORT_HEIGHT = 18;
 export const VIEWPORT_WIDTH = 32;
 
@@ -18,6 +20,9 @@ export default class Game {
       this.miniMap.visible = this.store.UI.showMinimap;
       this.state.shouldReRender = true;
     });
+
+    // Engine, mostly responsible for scripts and realtime animations.
+    this.engine = new Engine(store);
 
     // Initialize Pixi renderer
     this.renderer = PIXI.autoDetectRenderer(renderWidth, renderHeight);
@@ -117,8 +122,6 @@ export default class Game {
 
   loop() {
     if (this.state.shouldReRender === true) {
-      console.log("THE WORLD HAS CHANGED");
-
       let player = this.store.entityLayer[0];
       let baseData = GameRender.getBaseData(
         player,
