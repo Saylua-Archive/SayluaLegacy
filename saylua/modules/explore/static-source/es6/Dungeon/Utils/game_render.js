@@ -159,13 +159,13 @@ export function renderMinimap(baseData, tileSet, tileLayer, minimapSprites) {
       if (tileVisible) {
         sprite.alpha = 1 * baseVisibility;
         sprite.texture = EngineUtils.getTexture(parentTile.slug);
+        sprite.visible = true;
       } else {
         if (tileSeen) {
           sprite.alpha = 0.5 * baseVisibility;
           sprite.texture = EngineUtils.getTexture(parentTile.slug);
         } else {
-          sprite.alpha = 1 * baseVisibility;
-          sprite.texture = EngineUtils.getTexture('tile_fog');
+          sprite.visible = false;
         }
       }
     }

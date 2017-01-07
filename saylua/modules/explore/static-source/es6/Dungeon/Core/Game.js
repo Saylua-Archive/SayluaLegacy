@@ -97,6 +97,8 @@ export default class Game {
     this.state.miniMapSprites.map((sprite) => {
       this.miniMap.addChild(sprite);
     });
+
+    this.miniMap.visible = false;
     this.test();
   }
 
