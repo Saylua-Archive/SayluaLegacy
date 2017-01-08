@@ -12,8 +12,8 @@ export default class BlockGrid extends Component {
     let getColor = this.getColor;
     let rows = model.rows().map(function(col) {
       return (
-        <tr className="grid-row">{col.map(function(num) {
-          return <td className={"grid-square grid-square-" + num} />;
+        <tr>{col.map(function(num) {
+          return <td className={"grid-square-" + num} />;
         })}</tr>
       );
     });
