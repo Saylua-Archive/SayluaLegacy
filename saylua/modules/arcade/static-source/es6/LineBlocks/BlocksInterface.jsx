@@ -86,6 +86,13 @@ export default class BlocksInterface extends Component {
           <div className='blocks-score'>
             Score: { model.score }
           </div>
+          <div className='blocks-controls'>
+            Left/Right - Move piece
+            <br />Up - Rotate piece
+            <br />Down - Speedup
+            <br />Space - Drop piece
+            <br />Enter/P - Pause
+          </div>
         </div>
         <BlockGrid className='blocks-grid' matrix={ model.gameMatrix } />
       </div>
