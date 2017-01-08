@@ -28,7 +28,6 @@ export function getInitialGameState() {
       result.entitySet.map((entity) => {
         newEntitySet[entity.id] = entity;
       });
-      console.log(newEntitySet);
 
       result.tileSet = newTileSet;
       result.entitySet = newEntitySet;
@@ -37,10 +36,35 @@ export function getInitialGameState() {
       result.UI = {
         "showMinimap": false
       };
+      result.log = [];
     }
   });
 }
 
+export const logState = store => next => action => {
+  // Before any action, make sure we update from the log queue.
+  // This is really not kosher at all.
+
+  // Also, make the state available for debugging in the window.
+  window.debugState = store.getState();
+
+  // Note that this does not log in real-time, it occurs one step afterwards in game-time.
+  if (window.logQueue !== undefined) {
+    if ((window.logQueue.length > 0) && (window.logging !== true)) {
+      window.logging = true;
+
+      let newEvents = window.logQueue.slice();
+      store.dispatch({'type': 'LOG_EVENTS', 'events': newEvents});
+
+      window.logQueue = [];
+      window.logging = false;
+    }
+  }
+
+  // Continue as usual.
+  let result = next(action);
+  return result;
+};
 
 export const GameReducer = (state, action) => {
   switch (action.type) {
@@ -62,7 +86,7 @@ export const GameReducer = (state, action) => {
     case 'MOVE_PLAYER':
 
       var player = cloneDeep(state.entityLayer[0]);
-      var entities = state.entityLayer.slice(1);
+      var entities = state.entityLayer.slice().slice(1);
       var translation = GameLogic.translatePlayerLocation(player, state.tileLayer, state.tileSet, action.direction);
       var playerMoved = (player.location != translation);
 
@@ -76,6 +100,13 @@ export const GameReducer = (state, action) => {
       // Highly experimental. Questionable syntax.
       var newState = { ...state, 'entityLayer': entities, 'gameClock': newGameClock };
       return GameReducer(newState, { 'type': 'HOOK_ENTER', 'location': player.location });
+
+    case 'LOG_EVENTS':
+
+      // This is safe, .concat apparently operates on a copy. JS. So inconsistent.
+      var newLog = state.log.concat(action.events);
+
+      return { ...state, 'log': newLog };
 
     case 'TOGGLE_MINIMAP':
 

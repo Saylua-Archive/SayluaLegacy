@@ -1,4 +1,5 @@
 import * as MathUtils from "./math";
+import * as EngineUtils from "./engine";
 
 
 const ENABLED_SPECIAL_VARIABLES = [
@@ -41,12 +42,12 @@ function generateScript(id, payload) {
 
       // Add a wildcard
       pattern = pattern + '[a-z]+';
-      console.log("Search pattern: " + pattern);
+      //console.log("Search pattern: " + pattern);
 
       // Construct pattern and search
       pattern = new RegExp(pattern, "gm");
       let results = payload.match(pattern);
-      console.log(`Wildcard results: ${results}`);
+      //console.log(`Wildcard results: ${results}`);
 
       if (results === null) {
         return;
@@ -73,7 +74,7 @@ function generateScript(id, payload) {
   let args = requires.map((requirement) => requirement.split('.')[0]).join(",");
 
   // Compile and store.
-  console.log("Compiling: " + `window.__tfunc = function(${args}) { ${payload} }`);
+  //console.log("Compiling: " + `window.__tfunc = function(${args}) { ${payload} }`);
   eval(`window.__tfunc = function(${args}) { ${payload} }`);
 
   window.scriptEngineFunctions[id]['requires'] = requires;
@@ -98,9 +99,9 @@ function resolveScript(scriptFunction, meta) {
     if (metaContainsRequirement) {
       result = metaRequirements[strippedRequirement];
     } else {
-      console.log(`Requesting ${requirement} on behalf of ${scriptFunction.id}`);
+      //console.log(`Requesting ${requirement} on behalf of ${scriptFunction.id}`);
       result = resolveVariable(scriptFunction.id, requirement, meta);
-      console.log(`Got back ${result}`);
+      //console.log(`Got back ${result}`);
     }
 
     args.push(result);
@@ -115,8 +116,8 @@ export function resolveActions(actionType, actionLocation, tileSet, tileLayer, e
   let event = actionType.replace("HOOK_", "").toLowerCase();
 
   // Make sure that we are operating from copies.
-  let newTileLayer = tileLayer.splice(0);
-  let newEntityLayer = entityLayer.splice(0);
+  let newTileLayer = tileLayer.slice();
+  let newEntityLayer = entityLayer.slice();
 
   if (event === 'enter') {
     let x = actionLocation.x;
@@ -281,7 +282,11 @@ function resolveVariable(id, specialVariable, meta) {
   }
 
   if (specialVariable === '__log') {
-    // For now, we're just going to provide the traditional console.log
-    return console.log;
+    let curriedLog = (message) => {
+      EngineUtils.log(message);
+      console.log(message);
+    };
+
+    return curriedLog;
   }
 }
