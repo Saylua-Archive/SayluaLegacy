@@ -28,6 +28,7 @@ export function getInitialGameState() {
       result.entitySet.map((entity) => {
         newEntitySet[entity.id] = entity;
       });
+      console.log(newEntitySet);
 
       result.tileSet = newTileSet;
       result.entitySet = newEntitySet;
