@@ -32,7 +32,6 @@ export function getInitialGameState() {
       result.tileSet = newTileSet;
       result.entitySet = newEntitySet;
       result.gameClock = 0;
-      result.eventsQueue = [];
       result.UI = {
         "showMinimap": false
       };
@@ -44,9 +43,6 @@ export function getInitialGameState() {
 export const logState = store => next => action => {
   // Before any action, make sure we update from the log queue.
   // This is really not kosher at all.
-
-  // Also, make the state available for debugging in the window.
-  window.debugState = store.getState();
 
   // Note that this does not log in real-time, it occurs one step afterwards in game-time.
   if (window.logQueue !== undefined) {

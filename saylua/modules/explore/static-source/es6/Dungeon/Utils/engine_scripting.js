@@ -132,14 +132,14 @@ export function resolveActions(actionType, actionLocation, tileSet, tileLayer, e
     });
 
     for (let entity of matchingEntities) {
-      console.log("We have just entered the same tile as an entity.");
+      //console.log("We have just entered the same tile as an entity.");
       let parentEntity = entitySet[entity.parent];
-      console.log(parentEntity);
+      //console.log(parentEntity);
 
       // First, we run the local instance's scripts, if possible.
       if (entity.events !== undefined) {
         if (entity.events[event] !== undefined) {
-          console.log("We have a matching entity instance event!");
+          //console.log("We have a matching entity instance event!");
           let script = generateScript(entity.id, entity.events[event]);
           resolveScript(script, {
             'location': actionLocation,
@@ -154,7 +154,7 @@ export function resolveActions(actionType, actionLocation, tileSet, tileLayer, e
       // Then, we try the parent entity's scripts.
       if (parentEntity.events !== undefined) {
         if (parentEntity.events[event] !== undefined) {
-          console.log("We have a matching entity type event!");
+          //console.log("We have a matching entity type event!");
           let script = generateScript(parentEntity.id, parentEntity.events[event]);
           resolveScript(script, {
             'location': actionLocation,
@@ -284,7 +284,7 @@ function resolveVariable(id, specialVariable, meta) {
   if (specialVariable === '__log') {
     let curriedLog = (message) => {
       EngineUtils.log(message);
-      console.log(message);
+      //console.log(message);
     };
 
     return curriedLog;
