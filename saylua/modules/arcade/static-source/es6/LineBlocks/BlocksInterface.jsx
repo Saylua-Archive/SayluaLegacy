@@ -76,18 +76,39 @@ export default class BlocksInterface extends Component {
 
   render() {
     let model = this.props.model;
+    let overlay = '';
+    if (model.gameOver) {
+      overlay = <div className='blocks-overlay'>
+        Game Over
+        <br />Score: { model.score }
+        <br />You earned { model.score } Cloud Coins!
+        <br />Try again
+      </div>;
+    } else if (model.paused) {
+      overlay = <div className='blocks-overlay'>Paused</div>;
+    }
 
     return (
-      <div className='blocks-container'>
-        <div className='blocks-info'>
-          <div className='blocks-next-piece'>
-            <BlockGrid matrix={ model.nextPiece } />
+      <div className='blocks-outer-container'>
+        { overlay }
+        <div className='blocks-container'>
+          <div className='blocks-info'>
+            <div className='blocks-next-piece'>
+              <BlockGrid matrix={ model.nextPiece } />
+            </div>
+            <div className='blocks-score'>
+              Score: { model.score }
+            </div>
+            <div className='blocks-controls'>
+              &larr;&rarr; - Move piece
+              <br />&uarr;- Rotate piece
+              <br />&darr; - Speedup
+              <br />Space - Drop piece
+              <br />Enter/P - Pause
+            </div>
           </div>
-          <div className='blocks-score'>
-            Score: { model.score }
-          </div>
+          <BlockGrid className='blocks-grid' matrix={ model.gameMatrix } />
         </div>
-        <BlockGrid className='blocks-grid' matrix={ model.gameMatrix } />
       </div>
     );
   }

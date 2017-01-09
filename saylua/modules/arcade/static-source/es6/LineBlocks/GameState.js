@@ -6,39 +6,39 @@ import cloneDeep from "lodash.clonedeep";
 const LB_FPS = 60;
 const LB_MIN_TIMEOUT = 10;
 const LB_PIECES = [[0, 1, 0, 0, // i
-                  0, 1, 0, 0,
-                  0, 1, 0, 0,
-                  0, 1, 0, 0],
+                    0, 1, 0, 0,
+                    0, 1, 0, 0,
+                    0, 1, 0, 0],
 
-                 [0, 0, 2, 0, // j
-                  0, 0, 2, 0,
-                  0, 2, 2, 0,
-                  0, 0, 0, 0],
+                   [0, 0, 2, 0, // j
+                    0, 0, 2, 0,
+                    0, 2, 2, 0,
+                    0, 0, 0, 0],
 
-                 [0, 3, 0, 0, // l
-                  0, 3, 0, 0,
-                  0, 3, 3, 0,
-                  0, 0, 0, 0],
+                   [0, 3, 0, 0, // l
+                    0, 3, 0, 0,
+                    0, 3, 3, 0,
+                    0, 0, 0, 0],
 
-                 [0, 0, 0, 0, // o
-                  0, 4, 4, 0,
-                  0, 4, 4, 0,
-                  0, 0, 0, 0],
+                   [0, 0, 0, 0, // o
+                    0, 4, 4, 0,
+                    0, 4, 4, 0,
+                    0, 0, 0, 0],
 
-                 [0, 0, 0, 0, // t
-                  5, 5, 5, 0,
-                  0, 5, 0, 0,
-                  0, 0, 0, 0],
+                   [0, 0, 0, 0, // t
+                    5, 5, 5, 0,
+                    0, 5, 0, 0,
+                    0, 0, 0, 0],
 
-                 [0, 0, 0, 0, // s
-                  0, 6, 6, 0,
-                  6, 6, 0, 0,
-                  0, 0, 0, 0],
+                   [0, 0, 0, 0, // s
+                    0, 6, 6, 0,
+                    6, 6, 0, 0,
+                    0, 0, 0, 0],
 
-                 [0, 0, 0, 0, // z
-                  7, 7, 0, 0,
-                  0, 7, 7, 0,
-                  0, 0, 0, 0]];
+                   [0, 0, 0, 0, // z
+                    7, 7, 0, 0,
+                    0, 7, 7, 0,
+                    0, 0, 0, 0]];
 
 // GameState
 // --------------------------------------
@@ -72,8 +72,13 @@ export default class GameState extends BaseModel {
     setInterval(this.timeStep.bind(this), 1000 / LB_FPS);
   }
 
-  endGame() {
-    this.gameOver = true;
+  checkGameOver() {
+    // If the first row has any pieces, there is a game over.
+    let matrix = this.placedPieces;
+    for (let i = 0; i < matrix.width; i++) {
+      if (matrix.get(0, i)) return true;
+    }
+    return false;
   }
 
   timeStep() {
@@ -99,23 +104,21 @@ export default class GameState extends BaseModel {
       return true;
     }
     // If moving down is invalid, the piece cannot fall anymore.
-    let gameOver = false;
-    for (let i = 0; !gameOver && i + p.r < 0; i++) {
-      for (let j = 0; !gameOver && j < p.matrix.width; j++) {
-        gameOver = !!p.matrix.get(i, j);
-      }
-    }
+    this.placedPieces.addMatrix(p.matrix, p.r, p.c);
 
-    if (gameOver) {
-      this.endGame();
+    if (this.checkGameOver()) {
+      // GAME OVER.
+      this.piece = null;
+      this.gameOver = true;
+      
+      this.triggerUpdate();
     } else {
-      this.placedPieces.addMatrix(p.matrix, p.r, p.c);
       this.getNextPiece();
 
       // Check if a line was made.
       if (this.clearLines(p.r, p.r + 4).length > 0) {
         this.score += 50;
-        this.timeout--;
+        this.timeout -= 2;
       }
     }
     return false;
@@ -188,6 +191,7 @@ export default class GameState extends BaseModel {
 
   pause() {
     this.paused = !this.paused;
+    this.triggerUpdate();
   }
 
   drop() {
