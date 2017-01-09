@@ -39,20 +39,4 @@ def admin_panel_roles_edit():
         flash("Roles successfully updated!")
     privs.sort()
     return render_template('admin/roles/edit.html', roles=roles, privs=privs)
-
-
-def setup_db():
-    # Create the role 'admin' with all privileges
-    admin_role = Role(id='admin')
-    admin_dict = admin_role.to_dict()
-    for entry in admin_dict:
-        setattr(admin_role, entry, True)
-    admin_role.put()
-
-    if is_devserver():
-        if g.user:
-            g.user.role_id = 'admin'
-            g.user.put()
-
-    flash("Database Setup Complete")
-    return redirect("/admin/")
+    
