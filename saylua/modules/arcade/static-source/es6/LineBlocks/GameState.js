@@ -72,8 +72,13 @@ export default class GameState extends BaseModel {
     setInterval(this.timeStep.bind(this), 1000 / LB_FPS);
   }
 
-  endGame() {
-    this.gameOver = true;
+  checkGameOver() {
+    // If the first row has any pieces, there is a game over.
+    let matrix = this.placedPieces;
+    for (let i = 0; i < matrix.width; i++) {
+      if (matrix.get(0, i)) return true;
+    }
+    return false;
   }
 
   timeStep() {
@@ -99,17 +104,15 @@ export default class GameState extends BaseModel {
       return true;
     }
     // If moving down is invalid, the piece cannot fall anymore.
-    let gameOver = false;
-    for (let i = 0; !gameOver && i + p.r < 0; i++) {
-      for (let j = 0; !gameOver && j < p.matrix.width; j++) {
-        gameOver = !!p.matrix.get(i, j);
-      }
-    }
+    this.placedPieces.addMatrix(p.matrix, p.r, p.c);
 
-    if (gameOver) {
-      this.endGame();
+    if (this.checkGameOver()) {
+      // GAME OVER.
+      this.piece = null;
+      this.gameOver = true;
+      
+      this.triggerUpdate();
     } else {
-      this.placedPieces.addMatrix(p.matrix, p.r, p.c);
       this.getNextPiece();
 
       // Check if a line was made.
@@ -188,6 +191,7 @@ export default class GameState extends BaseModel {
 
   pause() {
     this.paused = !this.paused;
+    this.triggerUpdate();
   }
 
   drop() {
