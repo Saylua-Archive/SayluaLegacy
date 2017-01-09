@@ -8,18 +8,52 @@
   text-shadow: 2px 2px #457792;
 
   .blocks-overlay {
-    font-family: 'Patrick Hand', sans-serif;
-    font-size: 80px;
-    line-height: 200%;
+    font-family: 'Bitter', sans-serif;
+    font-size: 40px;
+    line-height: 150%;
     position: absolute;
     z-index: 100;
     top: 0;
     left: 0;
+    display: -ms-flexbox;
+    display: -moz-box;
+    display: -webkit-box;
+    display: box;
     width: 100%;
     height: 100%;
     text-align: center;
-    background: rgba(34, 34, 34, 0.5);
-    text-shadow: 4px 4px #2c4356;
+    background: rgba(34, 34, 34, 0.7);
+    text-shadow: 2px 2px #2c4356;
+
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    box-align: center;
+    -webkit-box-pack: center;
+    -moz-box-pack: center;
+    box-pack: center;
+    -ms-flex-align: center;
+    -ms-flex-pack: center;
+
+    .blocks-big-text {
+      font-size: 80px;
+      line-height: 150%;
+      text-shadow: 4px 4px #2c4356;
+    }
+
+    .blocks-small-text {
+      font-size: 20px;
+      line-height: 150%;
+    }
+
+    .blocks-try-again {
+      transition: color 0.5s ease;
+      color: #FFE784;
+    }
+
+    .blocks-try-again:hover {
+      cursor: pointer;
+      color: #FF9059;
+    }
   }
 }
 
@@ -39,9 +73,11 @@
   }
 
   .blocks-score {
-    font-family: 'Patrick Hand', sans-serif;
-    font-size: 30px;
-    line-height: 300%;
+    font-family: 'Bitter', sans-serif;
+    font-size: 24px;
+    line-height: 150%;
+    height: 80px;
+    padding-top: 24px;
   }
 
   .blocks-grid {

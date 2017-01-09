@@ -79,13 +79,16 @@ export default class BlocksInterface extends Component {
     let overlay = '';
     if (model.gameOver) {
       overlay = <div className='blocks-overlay'>
-        Game Over
+        <span className='blocks-big-text'>Game Over</span>
         <br />Score: { model.score }
-        <br />You earned { model.score } Cloud Coins!
-        <br />Try again
+        <br /><span className='blocks-small-text'>
+          You earned { model.score } Cloud Coins!</span>
+        <br /><span className='blocks-try-again'>Try again?</span>
       </div>;
     } else if (model.paused) {
-      overlay = <div className='blocks-overlay'>Paused</div>;
+      overlay = <div className='blocks-overlay'>
+        <span className='blocks-big-text'>Paused</span>
+      </div>;
     }
 
     return (
