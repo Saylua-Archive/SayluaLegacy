@@ -75,20 +75,31 @@ export default class BlocksInterface extends Component {
   }
 
   render() {
-    let model = this.props.model;
+    let game = this.props.model;
     let overlay = '';
-    if (model.gameOver) {
+    if (game.gameOver) {
+      // Game over state.
       overlay = <div className='blocks-overlay'>
         <span className='blocks-big-text'>Game Over</span>
-        <br />Score: { model.score }
+        <br />Score: { game.score }
         <br /><span className='blocks-small-text'>
-          You earned { model.score } Cloud Coins!</span>
-        <br /><span className='blocks-try-again'>Try again?</span>
+          You earned { game.score } Cloud Coins!</span>
+        <br /><span className='blocks-try-again' onClick={ game.start.bind(game) }>Try again?</span>
       </div>;
-    } else if (model.paused) {
+    } else if (game.paused) {
+      // Paused state.
       overlay = <div className='blocks-overlay'>
         <span className='blocks-big-text'>Paused</span>
       </div>;
+    } else if (!game.isRunning()) {
+      // Start screen.
+      return <div className='blocks-outer-container'>
+        <div className='blocks-start-screen'>
+          <span className='blocks-start-game' onClick={ game.start.bind(game) }>
+            Start Game
+          </span>
+        </div>
+      </div>
     }
 
     return (
@@ -97,10 +108,10 @@ export default class BlocksInterface extends Component {
         <div className='blocks-container'>
           <div className='blocks-info'>
             <div className='blocks-next-piece'>
-              <BlockGrid matrix={ model.nextPiece } />
+              <BlockGrid matrix={ game.nextPiece } />
             </div>
             <div className='blocks-score'>
-              Score: { model.score }
+              Score: { game.score }
             </div>
             <div className='blocks-controls'>
               &larr;&rarr; - Move piece
@@ -110,7 +121,7 @@ export default class BlocksInterface extends Component {
               <br />Enter/P - Pause
             </div>
           </div>
-          <BlockGrid className='blocks-grid' matrix={ model.gameMatrix } />
+          <BlockGrid className='blocks-grid' matrix={ game.gameMatrix } />
         </div>
       </div>
     );

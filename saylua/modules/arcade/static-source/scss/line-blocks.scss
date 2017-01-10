@@ -1,4 +1,5 @@
 .blocks-outer-container {
+  font-family: 'Bitter', sans-serif;
   position: relative;
   width: 100%;
   height: 600px;
@@ -8,7 +9,6 @@
   text-shadow: 2px 2px #457792;
 
   .blocks-overlay {
-    font-family: 'Bitter', sans-serif;
     font-size: 40px;
     line-height: 150%;
     position: absolute;
@@ -40,19 +40,40 @@
       text-shadow: 4px 4px #2c4356;
     }
 
+    .blocks-big-text {
+      font-size: 80px;
+      line-height: 150%;
+    }
+
     .blocks-small-text {
       font-size: 20px;
       line-height: 150%;
     }
 
     .blocks-try-again {
+      cursor: pointer;
       transition: color 0.5s ease;
-      color: #FFE784;
+      color: #ffe784;
     }
 
     .blocks-try-again:hover {
+      color: #ff9059;
+    }
+  }
+
+  .blocks-start-screen {
+    text-align: center;
+
+    .blocks-start-game {
+      font-size: 80px;
+      line-height: 500%;
       cursor: pointer;
-      color: #FF9059;
+      transition: color 0.5s ease;
+      color: #ffe784;
+    }
+
+    .blocks-start-game:hover {
+      color: #ff9059;
     }
   }
 }
@@ -62,22 +83,24 @@
   margin: auto;
   padding-top: 50px;
 
+
   .blocks-info {
-    font-family: sans-serif;
     font-size: 16px;
     font-weight: bold;
     line-height: 200%;
     float: left;
     width: 150px;
-    height: 500px;
-  }
 
-  .blocks-score {
-    font-family: 'Bitter', sans-serif;
-    font-size: 24px;
-    line-height: 150%;
-    height: 80px;
-    padding-top: 24px;
+    .blocks-controls {
+      font-family: sans-serif;
+    }
+
+    .blocks-score {
+      font-size: 24px;
+      line-height: 150%;
+      height: 80px;
+      padding-top: 24px;
+    }
   }
 
   .blocks-grid {

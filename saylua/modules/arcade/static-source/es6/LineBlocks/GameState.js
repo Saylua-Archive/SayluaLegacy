@@ -47,7 +47,6 @@ const LB_PIECES = [[0, 1, 0, 0, // i
 export default class GameState extends BaseModel {
   constructor() {
     super();
-    this.start();
   }
 
   clearGameState() {
@@ -62,6 +61,8 @@ export default class GameState extends BaseModel {
     this.placedPieces = new Matrix(18, 10);
     this.nextPiece = null;
     this.piece = {"matrix": new Matrix(4, 4), "r": -3, "c": 2};
+
+    clearInterval(this.timer);
   }
 
   start() {
@@ -69,7 +70,11 @@ export default class GameState extends BaseModel {
 
     this.getNextPiece();
 
-    setInterval(this.timeStep.bind(this), 1000 / LB_FPS);
+    this.timer = setInterval(this.timeStep.bind(this), 1000 / LB_FPS);
+  }
+
+  isRunning() {
+    return this.timer && !(this.gameOver || this.paused);
   }
 
   checkGameOver() {
@@ -82,7 +87,7 @@ export default class GameState extends BaseModel {
   }
 
   timeStep() {
-    if (this.paused || this.gameOver) return;
+    if (!this.isRunning()) return;
 
     this.frames++;
 
@@ -110,7 +115,7 @@ export default class GameState extends BaseModel {
       // GAME OVER.
       this.piece = null;
       this.gameOver = true;
-      
+
       this.triggerUpdate();
     } else {
       this.getNextPiece();
@@ -180,7 +185,9 @@ export default class GameState extends BaseModel {
   draw() {
     let matrix = cloneDeep(this.placedPieces);
     let p = this.piece;
-    matrix.addMatrix(p.matrix, p.r, p.c);
+    if (p) {
+      matrix.addMatrix(p.matrix, p.r, p.c);
+    }
 
     // gameMatrix is bound to a BlockGrid, which should render this.
     this.gameMatrix = matrix;
@@ -195,7 +202,7 @@ export default class GameState extends BaseModel {
   }
 
   drop() {
-    if (this.paused || this.gameOver) return;
+    if (!this.isRunning()) return;
     while (this.movePieceDown());
     this.draw();
   }
@@ -209,7 +216,7 @@ export default class GameState extends BaseModel {
   }
 
   rotate() {
-    if (this.paused || this.gameOver) return;
+    if (!this.isRunning()) return;
     let p = cloneDeep(this.piece);
     p.matrix.rotate();
     if (this.validPlacement(p.matrix, p.r, p.c)) {
@@ -219,7 +226,7 @@ export default class GameState extends BaseModel {
   }
 
   moveLeft() {
-    if (this.paused || this.gameOver) return;
+    if (!this.isRunning()) return;
     let p = this.piece;
     if (this.validPlacement(p.matrix, p.r, p.c - 1)) {
       p.c--;
@@ -228,7 +235,7 @@ export default class GameState extends BaseModel {
   }
 
   moveRight() {
-    if (this.paused || this.gameOver) return;
+    if (!this.isRunning()) return;
     let p = this.piece;
     if (this.validPlacement(p.matrix, p.r, p.c + 1)) {
       p.c++;
