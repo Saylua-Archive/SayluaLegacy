@@ -10,7 +10,7 @@ from google.appengine.ext import ndb
 
 
 class Dungeon(ndb.Model):
-    user_key = ndb.KeyProperty(indexed=True)
+    user_key = ndb.KeyProperty()
     name = ndb.StringProperty()
     last_accessed = ndb.DateTimeProperty(auto_now_add=True)
     tile_layer = ndb.BlobProperty()

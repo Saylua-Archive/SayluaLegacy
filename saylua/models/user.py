@@ -107,5 +107,5 @@ class User(ndb.Model):
 
 
 class LoginSession(ndb.Model):
-    user_key = ndb.StringProperty(indexed=True)
-    expires = ndb.DateTimeProperty()
+    user_key = ndb.StringProperty()
+    expires = ndb.DateTimeProperty(indexed=False)
