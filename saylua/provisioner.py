@@ -18,10 +18,18 @@ def setup():
     print("Admin Role Created")
 
     # Add the 'user' role
-    user_role = Role(id='admin')
+    user_role = Role(id='user')
     user_role.can_post_threads = True
     user_role.can_comment = True
     user_role.put()
     print("User Role Created")
+
+    # Add the 'moderator' role
+    moderator_role = Role(id='moderator')
+    moderator_role.can_post_threads = True
+    moderator_role.can_move_threads = True
+    moderator_role.can_comment = True
+    moderator_role.put()
+    print("Moderator Role Created")
 
     print("Database Setup Complete")
