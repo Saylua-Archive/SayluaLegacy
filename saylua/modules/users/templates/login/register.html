@@ -51,6 +51,15 @@
     <tr>
       <td></td>
       <td>
+        {% for error in form.recaptcha.errors %}
+          {{ error }}
+        {% endfor %}
+        {{ form.recaptcha }}
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
         <input type="submit" value="Register" name="register">
       </td>
     </tr>
