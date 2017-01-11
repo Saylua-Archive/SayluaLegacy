@@ -74,7 +74,7 @@ class User(ndb.Model):
 
     @classmethod
     @ndb.transactional(xg=True)
-    def transfer_currency(cls, from_key, to_key, cc, ss):
+    def transfer_currency(cls, from_key, to_key, cc=0, ss=0):
         from_user, to_user = ndb.get_multi([from_key, to_key])
         from_user.star_shards -= ss
         from_user.cloud_coins -= cc
@@ -90,7 +90,7 @@ class User(ndb.Model):
 
     @classmethod
     @ndb.transactional
-    def update_currency(cls, user_key, cc, ss):
+    def update_currency(cls, user_key, cc=0, ss=0):
         user = user_key.get()
         user.star_shards += ss
         user.cloud_coins += cc
@@ -99,6 +99,8 @@ class User(ndb.Model):
         cls.except_if_currency_invalid(user)
 
         user.put()
+
+        return [user.cloud_coins, user.star_shards]
 
     @classmethod
     def except_if_currency_invalid(cls, user):

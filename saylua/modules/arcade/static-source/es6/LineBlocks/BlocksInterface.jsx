@@ -77,13 +77,16 @@ export default class BlocksInterface extends Component {
   render() {
     let game = this.props.model;
     let overlay = '';
+    let prizeText = 'Sending score...';
+    if (game.scoreSent) {
+      prizeText = `You earned ${game.score} Cloud Coins!`;
+    }
     if (game.gameOver) {
       // Game over state.
       overlay = <div className='blocks-overlay'>
         <span className='blocks-big-text'>Game Over</span>
         <br />Score: { game.score }
-        <br /><span className='blocks-small-text'>
-          You earned { game.score } Cloud Coins!</span>
+        <br /><span className='blocks-small-text'>{ prizeText }</span>
         <br /><span className='blocks-try-again' onClick={ game.start.bind(game) }>Try again?</span>
       </div>;
     } else if (game.paused) {
