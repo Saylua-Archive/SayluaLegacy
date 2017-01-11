@@ -1,4 +1,3 @@
-from saylua import app
 from flask import render_template, redirect, g, flash, request
 from google.appengine.ext import ndb
 import math
