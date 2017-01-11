@@ -3,8 +3,8 @@ from google.appengine.ext import ndb
 
 class Board(ndb.Model):
     title = ndb.StringProperty()
-    url_title = ndb.StringProperty(indexed=False)
-    board_id = ndb.StringProperty(indexed=False)
+    url_title = ndb.StringProperty()
+    board_id = ndb.StringProperty()
     category_key = ndb.StringProperty()
     description = ndb.TextProperty()
 
@@ -25,7 +25,7 @@ class ForumThread(ndb.Model):
 
 class ForumPost(ndb.Model):
     creator_key = ndb.StringProperty()
-    thread_id = ndb.IntegerProperty(indexed=False)
-    board_id = ndb.IntegerProperty(indexed=False)
+    thread_id = ndb.IntegerProperty()
+    board_id = ndb.IntegerProperty()
     body = ndb.TextProperty()
     created_time = ndb.DateTimeProperty(auto_now_add=True)
