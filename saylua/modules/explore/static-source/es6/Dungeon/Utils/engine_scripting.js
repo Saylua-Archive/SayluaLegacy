@@ -1,5 +1,10 @@
+import astar from "astar";
+import cloneDeep from "lodash.clonedeep";
 import * as MathUtils from "./math";
 import * as EngineUtils from "./engine";
+
+
+import { OBSTRUCTIONS } from "./game_helpers";
 
 
 const ENABLED_SPECIAL_VARIABLES = [
@@ -10,10 +15,14 @@ const ENABLED_SPECIAL_VARIABLES = [
   '$entities',
   '$entity_nearest',
   '$entity_nearest_@type',
-  '__log'
-  //$location
-  //$location.screen
+  '$location',
+  '__distance',
+  '__isObstacle',
+  '__log',
+  '__moveTo',
+  '__rand'
 ];
+
 
 function generateScript(id, payload) {
   // Initialize if necessary.
@@ -42,12 +51,10 @@ function generateScript(id, payload) {
 
       // Add a wildcard
       pattern = pattern + '[a-z]+';
-      //console.log("Search pattern: " + pattern);
 
       // Construct pattern and search
       pattern = new RegExp(pattern, "gm");
       let results = payload.match(pattern);
-      //console.log(`Wildcard results: ${results}`);
 
       if (results === null) {
         return;
@@ -63,10 +70,15 @@ function generateScript(id, payload) {
       return;
     }
 
-    // Good.
-    if (payload.indexOf(specialVariable) !== -1) {
+    // Good. We still have to do a normal regex though.
+    let pattern = specialVariable.replace('$', '\\$');
+    pattern = pattern + "[^_]";
+    pattern = new RegExp(pattern, "gm");
+
+    let results = payload.match(pattern);
+
+    if (results !== null) {
       requires.push(specialVariable);
-      return;
     }
   });
 
@@ -87,21 +99,21 @@ function generateScript(id, payload) {
 
 function resolveScript(scriptFunction, meta) {
   let args = [];
+  let metaRequirements = Object.keys(meta);
 
   // Necessary so that we can actually bind arguments dynamically to generated scripts.
   for (let requirement of scriptFunction.requires) {
     let result;
     let strippedRequirement = requirement.replace('$', '');
-    let metaRequirements = Object.keys(meta);
     let metaContainsRequirement = (metaRequirements.indexOf(strippedRequirement) !== -1);
 
-    // We will manually inject a few things ourselves, as the engine will not be able to provide an up-to-date result.
+    // We will manually inject a few things ourselves, as the resolver will not be able to provide an accurate result.
     if (metaContainsRequirement) {
-      result = metaRequirements[strippedRequirement];
+      result = meta[strippedRequirement];
     } else {
       //console.log(`Requesting ${requirement} on behalf of ${scriptFunction.id}`);
       result = resolveVariable(scriptFunction.id, requirement, meta);
-      //console.log(`Got back ${result}`);
+      //console.log(`Got back: ${result}`); console.log(result);
     }
 
     args.push(result);
@@ -111,29 +123,40 @@ function resolveScript(scriptFunction, meta) {
 }
 
 
-export function resolveActions(actionType, actionLocation, tileSet, tileLayer, entitySet, entityLayer) {
+export function resolveActions(data) {
+  /*
+    Example Usage:
+    {
+      'actionType': 'HOOK_ENTER',
+      'actionLocation', { 'x': 0, 'y': 0}
+      'tileSet': <object:tileSet>,
+      'tileLayer': <array:tileLayer>,
+      'entitySet': <object:entitySet>,
+      'entityLayer': <array:entityLayer>
+    }
+  */
+
   // What are we trying to find matching events for, here?
-  let event = actionType.replace("HOOK_", "").toLowerCase();
+  let event = data.actionType.replace("HOOK_", "").toLowerCase();
 
   // Make sure that we are operating from copies.
-  let newTileLayer = tileLayer.slice();
-  let newEntityLayer = entityLayer.slice();
+  let newTileLayer = data.tileLayer.slice();
+  let newEntityLayer = data.entityLayer.slice();
 
+  // Trigger entities / tiles at the players new location.
   if (event === 'enter') {
-    let x = actionLocation.x;
-    let y = actionLocation.y;
 
     // Entities first
     let matchingEntities = newEntityLayer.filter((entity) => {
       let isNotPlayer = (entity.parent !== '0x1000');
-      let isSameLocation = ((entity.location.x == actionLocation.x) && (entity.location.y == actionLocation.y));
+      let isSameLocation = ((entity.location.x == data.actionLocation.x) && (entity.location.y == data.actionLocation.y));
 
       return (isNotPlayer && isSameLocation);
     });
 
     for (let entity of matchingEntities) {
       //console.log("We have just entered the same tile as an entity.");
-      let parentEntity = entitySet[entity.parent];
+      let parentEntity = data.entitySet[entity.parent];
       //console.log(parentEntity);
 
       // First, we run the local instance's scripts, if possible.
@@ -142,11 +165,13 @@ export function resolveActions(actionType, actionLocation, tileSet, tileLayer, e
           //console.log("We have a matching entity instance event!");
           let script = generateScript(entity.id, entity.events[event]);
           resolveScript(script, {
-            'location': actionLocation,
-            'tileSet': tileSet,
-            'entitySet': entitySet,
+            'this': entity,
+            'location': data.actionLocation,
+            'tileSet': data.tileSet,
+            'entitySet': data.entitySet,
             'tileLayer': newTileLayer,
-            'entityLayer': newEntityLayer
+            'entityLayer': newEntityLayer,
+            'nodeGraph': data.nodeGraph
           });
         }
       }// else { console.log('instance events.enter is undefined'); }
@@ -157,14 +182,57 @@ export function resolveActions(actionType, actionLocation, tileSet, tileLayer, e
           //console.log("We have a matching entity type event!");
           let script = generateScript(parentEntity.id, parentEntity.events[event]);
           resolveScript(script, {
-            'location': actionLocation,
-            'tileSet': tileSet,
-            'entitySet': entitySet,
+            'this': entity,
+            'location': data.actionLocation,
+            'tileSet': data.tileSet,
+            'entitySet': data.entitySet,
             'tileLayer': newTileLayer,
-            'entityLayer': newEntityLayer
+            'entityLayer': newEntityLayer,
+            'nodeGraph': data.nodeGraph
           });
         }
       }// else { console.log('type events.enter is undefined'); }
+    }
+  }
+
+  // Process AI behaviors.
+  if (event === 'timestep') {
+    let target = data.target;
+    let isTile = (target.tile !== undefined);
+    let isEntity = !isTile;
+
+    if (isEntity) {
+      let parentEntity = data.entitySet[target.parent];
+
+      if (target.events !== undefined) {
+        if (target.events[event] !== undefined) {
+          let script = generateScript(target.id, target.events[event]);
+          resolveScript(script, {
+            'this': target,
+            'location': target.location,
+            'tileSet': data.tileSet,
+            'entitySet': data.entitySet,
+            'tileLayer': newTileLayer,
+            'entityLayer': newEntityLayer,
+            'nodeGraph': data.nodeGraph
+          });
+        }
+      }
+
+      if (parentEntity.events !== undefined) {
+        if (parentEntity.events[event] !== undefined) {
+          let script = generateScript(parentEntity.id, parentEntity.events[event]);
+          resolveScript(script, {
+            'this': target,
+            'location': target.location,
+            'tileSet': data.tileSet,
+            'entitySet': data.entitySet,
+            'tileLayer': newTileLayer,
+            'entityLayer': newEntityLayer,
+            'nodeGraph': data.nodeGraph
+          });
+        }
+      }
     }
   }
 
@@ -174,39 +242,7 @@ export function resolveActions(actionType, actionLocation, tileSet, tileLayer, e
 function resolveVariable(id, specialVariable, meta) {
   let splitVar = specialVariable.split('_');
 
-  // A one time indexing on every layer update probably makes more sense than this nonsense.
-  if (specialVariable === '$this') {
-    // Search each group, in order of least numerous to most numerous.
-
-    // Is there an entity type that matches?
-    let matchingEntityType = meta.entitySet[id];
-    if (matchingEntityType !== undefined) {
-      return matchingEntityType;
-    }
-
-    // Is there a tile type that matches?
-    let matchingTileType = meta.tileSet[id];
-    if (matchingTileType !== undefined) {
-      return matchingTileType;
-    }
-
-    // Is there an entity instance that matches?
-    let matchingEntityInstance = meta.entityLayer.filter((entity) => entity.id === id);
-    if (matchingEntityInstance.length > 0) {
-      return matchingEntityInstance[0];
-    }
-
-    // Is there a tile instance that matches?
-    let matchingTileInstance = meta.tileLayer.filter((tile) => tile.id === id);
-    if (matchingTileInstance.length > 0) {
-      return matchingTileInstance[0];
-    }
-
-    // wtf
-    return "WE HAV EA PROBLEML SOMEONE SPLASE HLEP ME";
-  }
-
-  if (specialVariable === '$entity.nearest') {
+  if (specialVariable === '$entity_nearest') {
     // Search every entity, stopping at any point if an entity other than itself is located in the same tile.
     // There are probably some approximation methods we could use here to speed this up,
     // but it is unlikely this will be used often enough to require them.
@@ -281,12 +317,44 @@ function resolveVariable(id, specialVariable, meta) {
     return nearestEntity;
   }
 
+  if (specialVariable === '__distance') {
+    return MathUtils.distance;
+  }
+
   if (specialVariable === '__log') {
-    let curriedLog = (message) => {
-      EngineUtils.log(message);
-      //console.log(message);
+    return EngineUtils.log;
+  }
+
+  if (specialVariable === "__isObstacle") {
+    let curry = (tileSet, tileLayer, obstructions) => (location) => {
+      if (tileLayer[location.y] !== undefined) {
+        if (tileLayer[location.y][location.x] !== undefined) {
+          let currentTile = tileLayer[location.y][location.x].tile;
+          let tileType = tileSet[currentTile].type;
+
+          return (obstructions.indexOf(tileType) !== -1);
+        }
+      }
+
+      return true;
     };
 
-    return curriedLog;
+    return curry(meta.tileSet, meta.tileLayer.slice(), OBSTRUCTIONS);
+  }
+
+  if (specialVariable === '__moveTo') {
+    let curry = (nodeGraph) => (data) => {
+      let start = nodeGraph.grid[data.location.x][data.location.y];
+      let end = nodeGraph.grid[data.target.x][data.target.y];
+
+      let result = astar.astar.search(nodeGraph, start, end, { 'heuristic': astar.astar.heuristics.diagonal });
+      return result;
+    };
+
+    return curry(meta.nodeGraph);
+  }
+
+  if (specialVariable === '__rand') {
+    return MathUtils.randomRange;
   }
 }

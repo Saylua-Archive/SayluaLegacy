@@ -1,4 +1,4 @@
-import * as EngineUtils from "./engine";
+import * as EngineGraphics from "./engine_graphics";
 
 import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from "../Core/Game";
 
@@ -14,7 +14,7 @@ export function generateEntitySprites(stageWidth, stageHeight, entityLayer, enti
 
   for (let entity of entityLayer) {
     let entityParent = entitySet[entity.parent];
-    let spriteTexture = EngineUtils.getTexture(entityParent.slug);
+    let spriteTexture = EngineGraphics.getTexture(entityParent.slug);
     let sprite = new PIXI.Sprite(spriteTexture);
 
     sprite.visible = false;

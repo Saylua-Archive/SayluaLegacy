@@ -13,12 +13,26 @@ export default class Game {
     // Store store
     this.store = store.getState();
 
+    this.updateCounter = 0;
+
     // Store store store store.
     // This will be triggered any time the store state changes.
     this.unsubscribe = store.subscribe(() => {
+      this.updateCounter += 1;
       this.store = store.getState();
       this.miniMap.visible = this.store.UI.showMinimap;
+
       this.state.shouldReRender = true;
+
+      // Use this to measure how long it takes for each game update to process when the player moves.
+      // Corresponding start is located in `DungeonClient.jsx`
+      window.framet0 = window.framet0 || performance.now();
+      window.framet1 = performance.now();
+      let timeElapsed = Math.floor((window.framet1 - window.framet0) * 100) / 100;
+
+      window.average = window.average || 0;
+      window.average = Math.floor(((window.average + timeElapsed) / 2) * 100) / 100;
+      console.log(`This update took ${ timeElapsed } milliseconds. Average: ${ window.average }ms`);
     });
 
     // Engine, mostly responsible for scripts and realtime animations.

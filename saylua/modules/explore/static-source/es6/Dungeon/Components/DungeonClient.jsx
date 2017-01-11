@@ -106,6 +106,9 @@ export default class DungeonClient extends Component {
       // If we've gotten this far, prevent default behavior.
       event.preventDefault();
 
+      // Frame-time debug timer
+      window.framet0 = performance.now();
+
       this.props.store.dispatch({
         'type': "MOVE_PLAYER",
         'direction': keyName

@@ -1,4 +1,4 @@
-import * as EngineUtils from "./engine";
+import * as EngineFOV from "./engine_fov";
 import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from "../Core/Game";
 
 
@@ -22,7 +22,7 @@ export function calculateFOV(location, tileSet, tileLayer) {
     return (OBSTRUCTIONS.indexOf(tileType) !== -1);
   };
 
-  EngineUtils.calculateFOV(location.x, location.y, 8, visitTile, isBlocked);
+  EngineFOV.calculateFOV(location.x, location.y, 8, visitTile, isBlocked);
 
   return validTiles;
 }

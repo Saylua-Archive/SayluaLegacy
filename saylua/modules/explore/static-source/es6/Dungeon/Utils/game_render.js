@@ -1,5 +1,5 @@
 import * as GameHelpers from "./game_helpers";
-import * as EngineUtils from "./engine";
+import * as EngineGraphics from "./engine_graphics";
 
 import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from "../Core/Game";
 
@@ -66,14 +66,14 @@ export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
         // Now, we change the tile state depending on whether or not we can see it, and whether or not we /have/ seen it.
         if (tileVisible) {
           sprite.alpha = 1;
-          sprite.texture = EngineUtils.getTexture(parentTile.slug);
+          sprite.texture = EngineGraphics.getTexture(parentTile.slug);
         } else {
           if (tileSeen) {
             sprite.alpha = 0.5;
-            sprite.texture = EngineUtils.getTexture(parentTile.slug);
+            sprite.texture = EngineGraphics.getTexture(parentTile.slug);
           } else {
             sprite.alpha = 1;
-            sprite.texture = EngineUtils.getTexture('tile_fog');
+            sprite.texture = EngineGraphics.getTexture('tile_fog');
           }
         }
       }
@@ -158,12 +158,12 @@ export function renderMinimap(baseData, tileSet, tileLayer, minimapSprites) {
 
       if (tileVisible) {
         sprite.alpha = 1 * baseVisibility;
-        sprite.texture = EngineUtils.getTexture(parentTile.slug);
+        sprite.texture = EngineGraphics.getTexture(parentTile.slug);
         sprite.visible = true;
       } else {
         if (tileSeen) {
           sprite.alpha = 0.5 * baseVisibility;
-          sprite.texture = EngineUtils.getTexture(parentTile.slug);
+          sprite.texture = EngineGraphics.getTexture(parentTile.slug);
         } else {
           sprite.visible = false;
         }

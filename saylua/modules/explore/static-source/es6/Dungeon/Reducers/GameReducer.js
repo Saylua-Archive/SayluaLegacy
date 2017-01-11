@@ -1,10 +1,12 @@
-/*eslint no-console: ["off"]*/
+/* eslint { no-redeclare: 0 } */
 import cloneDeep from "lodash.clonedeep";
 import Reqwest from "reqwest";
+import astar from "astar";
+
 
 import * as EngineScripting from "../Utils/engine_scripting";
 import * as GameLogic from "../Utils/game_logic";
-
+import * as EngineUtils from "../Utils/engine";
 
 // GameStore -> Required by DungeonClient.
 // --------------------------------------
@@ -31,6 +33,7 @@ export function getInitialGameState() {
 
       result.tileSet = newTileSet;
       result.entitySet = newEntitySet;
+      result.nodeGraph = new astar.Graph(EngineUtils.generateNodeGraph(result.tileSet, result.tileLayer), { diagonal: true });
       result.gameClock = 0;
       result.UI = {
         "showMinimap": false
@@ -39,6 +42,21 @@ export function getInitialGameState() {
     }
   });
 }
+
+/**
+  Perhaps this will be useful in the future for when more than one type of action can move time forward.
+  e.g. ranged attacks, 'waiting', using items.
+**/
+/*export const processAI = store => next => action => {
+  // Ensure that if the player moves, all scripted objects resolve their behaviors.
+  if (action.type === 'MOVE_PLAYER') {
+    store.dispatch({ 'type': 'PROCESS_AI' });
+  }
+
+  // Continue as usual.
+  let result = next(action);
+  return result;
+};*/
 
 export const logState = store => next => action => {
   // Before any action, make sure we update from the log queue.
@@ -50,7 +68,7 @@ export const logState = store => next => action => {
       window.logging = true;
 
       let newEvents = window.logQueue.slice();
-      store.dispatch({'type': 'LOG_EVENTS', 'events': newEvents});
+      store.dispatch({ 'type': 'LOG_EVENTS', 'events': newEvents });
 
       window.logQueue = [];
       window.logging = false;
@@ -64,18 +82,24 @@ export const logState = store => next => action => {
 
 export const GameReducer = (state, action) => {
   switch (action.type) {
+    case 'PROCESS_AI':
+      var [entities, tiles] = GameLogic.processAI(state.tileSet, state.tileLayer, state.entitySet, state.entityLayer, state.nodeGraph);
+
+      return { ...state, 'entityLayer': entities, 'tileLayer': tiles };
+
     case 'HOOK_ENTER':
 
       // Entities will always affect tiles before the reverse occurs.
       // Fixable, but not immediately necessary for them to be simultaneous.
-      var [entities, tiles] = EngineScripting.resolveActions(
-        action.type,
-        action.location,
-        state.tileSet,
-        state.tileLayer,
-        state.entitySet,
-        state.entityLayer
-      );
+      var [entities, tiles] = EngineScripting.resolveActions({
+        'actionType': action.type,
+        'actionLocation': action.location,
+        'nodeGraph': state.nodeGraph,
+        'tileSet': state.tileSet,
+        'tileLayer': state.tileLayer,
+        'entitySet': state.entitySet,
+        'entityLayer': state.entityLayer
+      });
 
       return { ...state, 'entityLayer': entities, 'tileLayer': tiles };
 
@@ -93,9 +117,16 @@ export const GameReducer = (state, action) => {
       var newGameClock = state.gameClock;
       newGameClock = playerMoved ? newGameClock + 1 : newGameClock;
 
-      // Highly experimental. Questionable syntax.
+      // All of the below is highly experimental. Questionable syntax.
       var newState = { ...state, 'entityLayer': entities, 'gameClock': newGameClock };
-      return GameReducer(newState, { 'type': 'HOOK_ENTER', 'location': player.location });
+
+      // Make sure we trigger any entity / tile we collide with
+      newState = GameReducer(newState, { 'type': 'HOOK_ENTER', 'location': player.location });
+
+      // Step the game forward one time unit
+      newState = GameReducer(newState, { 'type': 'PROCESS_AI' });
+
+      return newState;
 
     case 'LOG_EVENTS':
 
