@@ -11,12 +11,12 @@ export default function Main() {
   getInitialGameState().then((initialState) => {
     let store = createStore(GameReducer, initialState);
 
-    InfernoDOM.render(
+    Inferno.render(
       <DungeonClient store={ store } />,
       document.getElementById("dungeon-client-mount")
     );
 
-    InfernoDOM.render(
+    Inferno.render(
       <DebugTools store={ store } />,
       document.getElementById("dungeon-debug-mount")
     );
