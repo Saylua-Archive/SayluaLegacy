@@ -15,6 +15,7 @@ export default class DungeonClient extends Component {
   constructor(props) {
     super(props);
 
+    this.refs = {};
     this.state = {};
   }
 
@@ -138,7 +139,7 @@ export default class DungeonClient extends Component {
 
   render() {
     return (
-      <div className="dungeon-wrapper" ref="pixiCanvas">
+      <div className="dungeon-wrapper" ref={(node) => this.refs.pixiCanvas = node} >
       </div>
     );
   }

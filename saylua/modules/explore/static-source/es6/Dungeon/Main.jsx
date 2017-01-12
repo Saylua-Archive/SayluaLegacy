@@ -1,5 +1,4 @@
 import Inferno from "inferno";
-import InfernoDOM from "inferno-dom";
 import { createStore, applyMiddleware, compose } from 'redux';
 
 import { getInitialGameState, logState, GameReducer } from "./Reducers/GameReducer";
@@ -16,12 +15,12 @@ export default function Main() {
       applyMiddleware(logState)
     ));
 
-    InfernoDOM.render(
+    Inferno.render(
       <DungeonClient store={ store } />,
       document.getElementById("dungeon-client-mount")
     );
 
-    InfernoDOM.render(
+    Inferno.render(
       <DebugTools store={ store } />,
       document.getElementById("dungeon-debug-mount")
     );
