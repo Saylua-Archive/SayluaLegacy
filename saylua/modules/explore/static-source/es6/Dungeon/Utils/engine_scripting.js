@@ -34,6 +34,8 @@ function generateScript(id, payload) {
     return window.scriptEngineFunctions[id];
   }
 
+  console.log("Compiling new script");
+
   // Reasons.
   window.scriptEngineFunctions[id]['id'] = id;
 
@@ -123,6 +125,53 @@ function resolveScript(scriptFunction, meta) {
 }
 
 
+function runEntityScripts(event, actor, data) {
+  let script, parent;
+
+  // Is it a child entity?
+  if (actor.parent !== undefined) {
+    parent = data.entitySet[actor.parent];
+  }
+
+  // Is it a child tile?
+  if (actor.tile !== undefined) {
+    parent = data.tileSet[actor.tile];
+  }
+
+  // First, we run the local instance's scripts, if possible.
+  if (actor.events !== undefined) {
+    if (actor.events[event] !== undefined) {
+      script = generateScript(actor.id, actor.events[event]);
+      resolveScript(script, data);
+
+      return 1;
+    }
+  }
+
+  // Then, we try the parent entity's scripts.
+  if (parent) {
+    if (parent.events !== undefined) {
+      if (parent.events[event] !== undefined) {
+        script = generateScript(parent.id, parent.events[event]);
+        resolveScript(script, data);
+
+        return 2;
+      }
+    }
+  }
+
+  // This thing had no scripts at all? Let's prevent it from being called again.
+  actor.meta.noScripts = true;
+
+  if (parent) {
+    parent.meta = parent.meta || {};
+    parent.meta.noScripts = true;
+  }
+
+  return false;
+}
+
+
 export function resolveActions(data) {
   /*
     Example Usage:
@@ -139,101 +188,50 @@ export function resolveActions(data) {
   // What are we trying to find matching events for, here?
   let event = data.actionType.replace("HOOK_", "").toLowerCase();
 
-  // Make sure that we are operating from copies.
-  let newTileLayer = data.tileLayer.slice();
-  let newEntityLayer = data.entityLayer.slice();
+  // Assume we have been provided a copy, for performance reasons.
+  let newTileLayer = data.tileLayer;
+  let newEntityLayer = data.entityLayer;
 
-  // Trigger entities / tiles at the players new location.
+  // The basic data that an event must pass, no matter what it is.
+  // All event types must also provide a 'this', and 'location' arg.
+
+  let baseData = {
+    'tileSet': data.tileSet,
+    'entitySet': data.entitySet,
+    'tileLayer': data.tileLayer,
+    'entityLayer': data.entityLayer,
+    'nodeGraph': data.nodeGraph
+  };
+
+  // Trigger events.enter on specified location.
   if (event === 'enter') {
+    baseData.location = data.actionLocation;
 
     // Entities first
-    let matchingEntities = newEntityLayer.filter((entity) => {
+    newEntityLayer.filter((entity) => {
+      // Filter to matching non-player, non-self entities.
       let isNotPlayer = (entity.parent !== '0x1000');
       let isSameLocation = ((entity.location.x == data.actionLocation.x) && (entity.location.y == data.actionLocation.y));
+      let hasScripts = (entity.meta.noScripts !== true);
 
-      return (isNotPlayer && isSameLocation);
+      return (isNotPlayer && isSameLocation && hasScripts);
+    })
+    .map((entity) => {
+      baseData.this = entity;
+      runEntityScripts(event, entity, baseData);
     });
 
-    for (let entity of matchingEntities) {
-      //console.log("We have just entered the same tile as an entity.");
-      let parentEntity = data.entitySet[entity.parent];
-      //console.log(parentEntity);
-
-      // First, we run the local instance's scripts, if possible.
-      if (entity.events !== undefined) {
-        if (entity.events[event] !== undefined) {
-          //console.log("We have a matching entity instance event!");
-          let script = generateScript(entity.id, entity.events[event]);
-          resolveScript(script, {
-            'this': entity,
-            'location': data.actionLocation,
-            'tileSet': data.tileSet,
-            'entitySet': data.entitySet,
-            'tileLayer': newTileLayer,
-            'entityLayer': newEntityLayer,
-            'nodeGraph': data.nodeGraph
-          });
-        }
-      }// else { console.log('instance events.enter is undefined'); }
-
-      // Then, we try the parent entity's scripts.
-      if (parentEntity.events !== undefined) {
-        if (parentEntity.events[event] !== undefined) {
-          //console.log("We have a matching entity type event!");
-          let script = generateScript(parentEntity.id, parentEntity.events[event]);
-          resolveScript(script, {
-            'this': entity,
-            'location': data.actionLocation,
-            'tileSet': data.tileSet,
-            'entitySet': data.entitySet,
-            'tileLayer': newTileLayer,
-            'entityLayer': newEntityLayer,
-            'nodeGraph': data.nodeGraph
-          });
-        }
-      }// else { console.log('type events.enter is undefined'); }
-    }
+    // Now the tile.
+    let tile = newTileLayer[data.actionLocation.y][data.actionLocation.x];
+    baseData.this = tile;
+    runEntityScripts(event, tile, baseData);
   }
 
   // Process AI behaviors.
   if (event === 'timestep') {
-    let target = data.target;
-    let isTile = (target.tile !== undefined);
-    let isEntity = !isTile;
-
-    if (isEntity) {
-      let parentEntity = data.entitySet[target.parent];
-
-      if (target.events !== undefined) {
-        if (target.events[event] !== undefined) {
-          let script = generateScript(target.id, target.events[event]);
-          resolveScript(script, {
-            'this': target,
-            'location': target.location,
-            'tileSet': data.tileSet,
-            'entitySet': data.entitySet,
-            'tileLayer': newTileLayer,
-            'entityLayer': newEntityLayer,
-            'nodeGraph': data.nodeGraph
-          });
-        }
-      }
-
-      if (parentEntity.events !== undefined) {
-        if (parentEntity.events[event] !== undefined) {
-          let script = generateScript(parentEntity.id, parentEntity.events[event]);
-          resolveScript(script, {
-            'this': target,
-            'location': target.location,
-            'tileSet': data.tileSet,
-            'entitySet': data.entitySet,
-            'tileLayer': newTileLayer,
-            'entityLayer': newEntityLayer,
-            'nodeGraph': data.nodeGraph
-          });
-        }
-      }
-    }
+    baseData.this = data.target;
+    baseData.location = data.target.location;
+    runEntityScripts(event, data.target, baseData);
   }
 
   return [newEntityLayer, newTileLayer];

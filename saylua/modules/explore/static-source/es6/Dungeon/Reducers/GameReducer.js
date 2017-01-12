@@ -83,7 +83,12 @@ export const logState = store => next => action => {
 export const GameReducer = (state, action) => {
   switch (action.type) {
     case 'PROCESS_AI':
+      var t0 = performance.now();
+
       var [entities, tiles] = GameLogic.processAI(state.tileSet, state.tileLayer, state.entitySet, state.entityLayer, state.nodeGraph);
+
+      var t1 = performance.now();
+      console.log("Process AI took " + (t1 - t0) + " milliseconds.");
 
       return { ...state, 'entityLayer': entities, 'tileLayer': tiles };
 
@@ -96,9 +101,9 @@ export const GameReducer = (state, action) => {
         'actionLocation': action.location,
         'nodeGraph': state.nodeGraph,
         'tileSet': state.tileSet,
-        'tileLayer': state.tileLayer,
+        'tileLayer': state.tileLayer.slice(),
         'entitySet': state.entitySet,
-        'entityLayer': state.entityLayer
+        'entityLayer': state.entityLayer.slice()
       });
 
       return { ...state, 'entityLayer': entities, 'tileLayer': tiles };

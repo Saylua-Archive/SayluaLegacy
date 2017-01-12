@@ -49,11 +49,11 @@ export function translatePlayerLocation(player, tileLayer, tileSet, direction) {
 
 
 export function processAI(tileSet, tileLayer, entitySet, entityLayer, nodeGraph) {
-  let referenceEntityLayer = entityLayer.slice();
-  //let referenceTileLayer = tileLayer.slice();
+  let referenceEntityLayer = entityLayer;
   let newEntityLayer = entityLayer.slice();
   let newTileLayer = tileLayer.slice();
 
+  var t0 = performance.now();
   // Note that this operates from a copy.
   for (let entity of referenceEntityLayer) {
 
@@ -76,26 +76,32 @@ export function processAI(tileSet, tileLayer, entitySet, entityLayer, nodeGraph)
     }
   }
 
-/*
-  for (let row of referenceTileLayer) {
-    for (let col of row) {
-      let matchingTile = newEntityLayer.filter((_entity) => _entity.id == entity.id);
+  var t1 = performance.now();
+  console.log("Process AI entities took " + (t1 - t0) + " milliseconds.");
 
-      if (matchingEntity.length > 0) {
-        matchingEntity = matchingEntity[0];
-
-        [newEntityLayer, newTileLayer] = resolveActions({
-          'actionType': 'HOOK_TIMESTEP',
-          'subject': matchingEntity,
-          'tileSet': tileSet,
-          'tileLayer': newTileLayer,
-          'entitySet': entitySet,
-          'entityLayer': newEntityLayer
-        });
+  let ddd = 0;
+  for (let row of newTileLayer) {
+    for (let tile of row) {
+      if (ddd === 0) {
+        t0 = performance.now();
       }
+      [newEntityLayer, newTileLayer] = resolveActions({
+        'actionType': 'HOOK_TIMESTEP',
+        'target': tile,
+        'tileSet': tileSet,
+        'tileLayer': newTileLayer,
+        'entitySet': entitySet,
+        'entityLayer': newEntityLayer
+      });
+
+      if (ddd === 0) {
+        t1 = performance.now();
+        console.log("Process AI 1x tile took " + (t1 - t0) + " milliseconds.");
+      }
+
+      ddd = 1;
     }
   }
-*/
 
   return [newEntityLayer, newTileLayer];
 }
