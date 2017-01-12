@@ -17,6 +17,8 @@ def api_send_score(game):
         return json.dumps(dict(error='Invalid game!')), 400
     finally:
         if game == Game.LINE_BLOCKS:
+            # TODO sanity check the game log and other variables sent to catch
+            # low hanging fruit attempts at cheating.
             data = request.get_json()
             GameScore.record_score(g.user.key, game, data['score'])
             cc, ss = User.update_currency(g.user.key, cc=data['score'])
