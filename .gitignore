@@ -7,6 +7,7 @@ node_modules
 .vagrant
 build
 yarn.lock
+saylua/config/secure.py
 
 # Ignore all third party dependencies other than bcrypt.
 lib/*
