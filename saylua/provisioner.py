@@ -1,4 +1,8 @@
 from saylua.models.role import Role
+from saylua.utils import is_devserver
+from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, ForumPost
+from saylua.models.user import User
+from saylua.modules.pets.soulnames import soulname
 
 # To run this import setup in the interactive console and run it as such
 # After that, edit a user's role to be admin to create the first admin
@@ -31,5 +35,17 @@ def setup():
     moderator_role.can_comment = True
     moderator_role.put()
     print("Moderator Role Created")
+
+    #Add placeholders if on the dev server
+    if is_devserver():
+        print("Adding Placeholder Users")
+        for i in range(4):
+            display_name = soulname(7)
+            username = display_name
+            phash = "hashyhashy"
+            email = username + "@" + username + ".biz"
+            new_user = User(display_name=display_name, usernames=[username], phash=phash,
+                email=email)
+            new_user.put()
 
     print("Database Setup Complete")
