@@ -31,6 +31,12 @@ export function getInitialGameState() {
         newEntitySet[entity.id] = entity;
       });
 
+      // Normalize our tileLayer into a shallow array.
+      let [mapHeight, mapWidth, newTileLayer] = EngineUtils.normalizeTileLayer(result.tileLayer);
+
+      result.mapHeight = mapHeight;
+      result.mapWidth = mapWidth;
+      result.tileLayer = newTileLayer;
       result.tileSet = newTileSet;
       result.entitySet = newEntitySet;
       result.nodeGraph = new astar.Graph(EngineUtils.generateNodeGraph(result.tileSet, result.tileLayer), { diagonal: true });
@@ -85,7 +91,7 @@ export const GameReducer = (state, action) => {
     case 'PROCESS_AI':
       var t0 = performance.now();
 
-      var [entities, tiles] = GameLogic.processAI(state.tileSet, state.tileLayer, state.entitySet, state.entityLayer, state.nodeGraph);
+      var [entities, tiles] = GameLogic.processAI(state.tileSet, state.tileLayer, state.entitySet, state.entityLayer, state.nodeGraph, state.mapWidth);
 
       var t1 = performance.now();
       console.log("Process AI took " + (t1 - t0) + " milliseconds.");
@@ -103,16 +109,16 @@ export const GameReducer = (state, action) => {
         'tileSet': state.tileSet,
         'tileLayer': state.tileLayer.slice(),
         'entitySet': state.entitySet,
-        'entityLayer': state.entityLayer.slice()
+        'entityLayer': state.entityLayer.slice(),
+        'mapWidth': state.mapWidth
       });
 
       return { ...state, 'entityLayer': entities, 'tileLayer': tiles };
 
     case 'MOVE_PLAYER':
-
       var player = cloneDeep(state.entityLayer[0]);
       var entities = state.entityLayer.slice().slice(1);
-      var translation = GameLogic.translatePlayerLocation(player, state.tileLayer, state.tileSet, action.direction);
+      var translation = GameLogic.translatePlayerLocation(player, state.tileLayer, state.tileSet, action.direction, state.mapWidth);
       var playerMoved = (player.location != translation);
 
       player.location = translation;
@@ -130,7 +136,6 @@ export const GameReducer = (state, action) => {
 
       // Step the game forward one time unit
       newState = GameReducer(newState, { 'type': 'PROCESS_AI' });
-
       return newState;
 
     case 'LOG_EVENTS':

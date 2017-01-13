@@ -1,7 +1,7 @@
 import { OBSTRUCTIONS } from "./game_helpers";
 import { resolveActions } from "./engine_scripting";
 
-export function translatePlayerLocation(player, tileLayer, tileSet, direction) {
+export function translatePlayerLocation(player, tileLayer, tileSet, direction, mapWidth) {
   let p_x, p_y, g_x, g_y, goalCell, goalTile, tileType;
 
   p_x = player.location.x;
@@ -27,7 +27,12 @@ export function translatePlayerLocation(player, tileLayer, tileSet, direction) {
 
   // Determine if we can visit this tile, theoretically.
   try {
-    goalCell = tileLayer[g_y][g_x];
+    let linearPosition = ((g_y * mapWidth) + g_x);
+    goalCell = tileLayer[linearPosition];
+    let validTile = (goalCell.location.x === g_x && goalCell.location.y === g_y);
+    if (!validTile) {
+      throw("Invalid location");
+    }
   } catch (e) {
     return player.location;
   }
@@ -48,7 +53,7 @@ export function translatePlayerLocation(player, tileLayer, tileSet, direction) {
 }
 
 
-export function processAI(tileSet, tileLayer, entitySet, entityLayer, nodeGraph) {
+export function processAI(tileSet, tileLayer, entitySet, entityLayer, nodeGraph, mapWidth) {
   let referenceEntityLayer = entityLayer;
   let newEntityLayer = entityLayer.slice();
   let newTileLayer = tileLayer.slice();
@@ -71,7 +76,8 @@ export function processAI(tileSet, tileLayer, entitySet, entityLayer, nodeGraph)
         'tileLayer': newTileLayer,
         'entitySet': entitySet,
         'entityLayer': newEntityLayer,
-        'nodeGraph': nodeGraph
+        'nodeGraph': nodeGraph,
+        'mapWidth': mapWidth
       });
     }
   }
@@ -79,28 +85,16 @@ export function processAI(tileSet, tileLayer, entitySet, entityLayer, nodeGraph)
   var t1 = performance.now();
   console.log("Process AI entities took " + (t1 - t0) + " milliseconds.");
 
-  let ddd = 0;
-  for (let row of newTileLayer) {
-    for (let tile of row) {
-      if (ddd === 0) {
-        t0 = performance.now();
-      }
-      [newEntityLayer, newTileLayer] = resolveActions({
-        'actionType': 'HOOK_TIMESTEP',
-        'target': tile,
-        'tileSet': tileSet,
-        'tileLayer': newTileLayer,
-        'entitySet': entitySet,
-        'entityLayer': newEntityLayer
-      });
-
-      if (ddd === 0) {
-        t1 = performance.now();
-        console.log("Process AI 1x tile took " + (t1 - t0) + " milliseconds.");
-      }
-
-      ddd = 1;
-    }
+  for (let tile of newTileLayer) {
+    [newEntityLayer, newTileLayer] = resolveActions({
+      'actionType': 'HOOK_TIMESTEP',
+      'target': tile,
+      'tileSet': tileSet,
+      'tileLayer': newTileLayer,
+      'entitySet': entitySet,
+      'entityLayer': newEntityLayer,
+      'mapWidth': mapWidth
+    });
   }
 
   return [newEntityLayer, newTileLayer];

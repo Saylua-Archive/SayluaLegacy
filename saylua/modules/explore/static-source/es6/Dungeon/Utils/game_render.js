@@ -5,13 +5,9 @@ import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from "../Core/Game";
 
 
 // This provides the common data layer necessary for other rendering functions to operate.
-export function getBaseData(player, tileSet, tileLayer, dimensions) {
+export function getBaseData(player, tileSet, tileLayer, dimensions, mapHeight, mapWidth) {
   // Calculate valid tiles.
-  let validTiles = GameHelpers.calculateFOV(player.location, tileSet, tileLayer);
-
-  // Calculate our map dimensions
-  let mapHeight = tileLayer.length;
-  let mapWidth = tileLayer[0].length;
+  let validTiles = GameHelpers.calculateFOV(player.location, tileSet, tileLayer, mapWidth);
 
   // Use map dimensions and player location to generate helper functions that tell us when a cell is in view.
   let [topLeft, bottomRight, within_x_bounds, within_y_bounds] = GameHelpers.getBounds(player.location, mapHeight, mapWidth);
@@ -35,46 +31,46 @@ export function getBaseData(player, tileSet, tileLayer, dimensions) {
 export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
   // There are MUCH prettier ways to do this.
   // This, however, is the fastest. Blame Javascript's expensive array operations.
-  for (let y = 0; y < baseData.mapHeight; y++) {
-    for (let x = 0; x < baseData.mapWidth; x++) {
-      var currentTile = tileLayer[y][x];
+  for (let tile of tileLayer) {
+    // Reasons
+    let x = tile.location.x;
+    let y = tile.location.y;
 
-      // Is this tile in our viewport?
-      if (baseData.within_x_bounds(x) && baseData.within_y_bounds(y)) {
-        // Set cell visibility, if necessary.
-        // Why would you write this? Masochists and code hygienists. For opposite reasons, of course.
-        let tileVisible = (baseData.validTiles[y] === undefined) ? false : ( (baseData.validTiles[y][x] === true) ? true : false );
-        let tileSeen = (currentTile.meta.seen === true);
+    // Is this tile in our viewport?
+    if (baseData.within_x_bounds(x) && baseData.within_y_bounds(y)) {
+      // Set cell visibility, if necessary.
+      // Why would you write this? Masochists and code hygienists. For opposite reasons, of course.
+      let tileVisible = (baseData.validTiles[y] === undefined) ? false : ( (baseData.validTiles[y][x] === true) ? true : false );
+      let tileSeen = (tile.meta.seen === true);
 
-        // We must 'reveal' tiles, initially. We never unset this.
-        if (tileVisible === true) {
-          currentTile.meta.seen = true;
-        }
+      // We must 'reveal' tiles, initially. We never unset this.
+      if (tileVisible === true) {
+        tile.meta.seen = true;
+      }
 
-        currentTile.meta.visible = tileVisible;
+      tile.meta.visible = tileVisible;
 
-        // Normalize, then translate our (x, y) coords into a linear integer.
-        let normal_x = x - baseData.topLeft.x;
-        let normal_y = y - baseData.topLeft.y;
+      // Normalize, then translate our (x, y) coords into a linear integer.
+      let normal_x = x - baseData.topLeft.x;
+      let normal_y = y - baseData.topLeft.y;
 
-        let parentTile = tileSet[currentTile.tile];
+      let parentTile = tileSet[tile.tile];
 
-        // All we have to do is change the texture of the sprite map, as the number of sprites never changes.
-        let linearPosition = normal_x + (VIEWPORT_WIDTH * normal_y);
-        let sprite = tileSprites[linearPosition];
+      // All we have to do is change the texture of the sprite map, as the number of sprites never changes.
+      let linearPosition = normal_x + (VIEWPORT_WIDTH * normal_y);
+      let sprite = tileSprites[linearPosition];
 
-        // Now, we change the tile state depending on whether or not we can see it, and whether or not we /have/ seen it.
-        if (tileVisible) {
-          sprite.alpha = 1;
+      // Now, we change the tile state depending on whether or not we can see it, and whether or not we /have/ seen it.
+      if (tileVisible) {
+        sprite.alpha = 1;
+        sprite.texture = EngineGraphics.getTexture(parentTile.slug);
+      } else {
+        if (tileSeen) {
+          sprite.alpha = 0.5;
           sprite.texture = EngineGraphics.getTexture(parentTile.slug);
         } else {
-          if (tileSeen) {
-            sprite.alpha = 0.5;
-            sprite.texture = EngineGraphics.getTexture(parentTile.slug);
-          } else {
-            sprite.alpha = 1;
-            sprite.texture = EngineGraphics.getTexture('tile_fog');
-          }
+          sprite.alpha = 1;
+          sprite.texture = EngineGraphics.getTexture('tile_fog');
         }
       }
     }
@@ -139,34 +135,34 @@ export function renderEntities(baseData, entityLayer, entitySprites) {
 
 
 export function renderMinimap(baseData, tileSet, tileLayer, minimapSprites) {
-  for (let y = 0; y < baseData.mapHeight; y++) {
-    for (let x = 0; x < baseData.mapWidth; x++) {
-      var currentTile = tileLayer[y][x];
+  for (let tile of tileLayer) {
+    // Reasons
+    let x = tile.location.x;
+    let y = tile.location.y;
 
-      // Why would you write this? Masochists and code hygienists. For opposite reasons, of course.
-      let tileVisible = (baseData.validTiles[y] === undefined) ? false : ( (baseData.validTiles[y][x] === true) ? true : false );
-      let tileSeen = (currentTile.meta.seen === true);
+    // Why would you write this? Masochists and code hygienists. For opposite reasons, of course.
+    let tileVisible = (baseData.validTiles[y] === undefined) ? false : ( (baseData.validTiles[y][x] === true) ? true : false );
+    let tileSeen = (tile.meta.seen === true);
 
-      let parentTile = tileSet[currentTile.tile];
+    let parentTile = tileSet[tile.tile];
 
-      // All we have to do is change the texture of the sprite map, as the number of sprites never changes.
-      let linearPosition = x + (baseData.mapWidth * y);
-      let sprite = minimapSprites[linearPosition];
+    // All we have to do is change the texture of the sprite map, as the number of sprites never changes.
+    let linearPosition = x + (baseData.mapWidth * y);
+    let sprite = minimapSprites[linearPosition];
 
-      // Now, we change the tile state depending on whether or not we can see it, and whether or not we /have/ seen it.
-      let baseVisibility = 0.8;
+    // Now, we change the tile state depending on whether or not we can see it, and whether or not we /have/ seen it.
+    let baseVisibility = 0.8;
 
-      if (tileVisible) {
-        sprite.alpha = 1 * baseVisibility;
+    if (tileVisible) {
+      sprite.alpha = 1 * baseVisibility;
+      sprite.texture = EngineGraphics.getTexture(parentTile.slug);
+      sprite.visible = true;
+    } else {
+      if (tileSeen) {
+        sprite.alpha = 0.5 * baseVisibility;
         sprite.texture = EngineGraphics.getTexture(parentTile.slug);
-        sprite.visible = true;
       } else {
-        if (tileSeen) {
-          sprite.alpha = 0.5 * baseVisibility;
-          sprite.texture = EngineGraphics.getTexture(parentTile.slug);
-        } else {
-          sprite.visible = false;
-        }
+        sprite.visible = false;
       }
     }
   }

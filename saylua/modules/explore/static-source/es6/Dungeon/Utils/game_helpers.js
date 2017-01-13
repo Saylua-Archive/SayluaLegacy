@@ -8,7 +8,7 @@ export const OBSTRUCTIONS = [
 ];
 
 
-export function calculateFOV(location, tileSet, tileLayer) {
+export function calculateFOV(location, tileSet, tileLayer, mapWidth) {
   let validTiles = [];
 
   let visitTile = (x, y) => {
@@ -17,9 +17,10 @@ export function calculateFOV(location, tileSet, tileLayer) {
   };
 
   let isBlocked = (x, y) => {
-    let currentTile = tileLayer[y][x].tile;
-    let tileType = tileSet[currentTile].type;
-    return (OBSTRUCTIONS.indexOf(tileType) !== -1);
+    let linearGlobalPosition = ((y * mapWidth) + x);
+    let parentTileID = tileLayer[linearGlobalPosition].tile;
+    let parentTileType = tileSet[parentTileID].type;
+    return (OBSTRUCTIONS.indexOf(parentTileType) !== -1);
   };
 
   EngineFOV.calculateFOV(location.x, location.y, 8, visitTile, isBlocked);

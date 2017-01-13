@@ -90,8 +90,8 @@ export default class Game {
     let miniMapSprites = GameInit.generateMinimapSprites(
       renderWidth,
       renderHeight,
-      this.store.tileLayer[0].length, // Total map width
-      this.store.tileLayer.length // Total map height
+      this.store.mapWidth, // Total map width
+      this.store.mapHeight // Total map height
     );
 
     this.state = {
@@ -143,7 +143,9 @@ export default class Game {
         player,
         this.store.tileSet,
         this.store.tileLayer,
-        this.state.dimensions
+        this.state.dimensions,
+        this.store.mapHeight,
+        this.store.mapWidth
       );
 
       // Edit our sprite layers in-place. So gross.

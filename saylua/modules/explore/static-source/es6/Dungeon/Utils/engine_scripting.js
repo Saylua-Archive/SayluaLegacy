@@ -89,12 +89,14 @@ function generateScript(id, payload) {
 
   // Compile and store.
   //console.log("Compiling: " + `window.__tfunc = function(${args}) { ${payload} }`);
+  console.log("BEGIN compile script");
   eval(`window.__tfunc = function(${args}) { ${payload} }`);
 
   window.scriptEngineFunctions[id]['requires'] = requires;
   window.scriptEngineFunctions[id]['function'] = window.__tfunc;
 
   delete window.__tfunc;
+  console.log("BEGIN return script");
   return window.scriptEngineFunctions[id];
 }
 
@@ -200,7 +202,8 @@ export function resolveActions(data) {
     'entitySet': data.entitySet,
     'tileLayer': data.tileLayer,
     'entityLayer': data.entityLayer,
-    'nodeGraph': data.nodeGraph
+    'nodeGraph': data.nodeGraph,
+    'mapWidth': data.mapWidth
   };
 
   // Trigger events.enter on specified location.
@@ -222,7 +225,8 @@ export function resolveActions(data) {
     });
 
     // Now the tile.
-    let tile = newTileLayer[data.actionLocation.y][data.actionLocation.x];
+    let linearPosition = ((data.actionLocation.y * data.mapWidth) + data.actionLocation.x);
+    let tile = newTileLayer[linearPosition];
     baseData.this = tile;
     runEntityScripts(event, tile, baseData);
   }
@@ -324,26 +328,38 @@ function resolveVariable(id, specialVariable, meta) {
   }
 
   if (specialVariable === "__isObstacle") {
-    let curry = (tileSet, tileLayer, obstructions) => (location) => {
-      if (tileLayer[location.y] !== undefined) {
-        if (tileLayer[location.y][location.x] !== undefined) {
-          let currentTile = tileLayer[location.y][location.x].tile;
-          let tileType = tileSet[currentTile].type;
+    let curry = (tileSet, tileLayer, mapWidth, obstructions) => (location) => {
 
-          return (obstructions.indexOf(tileType) !== -1);
+      let linearPosition = (location.y * mapWidth) + location.x;
+      let tileExists = (tileLayer[linearPosition] !== undefined);
+
+      if (tileExists) {
+        // There is a tile in this position. Is it the right one?
+        let validTile = (
+          tileLayer[linearPosition].location.x === location.x &&
+          tileLayer[linearPosition].location.y === location.y
+        );
+
+        if (validTile) {
+          let parentTileID = tileLayer[linearPosition].tile;
+          let parentTileType = tileSet[parentTileID].type;
+          return (obstructions.indexOf(parentTileType) !== -1);
         }
       }
 
       return true;
     };
 
-    return curry(meta.tileSet, meta.tileLayer.slice(), OBSTRUCTIONS);
+    return curry(meta.tileSet, meta.tileLayer.slice(), meta.mapWidth, OBSTRUCTIONS);
   }
 
   if (specialVariable === '__moveTo') {
     let curry = (nodeGraph) => (data) => {
-      let start = nodeGraph.grid[data.location.x][data.location.y];
-      let end = nodeGraph.grid[data.target.x][data.target.y];
+
+      let start, end;
+
+      start = nodeGraph.grid[data.location.x][data.location.y];
+      end = nodeGraph.grid[data.target.x][data.target.y];
 
       let result = astar.astar.search(nodeGraph, start, end, { 'heuristic': astar.astar.heuristics.diagonal });
       return result;
