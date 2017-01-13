@@ -2,7 +2,8 @@ from saylua import app
 from .models.db import Item
 from flask import render_template
 
-import os, random
+import os
+import random
 
 
 def items_inventory(category=None):
@@ -16,13 +17,11 @@ def items_inventory(category=None):
     return render_template('inventory.html', items=items, category=category)
 
 
-@app.route('/items/', methods=['GET'])
 def items_view_all():
     items = Item.query().fetch(20)
     return render_template('database/all.html', items=items)
 
 
-@app.route('/item/<url_name>/', methods=['GET'])
 def items_view_single(url_name):
     item = Item.by_url_name(url_name)
     if not item:

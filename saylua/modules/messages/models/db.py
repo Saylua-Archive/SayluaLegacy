@@ -83,26 +83,26 @@ class Conversation(ndb.Model):
 
 # Child
 class UserConversation(ndb.Model):
-    user_key = ndb.KeyProperty(indexed=True)
-    recipient_keys = ndb.KeyProperty(indexed=True, repeated=True)
-    conversation_key = ndb.KeyProperty(indexed=True)
+    user_key = ndb.KeyProperty()
+    recipient_keys = ndb.KeyProperty(repeated=True)
+    conversation_key = ndb.KeyProperty()
     title = ndb.StringProperty()
 
     # Status precendence order: Deleted > Unread > Sent > Replied > Read
     is_first = ndb.BooleanProperty(default=False)
     is_replied = ndb.BooleanProperty(default=False)
-    is_read = ndb.BooleanProperty(default=False, indexed=True)
-    is_deleted = ndb.BooleanProperty(default=False, indexed=True)
+    is_read = ndb.BooleanProperty(default=False)
+    is_deleted = ndb.BooleanProperty(default=False)
 
-    time = ndb.DateTimeProperty(indexed=True, auto_now_add=True)
+    time = ndb.DateTimeProperty(auto_now_add=True)
 
 
 class Notification(ndb.Model):
-    user_key = ndb.KeyProperty(indexed=True)
+    user_key = ndb.KeyProperty()
     time = ndb.DateTimeProperty(auto_now_add=True)
-    text = ndb.StringProperty()
-    link = ndb.StringProperty()
-    is_read = ndb.BooleanProperty(default=False, indexed=True)
+    text = ndb.StringProperty(indexed=False)
+    link = ndb.StringProperty(indexed=False)
+    is_read = ndb.BooleanProperty(default=False)
     count = ndb.IntegerProperty(default=1)
 
     @classmethod

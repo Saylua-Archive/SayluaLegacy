@@ -1,42 +1,46 @@
-import BaseModel from "./BaseModel";
+import BaseModel from "../shared/BaseModel";
 import Matrix from "./Matrix";
 
 import cloneDeep from "lodash.clonedeep";
+import 'whatwg-fetch';
 
-var pieceData = [[0, 1, 0, 0, // i
-                  0, 1, 0, 0,
-                  0, 1, 0, 0,
-                  0, 1, 0, 0],
+const GAME_ID = 1;
+const LB_FPS = 60;
+const LB_MIN_TIMEOUT = 10;
+const LB_PIECES = [[0, 1, 0, 0, // i
+                    0, 1, 0, 0,
+                    0, 1, 0, 0,
+                    0, 1, 0, 0],
 
-                 [0, 0, 2, 0, // j
-                  0, 0, 2, 0,
-                  0, 2, 2, 0,
-                  0, 0, 0, 0],
+                   [0, 0, 2, 0, // j
+                    0, 0, 2, 0,
+                    0, 2, 2, 0,
+                    0, 0, 0, 0],
 
-                 [0, 3, 0, 0, // l
-                  0, 3, 0, 0,
-                  0, 3, 3, 0,
-                  0, 0, 0, 0],
+                   [0, 3, 0, 0, // l
+                    0, 3, 0, 0,
+                    0, 3, 3, 0,
+                    0, 0, 0, 0],
 
-                 [0, 0, 0, 0, // o
-                  0, 4, 4, 0,
-                  0, 4, 4, 0,
-                  0, 0, 0, 0],
+                   [0, 0, 0, 0, // o
+                    0, 4, 4, 0,
+                    0, 4, 4, 0,
+                    0, 0, 0, 0],
 
-                 [0, 0, 0, 0, // t
-                  5, 5, 5, 0,
-                  0, 5, 0, 0,
-                  0, 0, 0, 0],
+                   [0, 0, 0, 0, // t
+                    5, 5, 5, 0,
+                    0, 5, 0, 0,
+                    0, 0, 0, 0],
 
-                 [0, 0, 0, 0, // s
-                  0, 6, 6, 0,
-                  6, 6, 0, 0,
-                  0, 0, 0, 0],
+                   [0, 0, 0, 0, // s
+                    0, 6, 6, 0,
+                    6, 6, 0, 0,
+                    0, 0, 0, 0],
 
-                 [0, 0, 0, 0, // z
-                  7, 7, 0, 0,
-                  0, 7, 7, 0,
-                  0, 0, 0, 0]];
+                   [0, 0, 0, 0, // z
+                    7, 7, 0, 0,
+                    0, 7, 7, 0,
+                    0, 0, 0, 0]];
 
 // GameState
 // --------------------------------------
@@ -45,10 +49,11 @@ var pieceData = [[0, 1, 0, 0, // i
 export default class GameState extends BaseModel {
   constructor() {
     super();
-    this.start();
   }
 
   clearGameState() {
+    this.frames = 0;
+    this.lastDrop = 0;
     this.timeout = 300;
     this.gameOver = false;
     this.paused = false;
@@ -57,7 +62,12 @@ export default class GameState extends BaseModel {
     this.gameMatrix = new Matrix(18, 10);
     this.placedPieces = new Matrix(18, 10);
     this.nextPiece = null;
-    this.piece = {"matrix": new Matrix(4, 4), "r": -1, "c": 2};
+    this.piece = {"matrix": new Matrix(4, 4), "r": -3, "c": 2};
+
+    this.gameLog = [];
+    this.scoreSent = false;
+
+    clearInterval(this.timer);
   }
 
   start() {
@@ -65,53 +75,85 @@ export default class GameState extends BaseModel {
 
     this.getNextPiece();
 
-    setTimeout(this.timeStep.bind(this), this.timeout);
+    this.startTime = new Date().getTime();
+    this.timer = setInterval(this.timeStep.bind(this), 1000 / LB_FPS);
+  }
+
+  isRunning() {
+    return this.timer && !(this.gameOver || this.paused);
+  }
+
+  checkGameOver() {
+    // If the first row has any pieces, there is a game over.
+    let matrix = this.placedPieces;
+    for (let i = 0; i < matrix.width; i++) {
+      if (matrix.get(0, i)) return true;
+    }
+    return false;
   }
 
   endGame() {
+    this.piece = null;
     this.gameOver = true;
+
+    let game = this;
+
+    fetch('/api/arcade/score/' + GAME_ID + '/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        score: this.score,
+        startTime: this.startTime,
+        gameLog: this.gameLog,
+        frames: this.frames
+      })
+    }).then(function (response) {
+      // TODO: Actually use the response. Retry this on failure.
+      game.scoreSent = true;
+      game.triggerUpdate();
+      return response.json();
+    });
+    this.triggerUpdate();
   }
 
   timeStep() {
-    if (this.paused || this.gameOver) return;
+    if (!this.isRunning()) return;
 
-    this.movePieceDown();
-    this.draw();
+    this.frames++;
 
-    let t = this.timeout;
+    let timeout = this.timeout;
     if (this.fast) {
-      t = 10;
+      timeout = LB_MIN_TIMEOUT;
     }
-
-    // HACK. Speedup in timeout. Awful, truly awful. Much hackish
-    setTimeout(this.timeStep.bind(this), t);
+    if ((this.frames - this.lastDrop) / LB_FPS >= timeout / 1000) {
+      this.lastDrop = this.frames;
+      this.movePieceDown();
+      this.draw();
+    }
   }
 
   movePieceDown() {
     let p = this.piece;
-    // Each time the clock ticks, we move the piece down if it's valid.
     if (this.validPlacement(p.matrix, p.r + 1, p.c)) {
       p.r++;
       return true;
     }
     // If moving down is invalid, the piece cannot fall anymore.
-    let gameOver = false;
-    for (let i = 0; !gameOver && i + p.r < 0; i++) {
-      for (let j = 0; !gameOver && j < p.matrix.width; j++) {
-        gameOver = !!p.matrix.get(i, j);
-      }
-    }
+    this.placedPieces.addMatrix(p.matrix, p.r, p.c);
 
-    if (gameOver) {
+    if (this.checkGameOver()) {
+      // GAME OVER.
       this.endGame();
     } else {
-      this.placedPieces.addMatrix(p.matrix, p.r, p.c);
       this.getNextPiece();
 
       // Check if a line was made.
       if (this.clearLines(p.r, p.r + 4).length > 0) {
-        this.score++;
-        this.timeout--;
+        this.score += 50;
+        this.timeout -= 2;
       }
     }
     return false;
@@ -166,15 +208,16 @@ export default class GameState extends BaseModel {
   }
 
   setNextPiece() {
-    let pieces = pieceData;
-    let i = Math.floor(Math.random() * pieces.length);
-    this.nextPiece = new Matrix(4, 4, pieces[i]);
+    let i = Math.floor(Math.random() * LB_PIECES.length);
+    this.nextPiece = new Matrix(4, 4, LB_PIECES[i]);
   }
 
   draw() {
     let matrix = cloneDeep(this.placedPieces);
     let p = this.piece;
-    matrix.addMatrix(p.matrix, p.r, p.c);
+    if (p) {
+      matrix.addMatrix(p.matrix, p.r, p.c);
+    }
 
     // gameMatrix is bound to a BlockGrid, which should render this.
     this.gameMatrix = matrix;
@@ -184,11 +227,13 @@ export default class GameState extends BaseModel {
   }
 
   pause() {
+    if (!this.timer) return;
     this.paused = !this.paused;
+    this.triggerUpdate();
   }
 
   drop() {
-    if (this.paused || this.gameOver) return;
+    if (!this.isRunning()) return;
     while (this.movePieceDown());
     this.draw();
   }
@@ -202,7 +247,7 @@ export default class GameState extends BaseModel {
   }
 
   rotate() {
-    if (this.paused || this.gameOver) return;
+    if (!this.isRunning()) return;
     let p = cloneDeep(this.piece);
     p.matrix.rotate();
     if (this.validPlacement(p.matrix, p.r, p.c)) {
@@ -212,7 +257,7 @@ export default class GameState extends BaseModel {
   }
 
   moveLeft() {
-    if (this.paused || this.gameOver) return;
+    if (!this.isRunning()) return;
     let p = this.piece;
     if (this.validPlacement(p.matrix, p.r, p.c - 1)) {
       p.c--;
@@ -221,7 +266,7 @@ export default class GameState extends BaseModel {
   }
 
   moveRight() {
-    if (this.paused || this.gameOver) return;
+    if (!this.isRunning()) return;
     let p = this.piece;
     if (this.validPlacement(p.matrix, p.r, p.c + 1)) {
       p.c++;
