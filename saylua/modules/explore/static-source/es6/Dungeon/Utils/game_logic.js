@@ -5,7 +5,8 @@ import { OBSTRUCTIONS } from "./game_helpers";
 import { resolveActions } from "./engine_scripting";
 
 
-const MAXIMUM_PROCESSING_DISTANCE = Math.floor(VISION_RADIUS * 2.25);
+const MAXIMUM_ENTITY_PROCESSING_DISTANCE = Math.floor(VISION_RADIUS * 3);
+const MAXIMUM_TILE_PROCESSING_DISTANCE = Math.floor(VISION_RADIUS * 1.2);
 
 
 export function translatePlayerLocation(player, tileLayer, tileSet, direction, mapWidth) {
@@ -81,7 +82,7 @@ export function processAI(tileSet, tileLayer, entitySet, entityLayer, nodeGraph,
       matchingEntity = matchingEntity[0];
 
       // Is this entity worth actually processing? These operations are expensive, you know.
-      if (distanceFromPlayer(matchingEntity.location) < MAXIMUM_PROCESSING_DISTANCE) {
+      if (distanceFromPlayer(matchingEntity.location) < MAXIMUM_ENTITY_PROCESSING_DISTANCE) {
         [newEntityLayer, newTileLayer] = resolveActions({
           'actionType': 'HOOK_TIMESTEP',
           'target': matchingEntity,
@@ -98,7 +99,7 @@ export function processAI(tileSet, tileLayer, entitySet, entityLayer, nodeGraph,
 
   for (let tile of newTileLayer) {
     // Should we script this tile?
-    if (distanceFromPlayer(tile.location) < MAXIMUM_PROCESSING_DISTANCE) {
+    if (distanceFromPlayer(tile.location) < MAXIMUM_TILE_PROCESSING_DISTANCE) {
       [newEntityLayer, newTileLayer] = resolveActions({
         'actionType': 'HOOK_TIMESTEP',
         'target': tile,

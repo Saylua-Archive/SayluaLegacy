@@ -348,7 +348,7 @@ function resolveVariable(id, specialVariable, meta) {
       return true;
     };
 
-    return curry(meta.tileSet, meta.tileLayer.slice(), meta.mapWidth, OBSTRUCTIONS);
+    return curry(meta.tileSet, meta.tileLayer, meta.mapWidth, OBSTRUCTIONS);
   }
 
   if (specialVariable === '__moveTo') {
