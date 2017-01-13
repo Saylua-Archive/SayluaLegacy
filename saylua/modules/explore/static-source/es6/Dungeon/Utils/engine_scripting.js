@@ -121,7 +121,12 @@ function resolveScript(scriptFunction, meta) {
     args.push(result);
   }
 
-  scriptFunction.function.apply(this, args);
+  try {
+    scriptFunction.function.apply(this, args);
+  } catch(e) {
+    console.log(`Script ${scriptFunction.id} failed: `);
+    console.log(e);
+  }
 }
 
 
