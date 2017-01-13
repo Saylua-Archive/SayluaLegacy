@@ -89,14 +89,12 @@ function generateScript(id, payload) {
 
   // Compile and store.
   //console.log("Compiling: " + `window.__tfunc = function(${args}) { ${payload} }`);
-  console.log("BEGIN compile script");
   eval(`window.__tfunc = function(${args}) { ${payload} }`);
 
   window.scriptEngineFunctions[id]['requires'] = requires;
   window.scriptEngineFunctions[id]['function'] = window.__tfunc;
 
   delete window.__tfunc;
-  console.log("BEGIN return script");
   return window.scriptEngineFunctions[id];
 }
 

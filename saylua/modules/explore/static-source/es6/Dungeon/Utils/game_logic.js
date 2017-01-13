@@ -1,5 +1,12 @@
+import * as MathUtils from "./math";
+
+import { VISION_RADIUS } from "../Core/Game";
 import { OBSTRUCTIONS } from "./game_helpers";
 import { resolveActions } from "./engine_scripting";
+
+
+const MAXIMUM_PROCESSING_DISTANCE = Math.floor(VISION_RADIUS * 2.25);
+
 
 export function translatePlayerLocation(player, tileLayer, tileSet, direction, mapWidth) {
   let p_x, p_y, g_x, g_y, goalCell, goalTile, tileType;
@@ -54,11 +61,15 @@ export function translatePlayerLocation(player, tileLayer, tileSet, direction, m
 
 
 export function processAI(tileSet, tileLayer, entitySet, entityLayer, nodeGraph, mapWidth) {
+  let playerLocation = entityLayer[0].location;
+  let distanceFromPlayer = (newLocation) => {
+    return MathUtils.distance(playerLocation, newLocation);
+  };
+
   let referenceEntityLayer = entityLayer;
   let newEntityLayer = entityLayer.slice();
   let newTileLayer = tileLayer.slice();
 
-  var t0 = performance.now();
   // Note that this operates from a copy.
   for (let entity of referenceEntityLayer) {
 
@@ -69,32 +80,35 @@ export function processAI(tileSet, tileLayer, entitySet, entityLayer, nodeGraph,
     if (matchingEntity.length > 0) {
       matchingEntity = matchingEntity[0];
 
+      // Is this entity worth actually processing? These operations are expensive, you know.
+      if (distanceFromPlayer(matchingEntity.location) < MAXIMUM_PROCESSING_DISTANCE) {
+        [newEntityLayer, newTileLayer] = resolveActions({
+          'actionType': 'HOOK_TIMESTEP',
+          'target': matchingEntity,
+          'tileSet': tileSet,
+          'tileLayer': newTileLayer,
+          'entitySet': entitySet,
+          'entityLayer': newEntityLayer,
+          'nodeGraph': nodeGraph,
+          'mapWidth': mapWidth
+        });
+      }
+    }
+  }
+
+  for (let tile of newTileLayer) {
+    // Should we script this tile?
+    if (distanceFromPlayer(tile.location) < MAXIMUM_PROCESSING_DISTANCE) {
       [newEntityLayer, newTileLayer] = resolveActions({
         'actionType': 'HOOK_TIMESTEP',
-        'target': matchingEntity,
+        'target': tile,
         'tileSet': tileSet,
         'tileLayer': newTileLayer,
         'entitySet': entitySet,
         'entityLayer': newEntityLayer,
-        'nodeGraph': nodeGraph,
         'mapWidth': mapWidth
       });
     }
-  }
-
-  var t1 = performance.now();
-  console.log("Process AI entities took " + (t1 - t0) + " milliseconds.");
-
-  for (let tile of newTileLayer) {
-    [newEntityLayer, newTileLayer] = resolveActions({
-      'actionType': 'HOOK_TIMESTEP',
-      'target': tile,
-      'tileSet': tileSet,
-      'tileLayer': newTileLayer,
-      'entitySet': entitySet,
-      'entityLayer': newEntityLayer,
-      'mapWidth': mapWidth
-    });
   }
 
   return [newEntityLayer, newTileLayer];

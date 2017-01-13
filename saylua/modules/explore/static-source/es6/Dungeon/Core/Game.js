@@ -6,6 +6,7 @@ import Engine from "./Engine";
 
 export const VIEWPORT_HEIGHT = 18;
 export const VIEWPORT_WIDTH = 32;
+export const VISION_RADIUS = 8;
 
 
 export default class Game {

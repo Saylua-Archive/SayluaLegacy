@@ -3,10 +3,10 @@ import cloneDeep from "lodash.clonedeep";
 import Reqwest from "reqwest";
 import astar from "astar";
 
-
 import * as EngineScripting from "../Utils/engine_scripting";
 import * as GameLogic from "../Utils/game_logic";
 import * as EngineUtils from "../Utils/engine";
+
 
 // GameStore -> Required by DungeonClient.
 // --------------------------------------
@@ -89,12 +89,8 @@ export const logState = store => next => action => {
 export const GameReducer = (state, action) => {
   switch (action.type) {
     case 'PROCESS_AI':
-      var t0 = performance.now();
 
       var [entities, tiles] = GameLogic.processAI(state.tileSet, state.tileLayer, state.entitySet, state.entityLayer, state.nodeGraph, state.mapWidth);
-
-      var t1 = performance.now();
-      console.log("Process AI took " + (t1 - t0) + " milliseconds.");
 
       return { ...state, 'entityLayer': entities, 'tileLayer': tiles };
 

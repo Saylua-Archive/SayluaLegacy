@@ -1,5 +1,5 @@
 import * as EngineFOV from "./engine_fov";
-import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from "../Core/Game";
+import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH, VISION_RADIUS } from "../Core/Game";
 
 
 // This could perhaps be located in a better place.
@@ -23,7 +23,7 @@ export function calculateFOV(location, tileSet, tileLayer, mapWidth) {
     return (OBSTRUCTIONS.indexOf(parentTileType) !== -1);
   };
 
-  EngineFOV.calculateFOV(location.x, location.y, 8, visitTile, isBlocked);
+  EngineFOV.calculateFOV(location.x, location.y, VISION_RADIUS, visitTile, isBlocked);
 
   return validTiles;
 }
