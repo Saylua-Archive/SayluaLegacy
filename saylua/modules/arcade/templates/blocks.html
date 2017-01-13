@@ -8,4 +8,18 @@
 {% block body %}
 <h2>Line Blocks</h2>
 <div id="blocks-mount"></div>
+<table>
+  <tr>
+    <th>
+      Highscores
+    </th>
+  </tr>
+  {% for hs in highscores %}
+  <tr>
+    <td>
+      {{ hs.score }} by {{ hs.user_key|name_from_key_string }}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
 {% endblock %}
