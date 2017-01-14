@@ -48,4 +48,10 @@ def setup():
                 email=email)
             new_user.put()
 
+        print("Adding Placeholder Board Categories")
+        categories = ["Saylua Talk", "Help", "Real Life", "Your Pets"]
+        for category in categories:
+            BoardCategory(title="Category").put()
+
+
     print("Database Setup Complete")

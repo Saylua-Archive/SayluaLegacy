@@ -46,10 +46,10 @@ class User(ndb.Model):
     autosubscribe_posts = ndb.BooleanProperty(default=False)
 
     # Misc profile stuff
-    css = ndb.StringProperty(default='')
-    gender = ndb.StringProperty(default='')
-    pronouns = ndb.StringProperty(default='')
-    bio = ndb.StringProperty(default='')
+    css = ndb.StringProperty(default='', indexed=False)
+    gender = ndb.StringProperty(default='', indexed=False)
+    pronouns = ndb.StringProperty(default='', indexed=False)
+    bio = ndb.StringProperty(default='', indexed=False)
 
     def get_role(self):
         return Role.get_by_id(self.role_id)
