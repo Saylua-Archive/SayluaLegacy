@@ -56,8 +56,19 @@ export function generateTileSprites(stageWidth, stageHeight) {
   return spriteLayer;
 }
 
+export function generateHUDSprites(data) {
+  let playerStatusSprites = generatePlayerStatusSprites();
+  let miniMapSprites = generateMinimapSprites(data);
+  let actionButtons = [];
 
-export function generateMinimapSprites(stageWidth, stageHeight, mapWidth, mapHeight) {
+  return {
+    'actionButtons': actionButtons,
+    'miniMap': miniMapSprites,
+    'playerStatus': playerStatusSprites
+  };
+}
+
+function generateMinimapSprites(data) {
   // Initialize window textures if necessary.
   window.textures = window.textures || {};
   window.textures['null'] = PIXI.Texture.fromImage("/static/img/tiles/test/null.png");
@@ -70,18 +81,18 @@ export function generateMinimapSprites(stageWidth, stageHeight, mapWidth, mapHei
   let size = 25; // size, in px
 
   // There are probably much more efficient ways to do this.
-  while ( ((size * mapHeight) > (stageHeight * 0.4)) || ((size * mapWidth) > (stageWidth * 0.4)) ) {
+  while ( ((size * data.mapHeight) > (data.renderHeight * 0.4)) || ((size * data.mapWidth) > (data.renderWidth * 0.4)) ) {
     size = size - 0.1;
   }
 
   size = Math.floor(size * 10) / 10;
 
   // Place our map 10% from the top right
-  let horizontalOffset = (stageWidth - (size * mapWidth)) / 1.1;
-  let verticalOffset = (stageHeight - (size * mapHeight)) * 0.1;
+  let horizontalOffset = (data.renderWidth - (size * data.mapWidth)) / 1.1;
+  let verticalOffset = (data.renderHeight - (size * data.mapHeight)) * 0.1;
 
-  for (let row = 0; row < mapHeight; row++) {
-    for (let col = 0; col < mapWidth; col++) {
+  for (let row = 0; row < data.mapHeight; row++) {
+    for (let col = 0; col < data.mapWidth; col++) {
       let sprite = new PIXI.Sprite(nullTexture);
 
       sprite.height = size;
@@ -95,4 +106,13 @@ export function generateMinimapSprites(stageWidth, stageHeight, mapWidth, mapHei
   }
 
   return spriteLayer;
+}
+
+function generatePlayerStatusSprites() {
+  let healthBar = new PIXI.Graphics();
+
+  healthBar.beginFill(0xbf5550);
+  healthBar.drawRect(25, 25, 300, 35);
+
+  return [healthBar];
 }

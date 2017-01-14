@@ -21,9 +21,10 @@ export default class Game {
     this.unsubscribe = store.subscribe(() => {
       this.updateCounter += 1;
       this.store = store.getState();
-      this.miniMap.visible = this.store.UI.showMinimap;
+      //this.miniMap.visible = this.store.UI.showMinimap;
+      this.miniMap.visible = true;
 
-      this.state.shouldReRender = true;
+      this.state.gameStateChanged = true;
 
       // Use this to measure how long it takes for each game update to process when the player moves.
       // Corresponding start is located in `DungeonClient.jsx`
@@ -88,30 +89,36 @@ export default class Game {
       this.store.entitySet
     );
 
-    let miniMapSprites = GameInit.generateMinimapSprites(
+    let HUDSprites = GameInit.generateHUDSprites({
       renderWidth,
       renderHeight,
-      this.store.mapWidth, // Total map width
-      this.store.mapHeight // Total map height
-    );
+      'mapWidth': this.store.mapWidth, // Total map width
+      'mapHeight': this.store.mapHeight // Total map height
+    });
 
     this.state = {
       "dimensions": [renderWidth, renderHeight],
-      "shouldReRender": true,
+      "gameStateChanged": true,
       tileSprites,
       entitySprites,
-      miniMapSprites
+      HUDSprites
     };
 
+
+    // Final stage setup
     this.state.tileSprites.map((sprite) => {
       this.tileStage.addChild(sprite);
     });
     this.state.entitySprites.map((sprite) => {
       this.entityStage.addChild(sprite);
     });
-    this.state.miniMapSprites.map((sprite) => {
+    this.state.HUDSprites.miniMap.map((sprite) => {
       this.miniMap.addChild(sprite);
     });
+    this.state.HUDSprites.playerStatus.map((sprite) => {
+      this.playerStatus.addChild(sprite);
+    });
+
 
     this.miniMap.visible = false;
     this.test();
@@ -138,8 +145,9 @@ export default class Game {
 
 
   loop() {
-    if (this.state.shouldReRender === true) {
-      let player = this.store.entityLayer[0];
+    let player = this.store.entityLayer[0];
+
+    if (this.state.gameStateChanged === true) {
       let baseData = GameRender.getBaseData(
         player,
         this.store.tileSet,
@@ -168,11 +176,13 @@ export default class Game {
         baseData,
         this.store.tileSet,
         this.store.tileLayer,
-        this.state.miniMapSprites
+        this.state.HUDSprites.miniMap
       );
 
-      this.state.shouldReRender = false;
+      this.state.gameStateChanged = false;
     }
+
+    GameRender.renderHUD(player, this.state.HUDSprites);
 
     this.renderer.render(this.stage);
   }

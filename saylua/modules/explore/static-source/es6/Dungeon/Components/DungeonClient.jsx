@@ -101,14 +101,14 @@ export default class DungeonClient extends Component {
       keyName = "synthetic";
     }
 
+    // Frame-time debug timer
+    window.framet0 = performance.now();
+
     let movementKeys = ["up", "down", "left", "right"];
 
     if (movementKeys.indexOf(keyName) !== -1) {
       // If we've gotten this far, prevent default behavior.
       event.preventDefault();
-
-      // Frame-time debug timer
-      window.framet0 = performance.now();
 
       this.props.store.dispatch({
         'type': "MOVE_PLAYER",

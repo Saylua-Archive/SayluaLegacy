@@ -119,10 +119,16 @@ export function renderEntities(baseData, entityLayer, entitySprites) {
           let normal_x = entity.location.lastSeen.x - baseData.topLeft.x;
           let normal_y = entity.location.lastSeen.y - baseData.topLeft.y;
 
-          sprite.alpha = 0.4;
-          sprite.x = Math.round((normal_x * tileWidth) + horizontalOffset);
-          sprite.y = Math.round((normal_y * tileHeight) + verticalOffSet);
-          sprite.visible = true;
+          // One last check. Is the last known location currently visible?
+          // We don't want to render ghosts if they're looking at exactly where it was.
+          if(baseData.within_x_bounds(normal_x) && baseData.within_y_bounds(normal_y)) {
+            sprite.visible = false;
+          } else {
+            sprite.alpha = 0.4;
+            sprite.x = Math.round((normal_x * tileWidth) + horizontalOffset);
+            sprite.y = Math.round((normal_y * tileHeight) + verticalOffSet);
+            sprite.visible = true;
+          }
         }
       }
     } else {
@@ -147,7 +153,7 @@ export function renderMinimap(baseData, tileSet, tileLayer, minimapSprites) {
     let parentTile = tileSet[tile.tile];
 
     // All we have to do is change the texture of the sprite map, as the number of sprites never changes.
-    let linearPosition = x + (baseData.mapWidth * y);
+    let linearPosition = (baseData.mapWidth * y) + x;
     let sprite = minimapSprites[linearPosition];
 
     // Now, we change the tile state depending on whether or not we can see it, and whether or not we /have/ seen it.
@@ -166,4 +172,8 @@ export function renderMinimap(baseData, tileSet, tileLayer, minimapSprites) {
       }
     }
   }
+}
+
+export function renderHUD(player, HUDSprites) {
+  return true;
 }
