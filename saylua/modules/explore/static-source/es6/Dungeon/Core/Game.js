@@ -21,8 +21,7 @@ export default class Game {
     this.unsubscribe = store.subscribe(() => {
       this.updateCounter += 1;
       this.store = store.getState();
-      //this.miniMap.visible = this.store.UI.showMinimap;
-      this.miniMap.visible = true;
+      this.miniMap.visible = this.store.UI.showMinimap;
 
       this.state.gameStateChanged = true;
 

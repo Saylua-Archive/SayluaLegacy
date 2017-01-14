@@ -175,5 +175,14 @@ export function renderMinimap(baseData, tileSet, tileLayer, minimapSprites) {
 }
 
 export function renderHUD(player, HUDSprites) {
-  return true;
+  // Set proper hearts percentage.
+  let [fill, hearts] = HUDSprites.playerStatus;
+
+  window.debugMaxHP = window.debugMaxHP || 100;
+  window.debugHP = window.debugHP || 75;
+
+  player.meta.health = window.debugHP;
+
+  let fillPercentage = (player.meta.health / window.debugMaxHP);
+  fill.width = (300 * fillPercentage);
 }

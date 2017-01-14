@@ -21,6 +21,16 @@ function resolveImage(itemSlug) {
   let [type, ...parts] = itemSlug.split("_");
 
   // Hardcoded for now, these should use a resolving API in the future.
+  if (type == "interface") {
+    if (parts[0] == "hp") {
+      if (parts[1] == "positive") {
+        return `/static/img/hp_positive.png`;
+      } else if (parts[1] == "negative") {
+        return `/static/img/hp_negative.png`;
+      }
+    }
+  }
+
   if (type == "entity") {
     if (parts[0] == "player") {
       return `/static/img/velbird.png`;
@@ -31,7 +41,9 @@ function resolveImage(itemSlug) {
     } else if (parts[0] == "enemy") {
       return `/static/img/enemies/${ parts.slice(-1) }.png`;
     }
-  } else if (type == "tile") {
+  }
+
+  if (type == "tile") {
     if (parts[0] == "fog") {
       return `/static/img/tiles/test/null.png`;
     }

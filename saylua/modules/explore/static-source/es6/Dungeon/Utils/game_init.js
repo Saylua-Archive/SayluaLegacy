@@ -109,10 +109,36 @@ function generateMinimapSprites(data) {
 }
 
 function generatePlayerStatusSprites() {
-  let healthBar = new PIXI.Graphics();
+  // This is lame, but calculating sizes before the canvas has rendered is difficult.
+  const HPtextureSize = { 'height': 193, 'width': 1186 };
 
-  healthBar.beginFill(0xbf5550);
-  healthBar.drawRect(25, 25, 300, 35);
+  let heartsTexture = EngineGraphics.getTexture("interface_hp_positive");
+  let maskTexture = EngineGraphics.getTexture("interface_hp_negative");
+  let hearts = new PIXI.Sprite(heartsTexture);
+  let mask = new PIXI.Sprite(maskTexture);
+  let fill = new PIXI.Graphics();
 
-  return [healthBar];
+  let calculatedHeight = ((HPtextureSize.height * 300) / HPtextureSize.width);
+  let calculatedWidth = 300;
+
+  hearts.x = 25;
+  hearts.y = 25;
+  mask.x = 25;
+  mask.y = 25;
+
+  hearts.height = calculatedHeight;
+  hearts.width = calculatedWidth;
+  mask.height = calculatedHeight;
+  mask.width = calculatedWidth;
+
+  //fill.beginFill(0xde3232);
+  fill.beginFill(0xff5a97);
+  fill.drawRect(25, 25, 300, 75);
+  fill.mask = mask;
+  fill.alpha = 0.7;
+
+  window.fill = fill;
+
+  // The order is important here, due to z-indexing.
+  return [fill, hearts, mask];
 }
