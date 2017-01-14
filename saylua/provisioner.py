@@ -51,7 +51,7 @@ def setup():
         print("Adding Placeholder Board Categories")
         categories = ["Saylua Talk", "Help", "Real Life", "Your Pets"]
         for category in categories:
-            BoardCategory(title="Category").put()
+            BoardCategory(title=category).put()
 
 
     print("Database Setup Complete")
