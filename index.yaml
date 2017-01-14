@@ -67,6 +67,18 @@ indexes:
   - name: last_action
     direction: desc
 
+- kind: GameLog
+  properties:
+  - name: game_id
+  - name: score
+    direction: desc
+
+- kind: GameScore
+  properties:
+  - name: game_id
+  - name: score
+    direction: desc
+
 - kind: Notification
   properties:
   - name: user

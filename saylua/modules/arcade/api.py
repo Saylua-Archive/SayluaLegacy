@@ -1,6 +1,6 @@
 from saylua.wrappers import login_required
 from flask import g, request
-from models.db import Game, GameScore
+from models.db import Game, GameLog
 from saylua.models.user import User
 
 import json
@@ -20,7 +20,7 @@ def api_send_score(game):
             # TODO sanity check the game log and other variables sent to catch
             # low hanging fruit attempts at cheating.
             data = request.get_json()
-            GameScore.record_score(g.user.key, game, data['score'])
+            GameLog.record_score(g.user.key, game, data['score'])
             cc, ss = User.update_currency(g.user.key, cc=data['score'])
             return json.dumps(dict(cloud_coins=cc, star_shards=ss))
     return json.dumps(dict(error='Bad request.')), 400

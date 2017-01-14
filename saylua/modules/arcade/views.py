@@ -1,6 +1,6 @@
 from flask import render_template
 
-from models.db import GameScore
+from models.db import Game, GameLog
 
 
 def games_main():
@@ -8,9 +8,9 @@ def games_main():
 
 
 def games_blocks():
-    return render_template("blocks.html")
+    highscores = GameLog.get_highscores(Game.LINE_BLOCKS, 10)
+    return render_template("blocks.html", highscores=highscores)
 
 
 def games_space():
-    highscores = GameScore.get_highscores(Game.LINE_BLOCKS, 10)
-    return render_template("space.html", highscores=highscores)
+    return render_template("space.html")

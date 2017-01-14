@@ -8,13 +8,27 @@ class Game(messages.Enum):
     LINE_BLOCKS = 1
 
 
-# This is a model for storing scores that users get in arcade games.
-# This also doubles as a log of rewards that users received from games.
-class GameScore(ndb.Model):
+class Highscore(ndb.Model):
+    user_key = ndb.KeyProperty()
+    game_log_key = ndb.KeyProperty()
+    game_id = msgprop.EnumProperty(Game, required=True)
+    score = ndb.IntegerProperty()
+
+    # Highscores are monthly. For an all-time highscore, year and month are set
+    # to zero.
+    year = ndb.IntegerProperty()
+    month = ndb.IntegerProperty()
+
+
+# Stores a log of a player's gameplay including score.
+class GameLog(ndb.Model):
     user_key = ndb.KeyProperty()
     game_id = msgprop.EnumProperty(Game, required=True)
     score = ndb.IntegerProperty()
     time = ndb.DateTimeProperty(auto_now_add=True)
+
+    # Note: Game logs are differently formatted per type of game.
+    game_log = ndb.JsonProperty(indexed=False)
 
     @classmethod
     def record_score(cls, user_key, game_id, score):
