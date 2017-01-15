@@ -1,8 +1,11 @@
 {% extends "layout.html" %}
 {% set page_title = "The News" %}
+{% block header_scripts %}
+  <link rel="stylesheet" type="text/css" href="{{ include_static('css/home.min.css') }}">
+{% endblock %}
 {% block body %}
 <h2>The Sayluan Gazette</h2>
-<a href="/news/">Headlines</a> / 
+<a href="/news/">Headlines</a> /
 <a href="/news/">Funny Pages</a> /
 <a href="/news/puzzle/">Daily Puzzle</a>
 <div class="news-post">
