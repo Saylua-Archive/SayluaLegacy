@@ -100,8 +100,8 @@ class UserConversation(ndb.Model):
 class Notification(ndb.Model):
     user_key = ndb.KeyProperty()
     time = ndb.DateTimeProperty(auto_now_add=True)
-    text = ndb.StringProperty(indexed=False)
-    link = ndb.StringProperty(indexed=False)
+    text = ndb.StringProperty()
+    link = ndb.StringProperty()
     is_read = ndb.BooleanProperty(default=False)
     count = ndb.IntegerProperty(default=1)
 

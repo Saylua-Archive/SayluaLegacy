@@ -54,7 +54,7 @@ export default class GameState extends BaseModel {
   clearGameState() {
     this.frames = 0;
     this.lastDrop = 0;
-    this.timeout = 300;
+    this.timeout = 800;
     this.gameOver = false;
     this.paused = false;
     this.fast = false;
@@ -72,7 +72,6 @@ export default class GameState extends BaseModel {
 
   start() {
     this.clearGameState();
-
     this.getNextPiece();
 
     this.startTime = new Date().getTime();
@@ -153,7 +152,7 @@ export default class GameState extends BaseModel {
       // Check if a line was made.
       if (this.clearLines(p.r, p.r + 4).length > 0) {
         this.score += 50;
-        this.timeout -= 2;
+        this.timeout -= 3;
       }
     }
     return false;
