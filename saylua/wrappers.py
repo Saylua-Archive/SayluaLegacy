@@ -1,6 +1,8 @@
 from flask import redirect as _redirect, url_for, render_template, g
 from functools import wraps
 
+import json
+
 
 def login_required(f, redirect='users.login'):
     """Redirects non-logged in users to a specified location.
@@ -12,7 +14,17 @@ def login_required(f, redirect='users.login'):
     def decorated_function(*args, **kwargs):
         if not g.logged_in:
             return _redirect(url_for(redirect))
+        return f(*args, **kwargs)
 
+    return decorated_function
+
+
+# Same as login_required but returns a 400 response for API endpoints.
+def api_login_required(f, error='You must be logged in to use this feature.'):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not g.logged_in:
+            return json.dumps(dict(error=error)), 401
         return f(*args, **kwargs)
 
     return decorated_function
