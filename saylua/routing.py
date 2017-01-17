@@ -42,7 +42,8 @@ class SayluaRouter(Blueprint):
 
     def register_urls(self, urls):
         for _url in urls:
-            self.add_url_rule(rule=_url.rule, endpoint=_url.name, view_func=_url.view_func, methods=_url.methods)
+            self.add_url_rule(rule=_url.rule, endpoint=_url.name, view_func=_url.view_func,
+                methods=_url.methods)
 
 
 class SayluaLoader(DispatchingJinjaLoader):
@@ -83,6 +84,7 @@ def url(rule, view_func, name=None, methods=["GET"]):
 
     __url = namedtuple('Url', ['rule', 'name', 'view_func', 'methods'])
     return __url(rule, name, view_func, methods)
+
 
 def register_urls(app, modules):
     """Don't try to understand this."""
