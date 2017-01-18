@@ -1,4 +1,4 @@
-// engine_graphics -> Required by Utils/game_init
+// graphics -> Required by Core/init
 // --------------------------------------
 // App level and graphics related utility functions.
 

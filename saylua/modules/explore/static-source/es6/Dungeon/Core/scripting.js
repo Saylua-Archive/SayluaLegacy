@@ -1,9 +1,9 @@
-// engine_scripting -> Required by Reducers/GameReducer
+// scripting -> Required by Reducers/GameReducer
 // --------------------------------------
 // The heart of Dungeons' game scripting.
 
 import astar from "astar";
-import cloneDeep from "lodash.clonedeep";
+
 import * as MathUtils from "../Utils/math";
 import * as EngineUtils from "../Utils/engine";
 

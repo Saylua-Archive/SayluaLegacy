@@ -1,4 +1,4 @@
-// game_init -> Required by Core/GameRenderer
+// init -> Required by Core/GameRenderer
 // --------------------------------------
 // Primal functions that generate initial game data.
 // Only run once.

@@ -1,5 +1,5 @@
 /* eslint { no-redeclare: 0 } */
-// GameReducer -> Required by DungeonClient.
+// GameReducer -> Required by Components/DungeonClient.
 // --------------------------------------
 // Produces outputs from various inputs.
 // Holds the actual data that makes up Dungeons.

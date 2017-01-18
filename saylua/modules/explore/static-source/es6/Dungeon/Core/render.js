@@ -1,4 +1,4 @@
-// game_render -> Required by Core/GameRenderer
+// render -> Required by Core/GameRenderer
 // --------------------------------------
 // Dirty functions related to mutating sprite layers
 // to assist the game renderer.

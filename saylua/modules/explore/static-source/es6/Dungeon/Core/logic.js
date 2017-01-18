@@ -1,4 +1,4 @@
-// game_logic -> Required by Reducers/GameReducer
+// logic -> Required by Reducers/GameReducer
 // --------------------------------------
 // Pure functions that calculate complex interactions
 // between given inputs for the GameReducer.
