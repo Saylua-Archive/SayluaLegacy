@@ -1,8 +1,6 @@
 from google.appengine.ext import ndb
 from dateutil import tz
 
-from flask import url_for
-
 import time
 import re
 import os
@@ -21,10 +19,6 @@ def get_static_version_id():
     if not is_devserver():
         version = get_gae_version()
     return version
-
-
-def include_static(file_path):
-    return url_for('static', filename=file_path) + '?v=' + str(get_static_version_id())
 
 
 def make_ndb_key(key_string):

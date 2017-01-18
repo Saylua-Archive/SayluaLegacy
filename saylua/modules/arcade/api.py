@@ -1,4 +1,4 @@
-from saylua.wrappers import login_required
+from saylua.wrappers import api_login_required
 from flask import g, request
 from models.db import Game, GameLog
 from saylua.models.user import User
@@ -9,7 +9,7 @@ import json
 # Send a score to the API.
 # TODO: Implement login_required that returns error for API call, rather than
 # redirecting to /login.
-@login_required
+@api_login_required
 def api_send_score(game):
     try:
         game = Game(game)

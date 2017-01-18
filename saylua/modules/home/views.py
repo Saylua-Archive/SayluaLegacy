@@ -13,8 +13,8 @@ def landing():
 
 
 def news():
-    return render_template("news.html")
+    return render_template("newspaper/news.html")
 
 
 def puzzle():
-    return render_template("puzzle.html")
+    return render_template("newspaper/puzzle.html")
