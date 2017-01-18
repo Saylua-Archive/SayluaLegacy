@@ -10,7 +10,7 @@ def soulname(min_length=7):
     while len(start) < min_length:
         start = extend_name(start)
     if is_bad(start):
-        return soulname(min_length)
+        return soulname(min_length) #try again if fails the check
     return start.lower()
 
 def extend_name(name):
