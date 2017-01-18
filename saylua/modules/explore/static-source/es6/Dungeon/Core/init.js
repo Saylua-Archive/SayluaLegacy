@@ -127,8 +127,8 @@ function generatePlayerStatusSprites() {
   let mask = new PIXI.Sprite(maskTexture);
   let fill = new PIXI.Graphics();
 
-  let calculatedHeight = ((HPtextureSize.height * 300) / HPtextureSize.width);
-  let calculatedWidth = 300;
+  let calculatedHeight = ((HPtextureSize.height * 150) / HPtextureSize.width);
+  let calculatedWidth = 150;
 
   hearts.x = 25;
   hearts.y = 25;
@@ -142,7 +142,7 @@ function generatePlayerStatusSprites() {
 
   //fill.beginFill(0xde3232);
   fill.beginFill(0xff5a97);
-  fill.drawRect(25, 25, 300, 75);
+  fill.drawRect(25, 25, 150, 75);
   fill.mask = mask;
   fill.alpha = 0.7;
 

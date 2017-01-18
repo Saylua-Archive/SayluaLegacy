@@ -359,7 +359,6 @@ function resolveSpecialVariable(id, specialVariable, meta) {
 
   if (specialVariable === '__moveTo') {
     let curry = (nodeGraph) => (data) => {
-
       let start, end;
 
       start = nodeGraph.grid[data.location.x][data.location.y];
