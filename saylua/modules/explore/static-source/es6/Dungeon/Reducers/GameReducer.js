@@ -1,16 +1,17 @@
 /* eslint { no-redeclare: 0 } */
+// GameReducer -> Required by DungeonClient.
+// --------------------------------------
+// Produces outputs from various inputs.
+// Holds the actual data that makes up Dungeons.
+
 import cloneDeep from "lodash.clonedeep";
 import Reqwest from "reqwest";
 import astar from "astar";
 
-import * as EngineScripting from "../Utils/engine_scripting";
-import * as GameLogic from "../Utils/game_logic";
-import * as EngineUtils from "../Utils/engine";
+import * as Scripting from "../Core/scripting";
+import * as GameLogic from "../Core/logic";
+import * as GameInit from "../Core/init";
 
-
-// GameStore -> Required by DungeonClient.
-// --------------------------------------
-// Primary game client reducer.
 
 export function getInitialGameState() {
   return Reqwest({
@@ -32,14 +33,14 @@ export function getInitialGameState() {
       });
 
       // Normalize our tileLayer into a shallow array.
-      let [mapHeight, mapWidth, newTileLayer] = EngineUtils.normalizeTileLayer(result.tileLayer);
+      let [mapHeight, mapWidth, newTileLayer] = GameInit.normalizeTileLayer(result.tileLayer);
 
       result.mapHeight = mapHeight;
       result.mapWidth = mapWidth;
       result.tileLayer = newTileLayer;
       result.tileSet = newTileSet;
       result.entitySet = newEntitySet;
-      result.nodeGraph = new astar.Graph(EngineUtils.generateNodeGraph(result.tileSet, result.tileLayer), { diagonal: true });
+      result.nodeGraph = new astar.Graph(GameInit.generateNodeGraph(result.tileSet, result.tileLayer), { diagonal: true });
       result.gameClock = 0;
       result.UI = {
         "showMinimap": false
@@ -94,11 +95,9 @@ export const GameReducer = (state, action) => {
 
       return { ...state, 'entityLayer': entities, 'tileLayer': tiles };
 
-    case 'HOOK_ENTER':
+    case 'TRIGGER_EVENT_ENTER':
 
-      // Entities will always affect tiles before the reverse occurs.
-      // Fixable, but not immediately necessary for them to be simultaneous.
-      var [entities, tiles] = EngineScripting.resolveActions({
+      var [entities, tiles] = Scripting.interpretGameEvents({
         'actionType': action.type,
         'actionLocation': action.location,
         'nodeGraph': state.nodeGraph,
@@ -128,7 +127,7 @@ export const GameReducer = (state, action) => {
       var newState = { ...state, 'entityLayer': entities, 'gameClock': newGameClock };
 
       // Make sure we trigger any entity / tile we collide with
-      newState = GameReducer(newState, { 'type': 'HOOK_ENTER', 'location': player.location });
+      newState = GameReducer(newState, { 'type': 'TRIGGER_EVENT_ENTER', 'location': player.location });
 
       // Step the game forward one time unit
       newState = GameReducer(newState, { 'type': 'PROCESS_AI' });

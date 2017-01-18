@@ -3,7 +3,7 @@ import onDomReady from "ondomready";
 import Component from "inferno-component";
 
 import * as CanvasUtils from "../Utils/canvas";
-import Game from "../Core/Game";
+import GameRenderer from "../Core/GameRenderer";
 
 // DungeonClient -> Required by Main
 // --------------------------------------
@@ -21,13 +21,13 @@ export default class DungeonClient extends Component {
 
 
   componentDidMount() {
-    // Start rendering Pixi canvas once our component has mounted.
+    // Create a canvas context with Pixi, then initialize a new GameRenderer and pass said context.
     onDomReady(() => {
       // Store client wrapper, canvas wrapper.
       this.clientWrapper = document.querySelectorAll(".dungeon-client-wrapper")[0];
       this.canvasWrapper = this.refs.pixiCanvas;
 
-      // Calculate the height, width of our canvas from the window size.
+      // Calculate the height, and width of our canvas from the window size.
       let [renderWidth, renderHeight] = CanvasUtils.calculateSize();
 
       // Resize container
@@ -36,9 +36,9 @@ export default class DungeonClient extends Component {
       this.canvasWrapper.style.height = renderHeight + "px";
       this.canvasWrapper.style.width = renderWidth + "px";
 
-      // Start Game, attach renderer to DOM
-      this.game = new Game(renderWidth, renderHeight, this.props.store);
-      this.refs.pixiCanvas.appendChild(this.game.getRenderer());
+      // Start game, attach renderer to DOM
+      this.gameRenderer = new GameRenderer(renderWidth, renderHeight, this.props.store);
+      this.refs.pixiCanvas.appendChild(this.gameRenderer.getRenderer());
 
       // Bind to the window.resize event.
       window.addEventListener("resize", this.handleWindowResize.bind(this));
@@ -53,7 +53,7 @@ export default class DungeonClient extends Component {
 
 
   animate() {
-    this.game.loop();
+    this.gameRenderer.loop();
     this.frame = requestAnimationFrame(this.animate.bind(this));
   }
 

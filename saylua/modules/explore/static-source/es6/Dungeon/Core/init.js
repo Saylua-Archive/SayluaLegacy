@@ -1,6 +1,15 @@
-import * as EngineGraphics from "./engine_graphics";
+// game_init -> Required by Core/GameRenderer
+// --------------------------------------
+// Primal functions that generate initial game data.
+// Only run once.
 
-import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from "../Core/Game";
+import * as Graphics from "./graphics";
+
+import { OBSTRUCTIONS } from "./logic";
+import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from "./GameRenderer";
+
+
+/******************************** RENDERER INIT ***********************************/
 
 
 export function generateEntitySprites(stageWidth, stageHeight, entityLayer, entitySet) {
@@ -14,7 +23,7 @@ export function generateEntitySprites(stageWidth, stageHeight, entityLayer, enti
 
   for (let entity of entityLayer) {
     let entityParent = entitySet[entity.parent];
-    let spriteTexture = EngineGraphics.getTexture(entityParent.slug);
+    let spriteTexture = Graphics.getTexture(entityParent.slug);
     let sprite = new PIXI.Sprite(spriteTexture);
 
     sprite.visible = false;
@@ -112,8 +121,8 @@ function generatePlayerStatusSprites() {
   // This is lame, but calculating sizes before the canvas has rendered is difficult.
   const HPtextureSize = { 'height': 193, 'width': 1186 };
 
-  let heartsTexture = EngineGraphics.getTexture("interface_hp_positive");
-  let maskTexture = EngineGraphics.getTexture("interface_hp_negative");
+  let heartsTexture = Graphics.getTexture("interface_hp_positive");
+  let maskTexture = Graphics.getTexture("interface_hp_negative");
   let hearts = new PIXI.Sprite(heartsTexture);
   let mask = new PIXI.Sprite(maskTexture);
   let fill = new PIXI.Graphics();
@@ -141,4 +150,47 @@ function generatePlayerStatusSprites() {
 
   // The order is important here, due to z-indexing.
   return [fill, hearts, mask];
+}
+
+
+/******************************** REDUCER INIT ***********************************/
+
+
+export function generateNodeGraph(tileSet, tileLayer) {
+  let nodeGraph = [];
+
+  // Our A* implementation uses [x][y] grids, so we must convert from our [y][x] grids.
+  // Weight based on whether or not they are obstructions.
+  for (let tile of tileLayer) {
+    nodeGraph[tile.location.x] = nodeGraph[tile.location.x] || [];
+
+    let parentTileType = tileSet[tile.tile].type;
+    let isObstruction = (OBSTRUCTIONS.indexOf(parentTileType) !== -1);
+
+    if (isObstruction) {
+      nodeGraph[tile.location.x].push(0);
+    } else {
+      nodeGraph[tile.location.x].push(1);
+    }
+  }
+
+  return nodeGraph;
+}
+
+
+export function normalizeTileLayer(tileLayer) {
+  let mapHeight = tileLayer.length;
+  let mapWidth = tileLayer[0].length;
+  let normalizedTileLayer = [];
+
+  for (let y = 0; y < mapHeight; y++) {
+    for (let x = 0; x < mapWidth; x++) {
+      let tile = tileLayer[y][x];
+
+      tile.location = { x, y };
+      normalizedTileLayer.push(tile);
+    }
+  }
+
+  return [mapHeight, mapWidth, normalizedTileLayer];
 }

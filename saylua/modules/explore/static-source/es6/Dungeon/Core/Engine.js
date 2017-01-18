@@ -1,3 +1,5 @@
+// Currently a placeholder, future as of yet undetermined.
+
 export default class Engine {
   constructor(store) {
     // Store store

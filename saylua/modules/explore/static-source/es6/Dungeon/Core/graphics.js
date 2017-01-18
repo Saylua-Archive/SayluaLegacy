@@ -1,3 +1,7 @@
+// engine_graphics -> Required by Utils/game_init
+// --------------------------------------
+// App level and graphics related utility functions.
+
 function getDataURI(url) {
   let image = new Image();
   image.src = url;

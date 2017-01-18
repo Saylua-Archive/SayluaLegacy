@@ -1,10 +1,13 @@
+// engine_scripting -> Required by Reducers/GameReducer
+// --------------------------------------
+// The heart of Dungeons' game scripting.
+
 import astar from "astar";
 import cloneDeep from "lodash.clonedeep";
-import * as MathUtils from "./math";
-import * as EngineUtils from "./engine";
+import * as MathUtils from "../Utils/math";
+import * as EngineUtils from "../Utils/engine";
 
-
-import { OBSTRUCTIONS } from "./game_helpers";
+import { OBSTRUCTIONS } from "./logic";
 
 
 const ENABLED_SPECIAL_VARIABLES = [
@@ -24,7 +27,7 @@ const ENABLED_SPECIAL_VARIABLES = [
 ];
 
 
-function generateScript(id, payload) {
+function compileScript(id, payload) {
   // Initialize if necessary.
   window.scriptEngineFunctions = window.scriptEngineFunctions || {};
   window.scriptEngineFunctions[id] = window.scriptEngineFunctions[id] || {};
@@ -33,8 +36,6 @@ function generateScript(id, payload) {
   if (window.scriptEngineFunctions[id]['function'] !== undefined) {
     return window.scriptEngineFunctions[id];
   }
-
-  console.log("Compiling new script");
 
   // Reasons.
   window.scriptEngineFunctions[id]['id'] = id;
@@ -99,7 +100,7 @@ function generateScript(id, payload) {
 }
 
 
-function resolveScript(scriptFunction, meta) {
+function executeScript(scriptFunction, meta) {
   let args = [];
   let metaRequirements = Object.keys(meta);
 
@@ -114,7 +115,7 @@ function resolveScript(scriptFunction, meta) {
       result = meta[strippedRequirement];
     } else {
       //console.log(`Requesting ${requirement} on behalf of ${scriptFunction.id}`);
-      result = resolveVariable(scriptFunction.id, requirement, meta);
+      result = resolveSpecialVariable(scriptFunction.id, requirement, meta);
       //console.log(`Got back: ${result}`); console.log(result);
     }
 
@@ -130,7 +131,7 @@ function resolveScript(scriptFunction, meta) {
 }
 
 
-function runEntityScripts(event, actor, data) {
+function resolveActorScripts(event, actor, data) {
   let script, parent;
 
   // Is it a child entity?
@@ -146,8 +147,8 @@ function runEntityScripts(event, actor, data) {
   // First, we run the local instance's scripts, if possible.
   if (actor.events !== undefined) {
     if (actor.events[event] !== undefined) {
-      script = generateScript(actor.id, actor.events[event]);
-      resolveScript(script, data);
+      script = compileScript(actor.id, actor.events[event]);
+      executeScript(script, data);
 
       return 1;
     }
@@ -157,8 +158,8 @@ function runEntityScripts(event, actor, data) {
   if (parent) {
     if (parent.events !== undefined) {
       if (parent.events[event] !== undefined) {
-        script = generateScript(parent.id, parent.events[event]);
-        resolveScript(script, data);
+        script = compileScript(parent.id, parent.events[event]);
+        executeScript(script, data);
 
         return 2;
       }
@@ -177,11 +178,11 @@ function runEntityScripts(event, actor, data) {
 }
 
 
-export function resolveActions(data) {
+export function interpretGameEvents(data) {
   /*
     Example Usage:
     {
-      'actionType': 'HOOK_ENTER',
+      'actionType': 'TRIGGER_EVENT_ENTER',
       'actionLocation', { 'x': 0, 'y': 0}
       'tileSet': <object:tileSet>,
       'tileLayer': <array:tileLayer>,
@@ -191,7 +192,7 @@ export function resolveActions(data) {
   */
 
   // What are we trying to find matching events for, here?
-  let event = data.actionType.replace("HOOK_", "").toLowerCase();
+  let event = data.actionType.replace("TRIGGER_EVENT_", "").toLowerCase();
 
   // Assume we have been provided a copy, for performance reasons.
   let newTileLayer = data.tileLayer;
@@ -224,27 +225,27 @@ export function resolveActions(data) {
     })
     .map((entity) => {
       baseData.this = entity;
-      runEntityScripts(event, entity, baseData);
+      resolveActorScripts(event, entity, baseData);
     });
 
     // Now the tile.
     let linearPosition = ((data.actionLocation.y * data.mapWidth) + data.actionLocation.x);
     let tile = newTileLayer[linearPosition];
     baseData.this = tile;
-    runEntityScripts(event, tile, baseData);
+    resolveActorScripts(event, tile, baseData);
   }
 
   // Process AI behaviors.
   if (event === 'timestep') {
     baseData.this = data.target;
     baseData.location = data.target.location;
-    runEntityScripts(event, data.target, baseData);
+    resolveActorScripts(event, data.target, baseData);
   }
 
   return [newEntityLayer, newTileLayer];
 }
 
-function resolveVariable(id, specialVariable, meta) {
+function resolveSpecialVariable(id, specialVariable, meta) {
   let splitVar = specialVariable.split('_');
 
   if (specialVariable === '$entity_nearest') {

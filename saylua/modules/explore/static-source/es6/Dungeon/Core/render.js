@@ -1,16 +1,21 @@
-import * as GameHelpers from "./game_helpers";
-import * as EngineGraphics from "./engine_graphics";
+// game_render -> Required by Core/GameRenderer
+// --------------------------------------
+// Dirty functions related to mutating sprite layers
+// to assist the game renderer.
 
-import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from "../Core/Game";
+import * as Graphics from "./graphics";
+
+import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from "./GameRenderer";
+import { calculateFOV, getBounds } from "./logic";
 
 
 // This provides the common data layer necessary for other rendering functions to operate.
 export function getBaseData(player, tileSet, tileLayer, dimensions, mapHeight, mapWidth) {
   // Calculate valid tiles.
-  let validTiles = GameHelpers.calculateFOV(player.location, tileSet, tileLayer, mapWidth);
+  let validTiles = calculateFOV(player.location, tileSet, tileLayer, mapWidth);
 
   // Use map dimensions and player location to generate helper functions that tell us when a cell is in view.
-  let [topLeft, bottomRight, within_x_bounds, within_y_bounds] = GameHelpers.getBounds(player.location, mapHeight, mapWidth);
+  let [topLeft, bottomRight, within_x_bounds, within_y_bounds] = getBounds(player.location, mapHeight, mapWidth);
 
   return {
     dimensions,
@@ -63,14 +68,14 @@ export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
       // Now, we change the tile state depending on whether or not we can see it, and whether or not we /have/ seen it.
       if (tileVisible) {
         sprite.alpha = 1;
-        sprite.texture = EngineGraphics.getTexture(parentTile.slug);
+        sprite.texture = Graphics.getTexture(parentTile.slug);
       } else {
         if (tileSeen) {
           sprite.alpha = 0.5;
-          sprite.texture = EngineGraphics.getTexture(parentTile.slug);
+          sprite.texture = Graphics.getTexture(parentTile.slug);
         } else {
           sprite.alpha = 1;
-          sprite.texture = EngineGraphics.getTexture('tile_fog');
+          sprite.texture = Graphics.getTexture('tile_fog');
         }
       }
     }
@@ -161,12 +166,12 @@ export function renderMinimap(baseData, tileSet, tileLayer, minimapSprites) {
 
     if (tileVisible) {
       sprite.alpha = 1 * baseVisibility;
-      sprite.texture = EngineGraphics.getTexture(parentTile.slug);
+      sprite.texture = Graphics.getTexture(parentTile.slug);
       sprite.visible = true;
     } else {
       if (tileSeen) {
         sprite.alpha = 0.5 * baseVisibility;
-        sprite.texture = EngineGraphics.getTexture(parentTile.slug);
+        sprite.texture = Graphics.getTexture(parentTile.slug);
       } else {
         sprite.visible = false;
       }
