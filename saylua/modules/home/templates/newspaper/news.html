@@ -1,14 +1,6 @@
-{% extends "layout.html" %}
-{% set page_title = "The News" %}
-{% block header_scripts %}
-  <link rel="stylesheet" type="text/css" href="{{ include_static('css/home.min.css') }}">
-{% endblock %}
-{% block body %}
-<h2 class="news-header">The Sayluan Gazette</h2>
-<div class="news-navigation">
-  <a href="/news/">Headlines</a> /
-  <a href="/news/puzzle/">Daily Puzzle</a>
-</div>
+{% extends "newspaper/template.html" %}
+{% set section_title = "News" %}
+{% block section_body %}
 <div class="news-post">
   <h3>Explore in our map on Saylua</h3>
   <p>
