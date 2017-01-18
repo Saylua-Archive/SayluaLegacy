@@ -1,6 +1,9 @@
 {% from "_macros/pagination.html" import pagination %}
 {% extends "layout.html" %}
 {% set page_title = "Bookshelf" %}
+{% block header_scripts %}
+  <link rel="stylesheet" type="text/css" href="{{ include_static('css/books.min.css') }}">
+{% endblock %}
 {% block body %}
 <h2>Your Bookshelf</h2>
 <div class="center full padded">
@@ -13,7 +16,7 @@
       <div class="book-square">
         <a href="/read/1/">
           Lorem Ipsum
-          <img src="/static/img/items/tome.png">
+          <img src="/static/img/items/160/bananas.png" class="item">
         </a>
       </div>
     {% endfor %}
