@@ -17,11 +17,18 @@ urlpatterns = [
     url('/user/<username>/', view_func=views.profile.user_profile, name='user_profile'),
 
     # User Settings URls
-    url('/settings/', view_func=views.settings.user_settings, name='user_settings', methods=['GET', 'POST']),
-    url('/settings/details/', view_func=views.settings.user_settings_details, name='user_settings_details', methods=['GET', 'POST']),
-    url('/settings/css/', view_func=views.settings.user_settings_details, name='user_settings_details', methods=['GET', 'POST']),
-    url('/settings/username/', view_func=views.settings.user_settings_username, name='user_settings_username', methods=['GET', 'POST']),
-    url('/settings/username/release/', view_func=views.settings.user_settings_username_release, name='user_settings_username_release', methods=['POST']),
-    url('/settings/email/', view_func=views.settings.user_settings_email, name='user_settings_email', methods=['GET', 'POST']),
-    url('/settings/password/', view_func=views.settings.user_settings_password, name='user_settings_password', methods=['GET', 'POST'])
+    url('/settings/', view_func=views.settings.user_settings, name='user_settings',
+        methods=['GET', 'POST']),
+    url('/settings/details/', view_func=views.settings.user_settings_details,
+        name='user_settings_details', methods=['GET', 'POST']),
+    url('/settings/css/', view_func=views.settings.user_settings_details,
+        name='user_settings_details', methods=['GET', 'POST']),
+    url('/settings/username/', view_func=views.settings.user_settings_username,
+        name='user_settings_username', methods=['GET', 'POST']),
+    url('/settings/username/release/', view_func=views.settings.user_settings_username_release,
+        name='user_settings_username_release', methods=['POST']),
+    url('/settings/email/', view_func=views.settings.user_settings_email,
+        name='user_settings_email', methods=['GET', 'POST']),
+    url('/settings/password/', view_func=views.settings.user_settings_password,
+        name='user_settings_password', methods=['GET', 'POST'])
 ]
