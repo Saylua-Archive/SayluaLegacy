@@ -7,8 +7,6 @@ import json
 
 
 # Send a score to the API.
-# TODO: Implement login_required that returns error for API call, rather than
-# redirecting to /login.
 @api_login_required
 def api_send_score(game):
     try:

@@ -4,7 +4,7 @@ from saylua.utils.form import flash_errors
 from saylua.models.user import LoginSession, User
 from saylua.wrappers import login_required
 
-from .forms.login import LoginForm, RegisterForm, login_check
+from ..forms.login import LoginForm, RegisterForm, login_check
 
 from google.appengine.ext import ndb
 from flask import render_template, redirect, make_response, request, g

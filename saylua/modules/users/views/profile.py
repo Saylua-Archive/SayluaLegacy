@@ -1,4 +1,3 @@
-from saylua import app
 from saylua.models.user import User
 from saylua.wrappers import login_required
 

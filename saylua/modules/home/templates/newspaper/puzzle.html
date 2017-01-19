@@ -1,14 +1,6 @@
-{% extends "layout.html" %}
-{% set page_title = "The News" %}
-{% block header_scripts %}
-  <script src="{{ include_static('js/NewsPuzzle.min.js') }}"></script>
-  <link rel="stylesheet" type="text/css" href="{{ include_static('css/home.min.css') }}">
-{% endblock %}
-{% block body %}
-<h2>The Sayluan Gazette</h2>
-<a href="/news/">Headlines</a> /
-<a href="/news/puzzle/">Daily Puzzle</a>
-
+{% extends "newspaper/template.html" %}
+{% set section_title = "News" %}
+{% block section_body %}
 <div id="puzzle-mount">
  <div class="block">
    <input type="text" maxlength="1" class="number" id="1-1" />
@@ -136,5 +128,4 @@
    <input type="text" maxlength="1" class="number" id="9-9" />
  </div>
 </div>
-
 {% endblock %}

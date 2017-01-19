@@ -5,7 +5,7 @@ from saylua.wrappers import login_required
 from saylua.modules.messages.models.db import Notification
 
 from flask import render_template, redirect, g, flash, request
-from forms import BankTransferForm, recipient_check
+from ..forms import BankTransferForm, recipient_check
 
 
 @login_required
