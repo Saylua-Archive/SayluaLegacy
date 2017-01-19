@@ -14,7 +14,7 @@ class Species(ndb.Model):
     description = ndb.TextProperty()
 
 class SpeciesVariation(ndb.Model):
-    species_id = ndb.StringProperty()
+    species_id = ndb.IntegerProperty()
     name = ndb.StringProperty()
     description = ndb.TextProperty()
 
