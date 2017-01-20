@@ -26,6 +26,8 @@ const ENABLED_SPECIAL_VARIABLES = [
   '__rand'
 ];
 
+const WORKERS_ENABLED = (window.Worker !== undefined);
+
 
 function compileScript(id, payload) {
   // Initialize if necessary.
@@ -87,13 +89,14 @@ function compileScript(id, payload) {
 
   // Translate required special arguments into function args
   let args = requires.map((requirement) => requirement.split('.')[0]).join(",");
-
+  let functionString = `function(${args}) { ${payload} }`;
   // Compile and store.
   //console.log("Compiling: " + `window.__tfunc = function(${args}) { ${payload} }`);
-  eval(`window.__tfunc = function(${args}) { ${payload} }`);
+  eval(`window.__tfunc = ${functionString};`);
 
   window.scriptEngineFunctions[id]['requires'] = requires;
   window.scriptEngineFunctions[id]['function'] = window.__tfunc;
+  window.scriptEngineFunctions[id]['functionString'] = functionString;
 
   delete window.__tfunc;
   return window.scriptEngineFunctions[id];
@@ -124,6 +127,8 @@ function executeScript(scriptFunction, meta) {
 
   try {
     scriptFunction.function.apply(this, args);
+    window.testA = scriptFunction.function.toString();
+    window.testB = args;
   } catch(e) {
     console.log(`Script ${scriptFunction.id} failed: `);
     console.log(e);

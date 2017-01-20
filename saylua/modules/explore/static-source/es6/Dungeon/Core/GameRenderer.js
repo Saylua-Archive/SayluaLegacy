@@ -9,7 +9,6 @@ import * as MathUtils from "../Utils/math";
 import * as GameRender from "./render";
 import * as GameInit from "./init";
 
-
 export const VIEWPORT_HEIGHT = 18;
 export const VIEWPORT_WIDTH = 32;
 export const VISION_RADIUS = 8;
