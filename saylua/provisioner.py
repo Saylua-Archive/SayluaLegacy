@@ -42,7 +42,8 @@ def setup():
         for i in range(4):
             display_name = soulname(7)
             username = display_name
-            phash = "hashyhashy"
+            #The following hash corresponds to the password "password" so you can use that to test
+            phash = "$2a$01$c1I8kCq3L1YgMDu4Hb.4COFJBWMqnjnZhyBvfaBPOOuVfPimvLAQq"
             email = username + "@" + username + ".biz"
             new_user = User(display_name=display_name, usernames=[username], phash=phash,
                 email=email)
