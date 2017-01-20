@@ -1,5 +1,10 @@
 {% extends "layout.html" %}
 {% set page_title = "Write a New Message" %}
+
+{% block header_scripts %}
+<link rel="stylesheet" type="text/css" href="{{ include_static('css/messages.min.css') }}">
+{% endblock %}
+
 {% block body %}
 <h2>Writing a New Message</h2>
 <p class="center full padded">
