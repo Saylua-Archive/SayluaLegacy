@@ -23,9 +23,9 @@ def generate_dungeon():
     dungeon = Dungeon.Dungeon()
 
     return json.dumps({
-      "dungeonInfo": dungeon.get_info(),
-      "tileSet": dungeon.tile_set,
-      "entitySet": dungeon.entity_set,
-      "tileLayer": dungeon.grid.render(),
-      "entityLayer": dungeon.entities.render()
+        "dungeonInfo": dungeon.get_info(),
+        "tileSet": dungeon.tile_set,
+        "entitySet": dungeon.entity_set,
+        "tileLayer": dungeon.grid.render(),
+        "entityLayer": dungeon.entities.render()
     })
