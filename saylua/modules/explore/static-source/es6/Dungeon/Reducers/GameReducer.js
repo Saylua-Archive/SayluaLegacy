@@ -46,8 +46,6 @@ export function getInitialGameState() {
         "showMinimap": false
       };
       result.log = [];
-
-      console.log(result.nodeGraph);
     }
   });
 }
@@ -115,7 +113,7 @@ export const GameReducer = (state, action) => {
     case 'MOVE_PLAYER':
       var player = cloneDeep(state.entityLayer[0]);
       var entities = state.entityLayer.slice().slice(1);
-      var translation = GameLogic.translatePlayerLocation(player, state.tileLayer, state.tileSet, action.direction, state.mapWidth);
+      var translation = GameLogic.translatePlayerLocation(player, state.tileLayer, state.tileSet, state.entityLayer, action.direction, state.mapWidth);
       var playerMoved = (player.location != translation);
 
       player.location = translation;

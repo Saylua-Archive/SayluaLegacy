@@ -76,7 +76,7 @@ export function getBounds(player_location, mapHeight, mapWidth) {
 }
 
 
-export function translatePlayerLocation(player, tileLayer, tileSet, direction, mapWidth) {
+export function translatePlayerLocation(player, tileLayer, tileSet, entityLayer, direction, mapWidth) {
   let p_x, p_y, g_x, g_y, goalCell, goalTile, tileType;
 
   p_x = player.location.x;
@@ -122,6 +122,19 @@ export function translatePlayerLocation(player, tileLayer, tileSet, direction, m
 
   if (OBSTRUCTIONS.indexOf(tileType) !== -1) {
     return player.location;
+  }
+
+  // One last check, is there an entity on this tile? (This should trigger an attack in the future)
+  let targetEntity = entityLayer.filter((entity) => (
+    (entity.location.x === g_x) && (entity.location.y === g_y)
+  ));
+
+  if (targetEntity.length > 0) {
+    return {
+      'x': player.location.x,
+      'y': player.location.y,
+      'target': targetEntity[0]
+    };
   }
 
   return { "x": g_x, "y": g_y };
