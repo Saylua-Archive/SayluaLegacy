@@ -9,9 +9,6 @@ import json
 
 @login_required
 def home():
-    flash("Are we the kings?")
-    flash("Are we the queens?")
-    flash("We aren't the kings or the queens!", "error")
     return render_template("map.html")
 
 

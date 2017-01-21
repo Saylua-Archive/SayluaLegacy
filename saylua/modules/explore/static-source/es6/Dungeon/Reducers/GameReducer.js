@@ -35,17 +35,24 @@ export function getInitialGameState() {
       // Normalize our tileLayer into a shallow array.
       let [mapHeight, mapWidth, newTileLayer] = GameInit.normalizeTileLayer(result.tileLayer);
 
+      // Initialize entity HP
+      let newEntityLayer = GameInit.initializeEntityHP(newEntitySet, result.entityLayer);
+
       result.mapHeight = mapHeight;
       result.mapWidth = mapWidth;
       result.tileLayer = newTileLayer;
       result.tileSet = newTileSet;
+      result.entityLayer = newEntityLayer;
       result.entitySet = newEntitySet;
       result.nodeGraph = new astar.Graph(GameInit.generateNodeGraph(result.tileSet, result.tileLayer), { diagonal: true });
       result.gameClock = 0;
       result.UI = {
+        "canMove": true,
         "showMinimap": false
       };
       result.log = [];
+
+
     }
   });
 }
@@ -70,16 +77,14 @@ export const logState = store => next => action => {
   // This is really not kosher at all.
 
   // Note that this does not log in real-time, it occurs one step afterwards in game-time.
-  if (window.logQueue !== undefined) {
-    if ((window.logQueue.length > 0) && (window.logging !== true)) {
-      window.logging = true;
+  if ((window.queue['log'].length > 0) && (window.logging !== true)) {
+    window.logging = true;
 
-      let newEvents = window.logQueue.slice();
-      store.dispatch({ 'type': 'LOG_EVENTS', 'events': newEvents });
+    let newEvents = window.queue['log'].slice();
+    store.dispatch({ 'type': 'LOG_EVENTS', 'events': newEvents });
 
-      window.logQueue = [];
-      window.logging = false;
-    }
+    window.queue['log'] = [];
+    window.logging = false;
   }
 
   // Continue as usual.
@@ -112,16 +117,30 @@ export const GameReducer = (state, action) => {
 
     case 'MOVE_PLAYER':
       var player = cloneDeep(state.entityLayer[0]);
-      var entities = state.entityLayer.slice().slice(1);
+      var entities = state.entityLayer.slice();
       var translation = GameLogic.translatePlayerLocation(player, state.tileLayer, state.tileSet, state.entityLayer, action.direction, state.mapWidth);
-      var playerMoved = (player.location != translation);
+      var playerMoved = ((player.location != translation) || (player.target !== undefined));
 
-      player.location = translation;
-      entities.unshift(player);
+      player.location.x = translation.x;
+      player.location.y = translation.y;
+      entities[0] = player;
 
       // Advance game clock by 1 if the player actually moved.
       var newGameClock = state.gameClock;
       newGameClock = playerMoved ? newGameClock + 1 : newGameClock;
+
+      // Did we attack something?
+      // As a temporary measure, we'll apply the attack manually here.
+      if (translation.target !== undefined) {
+        var targetEntity = translation.target;
+
+        targetEntity.meta.health = targetEntity.meta.health - 5;
+
+        if (targetEntity.meta.health < 0) {
+          // This needs to be replaced with a die() function.
+          targetEntity.meta.dead = true;
+        }
+      }
 
       // All of the below is highly experimental. Questionable syntax.
       var newState = { ...state, 'entityLayer': entities, 'gameClock': newGameClock };
@@ -140,10 +159,29 @@ export const GameReducer = (state, action) => {
 
       return { ...state, 'log': newLog };
 
+    case 'DAMAGE_PLAYER':
+
+      var player = cloneDeep(state.entityLayer[0]);
+      var entities = state.entityLayer.slice();
+
+      var damageAmount = action.damage;
+      player.meta.health = Math.max(0, (player.meta.health - damageAmount));
+
+      entities[0] = player;
+
+      return { ...state, 'entityLayer': entities };
+
     case 'TOGGLE_MINIMAP':
 
       var showMinimap = !state.UI.showMinimap;
-      var newUIState = { ...state.UI, 'showMinimap': showMinimap };
+      var newUIState = { ...state.UI, showMinimap };
+
+      return { ...state, 'UI': newUIState };
+
+    case 'TOGGLE_MOVEMENT':
+
+      var canMove = !state.UI.canMove;
+      var newUIState = { ...state.UI, canMove };
 
       return { ...state, 'UI': newUIState };
 

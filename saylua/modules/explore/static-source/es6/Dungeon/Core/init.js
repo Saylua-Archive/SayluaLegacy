@@ -177,6 +177,23 @@ export function generateNodeGraph(tileSet, tileLayer) {
   return nodeGraph;
 }
 
+export function initializeEntityHP(entitySet, entityLayer) {
+  for (let key of Object.keys(entitySet)) {
+    let parent = entitySet[key];
+    if (parent.meta !== undefined) {
+      if (parent.meta.maxHP !== undefined) {
+        let candidates = entityLayer.filter((entity) => (entity.parent === parent.id));
+
+        for (let candidate of candidates) {
+          candidate.meta.health = parent.meta.maxHP;
+        }
+      }
+    }
+  }
+
+  return entityLayer;
+}
+
 
 export function normalizeTileLayer(tileLayer) {
   let mapHeight = tileLayer.length;

@@ -184,13 +184,13 @@ export function renderHUD(player, HUDSprites) {
   let fill = HUDSprites.playerStatus[0];
 
 
-  window.debugMaxHP = window.debugMaxHP || 100;
+  /*window.debugMaxHP = window.debugMaxHP || 100;
   window.debugHP = (window.debugHP === undefined) ? 75 : window.debugHP;
 
   window.debugHP = (window.debugHP + 1) % window.debugMaxHP;
 
-  player.meta.health = window.debugHP;
+  player.meta.health = window.debugHP;*/
 
-  let fillPercentage = (player.meta.health / window.debugMaxHP);
+  let fillPercentage = (player.meta.health / 100);
   fill.width = (150 * fillPercentage);
 }

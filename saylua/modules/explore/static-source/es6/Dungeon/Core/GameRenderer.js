@@ -9,6 +9,8 @@ import * as MathUtils from "../Utils/math";
 import * as GameRender from "./render";
 import * as GameInit from "./init";
 
+import Engine from "./Engine";
+
 export const VIEWPORT_HEIGHT = 18;
 export const VIEWPORT_WIDTH = 32;
 export const VISION_RADIUS = 8;
@@ -40,6 +42,9 @@ export default class GameRenderer {
       window.average = Math.floor(((window.average + timeElapsed) / 2) * 100) / 100;
       console.log(`This update took ${ timeElapsed } milliseconds. Average: ${ window.average }ms`);
     });
+
+    // Store the Animation Engine
+    this.engine = new Engine(store);
 
     // Initialize Pixi renderer
     this.renderer = PIXI.autoDetectRenderer(renderWidth, renderHeight);
@@ -189,7 +194,11 @@ export default class GameRenderer {
       this.state.gameStateChanged = false;
     }
 
+    // Render our player HUD
     GameRender.renderHUD(player, this.state.sprites.HUD);
+
+    // Pass state along to the Engine for handling animations.
+    this.engine.loop(this.state);
 
     this.renderer.render(this.state.stages.primary);
   }

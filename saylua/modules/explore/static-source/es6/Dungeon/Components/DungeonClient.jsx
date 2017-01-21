@@ -110,10 +110,12 @@ export default class DungeonClient extends Component {
       // If we've gotten this far, prevent default behavior.
       event.preventDefault();
 
-      this.props.store.dispatch({
-        'type': "MOVE_PLAYER",
-        'direction': keyName
-      });
+      if (this.props.store.getState().UI.canMove === true) {
+        this.props.store.dispatch({
+          'type': "MOVE_PLAYER",
+          'direction': keyName
+        });
+      }
     }
 
     if (keyName === "minimap") {

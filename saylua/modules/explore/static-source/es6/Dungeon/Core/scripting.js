@@ -337,18 +337,14 @@ function resolveSpecialVariable(id, specialVariable, meta) {
   }
 
   if (specialVariable === '__debugAttack') {
-    window.queuedAttacks = window.queuedAttacks || [];
-
     let debugAttack = (id, damage) => {
-      window.queuedAttacks.push([id, damage]);
+      window.queue['attack'].push([id, damage]);
     };
 
     return debugAttack;
   }
 
   if (specialVariable === '__debugMove') {
-    window.queuedMoves = window.queuedMoves || [];
-
     let debugMove = (nodeGraph) => (id, oldPosition, newPosition) => {
       // Add weight to our old location
       let oldNode = nodeGraph.grid[oldPosition.x][oldPosition.y];
@@ -365,7 +361,7 @@ function resolveSpecialVariable(id, specialVariable, meta) {
       newNode.weight = newWeight;
 
       // Log move event to a global queue used for animation.
-      window.queuedMoves.push([id, oldPosition, newPosition]);
+      window.queue['move'].push([id, oldPosition, newPosition]);
     };
 
     return debugMove(meta.nodeGraph);

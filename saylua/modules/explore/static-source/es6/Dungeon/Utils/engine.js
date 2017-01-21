@@ -12,15 +12,11 @@ export function log(message) {
     return number + ""; // always return a string
   }
 
-  // Create global log queue if necessary.
-  // This logQueue is automatically consumed by our GameReducer when the state is updated.
-  window.logQueue = window.logQueue || [];
-
   let now = new Date();
   let timestamp = `${padZeroes(now.getUTCHours())}:${padZeroes(now.getUTCMinutes())}:${padZeroes(now.getUTCSeconds())}`;
   let output = `${timestamp} - ${message}`;
 
   console.log(`Logging: ${output}`);
-  window.logQueue.push(output);
+  window.queue['log'].push(output);
   return output;
 }

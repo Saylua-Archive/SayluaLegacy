@@ -7,6 +7,13 @@ import DebugTools from "./Components/DebugTools";
 
 
 export default function Main() {
+  // We're bad people, so let's establish some globals that we'll need.
+  window.queue = {
+    'log': [],
+    'attack': [],
+    'move': []
+  };
+
   getInitialGameState().then((initialState) => {
 
     // We do this for the Redux chrome extension.
