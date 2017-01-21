@@ -245,7 +245,7 @@ export function interpretGameEvents(data) {
   }
 
   // Process AI behaviors.
-  if (event === 'timestep') {
+  if (event === 'idle') {
     baseData.this = data.target;
     baseData.location = data.target.location;
     resolveActorScripts(event, data.target, baseData);

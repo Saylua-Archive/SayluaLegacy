@@ -164,7 +164,7 @@ export function processAI(tileSet, tileLayer, entitySet, entityLayer, nodeGraph,
       // Is this entity worth actually processing? These operations are expensive, you know.
       if (distanceFromPlayer(matchingEntity.location) < MAXIMUM_ENTITY_PROCESSING_DISTANCE) {
         [newEntityLayer, newTileLayer] = interpretGameEvents({
-          'actionType': 'TRIGGER_EVENT_TIMESTEP',
+          'actionType': 'TRIGGER_EVENT_IDLE',
           'target': matchingEntity,
           'tileSet': tileSet,
           'tileLayer': newTileLayer,
@@ -181,7 +181,7 @@ export function processAI(tileSet, tileLayer, entitySet, entityLayer, nodeGraph,
     // Should we script this tile?
     if (distanceFromPlayer(tile.location) < MAXIMUM_TILE_PROCESSING_DISTANCE) {
       [newEntityLayer, newTileLayer] = interpretGameEvents({
-        'actionType': 'TRIGGER_EVENT_TIMESTEP',
+        'actionType': 'TRIGGER_EVENT_IDLE',
         'target': tile,
         'tileSet': tileSet,
         'tileLayer': newTileLayer,
