@@ -19,14 +19,14 @@ def setup():
     for entry in admin_dict:
         setattr(admin_role, entry, True)
     admin_role.put()
-    print("Admin Role Created")
+    print('Admin Role Created')
 
     # Add the 'user' role
     user_role = Role(id='user')
     user_role.can_post_threads = True
     user_role.can_comment = True
     user_role.put()
-    print("User Role Created")
+    print('User Role Created')
 
     # Add the 'moderator' role
     moderator_role = Role(id='moderator')
@@ -34,26 +34,31 @@ def setup():
     moderator_role.can_move_threads = True
     moderator_role.can_comment = True
     moderator_role.put()
-    print("Moderator Role Created")
+    print('Moderator Role Created')
 
     #Add placeholders if on the dev server
     if is_devserver():
-        print("Adding Placeholder Users")
+        print('Adding Placeholder Users')
+        users = []
         for i in range(4):
             display_name = soulname(7)
             username = display_name
-            #The following hash corresponds to the password "password" so you can use that to test
-            phash = "$2a$01$c1I8kCq3L1YgMDu4Hb.4COFJBWMqnjnZhyBvfaBPOOuVfPimvLAQq"
-            email = username + "@" + username + ".biz"
+            #The following hash corresponds to the password 'password' so you can use that to test
+            phash = '$2a$01$c1I8kCq3L1YgMDu4Hb.4COFJBWMqnjnZhyBvfaBPOOuVfPimvLAQq'
+            email = username + '@' + username + '.biz'
             new_user = User(display_name=display_name, usernames=[username], phash=phash,
                 email=email)
-            new_user.put()
+            users.append(new_user.put().id()) #Add users to database, and their IDs to a list
 
-        print("Adding Placeholder Board Categories")
-        categories = ["Saylua Talk", "Help", "Real Life", "Your Pets"]
+        print('Adding Placeholder Board Categories')
+        categories = ['Saylua Talk', 'Help', 'Real Life', 'Your Pets']
         for category in categories:
             BoardCategory(title=category).put()
 
+        print('Adding Placeholder Boards')
 
 
-    print("Database Setup Complete")
+
+
+
+    print('Database Setup Complete')
