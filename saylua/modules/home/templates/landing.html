@@ -7,8 +7,8 @@
   <meta name="author" content="Saylua">
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/static/css/styles.min.css?v={{ version_id }}">
-  <link rel="stylesheet" href="/static/css/home.min.css?v={{ version_id }}">
+  <link rel="stylesheet" href="{{ include_static('css/styles.min.css') }}">
+  <link rel="stylesheet" href="{{ include_static('css/home.min.css') }}">
 
   <link rel="icon" type="image/png" href="/static/favicon.png" />
 
@@ -25,7 +25,7 @@
   <div class="background"></div>
   <div class="content">
     <img src="/static/img/logo.png" alt="Saylua" title="Saylua" id="logo" />
-    <br /><img src="/static/img/SHC.png" id="pet" />
+    <br /><img src="/static/img/SHC.png" class="landing-pet" />
   </div>
 
 <div class="clearfix"></div>

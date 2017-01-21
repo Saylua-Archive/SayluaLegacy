@@ -5,7 +5,7 @@ from saylua.utils.form import flash_errors
 
 from flask import render_template, redirect, g, url_for, flash, request
 
-from forms.settings import (GeneralSettingsForm, DetailsForm, UsernameForm,
+from ..forms.settings import (GeneralSettingsForm, DetailsForm, UsernameForm,
     EmailForm, PasswordForm)
 
 import datetime

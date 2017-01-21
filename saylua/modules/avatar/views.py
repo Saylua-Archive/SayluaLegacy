@@ -1,4 +1,3 @@
-from saylua import app
 from saylua.wrappers import login_required
 
 from flask import render_template, g, flash, request

@@ -2,7 +2,8 @@
 {% extends "layout.html" %}
 {% set page_title = "Pet's Room" %}
 {% block header_scripts %}
-<script src="/static/js/room.min.js"></script>
+<script src="{{ include_static('js/PetRoom.min.js') }}"></script>
+<link rel="stylesheet" href="{{ include_static('css/pets.min.css') }}">
 {% endblock %}
 {% block body %}
 <h2>Flowering Oranda's Room</h2>

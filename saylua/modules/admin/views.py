@@ -1,8 +1,7 @@
 from saylua.models.role import Role
-from saylua.utils import is_devserver
 from saylua.wrappers import admin_access_required
 
-from flask import render_template, redirect, flash, request, g
+from flask import render_template, redirect, flash, request
 
 
 @admin_access_required
@@ -39,4 +38,3 @@ def admin_panel_roles_edit():
         flash("Roles successfully updated!")
     privs.sort()
     return render_template('admin/roles/edit.html', roles=roles, privs=privs)
-    

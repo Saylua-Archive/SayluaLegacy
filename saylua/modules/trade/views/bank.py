@@ -1,12 +1,11 @@
-from saylua import app
 from saylua.models.user import User
 from saylua.utils import get_from_request
 from saylua.utils.form import flash_errors
 from saylua.wrappers import login_required
 from saylua.modules.messages.models.db import Notification
 
-from flask import render_template, redirect, g, url_for, flash, request
-from forms import BankTransferForm, recipient_check
+from flask import render_template, redirect, g, flash, request
+from ..forms import BankTransferForm, recipient_check
 
 
 @login_required
@@ -41,6 +40,6 @@ def bank_transfer():
                 # Send a notification to the user who received the currency
                 Notification.send(recipient.key, '%s sent you %d SS and %d CC'
                     % (g.user.display_name, ss, cc), '/bank/')
-                return redirect(url_for('bank_transfer'))
+                return redirect('/bank/transfer/')
     flash_errors(form)
     return render_template('bank/transfer.html', form=form)

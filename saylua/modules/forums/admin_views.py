@@ -1,9 +1,9 @@
-from saylua import app
 from saylua.wrappers import admin_access_required
 from flask import render_template, flash, request
 from saylua.utils import urlize
 
 from .models.db import Board, BoardCategory
+
 
 @admin_access_required
 def new_board_category():

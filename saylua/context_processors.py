@@ -2,9 +2,9 @@ from saylua import app
 from saylua.models.user import User
 from saylua.modules.messages.models.db import UserConversation
 from saylua.modules.messages.models.db import Notification
-from saylua.utils import get_static_version_id, include_static
+from saylua.utils import get_static_version_id
 
-from flask import g
+from flask import g, url_for
 
 import datetime
 
@@ -16,6 +16,9 @@ def inject_version_id():
 
 @app.context_processor
 def inject_include_static():
+    def include_static(file_path):
+        return url_for('static', filename=file_path) + '?v=' + str(get_static_version_id())
+
     return dict(include_static=include_static)
 
 

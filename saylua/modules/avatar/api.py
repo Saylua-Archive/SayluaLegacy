@@ -1,4 +1,5 @@
 from saylua import app
+from saylua.wrappers import api_login_required
 from flask import send_file
 
 from PIL import Image
@@ -8,6 +9,7 @@ import imghdr
 import json
 
 
+@api_login_required
 @app.route('/api/ha/wardrobe/')
 def wardrobe():
     image_url_base = os.path.join(app.static_folder, 'img/ha')
@@ -16,6 +18,7 @@ def wardrobe():
     return json.dumps(item_images)
 
 
+@api_login_required
 @app.route('/api/ha/<base>/')
 def image_base(base):
     return image(base, '')

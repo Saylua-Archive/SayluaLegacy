@@ -5,12 +5,16 @@ from saylua.utils import is_devserver
 def home():
     if g.user or is_devserver():
         return redirect('/news/', code=302)
+    return landing()
+
+
+def landing():
     return render_template("landing.html")
 
 
 def news():
-    return render_template("news.html")
+    return render_template("newspaper/news.html")
 
 
 def puzzle():
-    return render_template("puzzle.html")
+    return render_template("newspaper/puzzle.html")
