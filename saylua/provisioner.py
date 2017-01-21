@@ -11,6 +11,16 @@ from saylua.modules.pets.soulnames import soulname
 # from saylua.provisioner import setup
 # setup()
 
+def generate_admin_user():
+    display_name = 'admin'
+    username = 'admin'
+    phash = '$2a$01$c1I8kCq3L1YgMDu4Hb.4COFJBWMqnjnZhyBvfaBPOOuVfPimvLAQq'
+    email = 'admin@saylua.wizards'
+
+    admin_user = User(display_name=display_name, usernames=[username], phash=phash,
+        email=email)
+
+    admin_user.put()
 
 def setup():
     # Create the role 'admin' with all privileges
@@ -36,10 +46,14 @@ def setup():
     moderator_role.put()
     print('Moderator Role Created')
 
-    #Add placeholders if on the dev server
+    # Add placeholders if on the dev server
     if is_devserver():
+        print('Adding Initial Admin User')
+        generate_admin_user()
+
         print('Adding Placeholder Users')
         users = []
+
         for i in range(4):
             display_name = soulname(7)
             username = display_name
@@ -49,6 +63,7 @@ def setup():
             new_user = User(display_name=display_name, usernames=[username], phash=phash,
                 email=email)
             users.append(new_user.put().id()) #Add users to database, and their IDs to a list
+
 
         print('Adding Placeholder Board Categories')
         categories = ['Saylua Talk', 'Help', 'Real Life', 'Your Pets']
