@@ -16,9 +16,10 @@ def generate_admin_user():
     username = 'admin'
     phash = '$2a$01$c1I8kCq3L1YgMDu4Hb.4COFJBWMqnjnZhyBvfaBPOOuVfPimvLAQq'
     email = 'admin@saylua.wizards'
+    role = 'admin'
 
     admin_user = User(display_name=display_name, usernames=[username], phash=phash,
-        email=email)
+        email=email, role_id=role)
 
     admin_user.put()
 
