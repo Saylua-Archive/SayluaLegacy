@@ -1,7 +1,13 @@
 {% from "_macros/pagination.html" import pagination %}
 {% from "_macros/user_link.html" import user_link %}
+
 {% extends "layout.html" %}
 {% set page_title = "Inbox" %}
+
+{% block header_scripts %}
+<link rel="stylesheet" type="text/css" href="{{ include_static('css/messages.min.css') }}">
+{% endblock %}
+
 {% block body %}
 <h2>Your Inbox</h2>
 <h3>
