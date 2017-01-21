@@ -31,4 +31,19 @@
   .landing-pet {
     max-height: 100%;
   }
+
+  .social-icons {
+    width: 100%;
+    color: #fff;
+    font-size: 20px;
+  }
+
+  .social-icons a {
+    color: #fff;
+  }
+
+  .social-icons a:hover {
+    color: #e45f56;
+    text-decoration: none;
+  }
 }
