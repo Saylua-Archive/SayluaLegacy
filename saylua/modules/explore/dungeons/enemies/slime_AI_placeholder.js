@@ -1,10 +1,13 @@
-var player = $entity_nearest_player;
+var player = $player;
 var self = $this;
 
-var playerNearby = (__distance(player.location, self.location) < 6);
+var playerDistance = __distance(player.location, self.location);
+var withinAttackDistance = (playerDistance < 2);
+var playerNearby = (playerDistance < 6);
 
-// Moves towards the player when very close.
-if (playerNearby) {
+
+// Moves towards the player when close.
+if ((playerNearby === true) && (withinAttackDistance === false)) {
   // Increment counter
   self.meta.chaseDistance = self.meta.chaseDistance || 0;
 
@@ -24,16 +27,35 @@ if (playerNearby) {
 
 
     if (newLocation[0] !== undefined) {
+      // We will set the location instantly so that it registers as an obstacle
+      // for other entities when pathing, but then enter a queue to be animated.
+      var oldPosition = { 'x': self.location.x, 'y': self.location.y };
+
       self.location.x = newLocation[0].x;
       self.location.y = newLocation[0].y;
+
+      __debugMove($this.id, oldPosition);
     }
   }
 
   self.meta.chaseDistance = self.meta.chaseDistance + 1;
 
-} else {
+}
+
+// Attack the player when VERY close.
+else if ((playerNearby === true) && (withinAttackDistance === true)) {
+  // Clear the path and counter we use when idly roaming.
+  self.meta.roamProgress = 0;
+  self.meta.roamDistance = 0;
+  self.meta.roamPath = [];
+
+  var damage = __rand(4, 7);
+  __debugAttack($this.id, damage);
+}
+
+// Roam around otherwise.
+else {
   //__log(`${self.id} - Moving randomly.`);
-  // Move randomly otherwise.
   self.meta.chaseDistance = 0;
 
   // Initialize roam path.

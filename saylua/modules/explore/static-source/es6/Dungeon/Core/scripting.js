@@ -15,6 +15,7 @@ const ENABLED_SPECIAL_VARIABLES = [
   '$tileLayer',
   '$entityLayer',
   '$tiles',
+  '$player',
   '$entities',
   '$entity_nearest',
   '$entity_nearest_@type',
@@ -23,7 +24,10 @@ const ENABLED_SPECIAL_VARIABLES = [
   '__isObstacle',
   '__log',
   '__moveTo',
-  '__rand'
+  '__rand',
+  // Temporary
+  '__debugMove',
+  '__debugAttack'
 ];
 
 const WORKERS_ENABLED = (window.Worker !== undefined);
@@ -253,6 +257,10 @@ export function interpretGameEvents(data) {
 function resolveSpecialVariable(id, specialVariable, meta) {
   let splitVar = specialVariable.split('_');
 
+  if (specialVariable === '$player') {
+    return meta.entityLayer[0];
+  }
+
   if (specialVariable === '$entity_nearest') {
     // Search every entity, stopping at any point if an entity other than itself is located in the same tile.
     // There are probably some approximation methods we could use here to speed this up,
@@ -326,6 +334,26 @@ function resolveSpecialVariable(id, specialVariable, meta) {
     }
 
     return nearestEntity;
+  }
+
+  if (specialVariable === '__debugAttack') {
+    window.queuedAttacks = window.queuedAttacks || [];
+
+    let debugAttack = (id, damage) => {
+      window.queuedAttacks.push([id, damage]);
+    };
+
+    return debugAttack;
+  }
+
+  if (specialVariable === '__debugMove') {
+    window.queuedMoves = window.queuedMoves || [];
+
+    let debugMove = (id, oldPosition) => {
+      window.queuedMoves.push([id, oldPosition]);
+    };
+
+    return debugMove;
   }
 
   if (specialVariable === '__distance') {
