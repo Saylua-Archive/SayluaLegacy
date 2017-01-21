@@ -46,6 +46,8 @@ export function getInitialGameState() {
         "showMinimap": false
       };
       result.log = [];
+
+      console.log(result.nodeGraph);
     }
   });
 }

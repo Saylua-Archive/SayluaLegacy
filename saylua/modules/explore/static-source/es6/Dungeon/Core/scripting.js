@@ -349,11 +349,26 @@ function resolveSpecialVariable(id, specialVariable, meta) {
   if (specialVariable === '__debugMove') {
     window.queuedMoves = window.queuedMoves || [];
 
-    let debugMove = (id, oldPosition) => {
-      window.queuedMoves.push([id, oldPosition]);
+    let debugMove = (nodeGraph) => (id, oldPosition, newPosition) => {
+      // Add weight to our old location
+      let oldNode = nodeGraph.grid[oldPosition.x][oldPosition.y];
+
+      if (oldNode.priorWeight !== undefined) {
+        oldNode.weight = oldNode.priorWeight;
+      }
+
+      // Unweight our new location
+      let newNode = nodeGraph.grid[newPosition.x][newPosition.y];
+      newNode.priorWeight = newNode.weight;
+
+      let newWeight = Math.max(0, (newNode.weight - 1));
+      newNode.weight = newWeight;
+
+      // Log move event to a global queue used for animation.
+      window.queuedMoves.push([id, oldPosition, newPosition]);
     };
 
-    return debugMove;
+    return debugMove(meta.nodeGraph);
   }
 
   if (specialVariable === '__distance') {

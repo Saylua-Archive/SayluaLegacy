@@ -34,7 +34,9 @@ if ((playerNearby === true) && (withinAttackDistance === false)) {
       self.location.x = newLocation[0].x;
       self.location.y = newLocation[0].y;
 
-      __debugMove($this.id, oldPosition);
+      // This will weight the old location, and unweight the new location, in addition
+      // to adding it to an animation queue.
+      __debugMove($this.id, oldPosition, self.location);
     }
   }
 
