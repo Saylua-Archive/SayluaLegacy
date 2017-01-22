@@ -2,17 +2,14 @@ from saylua import app
 from saylua.models.user import User
 from saylua.modules.messages.models.db import UserConversation
 from saylua.modules.messages.models.db import Notification
-from saylua.utils import get_static_version_id
+from saylua.utils import make_ndb_key, get_static_version_id
 
 from flask import g, url_for
 
 import datetime
 
 
-@app.context_processor
-def inject_version_id():
-    return dict(version_id=get_static_version_id())
-
+# Injected functions.
 
 @app.context_processor
 def inject_include_static():
@@ -20,6 +17,23 @@ def inject_include_static():
         return url_for('static', filename=file_path) + '?v=' + str(get_static_version_id())
 
     return dict(include_static=include_static)
+
+
+@app.context_processor
+def inject_user_from_key():
+    def user_from_key(key):
+        if type(key) is str:
+            key = make_ndb_key(key)
+        return key.get()
+
+    return dict(user_from_key=user_from_key)
+
+
+# Injected variables.
+
+@app.context_processor
+def inject_version_id():
+    return dict(version_id=get_static_version_id())
 
 
 @app.context_processor
