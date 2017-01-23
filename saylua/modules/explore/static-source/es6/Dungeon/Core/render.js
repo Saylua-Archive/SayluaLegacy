@@ -6,7 +6,7 @@
 import * as Graphics from "./graphics";
 
 import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from "./GameRenderer";
-import { calculateFOV, getBounds } from "./logic";
+import { calculateFOV, getBounds, OBSTRUCTIONS } from "./logic";
 
 
 // This provides the common data layer necessary for other rendering functions to operate.
@@ -65,6 +65,12 @@ export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
       let linearPosition = normal_x + (VIEWPORT_WIDTH * normal_y);
       let sprite = tileSprites[linearPosition];
 
+      // Store this data for later use.
+      sprite.meta.tile = tile.id;
+      sprite.meta.tile_is_obstruction = (OBSTRUCTIONS.indexOf(parentTile.type) !== -1)
+      sprite.meta.grid_x = x;
+      sprite.meta.grid_y = y;
+
       // Now, we change the tile state depending on whether or not we can see it, and whether or not we /have/ seen it.
       if (tileVisible) {
         sprite.alpha = 1;
@@ -74,6 +80,9 @@ export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
           sprite.alpha = 0.5;
           sprite.texture = Graphics.getTexture(parentTile.slug);
         } else {
+          // Reasons
+          sprite.meta.tile = 'fog';
+
           sprite.alpha = 1;
           sprite.texture = Graphics.getTexture('tile_fog');
         }
@@ -186,6 +195,10 @@ export function renderMinimap(baseData, tileSet, tileLayer, minimapSprites) {
 }
 
 export function renderHUD(player, HUDSprites) {
+  renderHealth(player, HUDSprites);
+}
+
+function renderHealth(player, HUDSprites) {
   // Set proper hearts percentage.
   let fill = HUDSprites.playerStatus[0];
 

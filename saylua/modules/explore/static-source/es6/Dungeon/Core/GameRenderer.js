@@ -5,6 +5,7 @@
 // but delegates the actual logic and mutation necessary
 // to do so elsewhere.
 
+import * as MouseInteractions from "./mouse";
 import * as MathUtils from "../Utils/math";
 import * as GameRender from "./render";
 import * as GameInit from "./init";
@@ -60,6 +61,7 @@ export default class GameRenderer {
         "actionButtons": new PIXI.Container(),
         "gameLog": new PIXI.Container(),
         "miniMap": new PIXI.Container(),
+        "mouse": new PIXI.Container(),
         "playerStatus": new PIXI.Container()
       },
       "testing": new PIXI.Container()
@@ -72,6 +74,7 @@ export default class GameRenderer {
     stages.primary.addChild(stages.testing);
 
     // Store HUD children inside of HUD primary container.
+    stages.HUD.primary.addChild(stages.HUD.mouse);
     stages.HUD.primary.addChild(stages.HUD.actionButtons);
     stages.HUD.primary.addChild(stages.HUD.gameLog);
     stages.HUD.primary.addChild(stages.HUD.miniMap);
@@ -111,18 +114,31 @@ export default class GameRenderer {
       "HUD": HUDSprites
     };
 
-    // Final stage setup
+    // Final setup
+    let tileHoverHandler = MouseInteractions.tileHover(sprites.HUD.mouse, this);
+
     sprites.tiles.map((sprite) => {
+      // Additionally, bind mouse hover handler
+      sprite.interactive = true;
+      sprite.buttonMode = true;
+      sprite.on('mouseover', tileHoverHandler);
       stages.tiles.addChild(sprite);
     });
+
     sprites.entities.map((sprite) => {
       stages.entities.addChild(sprite);
     });
+
     sprites.HUD.miniMap.map((sprite) => {
       stages.HUD.miniMap.addChild(sprite);
     });
+
     sprites.HUD.playerStatus.map((sprite) => {
       stages.HUD.playerStatus.addChild(sprite);
+    });
+
+    sprites.HUD.mouse.map((sprite) => {
+      stages.HUD.mouse.addChild(sprite);
     });
 
     this.state = {
@@ -195,7 +211,10 @@ export default class GameRenderer {
     }
 
     // Render our player HUD
-    GameRender.renderHUD(player, this.state.sprites.HUD);
+    GameRender.renderHUD(
+      player,
+      this.state.sprites.HUD
+    );
 
     // Pass state along to the Engine for handling animations.
     this.engine.loop(this.state);

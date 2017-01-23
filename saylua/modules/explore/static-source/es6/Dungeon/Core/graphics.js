@@ -32,6 +32,12 @@ function resolveImage(itemSlug) {
       } else if (parts[1] == "negative") {
         return `/static/img/dungeons/interface/hp_negative.png`;
       }
+    } else if (parts[0] == "tile") {
+      if (itemSlug == "interface_tile_hover_green") {
+        return `/static/img/dungeons/interface/tileselect_green.png`;
+      } else if (itemSlug == "interface_tile_hover_red") {
+        return `/static/img/dungeons/interface/tileselect_red.png`;
+      }
     }
   }
 

@@ -9,14 +9,15 @@ import { OBSTRUCTIONS } from "./logic";
 import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from "./GameRenderer";
 
 
+// Initialize window textures if necessary.
+window.textures = window.textures || {};
+window.textures['null'] = PIXI.Texture.fromImage("/static/img/dungeons/tiles/test/null.png");
+
+
 /******************************** RENDERER INIT ***********************************/
 
 
 export function generateEntitySprites(stageWidth, stageHeight, entityLayer, entitySet) {
-  // Initialize window textures if necessary.
-  window.textures = window.textures || {};
-  window.textures['null'] = PIXI.Texture.fromImage("/static/img/dungeons/tiles/test/null.png");
-
   let spriteLayer = [];
   let spriteHeight = (stageHeight / VIEWPORT_HEIGHT) * 0.8;
   let spriteWidth = (stageWidth / VIEWPORT_WIDTH) * 0.8;
@@ -38,10 +39,6 @@ export function generateEntitySprites(stageWidth, stageHeight, entityLayer, enti
 
 
 export function generateTileSprites(stageWidth, stageHeight) {
-  // Initialize window textures if necessary.
-  window.textures = window.textures || {};
-  window.textures['null'] = PIXI.Texture.fromImage("/static/img/dungeons/tiles/test/null.png");
-
   let spriteLayer = [];
   let nullTexture = window.textures['null'];
 
@@ -58,6 +55,9 @@ export function generateTileSprites(stageWidth, stageHeight) {
       sprite.x = (col * spriteWidth);
       sprite.y = (row * spriteHeight);
 
+      // We will use this later.
+      sprite.meta = {};
+
       spriteLayer.push(sprite);
     }
   }
@@ -68,20 +68,18 @@ export function generateTileSprites(stageWidth, stageHeight) {
 export function generateHUDSprites(data) {
   let playerStatusSprites = generatePlayerStatusSprites();
   let miniMapSprites = generateMinimapSprites(data);
+  let mouseSprites = generateMouseSprites(data);
   let actionButtons = [];
 
   return {
     'actionButtons': actionButtons,
     'miniMap': miniMapSprites,
+    'mouse': mouseSprites,
     'playerStatus': playerStatusSprites
   };
 }
 
 function generateMinimapSprites(data) {
-  // Initialize window textures if necessary.
-  window.textures = window.textures || {};
-  window.textures['null'] = PIXI.Texture.fromImage("/static/img/dungeons/tiles/test/null.png");
-
   let spriteLayer = [];
   let nullTexture = window.textures['null'];
 
@@ -115,6 +113,24 @@ function generateMinimapSprites(data) {
   }
 
   return spriteLayer;
+}
+
+function generateMouseSprites(data) {
+  let greenTexture = Graphics.getTexture("interface_tile_hover_green");
+  let redTexture = Graphics.getTexture("interface_tile_hover_red");
+
+  let spriteHeight = data.renderHeight / VIEWPORT_HEIGHT;
+  let spriteWidth = data.renderWidth / VIEWPORT_WIDTH;
+  let sprite = new PIXI.Sprite(greenTexture);
+
+  sprite.height = spriteHeight;
+  sprite.width = spriteWidth;
+
+  sprite.x = 0;
+  sprite.y = 0;
+  sprite.visible = false;
+
+  return [sprite];
 }
 
 function generatePlayerStatusSprites() {
