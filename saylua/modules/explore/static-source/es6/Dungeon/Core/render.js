@@ -98,6 +98,12 @@ export function renderEntities(baseData, entityLayer, entitySprites) {
     let verticalOffSet = tileHeight * 0.1;
     let horizontalOffset = tileWidth * 0.1;
 
+    // Is the sprite alive?
+    if (entity.meta.dead === true) {
+      sprite.visible = false;
+      return;
+    }
+
     // We've got a winner!
     if (baseData.within_x_bounds(x) && baseData.within_y_bounds(y)) {
       // Set entity visibility, if necessary

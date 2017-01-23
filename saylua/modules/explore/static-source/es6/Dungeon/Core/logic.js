@@ -126,7 +126,9 @@ export function translatePlayerLocation(player, tileLayer, tileSet, entityLayer,
 
   // One last check, is there an entity on this tile? (This should trigger an attack in the future)
   let targetEntity = entityLayer.filter((entity) => (
-    (entity.location.x === g_x) && (entity.location.y === g_y)
+    (entity.location.x === g_x) &&
+    (entity.location.y === g_y) &&
+    (entity.meta.dead !== true)
   ));
 
   if (targetEntity.length > 0) {
@@ -156,7 +158,10 @@ export function processAI(tileSet, tileLayer, entitySet, entityLayer, nodeGraph,
 
     // Does this entity still exist?
     // Entities have to determine whether or not they still exist due to cross-interactions.
-    let matchingEntity = newEntityLayer.filter((_entity) => _entity.id == entity.id);
+    let matchingEntity = newEntityLayer.filter((_entity) => (
+      (_entity.id == entity.id) &&
+      (_entity.meta.dead !== true)
+    ));
 
     if (matchingEntity.length > 0) {
       matchingEntity = matchingEntity[0];

@@ -15,7 +15,7 @@ import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from "./GameRenderer";
 export function generateEntitySprites(stageWidth, stageHeight, entityLayer, entitySet) {
   // Initialize window textures if necessary.
   window.textures = window.textures || {};
-  window.textures['null'] = PIXI.Texture.fromImage("/static/img/tiles/test/null.png");
+  window.textures['null'] = PIXI.Texture.fromImage("/static/img/dungeons/tiles/test/null.png");
 
   let spriteLayer = [];
   let spriteHeight = (stageHeight / VIEWPORT_HEIGHT) * 0.8;
@@ -40,7 +40,7 @@ export function generateEntitySprites(stageWidth, stageHeight, entityLayer, enti
 export function generateTileSprites(stageWidth, stageHeight) {
   // Initialize window textures if necessary.
   window.textures = window.textures || {};
-  window.textures['null'] = PIXI.Texture.fromImage("/static/img/tiles/test/null.png");
+  window.textures['null'] = PIXI.Texture.fromImage("/static/img/dungeons/tiles/test/null.png");
 
   let spriteLayer = [];
   let nullTexture = window.textures['null'];
@@ -80,7 +80,7 @@ export function generateHUDSprites(data) {
 function generateMinimapSprites(data) {
   // Initialize window textures if necessary.
   window.textures = window.textures || {};
-  window.textures['null'] = PIXI.Texture.fromImage("/static/img/tiles/test/null.png");
+  window.textures['null'] = PIXI.Texture.fromImage("/static/img/dungeons/tiles/test/null.png");
 
   let spriteLayer = [];
   let nullTexture = window.textures['null'];

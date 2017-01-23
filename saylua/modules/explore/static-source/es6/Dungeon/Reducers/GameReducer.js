@@ -129,6 +129,7 @@ export const GameReducer = (state, action) => {
       var newGameClock = state.gameClock;
       newGameClock = playerMoved ? newGameClock + 1 : newGameClock;
 
+      /****** begin TEMPORARY CODE, REMOVE ASAP ********/
       // Did we attack something?
       // As a temporary measure, we'll apply the attack manually here.
       if (translation.target !== undefined) {
@@ -139,8 +140,19 @@ export const GameReducer = (state, action) => {
         if (targetEntity.meta.health < 0) {
           // This needs to be replaced with a die() function.
           targetEntity.meta.dead = true;
+
+          // Add weight to our old location
+          // Note dirty, uncloned state change
+          let targetNode = state.nodeGraph.grid[targetEntity.location.x][targetEntity.location.y];
+
+          if (targetNode.priorWeight !== undefined) {
+            targetNode.weight = targetNode.priorWeight;
+          } else {
+            targetNode.weight = 1;
+          }
         }
       }
+      /****** end TEMPORARY CODE, REMOVE ASAP ********/
 
       // All of the below is highly experimental. Questionable syntax.
       var newState = { ...state, 'entityLayer': entities, 'gameClock': newGameClock };

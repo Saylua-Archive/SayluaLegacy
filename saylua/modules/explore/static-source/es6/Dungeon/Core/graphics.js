@@ -28,9 +28,9 @@ function resolveImage(itemSlug) {
   if (type == "interface") {
     if (parts[0] == "hp") {
       if (parts[1] == "positive") {
-        return `/static/img/hp_positive.png`;
+        return `/static/img/dungeons/interface/hp_positive.png`;
       } else if (parts[1] == "negative") {
-        return `/static/img/hp_negative.png`;
+        return `/static/img/dungeons/interface/hp_negative.png`;
       }
     }
   }
@@ -39,20 +39,20 @@ function resolveImage(itemSlug) {
     if (parts[0] == "player") {
       return `/static/img/velbird.png`;
     } else if (parts[0] == "portal") {
-      return `/static/img/tiles/test/portal.png`;
+      return `/static/img/dungeons/tiles/test/portal.png`;
     } else if (parts[0] == "item") {
-      return `/static/img/item/${ parts.slice(-1) }.png`;
+      return `/static/img/dungeons/item/${ parts.slice(-1) }.png`;
     } else if (parts[0] == "enemy") {
-      return `/static/img/enemies/${ parts.slice(-1) }.png`;
+      return `/static/img/dungeons/enemies/${ parts.slice(-1) }.png`;
     }
   }
 
   if (type == "tile") {
     if (parts[0] == "fog") {
-      return `/static/img/tiles/test/null.png`;
+      return `/static/img/dungeons/tiles/test/null.png`;
     }
 
-    return `/static/img/tiles/test/${ parts.join("_") }.png`;
+    return `/static/img/dungeons/tiles/test/${ parts.join("_") }.png`;
   }
 
   throw(`Couldn't resolve '${itemSlug}' to image.`);

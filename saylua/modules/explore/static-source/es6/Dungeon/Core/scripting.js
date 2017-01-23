@@ -229,8 +229,9 @@ export function interpretGameEvents(data) {
       let isNotPlayer = (entity.parent !== '0x1000');
       let isSameLocation = ((entity.location.x == data.actionLocation.x) && (entity.location.y == data.actionLocation.y));
       let hasScripts = (entity.meta.noScripts !== true);
+      let isAlive = (entity.meta.dead !== true);
 
-      return (isNotPlayer && isSameLocation && hasScripts);
+      return (isNotPlayer && isSameLocation && hasScripts && isAlive);
     })
     .map((entity) => {
       baseData.this = entity;
