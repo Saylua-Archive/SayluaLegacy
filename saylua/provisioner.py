@@ -65,12 +65,8 @@ def setup():
                 email=email)
             users.append(new_user.put().id()) #Add users to database, and their IDs to a list
 
-<<<<<<< HEAD
-        print('Adding Placeholder Boards')
-=======
 
-        print('Adding Placeholder Board Categories')
->>>>>>> 8f862647dc4617e6cbbdffbb80c07b0d83b2b9a9
+        print('Adding Placeholder Boards')
         categories = ['Saylua Talk', 'Help', 'Real Life', 'Your Pets']
         category_keys = []
         for category in categories:
@@ -82,7 +78,8 @@ def setup():
                 description = "A board for talking about " + title
                 new_board = Board(title=title, url_title=url_title,
                         category_key=category_key, description=description)
-                new_board.put()
+                board_key = new_board.put()
+
 
 
 
