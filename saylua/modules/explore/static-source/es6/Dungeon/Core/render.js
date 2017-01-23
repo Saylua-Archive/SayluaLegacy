@@ -119,7 +119,7 @@ export function renderEntities(baseData, entityLayer, entitySprites) {
       let entityVisible = (baseData.validTiles[y] === undefined) ? false : ( (baseData.validTiles[y][x] === true) ? true : false );
       let entitySeen = (entity.meta.seen === true);
 
-      if (entityVisible) {
+      if (entityVisible === true) {
         entity.meta.seen = true;
         entity.location.lastSeen = {x, y};
       }
@@ -135,15 +135,19 @@ export function renderEntities(baseData, entityLayer, entitySprites) {
         sprite.visible = true;
       } else {
         if (entitySeen === true) {
-          // Normalize our (x, y) coords
-          let normal_x = entity.location.lastSeen.x - baseData.topLeft.x;
-          let normal_y = entity.location.lastSeen.y - baseData.topLeft.y;
-
           // One last check. Is the last known location currently visible?
           // We don't want to render ghosts if they're looking at exactly where it was.
-          if(baseData.within_x_bounds(normal_x) && baseData.within_y_bounds(normal_y)) {
+          let lastX = entity.location.lastSeen.x;
+          let lastY = entity.location.lastSeen.y;
+          let lastLocationVisible = (baseData.validTiles[lastY] === undefined) ? false : ( (baseData.validTiles[lastY][lastX] === true) ? true : false );
+
+          if (lastLocationVisible === true) {
             sprite.visible = false;
           } else {
+              // Normalize our (x, y) coords
+            let normal_x = entity.location.lastSeen.x - baseData.topLeft.x;
+            let normal_y = entity.location.lastSeen.y - baseData.topLeft.y;
+
             sprite.alpha = 0.4;
             sprite.x = Math.round((normal_x * tileWidth) + horizontalOffset);
             sprite.y = Math.round((normal_y * tileHeight) + verticalOffSet);
