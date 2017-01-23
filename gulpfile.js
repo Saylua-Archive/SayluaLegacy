@@ -102,7 +102,7 @@ gulp.task('build-js', [], function() {
 gulp.task('build-es', ['build-es6']);
 gulp.task('build-es6', [], function() {
   // Look for Main.jsx within <FolderName>, compile to <FolderName>.min.js
-  var pkgGlob = paths.es6 + "/**/Main.jsx";
+  var pkgGlob = paths.es6 + "/**/Main.js*";
   var packages = glob.sync(pkgGlob);
 
   // Compile hashmap from paths
