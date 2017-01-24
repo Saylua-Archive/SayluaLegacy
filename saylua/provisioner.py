@@ -62,7 +62,7 @@ def setup():
             phash = '$2a$01$c1I8kCq3L1YgMDu4Hb.4COFJBWMqnjnZhyBvfaBPOOuVfPimvLAQq'
             email = username + '@' + username + '.biz'
             new_user = User(display_name=display_name, usernames=[username], phash=phash,
-                email=email)
+                email=email, star_shards=15, cloud_coins=50000)
             users.append(new_user.put().id()) #Add users to database, and their IDs to a list
 
 
