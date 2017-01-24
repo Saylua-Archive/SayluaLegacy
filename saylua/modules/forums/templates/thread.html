@@ -39,7 +39,7 @@
 {{ pagination(page_count=page_count) }}
 </div>
 {% for post in posts %}
-{% set creator = post.creator_key|user_from_key_string %}
+{% set creator = user_from_key(post.creator_key) %}
 <table class="forum-post" id="forum-post-{{ loop.index }}">
   <tr>
     <th colspan="2">

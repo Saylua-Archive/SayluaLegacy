@@ -39,7 +39,7 @@ libraries:
 - name: pycrypto
   version: latest
 - name: MySQLdb
-  version: "latest"
+  version: latest
 
 # Files to ignore in production
 skip_files:

@@ -111,11 +111,6 @@ def saylua_conversation_url(conversation):
 
 
 # Query filters. Use these only when necessary.
-@app.template_filter('user_object')
-def saylua_user_object(user_key):
-    return User.get_by_id(user_key.id())
-
-
 @app.template_filter('name_from_key_string')
 def display_name_from_key(user_key):
     u_key = make_ndb_key(user_key)
@@ -124,12 +119,6 @@ def display_name_from_key(user_key):
         return found.display_name
     else:
         return "Unknown User"
-
-
-@app.template_filter('user_from_key_string')
-def user_from_key_string(user_key):
-    u_key = make_ndb_key(user_key)
-    return u_key.get()
 
 
 @app.template_filter('last_post_thread')

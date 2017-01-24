@@ -12,14 +12,16 @@ If you are on Windows, it is heavily suggested you use Vagrant.
 
 3. [Install the AppEngine SDK (Make sure you choose to install the original App Engine SDK for Python)](https://cloud.google.com/appengine/docs/python/download)
 
-4. Clone this repo and move to project directory:
+4. Install [MySQL Server](https://dev.mysql.com/downloads/mysql/)
+
+5. Clone this repo and move to project directory:
 
       ```
       git clone git@bitbucket.org:saylua/saylua.git
       cd saylua
       ```
 
-5. Install PIL dependencies zlib and libjpeg.
+6. Install PIL dependencies zlib and libjpeg.
 
       Ubuntu users can do the following:
 
@@ -30,17 +32,22 @@ If you are on Windows, it is heavily suggested you use Vagrant.
       OS X users need only install libjpeg:
       See: https://dzone.com/articles/installing-libjpeg-os-x
 
-6. Install python dependencies locally.
+7. Install SQLAlchemy dependency MySQLdb.
+
+     `pip install mysqlclient`
+
+8. Install python dependencies locally.
 
       `pip install -r requirements.txt -t lib`
 
 
-7. Install NodeJS dependencies.
+9. Install NodeJS dependencies.
 
       `npm install && npm install -g gulp eslint eslint-plugin-react webpack`
 
+10. Create the file saylua/config/secure.py based on saylua/config/example_secure.py
 
-8. Run this project locally from the command line:
+11. Run this project locally from the command line:
 
       `sh run.sh`
 

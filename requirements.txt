@@ -7,10 +7,12 @@
 #
 # bcrypt dependency deferred in favor of manually adding a version that works.
 Flask==0.10
-py2casefold
 python-dateutil
 Flask-WTF
 git+https://github.com/brmullikin/flask-markdown
+mdx_linkify
+flask_sqlalchemy
+
+# Local dependencies (Stuff we don't need in prod).
 pillow
 flake8
-mdx_linkify
