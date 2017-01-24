@@ -7,6 +7,8 @@
   TABLE OF CONTENTS:
     -- #0.1a Temporary Experimental Changes (You are here)
     -- #0.2a Main Layout
+    -- #0.3a Debug Layout
+    -- #0.3b Debug Styles
 
 *****************************************************************/
 
@@ -90,4 +92,70 @@ canvas {
 
   width: 80%;
   max-width: 1140px;
+}
+
+/*****************************************************************
+  -- #0.3a Debug Layout
+  ===============================================================
+  Debug section layout.
+*****************************************************************/
+
+.theme-main .container .debug-container {
+  background: #3c3c3c;
+  padding: 0px;
+  margin: 25px auto;
+
+  width: 80%;
+  max-width: 1140px;
+}
+
+.dungeon-debug-tools {
+  display: flex;
+  width: 100%;
+
+  .debug-menu {
+    width: 8%;
+  }
+
+  .debug-section {
+    width: 92%;
+  }
+}
+
+/*****************************************************************
+  -- #0.3b Debug Styles
+  ===============================================================
+  Debug section styles.
+*****************************************************************/
+
+.dungeon-debug-tools {
+  .debug-menu ul {
+    padding: 0px;
+
+    height: 100%;
+    width: 100%;
+  }
+
+  .debug-menu ul li {
+    color: #63ca58;
+    background: #222;
+
+    list-style-type: none;
+
+    font-family: "Open Sans";
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-align: center;
+    text-transform: uppercase;
+
+    padding: 8px 15px;
+
+    min-height: 75px;
+    width: 100%;
+  }
+
+  .debug-section {
+    padding: 25px;
+  }
 }
