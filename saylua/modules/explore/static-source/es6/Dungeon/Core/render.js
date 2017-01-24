@@ -67,7 +67,7 @@ export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
 
       // Store this data for later use.
       sprite.meta.tile = tile.id;
-      sprite.meta.tile_is_obstruction = (OBSTRUCTIONS.indexOf(parentTile.type) !== -1)
+      sprite.meta.tile_is_obstruction = (OBSTRUCTIONS.indexOf(parentTile.type) !== -1);
       sprite.meta.grid_x = x;
       sprite.meta.grid_y = y;
 

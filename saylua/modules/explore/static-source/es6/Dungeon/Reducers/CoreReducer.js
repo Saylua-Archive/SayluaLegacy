@@ -1,5 +1,5 @@
 /* eslint { no-redeclare: 0 } */
-// GameReducer -> Required by Components/DungeonClient.
+// CoreReducer -> Required by Components/DungeonClient.
 // --------------------------------------
 // Produces outputs from various inputs.
 // Holds the actual data that makes up Dungeons.
@@ -11,6 +11,8 @@ import astar from "astar";
 import * as Scripting from "../Core/scripting";
 import * as GameLogic from "../Core/logic";
 import * as GameInit from "../Core/init";
+
+import { DebugReducer } from "./DebugReducer";
 
 
 export function getInitialGameState() {
@@ -48,11 +50,10 @@ export function getInitialGameState() {
       result.gameClock = 0;
       result.UI = {
         "canMove": true,
-        "showMinimap": false
+        "showMinimap": false,
+        "waitingOnDungeonRequest": false
       };
       result.log = [];
-
-
     }
   });
 }
@@ -92,7 +93,11 @@ export const logState = store => next => action => {
   return result;
 };
 
-export const GameReducer = (state, action) => {
+export const CoreReducer = (state, action) => {
+  if (action.type.startsWith("DEBUG")) {
+    return DebugReducer(state, action);
+  }
+
   switch (action.type) {
     case 'PROCESS_AI':
 
@@ -158,10 +163,10 @@ export const GameReducer = (state, action) => {
       var newState = { ...state, 'entityLayer': entities, 'gameClock': newGameClock };
 
       // Make sure we trigger any entity / tile we collide with
-      newState = GameReducer(newState, { 'type': 'TRIGGER_EVENT_ENTER', 'location': player.location });
+      newState = CoreReducer(newState, { 'type': 'TRIGGER_EVENT_ENTER', 'location': player.location });
 
       // Step the game forward one time unit
-      newState = GameReducer(newState, { 'type': 'PROCESS_AI' });
+      newState = CoreReducer(newState, { 'type': 'PROCESS_AI' });
       return newState;
 
     case 'LOG_EVENTS':
@@ -196,6 +201,13 @@ export const GameReducer = (state, action) => {
       var newUIState = { ...state.UI, canMove };
 
       return { ...state, 'UI': newUIState };
+
+    case 'SET_GAME_STATE':
+      if (action.state !== undefined) {
+        return action.state;
+      } else {
+        throw("Invalid gameState.");
+      }
 
     default:
       return state;

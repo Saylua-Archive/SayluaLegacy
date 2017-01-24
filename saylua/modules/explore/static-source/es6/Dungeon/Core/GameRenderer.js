@@ -19,6 +19,9 @@ export const VISION_RADIUS = 8;
 
 export default class GameRenderer {
   constructor(renderWidth, renderHeight, store) {
+    // Store store
+    this.store = store;
+
     // Initialize the gameState from our store.
     this.gameState = store.getState();
 
@@ -152,6 +155,21 @@ export default class GameRenderer {
   }
 
 
+  cleanup() {
+    this.state.stages.entities.removeChildren();
+    this.state.sprites.entities = GameInit.generateEntitySprites(
+      this.state.dimensions[0],
+      this.state.dimensions[1],
+      this.gameState.entityLayer,
+      this.gameState.entitySet
+    );
+
+    this.state.sprites.entities.map((sprite) => {
+      this.state.stages.entities.addChild(sprite);
+    });
+  }
+
+
   getRenderer() {
     return this.renderer.view;
   }
@@ -172,6 +190,20 @@ export default class GameRenderer {
 
 
   loop() {
+    // Check to see if we must cleanup prior to rendering a new dungeon.
+    if (this.gameState.UI.waitingOnDungeonRequest === true) {
+      if (window.nextGameState !== undefined) {
+        this.store.dispatch({
+          'type': "SET_GAME_STATE",
+          'state': window.nextGameState
+        });
+
+        window.nextGameState = undefined;
+
+        this.cleanup();
+      }
+    }
+
     let player = this.gameState.entityLayer[0];
 
     if (this.state.gameStateChanged === true) {

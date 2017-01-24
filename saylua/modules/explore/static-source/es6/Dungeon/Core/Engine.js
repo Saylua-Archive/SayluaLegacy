@@ -6,6 +6,9 @@
 // Would be called AnimationEngine if animation
 // was the only thing it did.
 
+// This entire class will be rewritten with the advent of animations.
+// Very temporary code.
+
 export default class Engine {
   constructor(store) {
     // Store store
@@ -17,7 +20,7 @@ export default class Engine {
     // Store store store store.
     // This will be triggered any time the store state changes.
     this.unsubscribe = this.store.subscribe(() => {
-      this.gameState = this.store.getState();
+      this.gameState = store.getState();
 
       if (this.gameState.UI.canMove === true) {
         // Prevent the player from moving if animations must be processed.
@@ -35,13 +38,28 @@ export default class Engine {
   }
 
   loop(data) {
-    if (this.gameState.UI.canMove === false) {
+    // Are we currently generating a new dungeon?
+    if (this.gameState.UI.waitingOnDungeonRequest === true) {
+      if (this.gameState.UI.canMove === true) {
+        this.store.dispatch({
+          'type': "TOGGLE_MOVEMENT"
+        });
+      }
+    }
+
+    // Are we in the middle of animation?
+    else if (this.gameState.UI.canMove === false) {
+
+      // Are our animations complete?
       if ((window.queue.move.length === 0) && (window.queue.attack.length === 0) && (this.state.animating === false)) {
         // Enable movement where there are no queued animations.
         this.store.dispatch({
           'type': "TOGGLE_MOVEMENT"
         });
-      } else if (this.state.animating === false) {
+      }
+
+      // We should be animating if we're not moving.
+      else if (this.state.animating === false) {
         this.state.animating = true;
         // Animation code would normally go here.
         // We're going to resolve attacks and movement instantly for now.

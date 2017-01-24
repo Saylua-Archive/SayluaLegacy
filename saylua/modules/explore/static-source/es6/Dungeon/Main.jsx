@@ -1,7 +1,8 @@
 import Inferno from "inferno";
 import { createStore, applyMiddleware, compose } from 'redux';
 
-import { getInitialGameState, logState, GameReducer } from "./Reducers/GameReducer";
+import { getInitialGameState, logState, CoreReducer } from "./Reducers/CoreReducer";
+import { addAdditionalDebugParameters } from "./Reducers/DebugReducer";
 import DungeonClient from "./Components/DungeonClient";
 import DebugTools from "./Components/DebugTools";
 
@@ -14,11 +15,14 @@ export default function Main() {
     'move': []
   };
 
+  window.nextGameState = undefined;
+
   getInitialGameState().then((initialState) => {
+    initialState = addAdditionalDebugParameters(initialState);
 
     // We do this for the Redux chrome extension.
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-    let store = createStore(GameReducer, initialState, composeEnhancers(
+    let store = createStore(CoreReducer, initialState, composeEnhancers(
       applyMiddleware(logState)
     ));
 
