@@ -1,3 +1,7 @@
+// canvas
+// --------------------------------------
+// Delete this file if it still has only one function in a few months.
+
 export function calculateSize () {
   let ratio = 16 / 9;
   let width, height, baseWidth;

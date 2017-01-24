@@ -1,3 +1,8 @@
+// fov -> Required by Core/graphics
+// --------------------------------------
+// Exists solely to abstract the long and exhaustive
+// code that makes up the FOV calculation.
+
 /** Compute the field of view from (ox, oy) out to radius r. */
 export function calculateFOV(ox, oy, r, visit, blocked) {
   visit(ox, oy); // origin always visited.

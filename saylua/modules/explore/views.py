@@ -9,9 +9,6 @@ import json
 
 @login_required
 def home():
-    flash("Are we the kings?")
-    flash("Are we the queens?")
-    flash("We aren't the kings or the queens!", "error")
     return render_template("map.html")
 
 
@@ -26,9 +23,9 @@ def generate_dungeon():
     dungeon = Dungeon.Dungeon()
 
     return json.dumps({
-      "dungeonInfo": dungeon.get_info(),
-      "tileSet": dungeon.tile_set,
-      "entitySet": dungeon.entity_set,
-      "tileLayer": dungeon.grid.render(),
-      "entityLayer": dungeon.entities.render()
+        "dungeonInfo": dungeon.get_info(),
+        "tileSet": dungeon.tile_set,
+        "entitySet": dungeon.entity_set,
+        "tileLayer": dungeon.grid.render(),
+        "entityLayer": dungeon.entities.render()
     })

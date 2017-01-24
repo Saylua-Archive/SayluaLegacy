@@ -1,15 +1,31 @@
 import Inferno from "inferno";
-import InfernoDOM from "inferno-dom";
-import { createStore } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 
-import { getInitialGameState, GameReducer } from "./Reducers/GameReducer";
+import { getInitialGameState, logState, CoreReducer } from "./Reducers/CoreReducer";
+import { addAdditionalDebugParameters } from "./Reducers/DebugReducer";
 import DungeonClient from "./Components/DungeonClient";
 import DebugTools from "./Components/DebugTools";
 
 
 export default function Main() {
+  // We're bad people, so let's establish some globals that we'll need.
+  window.queue = {
+    'log': [],
+    'attack': [],
+    'move': []
+  };
+
+  // Consider replacing with a window.specialEventQueue that is cleared on every DungeonClient.loop() ?
+  window.nextGameState = undefined;
+
   getInitialGameState().then((initialState) => {
-    let store = createStore(GameReducer, initialState);
+    initialState = addAdditionalDebugParameters(initialState);
+
+    // We do this for the Redux chrome extension.
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+    let store = createStore(CoreReducer, initialState, composeEnhancers(
+      applyMiddleware(logState)
+    ));
 
     Inferno.render(
       <DungeonClient store={ store } />,
