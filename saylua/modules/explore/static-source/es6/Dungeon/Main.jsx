@@ -15,6 +15,7 @@ export default function Main() {
     'move': []
   };
 
+  // Consider replacing with a window.specialEventQueue that is cleared on every DungeonClient.loop() ?
   window.nextGameState = undefined;
 
   getInitialGameState().then((initialState) => {

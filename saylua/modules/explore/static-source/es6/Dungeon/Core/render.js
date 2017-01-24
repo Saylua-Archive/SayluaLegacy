@@ -191,6 +191,7 @@ export function renderMinimap(baseData, tileSet, tileLayer, minimapSprites) {
       if (tileSeen) {
         sprite.alpha = 0.5 * baseVisibility;
         sprite.texture = Graphics.getTexture(parentTile.slug);
+        sprite.visible = true;
       } else {
         sprite.visible = false;
       }

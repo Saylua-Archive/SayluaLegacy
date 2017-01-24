@@ -24,12 +24,18 @@ export default class DebugTools extends Component {
     });
   }
 
+  debugRevealMap() {
+    this.store.dispatch({
+      'type': 'DEBUG_REVEAL_MAP'
+    });
+  }
+
   render() {
     return (
       <div className="dungeon-debug-tools">
         <p>IT'S DEBUGGING TIME, BABY</p> <br />
         <button onClick={ this.debugRegenerateDungeon.bind(this) }>Regenerate Dungeon</button>
-        <button onClick={ this.props.reveal }>Reveal Dungeon</button>
+        <button onClick={ this.debugRevealMap.bind(this) }>Reveal Dungeon</button>
       </div>
     );
   }
