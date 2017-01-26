@@ -1,3 +1,3 @@
 window.addEventListener("load", function () {
-  Tabs.bind('#pet-room-actions');
+  Tabs.bind("#pet-room-actions");
 });
