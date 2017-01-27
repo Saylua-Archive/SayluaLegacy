@@ -1,33 +1,24 @@
-$black: #222;
-$notQuiteBlack: #565656;
-$white: #fff;
-$gray: #999;
+$black: hsl(0, 0%, 13%);
+$notQuiteBlack: hsl(0, 0%, 34%);
+$white: hsl(0, 0%, 100%);
+$gray: hsl(0, 0%, 60%);
 
-$mainBgColor: #e3eae9;
+$mainBgColor: hsl(171, 14%, 90%);
 
-$neutralColor: #e0f2f1;
-$neutralDarkColor: #93ccc6;
+$neutralColor: hsl(177, 41%, 91%);
+$neutralDarkColor: hsl(174, 36%, 69%);
 
-$mainSoftColor: #d0f3ee;
-$mainColor: #13c3a8;
-$mainDarkColor: #0dab95;
-$mainDarkerColor: #0a9381;
+$mainSoftColor: hsl(171, 59%, 88%);
+$mainColor: hsl(171, 82%, 42%);
+$mainDarkColor: hsl(172, 86%, 36%);
+$mainDarkerColor: hsl(172, 87%, 31%);
 
-$accentSoftColor: #f4cfcc;
-$accentColor: #e45f56;
+$accentSoftColor: hsl(4, 65%, 88%);
+$accentColor: hsl(4, 72%, 62%);
 
-$highlightSoftColor: #fff4d4;
-$highlightColor: #f5e6ba;
-$highlightDarkColor: #decc97;
+$highlightSoftColor: hsl(45, 100%, 92%);
+$highlightColor: hsl(45, 75%, 85%);
+$highlightDarkColor: hsl(45, 52%, 73%);
 
-$errorColor: #f03;
-$errorLightColor: #fcc;
-
-
-// Admin colors
-$adminSoftColor: #cad0d1;
-$adminColor: #383a3a;
-$adminDarkColor: #222;
-$adminDarkerColor: #000;
-
-$adminNeutralColor: #ddd;
+$errorColor: hsl(348, 100%, 50%);
+$errorLightColor: hsl(0, 100%, 90%);
