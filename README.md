@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/LikeMyBread/Saylua.svg?branch=master)](https://travis-ci.org/LikeMyBread/Saylua)
 ## Saylua
 
 ## Run Locally
