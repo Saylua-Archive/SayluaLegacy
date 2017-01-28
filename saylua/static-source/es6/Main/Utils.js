@@ -1,18 +1,18 @@
 // http://jaketrent.com/post/addremove-classes-raw-javascript/
-function hasClass(el, className) {
+export function hasClass(el, className) {
   if (el.classList)
     return el.classList.contains(className)
   else
     return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'))
 }
 
-function addClass(el, className) {
+export function addClass(el, className) {
   if (el.classList)
     el.classList.add(className)
   else if (!hasClass(el, className)) el.className += " " + className
 }
 
-function removeClass(el, className) {
+export function removeClass(el, className) {
   if (el.classList)
     el.classList.remove(className)
   else if (hasClass(el, className)) {
@@ -21,25 +21,25 @@ function removeClass(el, className) {
   }
 }
 
-function swapClass(el, classA, classB) {
+export function swapClass(el, classA, classB) {
   removeClass(el, classA);
   addClass(el, classB);
 }
 
 // http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript
-function capitalizeFirst(string) {
+export function capitalizeFirst(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 // http://stackoverflow.com/questions/8830839/javascript-dom-remove-element
-function removeElement(el) {
+export function removeElement(el) {
   if (el) {
     el.parentNode.removeChild(el);
   }
 }
 
 // http://stackoverflow.com/questions/5767325/how-to-remove-a-particular-element-from-an-array-in-javascript
-function arrayRemove(arr, item) {
+export function arrayRemove(arr, item) {
     for(var i = arr.length; i--;) {
         if(arr[i] === item) {
             arr.splice(i, 1);

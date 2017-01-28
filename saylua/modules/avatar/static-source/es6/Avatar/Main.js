@@ -1,4 +1,4 @@
-import 'whatwg-fetch'
+import 'whatwg-fetch';
 
 window.addEventListener('load', function () {
 	var haImage = document.getElementById('preview-ha');

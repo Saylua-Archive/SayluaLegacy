@@ -1,4 +1,5 @@
-// Depends on utils.js
+import {hasClass, removeClass, addClass} from './Utils';
+
 var _Tabs = (function Tabs() {
   return function TabsConstructor() {
     this.bind = function(selector) {
@@ -36,4 +37,4 @@ var _Tabs = (function Tabs() {
   }
 }());
 
-var Tabs = new _Tabs();
+export var Tabs = new _Tabs();

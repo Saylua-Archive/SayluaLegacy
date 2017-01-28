@@ -1,3 +1,9 @@
+import {hasClass, removeClass, addClass, swapClass} from './Utils';
+import CheckAll from './CheckAll';
+import FormValidation from './FormValidation';
+import Tabs from './Tabs';
+import './Notifications';
+
 window.addEventListener('load', function () {
   window.addEventListener('scroll', fixNavbar);
 

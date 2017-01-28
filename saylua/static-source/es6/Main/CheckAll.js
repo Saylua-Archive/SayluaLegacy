@@ -1,4 +1,3 @@
-// Depends on utils.js
 var _CheckAll = (function CheckAll() {
   return function CheckAllConstructor() {
     this.bind = function(selector) {

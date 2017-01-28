@@ -1,4 +1,5 @@
-// Depends on utils.js
+import {capitalizeFirst, removeClass, addClass} from './Utils';
+
 var _FormValidation = (function FormValidation() {
   var validatorList = {
     'required': {
@@ -126,4 +127,4 @@ var _FormValidation = (function FormValidation() {
   }
 }());
 
-var FormValidation = new _FormValidation();
+export var FormValidation = new _FormValidation();
