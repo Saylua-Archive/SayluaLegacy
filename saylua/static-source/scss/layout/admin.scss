@@ -1,0 +1,15 @@
+@import '../assets/variables';
+@import '../assets/variables-admin';
+
+.theme-admin {
+  @import 'layout';
+
+  #banner {
+    filter: grayscale(50%);
+    -ms-filter: grayscale(50%);
+    -webkit-filter: grayscale(0.5);
+    -webkit-filter: grayscale(50%);
+    -moz-filter: grayscale(50%);
+    -o-filter: grayscale(50%);
+  }
+}
