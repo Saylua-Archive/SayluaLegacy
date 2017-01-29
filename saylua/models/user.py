@@ -10,10 +10,12 @@ class _User(db.Model):
     display_name = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(120), unique=True)
     phash = db.Column(db.String(200))
+    role = db.Column(db.String(100))
 
-    def __init__(self, display_name, email):
+    def __init__(self, display_name, email, role="user"):
         self.display_name = display_name
         self.email = email
+        self.role = role
 
     def __repr__(self):
         return '<User %r>' % self.display_name
