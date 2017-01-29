@@ -1,3 +1,5 @@
+import Tabs from 'Plugins/Tabs';
+
 window.addEventListener("load", function () {
-  Tabs.bind("#pet-room-actions");
+  let tabs = new Tabs("#pet-room-actions");
 });

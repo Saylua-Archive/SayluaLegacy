@@ -1,16 +1,20 @@
-import {hasClass, removeClass, addClass} from './Utils';
+import {hasClass, removeClass, addClass} from 'Utils';
 
-var _Tabs = (function Tabs() {
-  return function TabsConstructor() {
-    this.bind = function(selector) {
-      var tabContainers = document.querySelectorAll(selector);
-      for (var i = 0; i < tabContainers.length; i++) {
-        processTabs(tabContainers[i]);
-      }
-    };
-  };
+export default class Tabs {
+  constructor(selector) {
+    if (selector) {
+      this.bind(selector);
+    }
+  }
 
-  function processTabs(container) {
+  bind(selector) {
+    var tabContainers = document.querySelectorAll(selector);
+    for (var i = 0; i < tabContainers.length; i++) {
+      this.processTabs(tabContainers[i]);
+    }
+  }
+
+  processTabs(container) {
     var tabs = container.getElementsByClassName('tab');
     for (var i = 0; i < tabs.length; i++) {
       if (!hasClass(tabs[i], 'selected')) {
@@ -35,6 +39,4 @@ var _Tabs = (function Tabs() {
       });
     }
   }
-}());
-
-export var Tabs = new _Tabs();
+}

@@ -1,8 +1,8 @@
-import {hasClass, removeClass, addClass, swapClass} from './Utils';
-import CheckAll from './CheckAll';
-import FormValidation from './FormValidation';
-import Tabs from './Tabs';
+import {hasClass, removeClass, addClass, swapClass} from 'Utils';
+import CheckAll from 'Plugins/CheckAll';
+import FormValidation from 'Plugins/FormValidation/Main';
 import './Notifications';
+
 
 window.addEventListener('load', function () {
   window.addEventListener('scroll', fixNavbar);
@@ -13,13 +13,16 @@ window.addEventListener('load', function () {
 
   initializeDropMenus(document.getElementById('navigation-text-links'));
 
-  // Form Validation
-  FormValidation.bind('.validated-form');
-  CheckAll.bind('.check-all');
+  // Bind dom behavior libraries to specific classes. Perhaps one day this
+  // could be replace with webcomponents.
+  let formValidation = new FormValidation('.validated-form');
+  let checkAll = new CheckAll('.check-all');
 
   bindTabTyping('.tabs-allowed');
 });
 
+// Allow tabs to be allowed in text fields. This is useful for allowing users
+// to edit code such as CSS.
 function bindTabTyping(selector) {
   var inputs = document.querySelectorAll(selector);
   for (var i = 0; i < inputs.length; i++) {
