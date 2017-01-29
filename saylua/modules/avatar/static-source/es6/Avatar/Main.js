@@ -1,4 +1,5 @@
-import 'whatwg-fetch'
+import {arrayRemove} from 'Utils';
+import 'whatwg-fetch';
 
 window.addEventListener('load', function () {
 	var haImage = document.getElementById('preview-ha');
@@ -25,15 +26,15 @@ window.addEventListener('load', function () {
     }
   });
 
-    function wear() {
-    	var item = this.getAttribute('data-item');
-    	var alreadyWearing = arrayRemove(wearing, item);
-    	if (!alreadyWearing) {
-    		wearing.push(item);
-    	}
+  function wear() {
+  	var item = this.getAttribute('data-item');
+  	var alreadyWearing = arrayRemove(wearing, item);
+  	if (!alreadyWearing) {
+  		wearing.push(item);
+  	}
 
-			var img_url = haEndpoint + wearing.join(',');
-    	haImage.src = img_url;
-			document.getElementById('ha-image-url').value = img_url;
-    }
+		var img_url = haEndpoint + wearing.join(',');
+  	haImage.src = img_url;
+		document.getElementById('ha-image-url').value = img_url;
+  }
 });

@@ -16,7 +16,6 @@ var webpack = require('webpack-stream');
 var webpackConfig = require('./webpack.config.js');
 
 var paths = {
-  js: 'saylua/**/static-source/js',
   es6: 'saylua/**/static-source/es6',
   sass: 'saylua/**/static-source/scss'
 };
@@ -67,41 +66,9 @@ gulp.task('build-sass', function () {
   });
 });
 
-gulp.task('build-js', [], function() {
-  // Minify and copy all JavaScript (except vendor scripts)
-  // with sourcemaps all the way down
-  var pkgGlob = paths.js + "/*/";
-  var folders = glob.sync(pkgGlob);
-
-  folders.forEach(function(folder) {
-    var pkgName = folder.split("/").splice(-2)[0];
-    var pkg = gulp.src(folder + '**/*.js', { base: process.cwd() });
-
-    // Filter deprecated / hidden packages
-    if (pkgName.startsWith("_")) {
-      return;
-    }
-
-    // Find our module path
-    var modulePath = folder.split('/static-source/')[0]
-
-    // Generate output path
-    var pkgPath = path.join(modulePath, dests.scripts);
-
-    if (process.env.NODE_ENV === "dev") {
-      pkg.pipe(concat(pkgName + '.min.js'))
-        .pipe(gulp.dest(pkgPath));
-    } else {
-      pkg.pipe(uglify()).on('error', gutil.log)
-        .pipe(concat(pkgName + '.min.js'))
-        .pipe(gulp.dest(pkgPath));
-    }
-  });
-});
-
 gulp.task('build-es', ['build-es6']);
 gulp.task('build-es6', [], function() {
-  // Look for Main.jsx within <FolderName>, compile to <FolderName>.min.js
+  // Look for Main.js(x) within <FolderName>, compile to <FolderName>.min.js
   var pkgGlob = paths.es6 + "/**/Main.js*";
   var packages = glob.sync(pkgGlob);
 
@@ -163,7 +130,7 @@ gulp.task('build-es6', [], function() {
 });
 
 // Build everything. Check under every stone. Leave no survivors.
-gulp.task('build', ['build-js', 'build-es6', 'build-sass']);
+gulp.task('build', ['build-es6', 'build-sass']);
 
 // Rerun the task when a file changes
 gulp.task('watch', function() {
@@ -175,11 +142,6 @@ gulp.task('watch', function() {
 
     process.stdout.write("\033[33m[Watching]\033[0m " + event + ": " + vinyl.path + "\n");
   };
-
-  watch([paths.js + "/**/*"], { 'usePolling': true }, function(vinyl) {
-    reportChange(vinyl);
-    gulp.start('build-js');
-  });
 
   watch([paths.es6 + "/**/*"], { 'usePolling': true }, function(vinyl) {
     reportChange(vinyl);
