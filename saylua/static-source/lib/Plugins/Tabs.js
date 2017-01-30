@@ -1,15 +1,20 @@
-// Depends on utils.js
-var _Tabs = (function Tabs() {
-  return function TabsConstructor() {
-    this.bind = function(selector) {
-      var tabContainers = document.querySelectorAll(selector);
-      for (var i = 0; i < tabContainers.length; i++) {
-        processTabs(tabContainers[i]);
-      }
-    };
-  };
+import {hasClass, removeClass, addClass} from 'Utils';
 
-  function processTabs(container) {
+export default class Tabs {
+  constructor(selector) {
+    if (selector) {
+      this.bind(selector);
+    }
+  }
+
+  bind(selector) {
+    var tabContainers = document.querySelectorAll(selector);
+    for (var i = 0; i < tabContainers.length; i++) {
+      this.processTabs(tabContainers[i]);
+    }
+  }
+
+  processTabs(container) {
     var tabs = container.getElementsByClassName('tab');
     for (var i = 0; i < tabs.length; i++) {
       if (!hasClass(tabs[i], 'selected')) {
@@ -34,6 +39,4 @@ var _Tabs = (function Tabs() {
       });
     }
   }
-}());
-
-var Tabs = new _Tabs();
+}

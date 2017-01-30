@@ -12,6 +12,6 @@ module.exports = {
   },
   "resolve": {
     "extensions": ["", ".js", ".min.js", ".jsx"],
-    "modulesDirectories": ["./saylua/static/js/lib", "./node_modules"],
+    "modulesDirectories": ["./saylua/static-source/lib", "./node_modules"],
   }
 };
