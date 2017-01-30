@@ -1,5 +1,4 @@
-@import 'assets/variables';
-@import 'assets/transitions';
+@import '../assets/transitions';
 
 html {
   font-size: 62.5%;
@@ -37,11 +36,35 @@ ul li {
   margin: 0;
 }
 
-h1 {
-  font-size: 2rem;
-  display: block;
+h2 {
+  color: $mainDarkColor;
+  background: $mainSoftColor;
+
+  font-size: 2.2rem;
+  line-height: 150%;
+  text-align: center;
+
   margin: 0;
-  padding: 0.5em 0;
+  margin-bottom: 0.5em;
+  padding: 0.25em 0px;
+
+  width: 100%;
+}
+
+h3, h4, th.section-header {
+  font-size: 2rem;
+  font-weight: normal;
+  line-height: 120%;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 4px;
+  text-align: left;
+  border-bottom: 1px $neutralDarkColor solid;
+  background: none;
+}
+
+h4 {
+  font-size: 1em;
 }
 
 p, pre {
