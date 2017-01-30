@@ -3,8 +3,16 @@
 
 $navHeight: 40px;
 
-.navbar {
+// This is used to prevent the navbar from leaving an empty space in the layout
+// when it's positioning changes.
+.navbar-container {
   float: left;
+  width: 100%;
+  height: $navHeight;
+}
+
+.navbar {
+  position: relative;
   width: 100%;
   z-index: 8000;
   height: $navHeight;
