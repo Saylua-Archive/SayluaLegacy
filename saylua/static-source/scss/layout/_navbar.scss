@@ -1,0 +1,186 @@
+@import '../assets/transitions';
+
+
+$navHeight: 40px;
+
+// This is used to prevent the navbar from leaving an empty space in the layout
+// when it's positioning changes.
+.navbar-container {
+  float: left;
+  width: 100%;
+  height: $navHeight;
+}
+
+.navbar {
+  position: relative;
+  width: 100%;
+  z-index: 8000;
+  height: $navHeight;
+  text-align: center;
+  background: $mainColor;
+
+  a.block-link, a.block-link:visited {
+    @include slow-color-trans;
+    font-size: 18px;
+    line-height: $navHeight;
+    display: inline-block;
+    height: $navHeight;
+    margin: 0 -2px;
+    padding: 0 10px;
+    color: $white;
+  }
+
+  a.block-link:hover {
+    text-decoration: none;
+    background: $mainDarkColor;
+  }
+
+  a.block-link.active {
+    background: $mainDarkerColor;
+  }
+
+  .alert-number {
+    font-size: 10px;
+    line-height: 17px;
+    position: absolute;
+    display: block;
+    box-sizing: border-box;
+    min-width: 16px;
+    height: 16px;
+    margin-top: -38px;
+    margin-left: -10px;
+    padding: 0 3px;
+    text-align: center;
+    color: $white;
+    border-radius: 5px;
+    background: $accentColor;
+  }
+
+  .search {
+    display: inline-block;
+    height: $navHeight;
+    padding: 0 7px;
+
+    input {
+      @include slow-color-trans;
+      font-size: 14px;
+      float: left;
+      width: 200px;
+      height: 19px;
+      margin: 0;
+      margin-top: -1px;
+      padding: 3px 25px 3px 5px;
+      color: $mainDarkColor;
+      border: 0;
+      background: $mainSoftColor;
+    }
+
+    input:focus {
+      color: $black;
+      outline: none;
+      background: $white;
+      box-shadow: -1px 1px 8px #eceb72, 1px -1px 8px #fff;
+    }
+
+    button {
+      font-size: 14px;
+      line-height: 100%;
+      position: relative;
+      width: 25px;
+      height: 25px;
+      margin-left: -26px;
+      padding: 5px;
+      cursor: pointer;
+      color: $mainDarkColor;
+      border: 0;
+      border-radius: 0;
+      background: none;
+    }
+  }
+}
+
+.navbar.navbar-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.nav-link {
+  display: inline-block;
+  position: relative;
+}
+
+#navigation-right {
+  display: inline-block;
+}
+
+#dropdown-right.dropdown-menu {
+  margin-left: -100px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  display: none;
+  margin-left: -50px;
+  width: 220px;
+  min-height: 50px;
+  margin-top: -0.25em;
+  padding-bottom: 0.5em;
+  border: 1px solid $neutralColor;
+  background: $white;
+  -webkit-box-shadow: 3px 8px 32px -13px $black;
+  -moz-box-shadow: 3px 8px 32px -13px $black;
+  box-shadow: 3px 8px 32px -13px $black;
+  z-index: 999;
+
+  ul {
+    font-size: 0.8em;
+    padding: 0;
+  }
+
+  a, a:visited {
+    @include fast-color-trans;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px;
+    text-align: left;
+  }
+
+  ul a {
+    padding: 0.25em 2px;
+    padding-left: 32px;
+    color: $gray;
+  }
+
+  a.highlight {
+    color: $accentColor;
+  }
+
+  a:hover {
+    text-decoration: none;
+    background: $neutralColor;
+  }
+
+  .dropdown-separator {
+    display: block;
+    box-sizing: border-box;
+    width: 210px;
+    margin: 0.25em 4px 0.5em;
+    border-bottom: 1px solid $neutralColor;
+  }
+
+  h3 {
+    @extend .dropdown-separator;
+    font-size: 1em;
+    line-height: 130%;
+  }
+}
+
+.dropdown-menu.shown, .shown {
+  display: block;
+}
+
+.dropdown-menu.hidden, .hidden {
+  display: none;
+}

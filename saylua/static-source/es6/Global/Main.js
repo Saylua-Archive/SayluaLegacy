@@ -41,18 +41,11 @@ function bindTabTyping(selector) {
 // Make navigation bar stay at the top
 function fixNavbar(e) {
   var top = document.getElementById("banner").offsetHeight;
-  var sidebars = document.getElementById("sidebar-container");
   if (document.body.scrollTop > top ||
     document.documentElement.scrollTop > top) {
-    addClass(document.getElementById("navbar"), "fixed");
-    if (sidebars) {
-      addClass(sidebars, "fixed");
-    }
+    addClass(document.getElementById("navbar"), "navbar-fixed");
   } else {
-    removeClass(document.getElementById("navbar"), "fixed");
-    if (sidebars) {
-      removeClass(sidebars, "fixed");
-    }
+    removeClass(document.getElementById("navbar"), "navbar-fixed");
   }
 }
 

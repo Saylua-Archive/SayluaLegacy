@@ -1,10 +1,10 @@
-@import '../assets/variables';
-@import '../assets/variables-admin';
+@import 'assets/variables';
+@import 'assets/variables-admin';
 
 .theme-admin {
-  @import 'layout';
+  @import 'main';
 
-  #banner {
+  .banner {
     filter: grayscale(50%);
     -ms-filter: grayscale(50%);
     -webkit-filter: grayscale(0.5);

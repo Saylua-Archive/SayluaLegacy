@@ -27,186 +27,45 @@
   <![endif]-->
 </head>
 
-<body class="{% if is_admin %}theme-admin{% else %}theme-main{% endif %}">
-<div class="overlay"></div>
-<div id="banner" class="container">
-  <a href="/" id="logo">
+<body{% if is_admin %} class="theme-admin"{% endif %}>
+<div id="banner" class="banner">
+  <a href="/" class="logo">
     <img src="/static/img/logo.png" alt="Saylua" title="Saylua" />
   </a>
 </div>
-<div class="container" id="nav-container">
-  <div id="navbar">
-    <div class="content-width">
-      <a href="/" class="block-link" title="Home">
-        <i class="fa fa-home" aria-hidden="true"></i>
-      </a>
-      <a href="/den/" class="block-link" title="Pets">
-        <i class="fa fa-paw" aria-hidden="true"></i>
-      </a>
-      <a href="/inventory/" class="block-link" title="Inventory">
-        <i class="fa fa-suitcase" aria-hidden="true"></i>
-      </a>
-      <div class="nav-link" id="navigation-text-links">
-        <div class="nav-link">
-          <a href="/games/" class="block-link" data-section="site-menu">Site</a>
-          <div class="left-menu dropdown-menu menu" id="site-menu">
-            <h3>General Saylua Stuff</h3>
-            <a href="/"><img src="/static/img/icons/house.png"> Home</a>
-            <a href="/inventory/"><img src="/static/img/icons/box.png"> My Inventory</a>
-            <a href="/den/"><img src="/static/img/icons/joystick.png"> My Pet Den</a>
-            <a href="/user_shop/"><img src="/static/img/icons/tag_blue.png"> My Shop</a>
-          </div>
-        </div>
-        <div class="nav-link">
-          <a href="/games/" class="block-link" data-section="play-menu">Play</a>
-          <div class="left-menu dropdown-menu menu" id="play-menu">
-            <h3>Games and Fun</h3>
-            <a href="/explore/"><img src="/static/img/icons/compass.png"> Explore</a>
-            <a href="/town/"><img src="/static/img/icons/group.png"> Town Square</a>
-            <a href="/arcade/"><img src="/static/img/icons/joystick.png"> The Arcade</a>
-            <a href="/crafting/"><img src="/static/img/icons/hammer.png"> Crafting</a>
-          </div>
-        </div>
-        <div class="nav-link">
-          <a href="/shops/" class="block-link" data-section="trade-menu">Trade</a>
-          <div class="left-menu dropdown-menu menu" id="trade-menu">
-            <h3>Buy and Sell</h3>
-            <a href="/shops/"><img src="/static/img/icons/tag_blue.png"> NPC Shops</a>
-            <a href="/shops/"><img src="/static/img/icons/find.png"> Shop Search</a>
-            <a href="/bank/"><img src="/static/img/icons/coins.png"> Bank of Saylua</a>
-            <span class="dropdown-separator"></span>
-            <a href="/starshards/"><img src="/static/img/icons/star_1.png"> Purchase Star Shards</a>
-          </div>
-        </div>
-        <div class="nav-link">
-          <a href="/forums/" class="block-link" data-section="community-menu">Community</a>
-          <div class="left-menu dropdown-menu menu" id="community-menu">
-            <h3>Interact with Others</h3>
-            <a href="/forums/"><img src="/static/img/icons/comment.png"> Forums</a>
-            <span class="dropdown-separator"></span>
-            <a href="/adopt/"><img src="/static/img/icons/heart.png"> Adoption Center</a>
-            <a href="/reserve/"><img src="/static/img/icons/shield.png"> Pet Reserve</a>
-          </div>
-        </div>
-        <div class="nav-link">
-          <a href="/help/" class="block-link" data-section="archives-menu">Archives</a>
-          <div class="left-menu dropdown-menu menu" id="archives-menu">
-            <h3>Learn About Saylua</h3>
-            <a href="/pets/"><img src="/static/img/icons/clipboard_text.png"> Species Guide</a>
-            <a href="/items/"><img src="/static/img/icons/drawer.png"> Item Database</a>
-            <span class="dropdown-separator"></span>
-            <a href="/shelf/"><img src="/static/img/icons/book_open.png"> My Bookshelf</a>
-            <a href="/museum/"><img src="/static/img/icons/palette.png"> The Museum</a>
-          </div>
-        </div>
-      </div>
-
-      <form class="search" action="/search/">
-        <input type="text" placeholder="Search Saylua" name="q">
-        <button><i class="fa fa-search" aria-hidden="true"></i></button>
-      </form>
-      {% if g.logged_in %}
-        <div id="navigation-right">
-          <a href="{{ g.user|user_url }}" class="block-link" data-section="user-menu">
-            <i class="fa fa-user" aria-hidden="true"></i>
-          </a>
-          <a href="/notifications/" class="block-link" data-section="notifications-menu">
-            <i class="fa fa-bell" aria-hidden="true"></i>
-            {% if notifications_count > 99 %}
-              <span class="alert-number">99+</span>
-            {% elif notifications_count > 0 %}
-              <span class="alert-number">{{notifications_count}}</span>
-            {% endif %}
-          </a>
-          <a href="/messages/" class="block-link" data-section="messages-menu">
-            <i class="fa fa-envelope" aria-hidden="true"></i>
-            {% if messages_count > 99 %}
-              <span class="alert-number">99+</span>
-            {% elif messages_count > 0 %}
-              <span class="alert-number">{{messages_count}}</span>
-            {% endif %}
-          </a>
-          <div id="dropdown-right" class="dropdown-menu">
-            <div id="user-menu" class="menu">
-              <h3>Logged in as {{g.user.display_name}}</h3>
-              <a href="{{ g.user|user_url }}"><img src="/static/img/icons/user.png"> My Profile</a>
-              <a href="/settings/"><img src="/static/img/icons/cog.png"> Account Settings</a>
-              <span class="dropdown-separator"></span>
-              <a href="/achievements/{{g.user.display_name}}/"><img src="/static/img/icons/award_star_gold.png"> My Achievements</a>
-              <a href="/friends/"><img src="/static/img/icons/group.png"> Friends List</a>
-              <span class="dropdown-separator"></span>
-              <a href="/logout/"><img src="/static/img/icons/lock_unlock.png"> Logout</a>
-            </div>
-            <div id="notifications-menu" class="menu">
-              <h3>Latest Notifications</h3>
-              <ul>
-                {% for notification in notifications %}
-                  <a href="/notification/{{notification.key.urlsafe()}}/"{% if not notification.is_read %} class="highlight"{% endif %}>
-                    <li>{{ notification.text }}{% if notification.count > 1 %} ({{ notification.count }}){% endif %}</li>
-                  </a>
-                {% else %}
-                  <a href="/notifications/">
-                    <li>You have no notifications. </li>
-                  </a>
-                {% endfor %}
-              </ul>
-              <span class="dropdown-separator"></span>
-              <a href="/notifications/"><img src="/static/img/icons/star_1.png"> View All Notifications</a>
-            </div>
-            <div id="messages-menu" class="menu">
-              <h3>Latest Messages</h3>
-              <ul>
-                {% for message in messages %}
-                  <a href="{{message|conversation_url}}"{% if not message.is_read %} class="highlight"{% endif %}>
-                    <li>{{ message.title }}</li>
-                  </a>
-                {% else %}
-                  <a href="/messages/">
-                    <li>You have no messages. </li>
-                  </a>
-                {% endfor %}
-              </ul>
-              <span class="dropdown-separator"></span>
-              <a href="/messages/"><img src="/static/img/icons/email.png"> View All Messages</a>
-            </div>
-          </div>
-        </div>
-      {% else %}
-        <a href="/login/" class="block-link">
-          <i class="fa fa-user" aria-hidden="true"></i>
-        </a>
-      {% endif %}
-    </div>
+<div id="navbar-container" class="navbar-container">
+  <div id="navbar" class="navbar">
+    {% include "navbar.html" %}
   </div>
 </div>
 {% block container %}
-  <div class="container">
-    <div class="content">
-      <div class="notifications-container">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              {% if category == 'error' %}
-                <div class="notification error">Error: {{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
-              {% else %}
-                <div class="notification">{{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-      </div>
-      {% if not fullscreen %}
-        {% include "sidebars.html" %}
-      {% endif %}
-      <div class="page-area">
-        {% block body %}{% endblock %}
-      </div>
+<div class="container">
+  <div class="content">
+    <div class="notifications-container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            {% if category == 'error' %}
+              <div class="notification error">Error: {{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
+            {% else %}
+              <div class="notification">{{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
+    {% if not fullscreen %}
+      {% include "sidebars.html" %}
+    {% endif %}
+    <div class="page-area">
+      {% block body %}{% endblock %}
     </div>
   </div>
+</div>
 {% endblock %}
 
-<div class="container footer">
-  <div class="content-width">
+<div class="footer">
+  <div class="content-container">
     <p>
       <a href="/online/">{{users_online_count|pluralize('User')}} Online</a> &bull;
       <a href="#">Back to Top</a> &bull;
