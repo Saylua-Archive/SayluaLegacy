@@ -115,9 +115,7 @@ class User(ndb.Model):
 
         # Throw exceptions if the currency amount is invalid
         cls.except_if_currency_invalid(user)
-
         user.put()
-
         return [user.cloud_coins, user.star_shards]
 
     @classmethod
