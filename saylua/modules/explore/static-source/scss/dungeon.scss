@@ -25,20 +25,20 @@ html {
   box-sizing: inherit;
 }
 
-.theme-main #banner {
+.theme-main .banner {
   background-position-y: 56%;
 }
 
-.theme-main #navbar {
+.theme-main .navbar {
   background: rgb(60, 46, 24);
 
-  &.fixed {
+  &.navbar-fixed {
     box-shadow: 0px 2px 6px 0px rgba(255, 61, 3, 0.45)
   }
 }
 
-.theme-main #navbar .search input {
-  height: 25px;
+.theme-main .navbar .search input {
+  height: 2.5rem;
 }
 
 

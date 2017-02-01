@@ -4,23 +4,18 @@
 @import 'notifications';
 
 
-%content-width {
+.inner-container {
   box-sizing: border-box;
   width: 95%;
   min-width: 400px;
   max-width: 1700px;
+  margin: auto;
 }
 
 %container {
   float: left;
   width: 100%;
   min-width: 400px;
-}
-
-.content-container {
-  @extend %content-width;
-  height: 100%;
-  margin: auto;
 }
 
 .banner {
@@ -51,7 +46,7 @@
 }
 
 .content {
-  @extend %content-width;
+  @extend .inner-container;
   overflow-y: hidden;
   min-height: 400px;
   min-height: 100%;
@@ -68,10 +63,10 @@
 }
 
 .breadcrumb {
-  font-size: 14px;
+  font-size: 1.4rem;
   display: block;
   width: 100%;
-  padding: 5px 10px;
+  padding: .5rem 1rem;
 }
 
 #side-login-form th.section-header {
@@ -87,8 +82,8 @@
 }
 
 .footer {
-  @extend %container;
-  font-size: 14px;
+  @extend .inner-container;
+  font-size: 1.4rem;
   text-align: center;
 
   .social-icons {
