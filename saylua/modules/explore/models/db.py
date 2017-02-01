@@ -1,24 +1,37 @@
-from google.appengine.ext import ndb
+from saylua import db
 
-# Consider using PickleProperty with compress=True in the future.
-# As even the largest concievable tilemap would take up at most ~1.5MB,
-# it would take ~700 users (1GB of data) before the issue of diskspace
-# might be worth addressing.
+class DungeonScript(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128))
+    content = db.Column(db.Text())
+    # minified_content = db.Column(db.Text())
+    owner_id = db.Column(db.Integer, db.ForeignKey('Owner.id'))
+
+class DungeonEntity(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128))
+    description = db.Column(db.Text())
+    type = db.Column(db.String(128))
+
+    events = db.relationship(
+        'DungeonScript',
+        backref='Owner',
+        lazy='joined',
+        innerjoin=True
+    )
+
+    meta = db.Column(db.JSON())
+
+#class DungeonTrait(db.Model):
+#    id = db.Column(db.Integer, primary_key=True)
+#    name = db.Column(db.String(128))
+#    description = db.Column(db.Text())
+#    events = db.relationship(
+#        'DungeonScript',
+#        backref='Owner',
+#        lazy='joined',
+#        innerjoin=True
+#    )
 #
-# This is assuming a tile size 10 times larger than they currently are,
-# with no cycling. (Dungeons should be depopulated based on inactivity)
-
-
-class Dungeon(ndb.Model):
-    user_key = ndb.KeyProperty()
-    name = ndb.StringProperty()
-    last_accessed = ndb.DateTimeProperty(auto_now_add=True)
-    tile_layer = ndb.BlobProperty()
-    entity_layer = ndb.BlobProperty()
-
-    # Usefulness of this method is questionable.
-    @classmethod
-    def create(cls, user_key, name, tile_layer, entity_layer):
-        dungeon = cls(user_key=user_key, name=name, tile_layer=tile_layer,
-                      entity_layer=entity_layer)
-        return dungeon.put()
+#    meta = db.Column(db.JSON())
+#    entity_id = db.Column(db.Integer, db.ForeignKey('DungeonEntity.id'))

@@ -1,0 +1,6 @@
+{
+    "id":          "entity_default_chest",
+    "description": "Look, a train! ...Ha! Chest kidding.",
+    "type":        "chest",
+    "meta":        { "locked": false }
+}
