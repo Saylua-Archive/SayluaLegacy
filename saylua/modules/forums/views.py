@@ -32,7 +32,7 @@ def forums_board(board_id):
             body = request.form.get('body')
             creator_key = g.user.key.urlsafe()
             board_id = board.key.id()
-            url_title = post_new_thread(title, body, creator_key, board_id)
+            url_title = post_new_thread(title, body, creator_key, board_id, board)
             return redirect("/forums/board/" + url_title + "/")
         page_number = request.args.get('page')
         if page_number is None:
@@ -48,7 +48,9 @@ def forums_board(board_id):
         page_count = int(math.ceil(total_threads / float(THREADS_PER_PAGE)))
     return render_template("board.html", board=board, threads=threads, page_count=page_count)
 
-def post_new_thread(title, body, creator_key, board_id):
+def post_new_thread(title, body, creator_key, board_id, board=None):
+    if board is None:
+        board = Board.query(Board.url_title == board_id).fetch()[0]
     new_thread = ForumThread(title=title, creator_key=creator_key, board_id=board_id)
     thread_key = new_thread.put()
     thread_id = thread_key.id()
