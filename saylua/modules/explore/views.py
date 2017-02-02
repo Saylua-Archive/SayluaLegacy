@@ -1,5 +1,6 @@
 from saylua.wrappers import login_required
 from .dungeons import Dungeon
+from .models.db import DungeonEntity
 
 from flask import render_template, flash
 from random import randint

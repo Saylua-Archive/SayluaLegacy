@@ -11,8 +11,12 @@ class InvalidSchemaJSON(Exception):
     pass
 
 
-#class InvalidTraitName(Exception):
-#   pass
+class InvalidTraitName(Exception):
+    pass
+
+
+class InvalidSchemaType(Exception):
+    pass
 
 
 def read_schema(schema_location):
@@ -49,39 +53,77 @@ def interpret_schema(namespaced_files):
     """Resolves dynamic variables denoted with '$' into their respective
     values if a matching entry is found within the namespace.
 
-    Currently limited to script related keys located within 'events'.
+    Most functionality disabled due to the addition of SQLALchemy.
+    Remains for posterity and possible future use.
     """
 
-    for file in namespaced_files:
-        if file.get('namespace') in ['entities', 'scripts', 'tiles', 'traits']:
-            content = json.reads(file.get('content'))
+    for i, file in enumerate(namespaced_files):
+        if file.get('namespace') in ['entities', 'tiles', 'traits']:
+            try:
+                content = json.loads(file.get('content'))
+            except json.decoder.JSONDecodeError as e:
+                raise InvalidSchemaJSON(str(e))
 
-            if content.get('events'):
-                # Keep track of which keys we should remove
-                prune_keys = []
+#            # Determine if we need to replace dynamic variables
+#            if content.get('events'):
+#                # Keep track of which keys we should remove
+#                prune_keys = []
+#
+#                for event in content.get('events'):
+#                    if event.startswith('$'):
+#                        # We must search for a matching script.
+#                        target_name = content['events'][event]
+#                        stripped_event = event[1:]
+#                        results = list(filter(
+#                            lambda x: (x.name == target_name and x.namespace == 'scripts'),
+#                            namespaced_files
+#                        ))
+#
+#                        if len(results) == 1:
+#                            result = results[0]
+#                            content['events'][stripped_event] = result.get('content')
+#
+#                            prune_keys.append(event)
+#
+#                        else:
+#                            raise InvalidScriptName(
+#                                'Returned {} results when searching for script \'{}\'.'.format(
+#                                    len(results),
+#                                    target_name
+#                                )
+#                            )
+#
+#                # Remove interpreted keys
+#                for key in prune_keys:
+#                    file['events'].pop(key)
 
-                for event in content.get('events'):
-                    if event.startswith('$'):
-                        # We must search for a matching script.
-                        target_name = namespaced_files['events'][event]
-                        stripped_event = event[1:]
-                        results = list(filter(lambda x: x.name == target_name, namespaced_files))
+            # Replace old raw string with JSON-ified content
+            namespaced_files[i]['content'] = content
 
-                        if len(results) == 1:
-                            result = results[0]
-                            content['events'][stripped_event] = result.get('content')
-
-                            prune_keys.append(event)
-
-                # Remove interpreted keys
-                for key in prune_keys:
-                    file['events'].pop(key)
+         else:
+            # We will make an exception for scripts, but anything else should raise an error.
+            if file.get('namespace') != 'scripts':
+                raise InvalidSchemaType
 
     return namespaced_files
 
 
 def generate_models_from_schema(schema):
-    pass
+    """Returns models from a specific set of dungeon model types.
+    """
+
+    ## Reasons
+    try:
+        from saylua.models.explore.models.db import DungeonScript, DungeonEntity, DungeonTrait
+    except ImportError:
+        try:
+            from ..models.db import DungeonScript, DungeonEntity, DungeonTrait
+
+    models = []
+
+    for scheme in schema:
+        if scheme.namespace == "entities":
+            pass
 
 def provision_dungeon_schema():
     cwd = __file__

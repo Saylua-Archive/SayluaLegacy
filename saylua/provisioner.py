@@ -1,3 +1,4 @@
+from saylua import db
 from saylua.models.role import Role
 from saylua.utils import is_devserver
 from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, ForumPost
@@ -50,7 +51,9 @@ def setup():
 
     # Turn dungeon schemas into models
     for model in provision_dungeon_schema():
-        model.put()
+        db.session.add(model)
+
+    db.session.commit()
 
     # Add placeholders if on the dev server
     if is_devserver():
