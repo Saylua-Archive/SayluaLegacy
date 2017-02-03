@@ -1,10 +1,17 @@
-<div id="sidebar-container">
-  <div class="sidebar left" id="left-bar">
+<div id="sidebar-container" class="sidebar-container">
+  <div id="left-sidebar" class="sidebar sidebar-left" >
     {% if g.logged_in %}
-    <div class="sidebar-section" id="ha-panel">
-      <a href="/avatar/"><img src="{{g.user.ha_url}}"></a>
+    <div id="avatar-section" class="sidebar-section">
+      <div id="pet-avatar-view" class="pet-avatar-view">
+        <a href="/avatar/" id="avatar-view" class="avatar-view">
+          <img src="{{g.user.ha_url}}" id="avatar-image" />
+        </a>
+        <a href="/pet/shc/" id="active-pet-view" class="active-pet-view">
+          <img src="/static/img/SHC.png" id="active-pet-image" class="left">
+        </a>
+      </div>
     </div>
-    <div class="sidebar-section">
+    <div id="user-info-section" class="sidebar-section">
       <p>You are <a href="{{g.user|user_url}}">{{g.user.display_name}}</a></p>
       <p>
         <img src="/static/img/icons/weather_clouds.png">
@@ -16,8 +23,9 @@
       </p>
     </div>
     {% else %}
-    <div id="side-login-error"></div>
-    <form class="validated-form" action="/login/" method="post" id="side-login-form" data-error-id="side-login-error">
+    <div id="sidebar-login-error"></div>
+    <form id="sidebar-login-form" class="validated-form" action="/login/"
+      method="post" data-error-id="sidebar-login-error">
       <table class="form-table center">
         <tr>
           <th class="section-header">
@@ -51,15 +59,10 @@
     </form>
     {% endif %}
   </div>
-  <div class="sidebar right" id="right-bar">
-    <div class="sidebar-section">
+  <div id="right-sidebar" class="sidebar sidebar-right">
+    <div id="pet-section" class="sidebar-section">
       <i class="fa fa-clock-o" aria-hidden="true"></i> <span id="site-time">{{saylua_time|show_time}}</span>
-      <a href="/pet/shc/"><img src="/static/img/SHC.png" class="left"></a>
-    </div>
-    <div class="sidebar-section">
-      <a href="/pet/shc/"><img src="/static/img/SHC.png" style="width: 50%;" class="left"></a>
-      <a href="/pet/shc/"><img src="/static/img/SHC.png" style="width: 50%;" class="left"></a>
-      <p>Flowering Oranda is hungry! <a href="/room/shc/">Feed them?</a> </p>
+
     </div>
   </div>
 </div>

@@ -39,36 +39,35 @@
   </div>
 </div>
 {% block container %}
-<div class="main">
-  <div class="content">
-    <div class="notifications-container">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          {% for category, message in messages %}
-            {% if category == 'error' %}
-              <div class="notification error">Error: {{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
-            {% else %}
-              <div class="notification">{{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
-    </div>
-    {% if not fullscreen %}
-      {% include "sidebars.html" %}
-    {% endif %}
-    <div class="page-area">
-      {% block body %}{% endblock %}
-    </div>
+<div id="main-body" class="main-body">
+  <div id="notifications-container" class="notifications-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          {% if category == 'error' %}
+            <div class="notification error">Error: {{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
+          {% else %}
+            <div class="notification">{{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+  {% if not fullscreen %}
+    {% include "sidebars.html" %}
+  {% endif %}
+  <div id="main-body-content" class="main-body-content">
+    {% block body %}{% endblock %}
   </div>
 </div>
 {% endblock %}
 
-<div class="footer">
+<div id="footer" class="footer">
   <p>
     <a href="/online/">{{users_online_count|pluralize('User')}} Online</a> &bull;
     <a href="#">Back to Top</a> &bull;
     <a href="#">About</a> &bull;
+    <a href="#">Credits</a> &bull;
     <a href="#">Terms of Service</a> &bull;
     <a href="#">Contact Us</a> &bull;
     <a href="#">Staff</a> &bull;
