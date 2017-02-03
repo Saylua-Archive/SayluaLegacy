@@ -14,7 +14,7 @@ from saylua.modules.pets.soulnames import soulname
 def generate_admin_user():
     display_name = "admin"
     username = "admin"
-    phash = "$2a$01$c1I8kCq3L1YgMDu4Hb.4COFJBWMqnjnZhyBvfaBPOOuVfPimvLAQq"
+    phash = User.hash_password("password") #Yes, the default password is password
     email = "admin@saylua.wizards"
     role = "admin"
 
