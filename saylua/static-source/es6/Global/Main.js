@@ -8,10 +8,10 @@ window.addEventListener('load', function () {
   window.addEventListener('scroll', fixNavbar);
 
   // Get all of the right navbar links and bind click events to them
-  initializeDropMenus(document.getElementById('navigation-right'),
-    document.getElementById('dropdown-right'));
+  initializeDropMenus(document.getElementById('navigation-user-links'),
+    document.getElementById('dropdown-user-links'));
 
-  initializeDropMenus(document.getElementById('navigation-text-links'));
+  initializeDropMenus(document.getElementById('navigation-main-links'));
 
   // Bind dom behavior libraries to specific classes. Perhaps one day this
   // could be replace with webcomponents.
@@ -53,7 +53,7 @@ function initializeDropMenus(navigation, parentMenu) {
   if (!navigation) return;
 
   var menu = parentMenu;
-  var links = navigation.getElementsByClassName('block-link');
+  var links = navigation.getElementsByClassName('navbar-link');
   var sections = navigation.getElementsByClassName('menu');
 
   // For through right navigation links and attach listeners to them

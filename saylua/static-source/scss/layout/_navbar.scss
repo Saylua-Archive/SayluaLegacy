@@ -19,7 +19,7 @@ $navHeight: 4rem;
   text-align: center;
   background: $mainColor;
 
-  a.block-link, a.block-link:visited {
+  a.navbar-link, a.navbar-link:visited {
     @include slow-color-trans;
     font-size: 1.8rem;
     line-height: $navHeight;
@@ -30,12 +30,12 @@ $navHeight: 4rem;
     color: $white;
   }
 
-  a.block-link:hover {
+  a.navbar-link:hover {
     text-decoration: none;
     background: $mainDarkColor;
   }
 
-  a.block-link.active {
+  a.navbar-link.active {
     background: $mainDarkerColor;
   }
 
@@ -65,7 +65,7 @@ $navHeight: 4rem;
       @include slow-color-trans;
       font-size: 1.4rem;
       float: left;
-      width: 20rem;
+      width: 200px;
       height: 1.9rem;
       margin: 0;
       margin-top: -.1rem;
@@ -105,17 +105,17 @@ $navHeight: 4rem;
   left: 0;
 }
 
-.nav-link {
+.navbar-block {
   display: inline-block;
   position: relative;
 }
 
-#navigation-right {
+.navigation-user-links {
   display: inline-block;
-}
 
-#dropdown-right.dropdown-menu {
-  margin-left: -100px;
+  &.dropdown-menu {
+    margin-left: -100px;
+  }
 }
 
 .dropdown-menu {
@@ -185,6 +185,7 @@ $navHeight: 4rem;
   display: none;
 }
 
+// Prevent the navbar from being sticky on mobile because that's annoying. 
 @media (max-width: 1024px) {
   .navbar.navbar-fixed {
     position: relative;
