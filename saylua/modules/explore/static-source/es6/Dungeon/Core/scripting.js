@@ -191,7 +191,7 @@ export function interpretGameEvents(data) {
   /*
     Example Usage:
     {
-      'actionType': 'TRIGGER_EVENT_ENTER',
+      'actionType': 'onEnter',
       'actionLocation', { 'x': 0, 'y': 0}
       'tileSet': <object:tileSet>,
       'tileLayer': <array:tileLayer>,
@@ -201,7 +201,7 @@ export function interpretGameEvents(data) {
   */
 
   // What are we trying to find matching events for, here?
-  let event = data.actionType.replace("TRIGGER_EVENT_", "").toLowerCase();
+  let event = data.actionType;
 
   // Assume we have been provided a copy, for performance reasons.
   let newTileLayer = data.tileLayer;
@@ -220,7 +220,7 @@ export function interpretGameEvents(data) {
   };
 
   // Trigger events.enter on specified location.
-  if (event === 'enter') {
+  if (event === 'onEnter') {
     baseData.location = data.actionLocation;
 
     // Entities first
@@ -246,7 +246,7 @@ export function interpretGameEvents(data) {
   }
 
   // Process AI behaviors.
-  if (event === 'idle') {
+  if (event === 'onIdle') {
     baseData.this = data.target;
     baseData.location = data.target.location;
     resolveActorScripts(event, data.target, baseData);
