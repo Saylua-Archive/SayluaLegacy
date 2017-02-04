@@ -42,14 +42,16 @@ function resolveImage(itemSlug) {
   }
 
   if (type == "entity") {
-    if (parts[0] == "player") {
-      return `/static/img/velbird.png`;
-    } else if (parts[0] == "portal") {
-      return `/static/img/dungeons/tiles/test/portal.png`;
-    } else if (parts[0] == "item") {
-      return `/static/img/dungeons/item/${ parts.slice(-1) }.png`;
-    } else if (parts[0] == "enemy") {
-      return `/static/img/dungeons/enemies/${ parts.slice(-1) }.png`;
+    if (parts[0] == "default") {
+      if (parts[1] == "player") {
+        return `/static/img/velbird.png`;
+      } else if (parts[1] == "portal") {
+        return `/static/img/dungeons/tiles/test/portal.png`;
+      } else if (parts[1] == "item") {
+        return `/static/img/dungeons/item/${ parts.slice(-1) }.png`;
+      } else if (parts[1] == "enemy") {
+        return `/static/img/dungeons/enemies/${ parts.slice(-1) }.png`;
+      }
     }
   }
 

@@ -1,4 +1,5 @@
 from saylua import db
+from collections import OrderedDict
 
 # Fool! Avert your gaze! If you should meet them eye to eye... you will be lost forever!
 # Abandon hope all ye' who enter here
@@ -38,11 +39,59 @@ r_trait_to_wrapper = db.Table('r_trait_to_wrapper',
 
 
 class SerializerBase:
-    def to_json(self):
-        pass
+    """Provide JSON (dict) serialization to our Tile and Entity objects for ease of use.
+    """
+
+    def to_dict(self):
+        # Define base dict, set defaults
+        base_dict = OrderedDict()
+
+        # Fill in base data
+        base_dict['id'] = self.name
+        base_dict['name'] = self.display_name
+        base_dict['description'] = self.description
+        base_dict['type'] = self.type
+        base_dict['events'] = {}
+        base_dict['meta'] = self.meta if self.meta else {}
+        base_dict['traits'] = []
+
+        # Normalize event items into dict values
+        for event in self.events:
+            # TODO: In the future, check if the is_devserver() flag is set
+            # and serve a minified version instead.
+            name = event.event_name
+            content = event.event_script[0].content
+
+            base_dict['events'][name] = content
+
+        # Inherit events / dict items from traits
+        for trait in self.traits:
+            base_dict.traits.append(trait.display_name)
+
+            # Trait events override local event values.
+            for event in trait.events:
+                name = event.event_name
+                content = event.event_script[0].content
+
+                base_dict['events'][name] = content
+
+            # Merge our two meta dictionaries.
+            # Unlike events, local dict values override trait dict values.
+            if trait.meta:
+                # The use of 'list' here is redundant unless you are using Python 3.
+                # Future proofing is important, kids.
+                base_dict['meta'] = dict(
+                    list(base_dict['meta'].items()) +
+                    list(trait.meta.items())
+                )
+
+        return base_dict
 
 
 class DungeonScript(db.Model):
+    """Basic blob container for Dungeons JS scripting.
+    """
+
     __tablename__ = 'dungeon_scripts'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -52,6 +101,9 @@ class DungeonScript(db.Model):
 
 
 class DungeonScriptWrapper(db.Model):
+    """This allows multiple actors to refer to the same script
+    when doing a JOIN, preserving the event type that the script is bound to.
+    """
     __tablename__ = 'dungeon_script_wrappers'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -67,6 +119,10 @@ class DungeonScriptWrapper(db.Model):
 
 
 class DungeonTrait(db.Model):
+    """Extends actor functionality, allowing Entities & Tiles
+    to share pools of events / metadata.
+    """
+
     __tablename__ = 'dungeon_traits'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -84,6 +140,10 @@ class DungeonTrait(db.Model):
 
 
 class DungeonEntity(db.Model, SerializerBase):
+    """Entity schema. Used for anything that
+    is not a tile that would rest on a tile.
+    """
+
     __tablename__ = 'dungeon_entities'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -110,6 +170,9 @@ class DungeonEntity(db.Model, SerializerBase):
 
 
 class DungeonTile(db.Model, SerializerBase):
+    """If it looks like a tile, and it quacks like a tile...
+    """
+
     __tablename__ = 'dungeon_tiles'
 
     id = db.Column(db.Integer, primary_key=True)

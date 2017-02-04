@@ -24,7 +24,7 @@ export function generateEntitySprites(stageWidth, stageHeight, entityLayer, enti
 
   for (let entity of entityLayer) {
     let entityParent = entitySet[entity.parent];
-    let spriteTexture = Graphics.getTexture(entityParent.slug);
+    let spriteTexture = Graphics.getTexture(entityParent.id);
     let sprite = new PIXI.Sprite(spriteTexture);
 
     sprite.visible = false;

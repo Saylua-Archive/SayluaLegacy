@@ -1,3 +1,4 @@
+from saylua.modules.explore.models.db import DungeonEntity, DungeonTile
 from . import map_list
 import random
 
@@ -6,8 +7,8 @@ class Dungeon:
     def __init__(self, type="random", options=None):
         # Determine our Dungeon type
         if type == "random":
-            terrain_keys = list(map_list.keys())
-            self.type = random.choice(terrain_keys)
+            map_types = list(map_list.keys())
+            self.type = random.choice(map_types)
             self.api = map_list[self.type]
 
         else:
@@ -15,8 +16,16 @@ class Dungeon:
             self.api = map_list[self.type]
 
         # Store tile_set, entity_set
-        self.tile_set = self.api.get("tile_set")
-        self.entity_set = self.api.get("entity_set")
+        tile_set = self.api.get("tile_set")
+        entity_set = self.api.get("entity_set")
+
+        # Resolve to the real tile_set, entity_set from names
+        raw_tile_set = DungeonTile.query.filter(DungeonTile.name.in_(tile_set)).all()
+        raw_entity_set = DungeonEntity.query.filter(DungeonEntity.name.in_(entity_set)).all()
+
+        # Reduce to JSON objects and store on the class
+        self.tile_set = [tile.to_dict() for tile in raw_tile_set]
+        self.entity_set = [entity.to_dict() for entity in raw_entity_set]
 
         # Generate Dungeon
         self.options = options or self.api.get("default_options")

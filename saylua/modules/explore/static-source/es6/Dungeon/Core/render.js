@@ -74,11 +74,11 @@ export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
       // Now, we change the tile state depending on whether or not we can see it, and whether or not we /have/ seen it.
       if (tileVisible) {
         sprite.alpha = 1;
-        sprite.texture = Graphics.getTexture(parentTile.slug);
+        sprite.texture = Graphics.getTexture(parentTile.id);
       } else {
         if (tileSeen) {
           sprite.alpha = 0.5;
-          sprite.texture = Graphics.getTexture(parentTile.slug);
+          sprite.texture = Graphics.getTexture(parentTile.id);
         } else {
           // Reasons
           sprite.meta.tile = 'fog';
@@ -185,12 +185,12 @@ export function renderMinimap(baseData, tileSet, tileLayer, minimapSprites) {
 
     if (tileVisible) {
       sprite.alpha = 1 * baseVisibility;
-      sprite.texture = Graphics.getTexture(parentTile.slug);
+      sprite.texture = Graphics.getTexture(parentTile.id);
       sprite.visible = true;
     } else {
       if (tileSeen) {
         sprite.alpha = 0.5 * baseVisibility;
-        sprite.texture = Graphics.getTexture(parentTile.slug);
+        sprite.texture = Graphics.getTexture(parentTile.id);
         sprite.visible = true;
       } else {
         sprite.visible = false;
