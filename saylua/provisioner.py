@@ -16,7 +16,7 @@ from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
 def generate_admin_user():
     display_name = "admin"
     username = "admin"
-    phash = "$2a$01$c1I8kCq3L1YgMDu4Hb.4COFJBWMqnjnZhyBvfaBPOOuVfPimvLAQq"
+    phash = User.hash_password("password") #Yes, the default password is password
     email = "admin@saylua.wizards"
     role = "admin"
 
@@ -67,8 +67,7 @@ def setup():
         for i in range(4):
             display_name = soulname(7)
             username = display_name
-            #The following hash corresponds to the password "password" so you can use that to test
-            phash = "$2a$01$c1I8kCq3L1YgMDu4Hb.4COFJBWMqnjnZhyBvfaBPOOuVfPimvLAQq"
+            phash = User.hash_password("password") #Yes, the default password is password
             email = username + "@" + username + ".biz"
             new_user = User(display_name=display_name, usernames=[username], phash=phash,
                 email=email, star_shards=15, cloud_coins=50000)

@@ -10,10 +10,12 @@ class _User(db.Model):
     display_name = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(120), unique=True)
     phash = db.Column(db.String(200))
+    role = db.Column(db.String(100))
 
-    def __init__(self, display_name, email):
+    def __init__(self, display_name, email, role="user"):
         self.display_name = display_name
         self.email = email
+        self.role = role
 
     def __repr__(self):
         return '<User %r>' % self.display_name
@@ -113,9 +115,7 @@ class User(ndb.Model):
 
         # Throw exceptions if the currency amount is invalid
         cls.except_if_currency_invalid(user)
-
         user.put()
-
         return [user.cloud_coins, user.star_shards]
 
     @classmethod
@@ -127,3 +127,8 @@ class User(ndb.Model):
 class LoginSession(ndb.Model):
     user_key = ndb.StringProperty()
     expires = ndb.DateTimeProperty(indexed=False)
+
+class _LoginSession(ndb.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    expires = db.Column(db.DateTime)

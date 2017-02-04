@@ -9,10 +9,13 @@ from .models.db import Board, BoardCategory
 def new_board_category():
     if request.method == 'POST':
         category = request.form.get('category')
-        new_category = BoardCategory(title=category)
-        new_category.put()
+        add_board_category(category)
         flash("New category: " + category + " successfully created.")
     return render_template("admin/newcategory.html")
+
+def add_board_category(title):
+    new_category = BoardCategory(title=title)
+    new_category.put()
 
 
 @admin_access_required
@@ -22,9 +25,12 @@ def new_board():
         title = request.form.get('title')
         category = request.form.get('category')
         description = request.form.get('description')
-        url_title = urlize(title)
-        new_board = Board(title=title, url_title=url_title,
-                category_key=category, description=description)
-        new_board.put()
+        add_new_board(title, category, description)
         flash("New board: \"" + title + "\" successfully created!")
     return render_template("admin/newboard.html", categories=categories)
+
+def add_new_board(title, category, description):
+    url_title = urlize(title)
+    new_board = Board(title=title, url_title=url_title,
+            category_key=category, description=description)
+    new_board.put()

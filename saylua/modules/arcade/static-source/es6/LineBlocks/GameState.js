@@ -1,4 +1,4 @@
-import BaseModel from "../shared/BaseModel";
+import BaseModel from "Models/BaseModel";
 import Matrix from "./Matrix";
 
 import cloneDeep from "lodash.clonedeep";

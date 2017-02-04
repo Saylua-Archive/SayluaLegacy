@@ -1,19 +1,28 @@
+import {hasClass, removeClass, addClass, swapClass} from 'Utils';
+import CheckAll from 'Plugins/CheckAll';
+import FormValidation from 'Plugins/FormValidation/Main';
+import './Notifications';
+
+
 window.addEventListener('load', function () {
   window.addEventListener('scroll', fixNavbar);
 
   // Get all of the right navbar links and bind click events to them
-  initializeDropMenus(document.getElementById('navigation-right'),
-    document.getElementById('dropdown-right'));
+  initializeDropMenus(document.getElementById('navigation-user-links'),
+    document.getElementById('dropdown-user-links'));
 
-  initializeDropMenus(document.getElementById('navigation-text-links'));
+  initializeDropMenus(document.getElementById('navigation-main-links'));
 
-  // Form Validation
-  FormValidation.bind('.validated-form');
-  CheckAll.bind('.check-all');
+  // Bind dom behavior libraries to specific classes. Perhaps one day this
+  // could be replace with webcomponents.
+  let formValidation = new FormValidation('.validated-form');
+  let checkAll = new CheckAll('.check-all');
 
   bindTabTyping('.tabs-allowed');
 });
 
+// Allow tabs to be allowed in text fields. This is useful for allowing users
+// to edit code such as CSS.
 function bindTabTyping(selector) {
   var inputs = document.querySelectorAll(selector);
   for (var i = 0; i < inputs.length; i++) {
@@ -32,18 +41,11 @@ function bindTabTyping(selector) {
 // Make navigation bar stay at the top
 function fixNavbar(e) {
   var top = document.getElementById("banner").offsetHeight;
-  var sidebars = document.getElementById("sidebar-container");
   if (document.body.scrollTop > top ||
     document.documentElement.scrollTop > top) {
-    addClass(document.getElementById("navbar"), "fixed");
-    if (sidebars) {
-      addClass(sidebars, "fixed");
-    }
+    addClass(document.getElementById("navbar"), "navbar-fixed");
   } else {
-    removeClass(document.getElementById("navbar"), "fixed");
-    if (sidebars) {
-      removeClass(sidebars, "fixed");
-    }
+    removeClass(document.getElementById("navbar"), "navbar-fixed");
   }
 }
 
@@ -51,7 +53,7 @@ function initializeDropMenus(navigation, parentMenu) {
   if (!navigation) return;
 
   var menu = parentMenu;
-  var links = navigation.getElementsByClassName('block-link');
+  var links = navigation.getElementsByClassName('navbar-link');
   var sections = navigation.getElementsByClassName('menu');
 
   // For through right navigation links and attach listeners to them

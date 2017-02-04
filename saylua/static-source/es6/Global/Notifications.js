@@ -1,3 +1,5 @@
+import {addClass} from 'Utils';
+
 window.addEventListener('load', function () {
   var notificationCloseButtons = document.querySelectorAll('.notification a.close-button');
 
