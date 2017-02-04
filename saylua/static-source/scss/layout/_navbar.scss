@@ -1,7 +1,7 @@
 @import '../assets/transitions';
 
 
-$navHeight: 40px;
+$navHeight: 4rem;
 
 // This is used to prevent the navbar from leaving an empty space in the layout
 // when it's positioning changes.
@@ -19,37 +19,37 @@ $navHeight: 40px;
   text-align: center;
   background: $mainColor;
 
-  a.block-link, a.block-link:visited {
+  a.navbar-link, a.navbar-link:visited {
     @include slow-color-trans;
-    font-size: 18px;
+    font-size: 1.8rem;
     line-height: $navHeight;
     display: inline-block;
     height: $navHeight;
     margin: 0 -2px;
-    padding: 0 10px;
+    padding: 0 1rem;
     color: $white;
   }
 
-  a.block-link:hover {
+  a.navbar-link:hover {
     text-decoration: none;
     background: $mainDarkColor;
   }
 
-  a.block-link.active {
+  a.navbar-link.active {
     background: $mainDarkerColor;
   }
 
   .alert-number {
-    font-size: 10px;
-    line-height: 17px;
+    font-size: 1rem;
+    line-height: 1.7rem;
     position: absolute;
     display: block;
     box-sizing: border-box;
-    min-width: 16px;
-    height: 16px;
-    margin-top: -38px;
-    margin-left: -10px;
-    padding: 0 3px;
+    min-width: 1.6rem;
+    height: 1.6rem;
+    margin-top: -3.8rem;
+    margin-left: -1rem;
+    padding: 0 .3rem;
     text-align: center;
     color: $white;
     border-radius: 5px;
@@ -59,17 +59,17 @@ $navHeight: 40px;
   .search {
     display: inline-block;
     height: $navHeight;
-    padding: 0 7px;
+    padding: 0 .7rem;
 
     input {
       @include slow-color-trans;
-      font-size: 14px;
+      font-size: 1.4rem;
       float: left;
       width: 200px;
-      height: 19px;
+      height: 1.9rem;
       margin: 0;
-      margin-top: -1px;
-      padding: 3px 25px 3px 5px;
+      margin-top: -.1rem;
+      padding: .3rem 2.5rem .3rem .5rem;
       color: $mainDarkColor;
       border: 0;
       background: $mainSoftColor;
@@ -83,13 +83,13 @@ $navHeight: 40px;
     }
 
     button {
-      font-size: 14px;
+      font-size: 1.4rem;
       line-height: 100%;
       position: relative;
-      width: 25px;
-      height: 25px;
-      margin-left: -26px;
-      padding: 5px;
+      width: 2.5rem;
+      height: 2.5rem;
+      margin-left: -2.6rem;
+      padding: .5rem;
       cursor: pointer;
       color: $mainDarkColor;
       border: 0;
@@ -105,17 +105,17 @@ $navHeight: 40px;
   left: 0;
 }
 
-.nav-link {
+.navbar-block {
   display: inline-block;
   position: relative;
 }
 
-#navigation-right {
+.navigation-user-links {
   display: inline-block;
-}
 
-#dropdown-right.dropdown-menu {
-  margin-left: -100px;
+  &.dropdown-menu {
+    margin-left: -100px;
+  }
 }
 
 .dropdown-menu {
@@ -183,4 +183,11 @@ $navHeight: 40px;
 
 .dropdown-menu.hidden, .hidden {
   display: none;
+}
+
+// Prevent the navbar from being sticky on mobile because that's annoying. 
+@media (max-width: 1024px) {
+  .navbar.navbar-fixed {
+    position: relative;
+  }
 }

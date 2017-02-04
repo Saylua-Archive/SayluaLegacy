@@ -29,8 +29,8 @@
 
 <body{% if is_admin %} class="theme-admin"{% endif %}>
 <div id="banner" class="banner">
-  <a href="/" class="logo">
-    <img src="/static/img/logo.png" alt="Saylua" title="Saylua" />
+  <a id="logo" href="/" class="logo">
+    <img id="logo-image" src="/static/img/logo.png" alt="Saylua" title="Saylua" />
   </a>
 </div>
 <div id="navbar-container" class="navbar-container">
@@ -39,62 +39,59 @@
   </div>
 </div>
 {% block container %}
-<div class="container">
-  <div class="content">
-    <div class="notifications-container">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          {% for category, message in messages %}
-            {% if category == 'error' %}
-              <div class="notification error">Error: {{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
-            {% else %}
-              <div class="notification">{{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
-    </div>
-    {% if not fullscreen %}
-      {% include "sidebars.html" %}
-    {% endif %}
-    <div class="page-area">
-      {% block body %}{% endblock %}
-    </div>
+<div id="main-body" class="main-body">
+  <div id="notifications-container" class="notifications-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          {% if category == 'error' %}
+            <div class="notification error">Error: {{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
+          {% else %}
+            <div class="notification">{{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+  {% if not fullscreen %}
+    {% include "sidebars.html" %}
+  {% endif %}
+  <div id="main-body-content" class="main-body-content">
+    {% block body %}{% endblock %}
   </div>
 </div>
 {% endblock %}
 
-<div class="footer">
-  <div class="content-container">
-    <p>
-      <a href="/online/">{{users_online_count|pluralize('User')}} Online</a> &bull;
-      <a href="#">Back to Top</a> &bull;
-      <a href="#">About</a> &bull;
-      <a href="#">Terms of Service</a> &bull;
-      <a href="#">Contact Us</a> &bull;
-      <a href="#">Staff</a> &bull;
-      <span id="social-icons">
-        <a href="https://www.facebook.com/officialsaylua/" target="_blank">
-          <i class="fa fa-facebook" aria-hidden="true"></i>
-        </a>
-        <a href="https://twitter.com/officialsaylua" target="_blank">
-          <i class="fa fa-twitter" aria-hidden="true"></i>
-        </a>
-        <a href="http://saylua.tumblr.com/" target="_blank">
-          <i class="fa fa-tumblr" aria-hidden="true"></i>
-        </a>
-        <a href="https://www.reddit.com/r/saylua" target="_blank">
-          <i class="fa fa-reddit" aria-hidden="true"></i>
-        </a>
-      </span>
-    </p>
-    <p>
-      &copy; 2016 <a href="/">Saylua</a>
-    </p>
-    <p>
-      <a href="/admin/">Admin Panel</a>
-    </p>
-  </div>
+<div id="footer" class="footer">
+  <p>
+    <a href="/online/">{{users_online_count|pluralize('User')}} Online</a> &bull;
+    <a href="#">Back to Top</a> &bull;
+    <a href="#">About</a> &bull;
+    <a href="#">Credits</a> &bull;
+    <a href="#">Terms of Service</a> &bull;
+    <a href="#">Contact Us</a> &bull;
+    <a href="#">Staff</a> &bull;
+    <span id="social-icons">
+      <a href="https://www.facebook.com/officialsaylua/" target="_blank">
+        <i class="fa fa-facebook" aria-hidden="true"></i>
+      </a>
+      <a href="https://twitter.com/officialsaylua" target="_blank">
+        <i class="fa fa-twitter" aria-hidden="true"></i>
+      </a>
+      <a href="http://saylua.tumblr.com/" target="_blank">
+        <i class="fa fa-tumblr" aria-hidden="true"></i>
+      </a>
+      <a href="https://www.reddit.com/r/saylua" target="_blank">
+        <i class="fa fa-reddit" aria-hidden="true"></i>
+      </a>
+    </span>
+  </p>
+  <p>
+    &copy; 2016 <a href="/">Saylua</a>
+  </p>
+  <p>
+    <a href="/admin/">Admin Panel</a>
+  </p>
 </div>
 <div class="clearfix"></div>
 <script>

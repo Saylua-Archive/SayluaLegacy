@@ -1,26 +1,22 @@
 @import '../assets/transitions';
+@import '../assets/animations';
 
 @import 'navbar';
 @import 'notifications';
 
 
-%content-width {
+.inner-container {
   box-sizing: border-box;
   width: 95%;
   min-width: 400px;
   max-width: 1700px;
+  margin: auto;
 }
 
 %container {
   float: left;
   width: 100%;
   min-width: 400px;
-}
-
-.content-container {
-  @extend %content-width;
-  height: 100%;
-  margin: auto;
 }
 
 .banner {
@@ -50,31 +46,31 @@
   }
 }
 
-.content {
-  @extend %content-width;
+.main-body {
+  @extend .inner-container;
   overflow-y: hidden;
   min-height: 400px;
   min-height: 100%;
   margin: auto;
   padding: 1em 0;
-}
 
-.page-area {
-  overflow: hidden;
-  box-sizing: border-box;
-  padding: 0.5em 8px 1em;
-  background-color: $white;
-  margin-top: 5px;
+  .main-body-content {
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 0.5em .8rem 1em;
+    background-color: $white;
+    margin-top: .5rem;
+  }
 }
 
 .breadcrumb {
-  font-size: 14px;
+  font-size: 1.4rem;
   display: block;
   width: 100%;
-  padding: 5px 10px;
+  padding: .5rem 1rem;
 }
 
-#side-login-form th.section-header {
+.sidebar-login-form th.section-header {
   border-bottom: 1px $gray dotted;
 }
 
@@ -82,13 +78,38 @@
 .sidebar {
   box-sizing: border-box;
   width: 16%;
+  min-width: 100px;
   max-width: 300px;
   padding: 1rem 1%;
+  &.sidebar-left {
+    float:left;
+  }
+  &.sidebar-right {
+    float:right;
+  }
+
+  .pet-avatar-view {
+    position: relative;
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .active-pet-view {
+    width: 80%;
+    position: absolute;
+    bottom: -1rem;
+    left: -1rem;
+    z-index: 50;
+  }
+
+  .active-pet-view:hover {
+    @include bounce-margin;
+  }
 }
 
 .footer {
-  @extend %container;
-  font-size: 14px;
+  @extend .inner-container;
+  font-size: 1.4rem;
   text-align: center;
 
   .social-icons {
@@ -104,29 +125,41 @@
   }
 }
 
-@media (max-width: 1200px) {
-  #ha-panel {
+@media (max-width: 1024px) {
+  .avatar-view {
+    display: block;
     overflow: hidden;
     width: 100%;
     height: 100px;
   }
-  #sidebar-container {
+  .sidebar-container {
     float: left;
     box-sizing: border-box;
     width: 17%;
-    padding: 10px 1%;
+    padding: 1rem 1%;
   }
   .sidebar {
     width: 100%;
     padding: 0;
   }
-  .sidebar.right {
+  .sidebar.sidebar-right {
     float: left;
   }
 }
 
-@media (max-width: 1024px) {
-  .navbar.navbar-fixed {
-    position: relative;
+@media (max-width: 800px) {
+  .sidebar-container {
+    float: left;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1rem 1%;
+  }
+  .sidebar {
+    width: 50%;
+    padding: 0;
+    .sidebar-section {
+      float: left;
+      width: 50%;
+    }
   }
 }

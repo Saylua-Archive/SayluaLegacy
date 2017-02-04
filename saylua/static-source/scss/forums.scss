@@ -1,151 +1,150 @@
 @import 'assets/variables';
 @import 'assets/transitions';
 
-.forum-table {
+table.forum-table {
   width: 100%;
-  margin-bottom: 40px;
+  margin-bottom: 4rem;
   border-collapse: collapse;
-}
 
-.forum-table td, .forum-table th {
-  padding: 4px;
-}
+  td, th {
+    padding: .4rem;
+  }
 
-.forum-table th {
-  font-size: 12px;
-  text-align: left;
-  background: none;
-  font-weight: normal;
-}
+  th {
+    font-size: 1.2rem;
+    text-align: left;
+    background: none;
+    font-weight: normal;
+  }
 
-.forum-table th.section-header {
-  padding-top: 20px;
-}
+  th.section-header {
+    padding-top: 20px;
+  }
 
-table.forum-table .forum-board-row,
-table.forum-table .forum-thread-row {
-  @include fast-color-trans;
-}
+  .forum-board-row,
+  .forum-thread-row {
+    @include fast-color-trans;
+  }
 
-table.forum-table .forum-board-row.highlight {
-  background: $highlightSoftColor;
-}
+  .forum-board-row.highlight {
+    background: $highlightSoftColor;
+  }
 
-table.forum-table .forum-board-row.highlight td {
-  border-bottom: 1px $highlightColor solid;
-}
+  .forum-board-row.highlight td {
+    border-bottom: 1px $highlightColor solid;
+  }
 
-table.forum-table .forum-board-row td {
-  font-size: 14px;
-  vertical-align: center;
-  border-bottom: 1px $mainSoftColor solid;
-}
+  .forum-board-row td {
+    font-size: 14px;
+    vertical-align: center;
+    border-bottom: 1px $mainSoftColor solid;
+  }
 
-table.forum-table .forum-thread-row:nth-child(odd) {
-  background: $neutralColor;
-}
+  .forum-thread-row:nth-child(odd) {
+    background: $neutralColor;
+  }
 
-table.forum-table .forum-thread-row.highlight:nth-child(n) {
-  background-color: $highlightSoftColor;
-}
+  .forum-thread-row.highlight:nth-child(n) {
+    background-color: $highlightSoftColor;
+  }
 
-table.forum-table .forum-thread-row.highlight:nth-child(odd) {
-  background-color: $highlightColor;
-}
+  .forum-thread-row.highlight:nth-child(odd) {
+    background-color: $highlightColor;
+  }
 
-table.forum-table .forum-board-row:hover,
-table.forum-table .forum-thread-row:nth-child(n):hover {
-  background-color: $accentSoftColor;
-}
+  .forum-board-row:hover,
+  .forum-thread-row:nth-child(n):hover {
+    background-color: $accentSoftColor;
+  }
 
-table.forum-table td.forum-board-icon {
-  width: 60px!important;
-  min-width: 60px;
-}
+  td.forum-board-icon {
+    width: 60px!important;
+    min-width: 60px;
+  }
 
-table.forum-table td.forum-board-info {
-  width: 54%;
-}
+  td.forum-board-info {
+    width: 54%;
+    a {
+      display: block;
+      float: left;
+      overflow: auto;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+    }
 
-table.forum-table td.forum-board-info a {
-  display: block;
-  float: left;
-  overflow: auto;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-}
+    a:hover .forum-board-link {
+      text-decoration: underline;
+    }
 
-table.forum-table td.forum-board-info a:hover .forum-board-link {
-  text-decoration: underline;
-}
+    a p,
+    a:hover p {
+      line-height: 1.8rem;
+      margin: 0;
+      text-decoration: none;
+      color: $black;
+      border: 0;
+    }
+  }
 
-table.forum-table td.forum-board-info a p,
-table.forum-table td.forum-board-info a:hover p {
-  line-height: 18px;
-  margin: 0;
-  text-decoration: none;
-  color: $black;
-  border: 0;
-}
+  td.forum-thread-info {
+    width: 50%;
 
-table.forum-table td.forum-thread-info {
-  width: 50%;
-}
+    a {
+      line-height: normal;
+      display: block;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+    }
 
-table.forum-table td.forum-thread-info a {
-  line-height: normal;
-  display: block;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-}
+    a:hover .forum-thread-link {
+      display: block;
+      width: 100%;
+      text-decoration: underline;
+    }
 
-table.forum-table td.forum-thread-info a:hover .forum-thread-link {
-  display: block;
-  width: 100%;
-  text-decoration: underline;
-}
+    a p.small,
+    a:hover p.small {
+      margin: .5rem 0;
+      text-decoration: none;
+      color: $black;
+    }
+  }
 
-table.forum-table td.forum-thread-info a p.small,
-table.forum-table td.forum-thread-info a:hover p.small {
-  margin: 5px 0;
-  text-decoration: none;
-  color: $black;
-}
+  td.forum-thread-icon {
+    width: 1.6rem;
+    text-align: center;
+  }
 
-table.forum-table td.forum-thread-icon {
-  width: 16px;
-  text-align: center;
-}
-
-table.forum-table td.forum-latest-post {
-  font-size: 12px;
-  width: 25%;
+  td.forum-latest-post {
+    font-size: 1.2rem;
+    width: 25%;
+  }
 }
 
 table.forum-post {
   box-sizing: border-box;
   width: 98%;
-  margin: 20px 1%;
-  padding: 0px;
+  margin: 2rem 1%;
+  padding: 0;
   border-collapse: collapse;
   border: 1px $mainSoftColor solid;
-}
 
-.forum-post th {
-  font-size: 14px;
-  font-weight: normal;
-  padding: 3px 8px;
-  text-align: left;
-  background: $mainSoftColor;
-}
+  th {
+    font-size: 1.4rem;
+    font-weight: normal;
+    padding: .3rem .8rem;
+    text-align: left;
+    background: $mainSoftColor;
+  }
 
-.forum-post td {
-  padding: 5px;
-}
+  td {
+    padding: .5rem;
+  }
 
-.forum-post .forum-post-info {
-  width: 150px;
-  text-align: center;
+  .forum-post-info {
+    width: 150px;
+    text-align: center;
+  }
 }
