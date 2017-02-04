@@ -39,9 +39,9 @@ def read_schema(schema_location):
                 with open(file_path, 'r') as f:
                     content = f.read()
                     file_object = {
-                        'name': stripped_name,
+                        'name': "{}_{}".format(file_type, stripped_name),
                         'content': content,
-                        'namespace': file_type
+                        'type': file_type
                     }
 
                 namespaced_files.append(file_object)
@@ -58,7 +58,7 @@ def interpret_schema(namespaced_files):
     """
 
     for i, file in enumerate(namespaced_files):
-        if file.get('namespace') in ['entities', 'tiles', 'traits']:
+        if file.get('type') in ['entity', 'tile', 'trait']:
             try:
                 content = json.loads(file.get('content'))
             except json.decoder.JSONDecodeError as e:
@@ -75,7 +75,7 @@ def interpret_schema(namespaced_files):
 #                        target_name = content['events'][event]
 #                        stripped_event = event[1:]
 #                        results = list(filter(
-#                            lambda x: (x.name == target_name and x.namespace == 'scripts'),
+#                            lambda x: (x.name == target_name and x.get('type') == 'script'),
 #                            namespaced_files
 #                        ))
 #
@@ -100,33 +100,171 @@ def interpret_schema(namespaced_files):
             # Replace old raw string with JSON-ified content
             namespaced_files[i]['content'] = content
 
-         else:
+        else:
             # We will make an exception for scripts, but anything else should raise an error.
-            if file.get('namespace') != 'scripts':
+            if file.get('type') != 'script':
                 raise InvalidSchemaType
 
     return namespaced_files
 
 
+# TODO: Account for inlined scripts, or explicitly error when used.
 def generate_models_from_schema(schema):
     """Returns models from a specific set of dungeon model types.
     """
 
-    ## Reasons
+    def find_script(target_name, models):
+        target = [x for x in models if (x.__tablename__ == 'dungeon_scripts' and x.name == target_name)]
+
+        if len(target) == 1:
+            return target[0]
+
+        else:
+            raise InvalidScriptName(
+                'Returned {} results when searching for script \'{}\'.'.format(
+                    len(target),
+                    target_name
+                )
+            )
+
+    def find_trait(target_name, models):
+        target = [x for x in models if (x.__tablename__ == 'dungeon_traits' and x.name == target_name)]
+
+        if len(target) == 1:
+            return target[0]
+
+        else:
+            raise InvalidTraitName(
+                'Returned {} results when searching for trait \'{}\'.'.format(
+                    len(target),
+                    target_name
+                )
+            )
+
+
+    # Reasons
     try:
-        from saylua.models.explore.models.db import DungeonScript, DungeonEntity, DungeonTrait
+        from saylua.modules.explore.models.db import DungeonScript, DungeonScriptWrapper, DungeonTrait, DungeonEntity, DungeonTile
     except ImportError:
         try:
-            from ..models.db import DungeonScript, DungeonEntity, DungeonTrait
+            from ..models.db import DungeonScript, DungeonScriptWrapper, DungeonTrait, DungeonEntity, DungeonTile
+        except ImportError:
+            raise
 
     models = []
 
-    for scheme in schema:
-        if scheme.namespace == "entities":
-            pass
+    # Scripts first
+    for scheme in [x for x in schema if x.get('type') == 'script']:
+        script = DungeonScript(name=scheme.get('name'), content=scheme.get('content'))
+        models.append(script)
+
+    # Traits second
+    for scheme in [x for x in schema if x.get('type') == 'trait']:
+        content = scheme.get('content')
+
+        # Define our base Trait
+        trait = DungeonTrait(
+            name=scheme.get('name'),
+            display_name=content.get('name'),
+            description=content.get('description'),
+            meta=content.get('meta')
+        )
+
+        for event in content.get('events', []):
+            if event.startswith('$'):
+                # We need to find the specified script
+                target_name = content['events'][event]
+                target = find_script(target_name, models)
+
+                # Get proper name, create wrapper
+                stripped_name = event[1:]
+                wrapper = DungeonScriptWrapper(event_name=stripped_name, event_script=[target])
+
+                # Store wrapper
+                trait.events.append(wrapper)
+                models.append(wrapper)
+
+        models.append(trait)
+
+    # Entities third
+    for scheme in [x for x in schema if x.get('type') == 'entity']:
+        content = scheme.get('content')
+
+        # Define our base Entity
+        entity = DungeonEntity(
+            name=scheme.get('name'),
+            display_name=content.get('name'),
+            description=content.get('description'),
+            type=content.get('type'),
+            meta=content.get('meta')
+        )
+
+        for event in content.get('events', []):
+            if event.startswith('$'):
+                # We need to find the specified script
+                target_name = content['events'][event]
+                target = find_script(target_name, models)
+
+                # Get proper name, create wrapper
+                stripped_name = event[1:]
+                wrapper = DungeonScriptWrapper(event_name=stripped_name, event_script=[target])
+
+                # Store wrapper
+                entity.events.append(wrapper)
+                models.append(wrapper)
+
+        for event in content.get('traits', []):
+            if event.startswith('$'):
+                target_name = content['events'][event]
+                target = find_trait(target_name, models)
+
+                # Store trait
+                entity.traits.append(target)
+
+        models.append(entity)
+
+    # Tiles come last.
+    for scheme in [x for x in schema if x.get('type') == 'tile']:
+        content = scheme.get('content')
+
+        # Define our base Tile
+        tile = DungeonTile(
+            name=scheme.get('name'),
+            display_name=content.get('name'),
+            description=content.get('description'),
+            type=content.get('type'),
+            meta=content.get('meta')
+        )
+
+        for event in content.get('events', []):
+            if event.startswith('$'):
+                # We need to find the specified script
+                target_name = content['events'][event]
+                target = find_script(target_name, models)
+
+                # Get proper name, create wrapper
+                stripped_name = event[1:]
+                wrapper = DungeonScriptWrapper(event_name=stripped_name, event_script=[target])
+
+                # Store wrapper
+                tile.events.append(wrapper)
+                models.append(wrapper)
+
+        for event in content.get('traits', []):
+            if event.startswith('$'):
+                target_name = content['events'][event]
+                target = find_trait(target_name, models)
+
+                # Store trait
+                tile.traits.append(target)
+
+        models.append(tile)
+
+    return models
+
 
 def provision_dungeon_schema():
-    cwd = __file__
+    cwd = os.path.split(__file__)[0]
     schema_location = os.path.join(cwd, "schema")
 
     namespaced_files = read_schema(schema_location)

@@ -1,5 +1,5 @@
 {
-    "id":          "entity_default_chest",
+    "name":        "Chest",
     "description": "Look, a train! ...Ha! Chest kidding.",
     "type":        "chest",
     "meta":        { "locked": false }

@@ -1,7 +1,0 @@
-{
-    "name":        "burn_immune",
-    "description": "Immune to burn damage.",
-    "events": {
-      "$onDamaged": "burn_immune"
-    }
-}

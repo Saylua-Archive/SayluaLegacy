@@ -1,10 +1,9 @@
 {
-    "id":          "entity_enemy_slime",
     "name":        "Primordial Ooze",
     "description": "Sluggish beastie. Nasty things.",
     "type":        "enemy",
     "events":       {
-        "$onIdle": "default_enemy_idle"
+        "$onIdle": "script_default_enemy_idle"
     },
     "meta":        {
         "maxHP": 10
