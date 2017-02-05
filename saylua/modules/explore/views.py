@@ -13,11 +13,6 @@ def home():
 
 
 @login_required
-def battle():
-    return render_template("battle.html", bg_num=randint(1, 21))
-
-
-@login_required
 def generate_dungeon():
     # Acquire our dungeon
     dungeon = Dungeon.Dungeon()

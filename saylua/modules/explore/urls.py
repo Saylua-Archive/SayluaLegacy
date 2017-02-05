@@ -8,5 +8,4 @@ urlpatterns = [
         view_func=views.generate_dungeon,
         methods=['POST']
     ),
-    url('/battle/', view_func=views.battle, name='explore_battle', methods=['GET']),
 ]

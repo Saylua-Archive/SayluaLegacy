@@ -18,85 +18,6 @@ $navHeight: 4rem;
   height: $navHeight;
   text-align: center;
   background: $mainColor;
-
-  a.navbar-link, a.navbar-link:visited {
-    @include slow-color-trans;
-    font-size: 1.8rem;
-    line-height: $navHeight;
-    display: inline-block;
-    height: $navHeight;
-    margin: 0 -2px;
-    padding: 0 1rem;
-    color: $white;
-  }
-
-  a.navbar-link:hover {
-    text-decoration: none;
-    background: $mainDarkColor;
-  }
-
-  a.navbar-link.active {
-    background: $mainDarkerColor;
-  }
-
-  .alert-number {
-    font-size: 1rem;
-    line-height: 1.7rem;
-    position: absolute;
-    display: block;
-    box-sizing: border-box;
-    min-width: 1.6rem;
-    height: 1.6rem;
-    margin-top: -3.8rem;
-    margin-left: -1rem;
-    padding: 0 .3rem;
-    text-align: center;
-    color: $white;
-    border-radius: 5px;
-    background: $accentColor;
-  }
-
-  .search {
-    display: inline-block;
-    height: $navHeight;
-    padding: 0 .7rem;
-
-    input {
-      @include slow-color-trans;
-      font-size: 1.4rem;
-      float: left;
-      width: 200px;
-      height: 1.9rem;
-      margin: 0;
-      margin-top: -.1rem;
-      padding: .3rem 2.5rem .3rem .5rem;
-      color: $mainDarkColor;
-      border: 0;
-      background: $mainSoftColor;
-    }
-
-    input:focus {
-      color: $black;
-      outline: none;
-      background: $white;
-      box-shadow: -1px 1px 8px #eceb72, 1px -1px 8px #fff;
-    }
-
-    button {
-      font-size: 1.4rem;
-      line-height: 100%;
-      position: relative;
-      width: 2.5rem;
-      height: 2.5rem;
-      margin-left: -2.6rem;
-      padding: .5rem;
-      cursor: pointer;
-      color: $mainDarkColor;
-      border: 0;
-      border-radius: 0;
-      background: none;
-    }
-  }
 }
 
 .navbar.navbar-fixed {
@@ -105,7 +26,90 @@ $navHeight: 4rem;
   left: 0;
 }
 
-.navbar-block {
+a.navbar-link, a.navbar-link:visited {
+  @include slow-color-trans;
+  font-size: 1.8rem;
+  line-height: $navHeight;
+  display: inline-block;
+  height: $navHeight;
+  margin: 0 -2px;
+  padding: 0 1rem;
+  color: $white;
+}
+
+a.navbar-link:hover {
+  text-decoration: none;
+  background: $mainDarkColor;
+}
+
+a.navbar-link.active {
+  background: $mainDarkerColor;
+}
+
+.alert-number {
+  font-size: 1rem;
+  line-height: 1.7rem;
+  position: absolute;
+  display: block;
+  box-sizing: border-box;
+  min-width: 1.6rem;
+  height: 1.6rem;
+  margin-top: -3.8rem;
+  margin-left: -1rem;
+  padding: 0 .3rem;
+  text-align: center;
+  color: $white;
+  border-radius: 5px;
+  background: $accentColor;
+}
+
+.search {
+  display: inline-block;
+  height: $navHeight;
+  padding: 0 .7rem;
+
+  input {
+    @include slow-color-trans;
+    font-size: 1.4rem;
+    float: left;
+    width: 200px;
+    height: 1.9rem;
+    margin: 0;
+    margin-top: -.1rem;
+    padding: .3rem 2.5rem .3rem .5rem;
+    color: $mainDarkColor;
+    border: 0;
+    background: $mainSoftColor;
+  }
+
+  input:focus {
+    color: $black;
+    outline: none;
+    background: $white;
+    box-shadow: -1px 1px 8px #eceb72, 1px -1px 8px #fff;
+  }
+
+  button {
+    font-size: 1.4rem;
+    line-height: 100%;
+    position: relative;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-left: -2.6rem;
+    padding: .5rem;
+    cursor: pointer;
+    color: $mainDarkColor;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+
+  button:hover {
+    background: none;
+  }
+}
+
+.navbar-dropdown-container {
   display: inline-block;
   position: relative;
 }
@@ -185,9 +189,54 @@ $navHeight: 4rem;
   display: none;
 }
 
-// Prevent the navbar from being sticky on mobile because that's annoying. 
+.navigation-main-links .navbar-link i {
+  display: none;
+}
+
+// Prevent the navbar from being sticky on mobile because that's annoying.
 @media (max-width: 1024px) {
   .navbar.navbar-fixed {
     position: relative;
+  }
+}
+
+@media (max-width: 900px) {
+  .search {
+    // TODO: Make this actually show up but in responsive form. Can I do with without JS????
+    display: none;
+  }
+
+  a.navbar-link {
+    padding: 0 .6rem;
+    font-size: 1.5rem;
+
+    i {
+      display: inline;
+    }
+  }
+
+  .navigation-main-links a.navbar-link {
+    line-height: 100%;
+    min-width: 3rem;
+    padding: 0 .2rem;
+
+    i {
+      padding-top: .5rem;
+      display: block;
+      width: 100%;
+      font-size: 1.5rem;
+      line-height: 2rem;
+    }
+
+    label {
+      display: block;
+      width: 100%;
+      font-size: .5rem;
+      line-height: 100%;
+    }
+  }
+
+  .navigation-user-links .dropdown-menu {
+    margin-left: -130px;
   }
 }

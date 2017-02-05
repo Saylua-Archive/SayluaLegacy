@@ -1,16 +1,14 @@
 <div id="navbar-inner-container" class="inner-container">
   <a href="/" class="navbar-link" title="Home">
-    <i class="fa fa-home" aria-hidden="true"></i>
+    <i class="fa fa-fw fa-home" aria-hidden="true"></i>
   </a>
-  <a href="/den/" class="navbar-link" title="Pets">
-    <i class="fa fa-paw" aria-hidden="true"></i>
-  </a>
-  <a href="/inventory/" class="navbar-link" title="Inventory">
-    <i class="fa fa-suitcase" aria-hidden="true"></i>
-  </a>
-  <div id="navigation-main-links" class="navbar-block">
-    <div class="navbar-block">
-      <a href="/games/" class="navbar-link" data-section="site-menu">Site</a>
+
+  <div id="navigation-main-links" class="navigation-main-links navbar-dropdown-container">
+    <div class="navbar-dropdown-container">
+      <a href="/games/" class="navbar-link" data-section="site-menu">
+        <i class="fa fa-fw fa-globe" aria-hidden="true"></i>
+        <label>Site</label>
+      </a>
       <div class="left-menu dropdown-menu menu" id="site-menu">
         <h3>General Saylua Stuff</h3>
         <a href="/"><img src="/static/img/icons/house.png"> Home</a>
@@ -19,8 +17,11 @@
         <a href="/user_shop/"><img src="/static/img/icons/tag_blue.png"> My Shop</a>
       </div>
     </div>
-    <div class="navbar-block">
-      <a href="/games/" class="navbar-link" data-section="play-menu">Play</a>
+    <div class="navbar-dropdown-container">
+      <a href="/games/" class="navbar-link" data-section="play-menu">
+        <i class="fa fa-fw fa-paw" aria-hidden="true"></i>
+        <label>Play</label>
+      </a>
       <div class="left-menu dropdown-menu menu" id="play-menu">
         <h3>Games and Fun</h3>
         <a href="/explore/"><img src="/static/img/icons/compass.png"> Explore</a>
@@ -29,8 +30,11 @@
         <a href="/crafting/"><img src="/static/img/icons/hammer.png"> Crafting</a>
       </div>
     </div>
-    <div class="navbar-block">
-      <a href="/shops/" class="navbar-link" data-section="trade-menu">Trade</a>
+    <div class="navbar-dropdown-container">
+      <a href="/shops/" class="navbar-link" data-section="trade-menu">
+        <i class="fa fa-fw fa-suitcase" aria-hidden="true"></i>
+        <label>Trade</label>
+      </a>
       <div class="left-menu dropdown-menu menu" id="trade-menu">
         <h3>Buy and Sell</h3>
         <a href="/shops/"><img src="/static/img/icons/tag_blue.png"> NPC Shops</a>
@@ -40,8 +44,11 @@
         <a href="/starshards/"><img src="/static/img/icons/star_1.png"> Purchase Star Shards</a>
       </div>
     </div>
-    <div class="navbar-block">
-      <a href="/forums/" class="navbar-link" data-section="community-menu">Community</a>
+    <div class="navbar-dropdown-container">
+      <a href="/forums/" class="navbar-link" data-section="community-menu">
+        <i class="fa fa-fw fa-comments" aria-hidden="true"></i>
+        <label>Community</label>
+      </a>
       <div class="left-menu dropdown-menu menu" id="community-menu">
         <h3>Interact with Others</h3>
         <a href="/forums/"><img src="/static/img/icons/comment.png"> Forums</a>
@@ -50,8 +57,11 @@
         <a href="/reserve/"><img src="/static/img/icons/shield.png"> Pet Reserve</a>
       </div>
     </div>
-    <div class="navbar-block">
-      <a href="/help/" class="navbar-link" data-section="archives-menu">Archives</a>
+    <div class="navbar-dropdown-container">
+      <a href="/help/" class="navbar-link" data-section="archives-menu">
+        <i class="fa fa-fw fa-book" aria-hidden="true"></i>
+        <label>Archives</label>
+      </a>
       <div class="left-menu dropdown-menu menu" id="archives-menu">
         <h3>Learn About Saylua</h3>
         <a href="/pets/"><img src="/static/img/icons/clipboard_text.png"> Species Guide</a>
@@ -65,15 +75,16 @@
 
   <form class="search" action="/search/">
     <input type="text" placeholder="Search Saylua" name="q">
-    <button><i class="fa fa-search" aria-hidden="true"></i></button>
+    <button><i class="fa fa-fw fa-search" aria-hidden="true"></i></button>
   </form>
+
   {% if g.logged_in %}
     <div id="navigation-user-links" class="navigation-user-links">
       <a href="{{ g.user|user_url }}" class="navbar-link" data-section="user-menu">
-        <i class="fa fa-user" aria-hidden="true"></i>
+        <i class="fa fa-fw fa-user" aria-hidden="true"></i>
       </a>
       <a href="/notifications/" class="navbar-link" data-section="notifications-menu">
-        <i class="fa fa-bell" aria-hidden="true"></i>
+        <i class="fa fa-fw fa-bell" aria-hidden="true"></i>
         {% if notifications_count > 99 %}
           <span class="alert-number">99+</span>
         {% elif notifications_count > 0 %}
@@ -81,7 +92,7 @@
         {% endif %}
       </a>
       <a href="/messages/" class="navbar-link" data-section="messages-menu">
-        <i class="fa fa-envelope" aria-hidden="true"></i>
+        <i class="fa fa-fw fa-envelope" aria-hidden="true"></i>
         {% if messages_count > 99 %}
           <span class="alert-number">99+</span>
         {% elif messages_count > 0 %}
@@ -135,7 +146,7 @@
     </div>
   {% else %}
     <a href="/login/" class="navbar-link">
-      <i class="fa fa-user" aria-hidden="true"></i>
+      <i class="fa fa-fw fa-user" aria-hidden="true"></i>
     </a>
   {% endif %}
 </div>
