@@ -1,9 +1,9 @@
 import Inferno from "inferno";
 import Component from "inferno-component";
 
-import MainDebug from "./Debug/MainDebug";
-import ScriptEditor from "./Debug/ScriptEditor";
-import MapSummoner from "./Debug/MapSummoner";
+import DebugGeneral from "./Debug/General";
+import DebugEditor from "./Debug/Editor";
+import DebugSummoner from "./Debug/Summoner";
 
 export default class DebugTools extends Component {
   constructor(props) {
@@ -45,22 +45,22 @@ export default class DebugTools extends Component {
   getActiveSection() {
     if (this.state.activeSection === 'general') {
       return (
-        <MainDebug
+        <DebugGeneral
           debugRevealMap={ this.debugRevealMap.bind(this) }
           debugRegenerateDungeon={ this.debugRegenerateDungeon.bind(this) }
         />
       );
     }
 
-    else if (this.state.activeSection === 'scripts') {
+    else if (this.state.activeSection === 'editor') {
       return (
-        <ScriptEditor store={ this.store } />
+        <DebugEditor store={ this.store } />
       );
     }
 
-    else if (this.state.activeSection === 'summon') {
+    else if (this.state.activeSection === 'summoner') {
       return (
-        <MapSummoner store={ this.store } />
+        <DebugSummoner store={ this.store } />
       );
     }
   }
@@ -68,8 +68,8 @@ export default class DebugTools extends Component {
   generateMenuItems() {
     let items = [
       'general',
-      'scripts',
-      'summon'
+      'editor',
+      'summoner'
     ];
 
     let menuItems = items.map((item) => {

@@ -5,7 +5,9 @@
   templates.
 
   TABLE OF CONTENTS:
-    -- #0.1a Temporary Experimental Changes (You are here)
+    -- #0.00 Base (You are here)
+    -- #0.0a Colors
+    -- #0.1a Temporary Experimental Changes
     -- #0.2a Main Layout
     -- #0.3a Debug Layout
     -- #0.3b Debug Styles
@@ -27,11 +29,49 @@ html {
   box-sizing: inherit;
 }
 
-.theme-main .banner {
+/*****************************************************************
+  -- #0.0a Colors
+  ===============================================================
+  Color variables.
+*****************************************************************/
+
+// -- Base colors
+
+$black: #222;
+$white: #fff;
+$green: hsl(114, 52%, 57%);
+
+// -- Derivative colors
+
+// -- Element specific colors
+
+// Canvas container container container ahuehuaheuahuehauehauheuaheuhauehuaehuahuehauehuehuhauehuaheuaheuhehe
+$background-gradient-start: hsla(180, 100%, 50%, 0.31);
+$background-gradient-end: hsla(0, 91%, 13%, 0.7);
+
+
+// Debug section
+$debug-background: hsl(0, 0%, 24%);
+$debug-menu-active: hsl(0, 0%, 20%);
+$debug-menu-active-border: hsl(0, 0%, 19%);
+$debug-menu-hover: hsl(0, 0%, 15%);
+
+$debug-button-color: hsla(0, 10%, 74%, 1);
+$debug-button-color-hover: $white;
+$debug-button-background: hsla(0, 12%, 35%, 1);
+$debug-button-background-hover: hsl(340, 82%, 52%);
+
+/*****************************************************************
+  -- #0.1a Experimental Changes
+  ===============================================================
+  May or may not be temporary.
+*****************************************************************/
+
+.banner {
   background-position-y: 56%;
 }
 
-.theme-main .navbar {
+.navbar {
   background: rgb(60, 46, 24);
 
   &.navbar-fixed {
@@ -39,7 +79,7 @@ html {
   }
 }
 
-.theme-main .navbar .search input {
+.navbar .search input {
   height: 2.5rem;
 }
 
@@ -51,7 +91,7 @@ html {
 *****************************************************************/
 
 canvas {
-  background: #222;
+  background: $black;
   height: 100%;
   width: 100%;
 }
@@ -59,15 +99,14 @@ canvas {
 .dungeon-theatre {
   padding: 75px 0px;
 
-  //background: linear-gradient(to bottom, rgba(2, 255, 255, 0.31) 0%, rgba(255,255,255,0.7) 100%), url(/static/img/bg/21.jpg);
-  background: linear-gradient(to bottom, rgba(2, 255, 255, 0.31) 0%, rgba(64, 3, 3, 0.7) 100%), url(/static/img/bg/21.jpg);
+  background: linear-gradient(to bottom, $background-gradient-start 0%, $background-gradient-end 100%), url("/static/img/bg/21.jpg");
   background-size: cover;
 
   width: 100%;
 }
 
 .dungeon-client-wrapper {
-  background: #fff;
+  background: $white;
 
   margin: 0 auto;
   position: relative;
@@ -84,7 +123,14 @@ canvas {
   width: 100%;
 }
 
-.theme-main .container .page-area {
+// Specificity fight!
+div.main-body.dungeons-body {
+  padding: 0;
+  max-width: 100%;
+  width: 100%;
+}
+
+.main-body .main-body-content {
   background: #fff;
 
   padding: 25px;
@@ -100,8 +146,8 @@ canvas {
   Debug section layout.
 *****************************************************************/
 
-.theme-main .container .debug-container {
-  background: #3c3c3c;
+.main-body .debug-container {
+  background: $debug-background;
   padding: 0px;
   margin: 25px auto;
 
@@ -137,8 +183,8 @@ canvas {
   }
 
   .debug-menu ul li {
-    color: #63ca58;
-    background: #222;
+    color: $green;
+    background: $black;
 
     list-style-type: none;
 
@@ -148,14 +194,114 @@ canvas {
     letter-spacing: 1px;
     text-align: center;
     text-transform: uppercase;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     padding: 8px 15px;
+    overflow: hidden;
 
     min-height: 75px;
     width: 100%;
+
+    transition: background-color 300ms ease;
+
+    &:hover {
+      cursor: pointer;
+      background: $debug-menu-hover;
+    }
+
+    &.active {
+      background: $debug-menu-active;
+      border-right: $debug-menu-active-border;
+    }
+
+    &.item-general .icon, &.item-editor .icon, &.item-summoner .icon {
+      background-size: cover;
+      display: block;
+
+      margin: 0 auto;
+
+      height: 45px;
+      width: 45px;
+    }
+
+    &.item-general .icon {
+      background-image: url("/static/img/dungeons/debug/menu_icon_general.png");
+    }
+
+    &.item-editor .icon {
+      background-image: url("/static/img/dungeons/debug/menu_icon_editor.png");
+    }
+
+    &.item-summoner .icon {
+      background-image: url("/static/img/dungeons/debug/menu_icon_summoner.png");
+    }
+  }
+}
+
+.debug-section .section-general {
+  display: flex;
+
+  .general-actions {
+    width: 30%;
   }
 
-  .debug-section {
-    padding: 25px;
+  .general-options {
+    width: 70%;
   }
+}
+
+.debug-section .section-general {
+  h4 {
+    color: #fff;
+
+    font-weight: bold;
+    font-size: 2.4rem;
+    line-height: 2.4em;
+    text-align: center;
+
+    margin: 0;
+    padding: 0;
+
+    border-bottom: none;
+  }
+}
+
+.debug-section .section-general .general-actions {
+  ul {
+    display: block;
+    padding: 0;
+    width: 100%;
+  }
+
+  ul li {
+    display: block;
+    list-style-type: none;
+    width: 100%;
+  }
+
+  ul li button {
+    color: $debug-button-color;
+    background: $debug-button-background;
+    border-radius: 0;
+
+    padding: 10px 30px;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+
+    font-weight: bold;
+    letter-spacing: 2px;
+
+    width: 100%;
+
+    &:hover {
+      color: $debug-button-color-hover;
+
+      background: $debug-button-background-hover;
+    }
+  }
+}
+
+.debug-section .section-general .general-options {
+
 }
