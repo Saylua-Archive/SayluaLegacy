@@ -78,3 +78,16 @@ if (!Array.prototype.includes) {
     return false;
   };
 }
+
+// https://stackoverflow.com/questions/8578617/inject-a-script-tag-with-remote-src-and-wait-for-it-to-execute#8578840
+export function injectScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = src;
+    script.addEventListener('load', () => resolve());
+    script.addEventListener('error', () => reject('Error loading script.'));
+    script.addEventListener('abort', () => reject('Script loading aborted.'));
+    document.head.appendChild(script);
+  });
+}

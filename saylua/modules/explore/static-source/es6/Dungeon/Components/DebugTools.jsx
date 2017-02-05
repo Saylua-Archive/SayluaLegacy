@@ -1,9 +1,14 @@
+// DebugTools -> Required by Main
+// --------------------------------------
+// Does what it says on the tin.
+
 import Inferno from "inferno";
 import Component from "inferno-component";
 
 import DebugGeneral from "./Debug/General";
 import DebugEditor from "./Debug/Editor";
 import DebugSummoner from "./Debug/Summoner";
+
 
 export default class DebugTools extends Component {
   constructor(props) {
@@ -23,11 +28,13 @@ export default class DebugTools extends Component {
     };
   }
 
+
   debugRegenerateDungeon() {
     this.store.dispatch({
       'type': 'DEBUG_REGENERATE_DUNGEON'
     });
   }
+
 
   debugRevealMap() {
     this.store.dispatch({
@@ -35,12 +42,14 @@ export default class DebugTools extends Component {
     });
   }
 
+
   selectSection(section, event) {
     event.preventDefault();
     this.setState({
       'activeSection': section
     });
   }
+
 
   getActiveSection() {
     if (this.state.activeSection === 'general') {
@@ -64,6 +73,7 @@ export default class DebugTools extends Component {
       );
     }
   }
+
 
   generateMenuItems() {
     let items = [
@@ -92,6 +102,7 @@ export default class DebugTools extends Component {
 
     return menuItems;
   }
+
 
   render() {
     let selectedSection = this.getActiveSection();

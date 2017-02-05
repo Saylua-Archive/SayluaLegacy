@@ -1,3 +1,7 @@
+// mouse -> Required by Core/GameRenderer
+// --------------------------------------
+// Mouse related game interactions.
+
 import * as Graphics from "./graphics";
 
 

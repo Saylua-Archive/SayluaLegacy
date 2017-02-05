@@ -1,3 +1,9 @@
+// DungeonClient -> Required by Main
+// --------------------------------------
+// The actual client. This handles input and renders the map.
+// Technically, this can and should be a stateless component
+// instead of a traditional one.
+
 import Inferno from "inferno";
 import onDomReady from "ondomready";
 import Component from "inferno-component";
@@ -5,11 +11,6 @@ import Component from "inferno-component";
 import * as CanvasUtils from "../Utils/canvas";
 import GameRenderer from "../Core/GameRenderer";
 
-// DungeonClient -> Required by Main
-// --------------------------------------
-// The actual client. This handles input and renders the map.
-// Technically, this can and should be a stateless component
-// instead of a traditional one.
 
 export default class DungeonClient extends Component {
   constructor(props) {
@@ -141,7 +142,7 @@ export default class DungeonClient extends Component {
 
   render() {
     return (
-      <div className="dungeon-wrapper" ref={(node) => this.refs.pixiCanvas = node} >
+      <div className="dungeon-wrapper" ref={ (node) => this.refs.pixiCanvas = node } >
       </div>
     );
   }

@@ -11,6 +11,8 @@
     -- #0.2a Main Layout
     -- #0.3a Debug Layout
     -- #0.3b Debug Styles
+    -- #0.3c Debug Section.General
+    -- #0.3d Debug Section.Editor
 
 *****************************************************************/
 
@@ -52,6 +54,7 @@ $background-gradient-end: hsla(0, 91%, 13%, 0.7);
 
 // Debug section
 $debug-background: hsl(0, 0%, 24%);
+$debug-menu-background: #e2e9e8; // This is the color the page background
 $debug-menu-active: hsl(0, 0%, 20%);
 $debug-menu-active-border: hsl(0, 0%, 19%);
 $debug-menu-hover: hsl(0, 0%, 15%);
@@ -239,19 +242,7 @@ div.main-body.dungeons-body {
   }
 }
 
-.debug-section .section-general {
-  display: flex;
-
-  .general-actions {
-    width: 30%;
-  }
-
-  .general-options {
-    width: 70%;
-  }
-}
-
-.debug-section .section-general {
+.debug-section {
   h4 {
     color: #fff;
 
@@ -264,6 +255,24 @@ div.main-body.dungeons-body {
     padding: 0;
 
     border-bottom: none;
+  }
+}
+
+/*****************************************************************
+  -- #0.3c Debug Section.General
+  ===============================================================
+  Styles for the Section.General debug section.
+*****************************************************************/
+
+.debug-section .section-general {
+  display: flex;
+
+  .general-actions {
+    width: 30%;
+  }
+
+  .general-options {
+    width: 70%;
   }
 }
 
@@ -294,6 +303,8 @@ div.main-body.dungeons-body {
 
     width: 100%;
 
+    transition: background-color 200ms ease;
+
     &:hover {
       color: $debug-button-color-hover;
 
@@ -304,4 +315,33 @@ div.main-body.dungeons-body {
 
 .debug-section .section-general .general-options {
 
+}
+
+/*****************************************************************
+  -- #0.3d Debug Section.Editor
+  ===============================================================
+  Styles for the Section.Editor debug section.
+*****************************************************************/
+
+.debug-section .section-editor {
+  display: flex;
+
+  .editor-select {
+    width: 30%;
+  }
+
+  .editor-edit {
+    width: 70%;
+  }
+}
+
+.debug-section .section-editor .editor-edit {
+  .ace_gutter {
+    padding-top: 12px;
+  }
+
+  .ace_content {
+    padding-top: 12px;
+    padding-left: 12px;
+  }
 }
