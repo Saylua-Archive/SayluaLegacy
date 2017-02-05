@@ -34,6 +34,10 @@ export const DebugReducer = (state, action) => {
 
       return { ...state, 'tileLayer': newTileLayer, 'entityLayer': newEntityLayer };
 
+    case 'DEBUG_TOGGLE_FOV':
+      var newDebug = {...state.debug, 'FOVEnabled': !state.debug.FOVEnabled };
+      return { ...state, 'debug': newDebug };
+
     default:
       return state;
   }

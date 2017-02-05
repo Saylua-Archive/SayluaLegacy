@@ -29,6 +29,14 @@ export default class DebugTools extends Component {
   }
 
 
+  debugEnableFOV() {
+    console.log("Toggled!");
+    this.store.dispatch({
+      'type': 'DEBUG_TOGGLE_FOV'
+    });
+  }
+
+
   debugRegenerateDungeon() {
     this.store.dispatch({
       'type': 'DEBUG_REGENERATE_DUNGEON'
@@ -55,6 +63,8 @@ export default class DebugTools extends Component {
     if (this.state.activeSection === 'general') {
       return (
         <DebugGeneral
+          store={ this.store }
+          debugEnableFOV={ this.debugEnableFOV.bind(this) }
           debugRevealMap={ this.debugRevealMap.bind(this) }
           debugRegenerateDungeon={ this.debugRegenerateDungeon.bind(this) }
         />

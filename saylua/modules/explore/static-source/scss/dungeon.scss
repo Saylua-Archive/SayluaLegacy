@@ -54,14 +54,17 @@ $background-gradient-end: hsla(0, 91%, 13%, 0.7);
 
 // Debug section
 $debug-background: hsl(0, 0%, 24%);
-$debug-menu-background: #e2e9e8; // This is the color the page background
+$debug-menu-background: #e2e9e8;      // This is the color of the page background
 $debug-menu-active: hsl(0, 0%, 20%);
 $debug-menu-active-border: hsl(0, 0%, 19%);
 $debug-menu-hover: hsl(0, 0%, 15%);
 
-$debug-button-color: hsla(0, 10%, 74%, 1);
+$fake-checkbox-checked: hsl(100, 75%, 48%);
+$fake-checkbox-unchecked: hsl(0, 75%, 48%);
+
+$debug-button-color: hsl(0, 10%, 74%);
 $debug-button-color-hover: $white;
-$debug-button-background: hsla(0, 12%, 35%, 1);
+$debug-button-background: hsl(0, 12%, 35%);
 $debug-button-background-hover: hsl(340, 82%, 52%);
 
 /*****************************************************************
@@ -78,7 +81,7 @@ $debug-button-background-hover: hsl(340, 82%, 52%);
   background: rgb(60, 46, 24);
 
   &.navbar-fixed {
-    box-shadow: 0px 2px 6px 0px rgba(255, 61, 3, 0.45)
+    box-shadow: 0px 2px 6px 0px rgba(255, 61, 3, 0.16);
   }
 }
 
@@ -178,7 +181,10 @@ div.main-body.dungeons-body {
 *****************************************************************/
 
 .dungeon-debug-tools {
+  font-family: "Open Sans";
+
   .debug-menu ul {
+    background: $debug-menu-background;
     padding: 0px;
 
     height: 100%;
@@ -190,8 +196,6 @@ div.main-body.dungeons-body {
     background: $black;
 
     list-style-type: none;
-
-    font-family: "Open Sans";
     font-size: 10px;
     font-weight: bold;
     letter-spacing: 1px;
@@ -314,7 +318,64 @@ div.main-body.dungeons-body {
 }
 
 .debug-section .section-general .general-options {
+  ul {
+    display: flex;
+  }
 
+  ul li {
+    list-style-type: none;
+    width: 100%;
+  }
+
+  ul li input[type='checkbox'] {
+    position: absolute;
+    left: -9999px;
+  }
+
+  ul li input[type='checkbox'] + label {
+    color: #fff;
+    font-weight: bold;
+  }
+
+  ul li input[type='checkbox'] + label .fake-checkbox {
+    background: $fake-checkbox-unchecked;
+    display: block;
+
+    border-radius: 4px;
+
+    height: 35px;
+    width: 35px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  ul li input[type='checkbox']:checked + label .fake-checkbox {
+    background: $fake-checkbox-checked;
+  }
+
+  ul li input[type='checkbox'] + label .fake-checkbox:after {
+    display: block;
+    content: "×";
+
+    font-size: 3.2em;
+    text-align: center;
+
+    position: relative;
+    top: 0.3rem;
+  }
+
+  ul li input[type='checkbox']:checked + label .fake-checkbox:after {
+    display: block;
+    content: "✔";
+
+    font-size: 2em;
+    text-align: center;
+
+    position: relative;
+    top: 0.5rem;
+  }
 }
 
 /*****************************************************************

@@ -18,6 +18,9 @@ export default function Main() {
   // Consider replacing with a window.specialEventQueue that is cleared on every DungeonClient.loop() ?
   window.nextGameState = undefined;
 
+  // This is here primarily so that random sections of code know debug values.
+  window.getStoreState = (store) => () => store.getState();
+
   getInitialGameState().then((initialState) => {
     initialState = addAdditionalDebugParameters(initialState);
 
@@ -26,6 +29,8 @@ export default function Main() {
     let store = createStore(CoreReducer, initialState, composeEnhancers(
       applyMiddleware(logState)
     ));
+
+    window.getStoreState = window.getStoreState(store);
 
     Inferno.render(
       <DungeonClient store={ store } />,

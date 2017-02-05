@@ -43,9 +43,18 @@ export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
 
     // Is this tile in our viewport?
     if (baseData.within_x_bounds(x) && baseData.within_y_bounds(y)) {
+
       // Set cell visibility, if necessary.
-      // Why would you write this? Masochists and code hygienists. For opposite reasons, of course.
-      let tileVisible = (baseData.validTiles[y] === undefined) ? false : ( (baseData.validTiles[y][x] === true) ? true : false );
+      let FOVEnabled = window.getStoreState().debug.FOVEnabled;
+      let tileVisible;
+
+      if (FOVEnabled === true) {
+        // Why would you write this? Masochists and code hygienists. For opposite reasons, of course.
+        tileVisible = (baseData.validTiles[y] === undefined) ? false : ( (baseData.validTiles[y][x] === true) ? true : false );
+      } else {
+        tileVisible = true;
+      }
+
       let tileSeen = (tile.meta.seen === true);
 
       // We must 'reveal' tiles, initially. We never unset this.
@@ -115,8 +124,17 @@ export function renderEntities(baseData, entityLayer, entitySprites) {
 
     // We've got a winner!
     if (baseData.within_x_bounds(x) && baseData.within_y_bounds(y)) {
+
       // Set entity visibility, if necessary
-      let entityVisible = (baseData.validTiles[y] === undefined) ? false : ( (baseData.validTiles[y][x] === true) ? true : false );
+      let FOVEnabled = window.getStoreState().debug.FOVEnabled;
+      let entityVisible;
+
+      if (FOVEnabled === true) {
+        entityVisible = (baseData.validTiles[y] === undefined) ? false : ( (baseData.validTiles[y][x] === true) ? true : false );
+      } else {
+        entityVisible = true;
+      }
+
       let entitySeen = (entity.meta.seen === true);
 
       if (entityVisible === true) {
