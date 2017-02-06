@@ -34,6 +34,7 @@ function mapOptionsToInputs(props, state) {
     if (action.type === "toggle") {
       let sanitizedName = action.name.toLowerCase().replace(" ", "_");
       let elementID = `toggle-${sanitizedName}`;
+
       return (
         <li>
           <input
