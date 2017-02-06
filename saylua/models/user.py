@@ -6,18 +6,14 @@ from saylua import db
 
 
 class _User(db.Model):
+    __tablename__ = "users"
+
     id = db.Column(db.Integer, primary_key=True)
     display_name = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(120), unique=True)
     phash = db.Column(db.String(200))
-    role = db.Column(db.String(100))
-    ha_url = db.Column(db.String(100))
-
-    def __init__(self, display_name, email, role="user", ha_url='/api/ha/m/'):
-        self.display_name = display_name
-        self.email = email
-        self.role = role
-        self.ha_url = ha_url
+    role = db.Column(db.String(100), default="user")
+    ha_url = db.Column(db.String(100), default="/api/ha/m/")
 
     def __repr__(self):
         return '<User %r>' % self.display_name
