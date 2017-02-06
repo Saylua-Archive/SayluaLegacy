@@ -1,12 +1,13 @@
 @import '../assets/transitions';
-@import '../assets/animations';
+@import '../assets/keyframes';
 
 @import 'navbar';
 @import 'notifications';
 
-%container {
-  float: left;
-  width: 100%;
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   min-width: 300px;
 }
 
@@ -17,7 +18,6 @@
 }
 
 .banner {
-  @extend %container;
   height: 7.6rem;
   padding: 1.8rem;
   text-align: center;
@@ -44,6 +44,8 @@
 
 .main-body {
   @extend .inner-container;
+  display: flex;
+  flex-direction: row;
   overflow-y: hidden;
   min-height: 400px;
   min-height: 100%;
@@ -55,6 +57,7 @@
     padding: 0.5em .8rem 1em;
     background-color: $white;
     margin-top: .5rem;
+    flex-grow: 1;
   }
 }
 
@@ -71,9 +74,10 @@
 
 // Total width should not exceed 180px
 .sidebar {
+  display: flex;
+  flex-direction: column;
   width: 20%;
   padding: 1rem 1%;
-  float:left;
 
   .pet-avatar-view {
     position: relative;
@@ -124,6 +128,10 @@
     width: 100%;
   }
 
+  .main-body {
+    flex-direction: column;
+  }
+
   .avatar-view {
     display: block;
     overflow: hidden;
@@ -131,12 +139,11 @@
     height: 100px;
   }
   .sidebar {
-    float: left;
+    flex-direction: row;
     width: 100%;
     padding: 1rem 1%;
 
     .sidebar-section {
-      float: left;
       width: 25%;
     }
   }
