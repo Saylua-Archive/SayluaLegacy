@@ -46,14 +46,13 @@ body {
   @extend .inner-container;
   display: flex;
   flex-direction: row;
-  overflow-y: hidden;
+  align-items: stretch;
   min-height: 400px;
-  min-height: 100%;
+  height: auto;
   margin: auto;
   padding: 1em 0;
 
   .main-body-content {
-    overflow: hidden;
     padding: 0.5em .8rem 1em;
     background-color: $white;
     margin-top: .5rem;
