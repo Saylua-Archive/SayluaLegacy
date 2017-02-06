@@ -3,7 +3,6 @@
 
 .section-menu {
   float: left;
-  box-sizing: border-box;
   padding: 0px;
   border-right: 1px solid $neutralColor;
 }
@@ -17,7 +16,6 @@
   @include fast-color-trans;
   line-height: 150%;
   display: block;
-  box-sizing: border-box;
   width: 100%;
   padding: 8px;
 }

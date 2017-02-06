@@ -35,6 +35,10 @@ a.navbar-link, a.navbar-link:visited {
   margin: 0 -2px;
   padding: 0 1rem;
   color: $white;
+
+  label {
+    cursor: pointer;
+  }
 }
 
 a.navbar-link:hover {
@@ -73,7 +77,7 @@ a.navbar-link.active {
     font-size: 1.4rem;
     float: left;
     width: 200px;
-    height: 1.9rem;
+    height: 2.5rem;
     margin: 0;
     margin-top: -.1rem;
     padding: .3rem 2.5rem .3rem .5rem;
@@ -194,31 +198,36 @@ a.navbar-link.active {
 }
 
 // Prevent the navbar from being sticky on mobile because that's annoying.
-@media (max-width: 1024px) {
+@media (max-height: 500px) {
   .navbar.navbar-fixed {
     position: relative;
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
+  .search input {
+    width: 150px;
+  }
+}
+
+@media (max-width: 800px) {
   .search {
-    // TODO: Make this actually show up but in responsive form. Can I do with without JS????
+    // TODO: Make this actually show up but in responsive form. Can I do with without JS?
     display: none;
   }
 
   a.navbar-link {
-    padding: 0 .6rem;
+    padding: 0 .3rem;
     font-size: 1.5rem;
 
     i {
-      display: inline;
+      display: block;
     }
   }
 
   .navigation-main-links a.navbar-link {
     line-height: 100%;
     min-width: 3rem;
-    padding: 0 .2rem;
 
     i {
       padding-top: .5rem;
@@ -234,9 +243,5 @@ a.navbar-link.active {
       font-size: .5rem;
       line-height: 100%;
     }
-  }
-
-  .navigation-user-links .dropdown-menu {
-    margin-left: -130px;
   }
 }
