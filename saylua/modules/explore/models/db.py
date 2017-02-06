@@ -37,7 +37,6 @@ r_trait_to_wrapper = db.Table('r_trait_to_wrapper',
 )
 
 
-
 class SerializerBase:
     """Provide JSON (dict) serialization to our Tile and Entity objects for ease of use.
     """

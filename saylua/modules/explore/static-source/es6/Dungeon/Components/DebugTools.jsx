@@ -30,7 +30,6 @@ export default class DebugTools extends Component {
 
 
   debugEnableFOV() {
-    console.log("Toggled!");
     this.store.dispatch({
       'type': 'DEBUG_TOGGLE_FOV'
     });

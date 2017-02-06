@@ -1,9 +1,156 @@
+import Reqwest from "reqwest";
 import Inferno from "inferno";
+import Component from "inferno-component";
 
-export default function DebugSummoner(props) {
-  return (
-    <div className="section-Summoner">
-      I am the map Summoner.
-    </div>
-  );
+import { resolveImage } from "../../Core/graphics";
+
+export default class DebugSummoner extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      "entities": [],
+      "tiles": [],
+      "search": "",
+      "searchActive": false,
+      "hoveredItem": ""
+    };
+  }
+
+  componentWillMount() {
+    let entities = Reqwest({
+      "url": '/explore/api/list_entities',
+      "type": 'json',
+      "method": 'post'
+    });
+
+    let tiles = Reqwest({
+      "url": '/explore/api/list_tiles',
+      "type": 'json',
+      "method": 'post'
+    });
+
+    Promise.all([entities, tiles]).then((results) => {
+      this.setState({
+        "entities": results[0].result,
+        "tiles": results[1].result
+      });
+    });
+  }
+
+  handleItemHover(e) {
+    let itemName = e.target.dataset['name'];
+
+    this.setState({
+      "hoveredItem": itemName
+    });
+  }
+
+  handleItemHoverOut(e) {
+    this.setState({
+      "hoveredItem": ""
+    });
+  }
+
+  handleSearchChange(e) {
+    e.preventDefault();
+
+    let newValue = e.target.value;
+    let searchActive = (newValue.trim() !== '');
+
+    this.setState({
+      "search": e.target.value,
+      "searchActive": searchActive
+    });
+  }
+
+  generateListItems(iterator) {
+    let items = iterator.map((item) => {
+      let itemString = `${item.name || 'Unknown'}  :  ${item.id}`;
+      let imageURL;
+
+      // Attempt to locate matching image URL
+      // default to the debug nil image.
+      try {
+        imageURL = resolveImage(item.id);
+      } catch(e) {
+        imageURL = resolveImage('debug_x');
+      }
+
+      return (
+        <li
+          onMouseEnter={ this.handleItemHover.bind(this) }
+          onMouseLeave={ this.handleItemHoverOut.bind(this) }
+          data-name={ itemString }
+        >
+          <div className="image-container">
+            <img src={ imageURL } alt={ item.name } />
+          </div>
+        </li>
+      );
+    });
+
+    return items;
+  }
+
+  render() {
+    let validEntities = this.state.entities.filter((entity) => {
+      if (entity.name === null) {
+        return (entity.id.indexOf(this.state.search) >= 0);
+      } else {
+        return (
+          entity.name.indexOf(this.state.search) >= 0 ||
+          entity.id.indexOf(this.state.search) >= 0
+        );
+      }
+    });
+
+    let validTiles = this.state.tiles.filter((tile) => {
+      if (tile.name === null) {
+        return (tile.id.indexOf(this.state.search) >= 0);
+      } else {
+        return (
+          tile.name.indexOf(this.state.search) >= 0 ||
+          tile.id.indexOf(this.state.search) >= 0
+        );
+      }
+    });
+
+    let entities = this.generateListItems(validEntities);
+    let tiles = this.generateListItems(validTiles);
+
+    let searchTextClasses = ['search-text'];
+
+    if (this.state.searchActive) {
+      searchTextClasses.push('active');
+    }
+
+    return (
+      <div className="section-summoner">
+        <div className="summoner-search">
+          <span className="hover-item">{ this.state.hoveredItem }</span>
+          <span className={ searchTextClasses.join(' ') }>search</span>
+          <input
+            type="text"
+            value={ this.state.search }
+            onInput={ this.handleSearchChange.bind(this) }
+          />
+        </div>
+        <div className="summoner-select">
+          <div className="select-entities">
+            <h4>Entities</h4>
+            <ul>
+              { entities }
+            </ul>
+          </div>
+          <div className="select-tiles">
+            <h4>Tiles</h4>
+            <ul>
+              { tiles }
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }

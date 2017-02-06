@@ -1,8 +1,9 @@
-from saylua.wrappers import login_required
-from .dungeons import Dungeon
-from .models.db import DungeonEntity
+from saylua.wrappers import login_required, devserver_only
 
-from flask import render_template, flash
+from .dungeons import Dungeon
+from .models.db import DungeonEntity, DungeonTile
+
+from flask import render_template
 from random import randint
 
 import json
@@ -16,6 +17,26 @@ def home():
 @login_required
 def battle():
     return render_template("battle.html", bg_num=randint(1, 21))
+
+
+@login_required
+@devserver_only
+def api_entity_list():
+    entities = [x.to_dict() for x in DungeonEntity.query.all()]
+
+    return json.dumps({
+        "result": entities
+    })
+
+
+@login_required
+@devserver_only
+def api_tile_list():
+    tiles = [x.to_dict() for x in DungeonTile.query.all()]
+
+    return json.dumps({
+        "result": tiles
+    })
 
 
 @login_required
