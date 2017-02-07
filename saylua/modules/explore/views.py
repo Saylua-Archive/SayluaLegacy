@@ -15,11 +15,6 @@ def home():
 
 
 @login_required
-def battle():
-    return render_template("battle.html", bg_num=randint(1, 21))
-
-
-@login_required
 @devserver_only
 def api_entity_list():
     entities = [x.to_dict() for x in DungeonEntity.query.all()]

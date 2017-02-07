@@ -1,6 +1,4 @@
 @import '../assets/transitions';
-
-
 $navHeight: 4rem;
 
 // This is used to prevent the navbar from leaving an empty space in the layout
@@ -13,90 +11,14 @@ $navHeight: 4rem;
 
 .navbar {
   position: relative;
-  width: 100%;
   z-index: 8000;
+  display: flex;
+  width: 100%;
   height: $navHeight;
   text-align: center;
   background: $mainColor;
 
-  a.navbar-link, a.navbar-link:visited {
-    @include slow-color-trans;
-    font-size: 1.8rem;
-    line-height: $navHeight;
-    display: inline-block;
-    height: $navHeight;
-    margin: 0 -2px;
-    padding: 0 1rem;
-    color: $white;
-  }
-
-  a.navbar-link:hover {
-    text-decoration: none;
-    background: $mainDarkColor;
-  }
-
-  a.navbar-link.active {
-    background: $mainDarkerColor;
-  }
-
-  .alert-number {
-    font-size: 1rem;
-    line-height: 1.7rem;
-    position: absolute;
-    display: block;
-    box-sizing: border-box;
-    min-width: 1.6rem;
-    height: 1.6rem;
-    margin-top: -3.8rem;
-    margin-left: -1rem;
-    padding: 0 .3rem;
-    text-align: center;
-    color: $white;
-    border-radius: 5px;
-    background: $accentColor;
-  }
-
-  .search {
-    display: inline-block;
-    height: $navHeight;
-    padding: 0 .7rem;
-
-    input {
-      @include slow-color-trans;
-      font-size: 1.4rem;
-      float: left;
-      width: 200px;
-      height: 1.9rem;
-      margin: 0;
-      margin-top: -.1rem;
-      padding: .3rem 2.5rem .3rem .5rem;
-      color: $mainDarkColor;
-      border: 0;
-      background: $mainSoftColor;
-    }
-
-    input:focus {
-      color: $black;
-      outline: none;
-      background: $white;
-      box-shadow: -1px 1px 8px #eceb72, 1px -1px 8px #fff;
-    }
-
-    button {
-      font-size: 1.4rem;
-      line-height: 100%;
-      position: relative;
-      width: 2.5rem;
-      height: 2.5rem;
-      margin-left: -2.6rem;
-      padding: .5rem;
-      cursor: pointer;
-      color: $mainDarkColor;
-      border: 0;
-      border-radius: 0;
-      background: none;
-    }
-  }
+  justify-content: center;
 }
 
 .navbar.navbar-fixed {
@@ -105,33 +27,132 @@ $navHeight: 4rem;
   left: 0;
 }
 
-.navbar-block {
-  display: inline-block;
-  position: relative;
+// Basically, this container is used to center all the navbar links.
+.navbar-inner-container {
+  display: flex;
+  flex-direction: row;
+  width: auto;
+  height: $navHeight;
+  margin: auto;
+
+  align-items: stretch;
 }
 
-.navigation-user-links {
-  display: inline-block;
+.navbar-block {
+  display: flex;
+  flex-direction: row;
 
-  &.dropdown-menu {
-    margin-left: -100px;
+  align-items: stretch;
+}
+
+a.navbar-link {
+  @include slow-color-trans;
+  font-size: 1.7rem;
+  display: flex;
+  padding: 0 1rem;
+  color: $white;
+
+  align-items: center;
+
+  i {
+    font-size: 2.1rem;
+  }
+
+  label {
+    padding-top: 0.3rem;
+    cursor: pointer;
   }
 }
 
+a.navbar-link:hover {
+  text-decoration: none;
+  background: $mainDarkColor;
+}
+
+a.navbar-link.active {
+  background: $mainDarkerColor;
+}
+
+.alert-number {
+  font-size: 1rem;
+  line-height: 1.7rem;
+  position: absolute;
+  display: block;
+  box-sizing: border-box;
+  min-width: 1.6rem;
+  height: 1.6rem;
+  margin-top: -1.3rem;
+  margin-left: -0.7rem;
+  padding: 0 0.3rem;
+  text-align: center;
+  color: $white;
+  border-radius: 5px;
+  background: $accentColor;
+}
+
+.search {
+  display: flex;
+  padding: 0 0.7rem;
+
+  align-items: center;
+
+  input {
+    @include slow-color-trans;
+    font-size: 1.4rem;
+    float: left;
+    width: 200px;
+    height: 2.5rem;
+    margin: 0;
+    margin-top: -0.1rem;
+    padding: 0.3rem 2.5rem 0.3rem 0.5rem;
+    color: $mainDarkColor;
+    border: 0;
+    background: $mainSoftColor;
+  }
+
+  input:focus {
+    color: $black;
+    outline: none;
+    background: $white;
+    box-shadow: -1px 1px 8px #eceb72, 1px -1px 8px #fff;
+  }
+
+  button {
+    font-size: 1.4rem;
+    line-height: 100%;
+    position: relative;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-left: -2.6rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: $mainDarkColor;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+
+  button:hover {
+    background: none;
+  }
+}
+
+
 .dropdown-menu {
   position: absolute;
+  z-index: 999;
+  top: -0.25em;
   display: none;
-  margin-left: -50px;
   width: 220px;
   min-height: 50px;
-  margin-top: -0.25em;
+  margin-top: $navHeight;
+  margin-left: -50px;
   padding-bottom: 0.5em;
   border: 1px solid $neutralColor;
   background: $white;
   -webkit-box-shadow: 3px 8px 32px -13px $black;
   -moz-box-shadow: 3px 8px 32px -13px $black;
   box-shadow: 3px 8px 32px -13px $black;
-  z-index: 999;
 
   ul {
     font-size: 0.8em;
@@ -185,9 +206,97 @@ $navHeight: 4rem;
   display: none;
 }
 
-// Prevent the navbar from being sticky on mobile because that's annoying. 
-@media (max-width: 1024px) {
+.navbar-dropdown-main .navbar-link i {
+  display: none;
+}
+
+// Prevent the navbar from being sticky on mobile because that's annoying.
+@media (max-height: 500px) {
   .navbar.navbar-fixed {
     position: relative;
+  }
+}
+
+@media (max-width: 1024px) {
+  .search input {
+    width: 150px;
+  }
+}
+
+@media (max-width: 800px) {
+  .navbar-inner-container {
+    width: 95%;
+  }
+
+  .navbar-block.search {
+    // TODO: Make this actually show up but in responsive form. Can I do with without JS?
+    display: none;
+  }
+
+  a.navbar-link {
+    padding: 0 0.3rem;
+
+    i {
+      display: block;
+      font-size: 1.8rem;
+    }
+  }
+
+  .navbar-block {
+    display: flex;
+    justify-content: center;
+
+    flex-grow: 1;
+  }
+
+  .navbar-user-links {
+    flex-grow: 2;
+
+    a.navbar-link {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .navbar-dropdown-main a.navbar-link {
+    line-height: 100%;
+    min-width: 3rem;
+
+    i {
+      font-size: 1.5rem;
+      display: block;
+      padding-right: 0.4rem;
+    }
+
+    label {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  a.navbar-link {
+    i {
+      display: block;
+      font-size: 1.5rem;
+    }
+  }
+
+  .navbar-dropdown-main a.navbar-link {
+    display: flex;
+    flex-direction: column;
+
+    i {
+      display: block;
+      padding: 0;
+      padding-top: 0.8rem;
+    }
+
+    label {
+      line-height: 100%;
+      font-size: 0.8rem;
+      display: block;
+    }
   }
 }
