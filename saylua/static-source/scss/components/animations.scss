@@ -1,13 +1,4 @@
-@keyframes bounce {
-  0%, 100% {
-    position: relative;
-    top: 0;
-  }
-
-  50% {
-    top: 10px;
-  }
-}
+@import '../assets/keyframes';
 
 .bounce {
   -webkit-animation: bounce 1.5s linear infinite; /* Chrome, Safari, Opera */
