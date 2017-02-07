@@ -36,6 +36,11 @@ export default class DebugTools extends Component {
   }
 
 
+  debugClearCache() {
+    localStorage.clear();
+  }
+
+
   debugToggleOption(name) {
     this.store.dispatch({
       'type': 'DEBUG_TOGGLE_OPTION',
@@ -62,6 +67,13 @@ export default class DebugTools extends Component {
     this.forceReRender();
   }
 
+  debugQueueSummon(target) {
+    this.store.dispatch({
+      'type': 'DEBUG_QUEUE_SUMMON',
+      'summon': target
+    });
+  }
+
 
   selectSection(section, event) {
     event.preventDefault();
@@ -76,6 +88,7 @@ export default class DebugTools extends Component {
       return (
         <DebugGeneral
           store={ this.store }
+          debugClearCache={ this.debugClearCache.bind(this) }
           debugToggleOption={ this.debugToggleOption.bind(this) }
           debugRevealMap={ this.debugRevealMap.bind(this) }
           debugRegenerateDungeon={ this.debugRegenerateDungeon.bind(this) }
@@ -92,7 +105,10 @@ export default class DebugTools extends Component {
 
     else if (this.state.activeSection === 'summoner') {
       return (
-        <DebugSummoner store={ this.store } />
+        <DebugSummoner
+          store={ this.store }
+          debugQueueSummon={ this.debugQueueSummon.bind(this) }
+        />
       );
     }
   }

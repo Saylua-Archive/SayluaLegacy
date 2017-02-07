@@ -117,14 +117,23 @@ export default class GameRenderer {
       "HUD": HUDSprites
     };
 
-    // Final setup
+    // -- Final setup
+    // Mouse events
     let tileHoverHandler = MouseInteractions.tileHover(sprites.HUD.mouse, this);
+    let tileClickHandler = MouseInteractions.tileClick(this);
+
+    // Sprite creator. This should be replaced with a real sprite management system at some point.
+    this.generateEntitySprite = GameInit.generateEntitySprite(renderWidth, renderHeight, sprites.entities);
 
     sprites.tiles.map((sprite) => {
-      // Additionally, bind mouse hover handler
+      // Bind mouse events
       sprite.interactive = true;
       sprite.buttonMode = true;
+
+      sprite.on('mousedown', tileClickHandler);
       sprite.on('mouseover', tileHoverHandler);
+
+      // Append to the stage
       stages.tiles.addChild(sprite);
     });
 
@@ -229,7 +238,8 @@ export default class GameRenderer {
       GameRender.renderEntities(
         baseData,
         this.gameState.entityLayer,
-        this.state.sprites.entities
+        this.state.sprites.entities,
+        this.generateEntitySprite
       );
 
       GameRender.renderMinimap(

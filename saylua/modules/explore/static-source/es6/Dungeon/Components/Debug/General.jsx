@@ -6,7 +6,8 @@ import Inferno from "inferno";
 function mapActionsToButtons(props, state) {
   let actions = [
     ["Regenerate Dungeon", props.debugRegenerateDungeon],
-    ["Reveal Map", props.debugRevealMap]
+    ["Reveal Map", props.debugRevealMap],
+    ["Clear Cache", props.debugClearCache]
   ];
 
   let items = actions.map((action) => (

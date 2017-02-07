@@ -101,12 +101,12 @@ export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
 }
 
 
-export function renderEntities(baseData, entityLayer, entitySprites) {
+export function renderEntities(baseData, entityLayer, entitySprites, generateEntitySprite) {
   entityLayer.map((entity, i) => {
     let x = entity.location.x;
     let y = entity.location.y;
 
-    let sprite = entitySprites[i];
+    let sprite = entitySprites[i] || generateEntitySprite(entity.parent);
 
     let [stageWidth, stageHeight] = baseData.dimensions;
 

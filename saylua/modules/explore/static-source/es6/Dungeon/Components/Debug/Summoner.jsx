@@ -38,6 +38,24 @@ export default class DebugSummoner extends Component {
     });
   }
 
+
+  handleItemClick(e) {
+    let itemID = e.target.dataset['id'];
+    let isTile = itemID.startsWith("tile");
+    let target;
+
+    if (isTile === true) {
+      target = this.state.tiles.filter((tile) => (tile.id == itemID));
+      target = target[0];
+    } else {
+      target = this.state.entities.filter((entity) => (entity.id == itemID));
+      target = target[0];
+    }
+
+    this.props.debugQueueSummon(target);
+  }
+
+
   handleItemHover(e) {
     let itemName = e.target.dataset['name'];
 
@@ -46,11 +64,13 @@ export default class DebugSummoner extends Component {
     });
   }
 
+
   handleItemHoverOut(e) {
     this.setState({
       "hoveredItem": ""
     });
   }
+
 
   handleSearchChange(e) {
     e.preventDefault();
@@ -63,6 +83,7 @@ export default class DebugSummoner extends Component {
       "searchActive": searchActive
     });
   }
+
 
   generateListItems(iterator) {
     let items = iterator.map((item) => {
@@ -79,12 +100,18 @@ export default class DebugSummoner extends Component {
 
       return (
         <li
+          onClick={ this.handleItemClick.bind(this) }
           onMouseEnter={ this.handleItemHover.bind(this) }
           onMouseLeave={ this.handleItemHoverOut.bind(this) }
           data-name={ itemString }
+          data-id={ item.id }
         >
           <div className="image-container">
-            <img src={ imageURL } alt={ item.name } />
+            <img
+              src={ imageURL }
+              alt={ item.name }
+              data-id={ item.id } // We have to define this here too because onClick returns the targeted element directly.
+            />
           </div>
         </li>
       );
@@ -92,6 +119,7 @@ export default class DebugSummoner extends Component {
 
     return items;
   }
+
 
   render() {
     let validEntities = this.state.entities.filter((entity) => {

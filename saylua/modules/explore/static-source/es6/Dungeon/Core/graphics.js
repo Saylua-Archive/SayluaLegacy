@@ -49,9 +49,11 @@ export function resolveImage(itemSlug) {
         return `/static/img/dungeons/tiles/test/portal.png`;
       } else if (parts[1] == 'item') {
         return `/static/img/dungeons/item/${ parts.slice(-1) }.png`;
-      } else if (parts[1] == 'enemy') {
-        return `/static/img/dungeons/enemies/${ parts.slice(-1) }.png`;
       }
+    }
+
+    else if (parts[0] == 'enemy') {
+      return `/static/img/dungeons/enemies/${ parts.slice(-1) }.png`;
     }
   }
 
