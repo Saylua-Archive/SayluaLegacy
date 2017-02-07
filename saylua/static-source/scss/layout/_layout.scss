@@ -46,10 +46,10 @@ body {
   @extend .inner-container;
   display: flex;
   flex-direction: row;
-  align-items: stretch;
   min-height: 400px;
   margin: auto;
   padding: 1em 0;
+  flex-shrink: 0;
 }
 
 .main-body-content {
@@ -70,11 +70,10 @@ body {
   border-bottom: 1px $gray dotted;
 }
 
-// Total width should not exceed 180px
 .sidebar {
   display: flex;
   flex-direction: column;
-  min-width: 20%;
+  flex-shrink: 0;
   width: 20%;
   padding: 1rem 1%;
 
