@@ -24,22 +24,33 @@ export default class DebugTools extends Component {
     });
 
     this.state = {
-      'activeSection': 'general'
+      'activeSection': 'general',
+      "__forceReRender": false
     };
   }
 
-
-  debugEnableFOV() {
-    this.store.dispatch({
-      'type': 'DEBUG_TOGGLE_FOV'
+  forceReRender(component) {
+    this.setState({
+      "__forceReRender": !this.state.__forceReRender
     });
   }
 
+
+  debugToggleOption(name) {
+    this.store.dispatch({
+      'type': 'DEBUG_TOGGLE_OPTION',
+      'name': name
+    });
+
+    this.forceReRender();
+  }
 
   debugRegenerateDungeon() {
     this.store.dispatch({
       'type': 'DEBUG_REGENERATE_DUNGEON'
     });
+
+    this.forceReRender();
   }
 
 
@@ -47,6 +58,8 @@ export default class DebugTools extends Component {
     this.store.dispatch({
       'type': 'DEBUG_REVEAL_MAP'
     });
+
+    this.forceReRender();
   }
 
 
@@ -63,9 +76,10 @@ export default class DebugTools extends Component {
       return (
         <DebugGeneral
           store={ this.store }
-          debugEnableFOV={ this.debugEnableFOV.bind(this) }
+          debugToggleOption={ this.debugToggleOption.bind(this) }
           debugRevealMap={ this.debugRevealMap.bind(this) }
           debugRegenerateDungeon={ this.debugRegenerateDungeon.bind(this) }
+          __forceReRender={ this.state.__forceReRender }
         />
       );
     }

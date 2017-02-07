@@ -24,9 +24,17 @@ function mapOptionsToInputs(props, state) {
       "name": "FOV Enabled",
       "type": "toggle",
       "options": {
-        "boundFunction": props.debugEnableFOV
+        "boundFunction": props.debugToggleOption.bind(this, 'FOVEnabled')
       },
       "value": state.debug.FOVEnabled
+    },
+    {
+      "name": "Capture Keyboard Input",
+      "type": "toggle",
+      "options": {
+        "boundFunction": props.debugToggleOption.bind(this, 'keyboardInputEnabled')
+      },
+      "value": state.debug.keyboardInputEnabled
     }
   ];
 

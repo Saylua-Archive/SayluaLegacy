@@ -481,8 +481,7 @@ div.main-body.dungeons-body {
 }
 
 .debug-section .section-summoner {
-  display: flex;
-  flex-direction: column;
+  height: 100%;
 
   .summoner-search {
     background: $debug-search-section-background;
@@ -535,6 +534,9 @@ div.main-body.dungeons-body {
   }
 
   .summoner-select {
+    cursor: url('/static/img/dungeons/debug/master_hand_idle.png') 18 30, auto;
+    height: 100%;
+
     ul li {
       list-style-type: none;
       padding: 5px;
@@ -550,7 +552,7 @@ div.main-body.dungeons-body {
     }
 
     ul li .image-container:hover {
-      cursor: pointer;
+      cursor: url('/static/img/dungeons/debug/master_hand_grab.png') 23 28, auto;
     }
 
     .select-entities {

@@ -8,7 +8,8 @@ import * as Debug from "../Core/debug";
 
 export function addAdditionalDebugParameters(state) {
   let debug = {
-    "FOVEnabled": true
+    "FOVEnabled": true,
+    "keyboardInputEnabled": true
   };
 
   return {...state, debug };
@@ -34,8 +35,10 @@ export const DebugReducer = (state, action) => {
 
       return { ...state, 'tileLayer': newTileLayer, 'entityLayer': newEntityLayer };
 
-    case 'DEBUG_TOGGLE_FOV':
-      var newDebug = {...state.debug, 'FOVEnabled': !state.debug.FOVEnabled };
+    case 'DEBUG_TOGGLE_OPTION':
+      var newDebug = { ...state.debug };
+      newDebug[action.name] = !newDebug[action.name];
+
       return { ...state, 'debug': newDebug };
 
     default:

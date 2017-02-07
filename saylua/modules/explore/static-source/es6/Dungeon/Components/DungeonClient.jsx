@@ -108,6 +108,12 @@ export default class DungeonClient extends Component {
     let movementKeys = ["up", "down", "left", "right"];
 
     if (movementKeys.indexOf(keyName) !== -1) {
+      // Disable keyboard input capture when the debugger tells us to.
+      let keyboardInputEnabled = window.getStoreState().debug.keyboardInputEnabled;
+      if (keyboardInputEnabled === false) {
+        return;
+      }
+
       // If we've gotten this far, prevent default behavior.
       event.preventDefault();
 
