@@ -160,7 +160,7 @@ export default class GameRenderer {
       sprites
     };
 
-    this.test();
+    //this.test();
   }
 
 
@@ -185,7 +185,7 @@ export default class GameRenderer {
 
 
   test() {
-    let sprite = new PIXI.Sprite.fromImage("/static/img/loxi.png");
+    /*let sprite = new PIXI.Sprite.fromImage("/static/img/loxi.png");
     let [width, height] = this.state.dimensions;
 
     sprite.x = MathUtils.randomRange(0, width);
@@ -194,7 +194,7 @@ export default class GameRenderer {
     sprite.height = 150;
     sprite.width = 150;
 
-    this.state.stages.testing.addChild(sprite);
+    this.state.stages.testing.addChild(sprite);*/
   }
 
 
