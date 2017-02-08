@@ -1,7 +1,9 @@
 // debug -> Required by Reducers/DebugReducer
 // --------------------------------------
 // Useful functions for the debug reducer.
+import { OBSTRUCTIONS } from "./logic";
 import { uuid } from "Utils";
+
 
 export function revealMap(tileLayer, entityLayer) {
   for (let tile of tileLayer) {
@@ -36,7 +38,7 @@ export function updateItemSets(summon, entitySet, tileSet) {
 }
 
 
-export function placeSummon(summon, location, entityLayer, tileLayer) {
+export function placeSummon(summon, location, entityLayer, tileLayer, nodeGraph) {
   let isTile = summon.id.startsWith('tile');
 
   if (isTile === true) {
@@ -47,6 +49,12 @@ export function placeSummon(summon, location, entityLayer, tileLayer) {
 
     matchingTile.tile = summon.id;
     matchingTile.meta = {};
+
+    // Dirty grid modification, for speed reasons
+    // Ctrl+F: "Bug in the making"
+    let isObstacle = (OBSTRUCTIONS.indexOf(summon.type) !== -1);
+    nodeGraph.grid[location.x][location.y].weight = (isObstacle === true) ? 0 : 1;
+
   } else {
     entityLayer.push({
       "id": uuid(),

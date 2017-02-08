@@ -27,7 +27,8 @@ export const DebugReducer = (state, action) => {
         state.debug.queuedSummon,
         action.location,
         state.entityLayer.slice(),
-        state.tileLayer.slice()
+        state.tileLayer.slice(),
+        state.nodeGraph
       );
 
       return { ...state, 'tileLayer': newTileLayer, 'entityLayer': newEntityLayer };
