@@ -1,10 +1,12 @@
+import onDomReady from "ondomready";
+
 import {hasClass, removeClass, addClass, swapClass} from 'Utils';
 import CheckAll from 'Plugins/CheckAll';
 import FormValidation from 'Plugins/FormValidation/Main';
 import './Notifications';
 
 
-window.addEventListener('DOMContentLoaded', function () {
+onDomReady(function () {
   window.addEventListener('scroll', fixNavbar);
 
   // Get all of the right navbar links and bind click events to them
