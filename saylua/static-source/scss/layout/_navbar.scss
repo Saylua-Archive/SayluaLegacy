@@ -4,9 +4,10 @@ $navHeight: 4rem;
 // This is used to prevent the navbar from leaving an empty space in the layout
 // when it's positioning changes.
 .navbar-container {
-  float: left;
   width: 100%;
   height: $navHeight;
+
+  flex-shrink: 0;
 }
 
 .navbar {
@@ -43,6 +44,8 @@ $navHeight: 4rem;
   flex-direction: row;
 
   align-items: stretch;
+  flex-grow: 1;
+  justify-content: center;
 }
 
 a.navbar-link {
@@ -53,6 +56,8 @@ a.navbar-link {
   color: $white;
 
   align-items: center;
+  flex-grow: 1;
+  justify-content: center;
 
   i {
     font-size: 2.1rem;
@@ -78,7 +83,6 @@ a.navbar-link.active {
   line-height: 1.7rem;
   position: absolute;
   display: block;
-  box-sizing: border-box;
   min-width: 1.6rem;
   height: 1.6rem;
   margin-top: -1.3rem;
@@ -92,8 +96,8 @@ a.navbar-link.active {
 
 .search {
   display: flex;
-  padding: 0 0.7rem;
   margin-top: 1px;
+  padding: 0 0.7rem;
 
   align-items: center;
 
@@ -138,22 +142,32 @@ a.navbar-link.active {
   }
 }
 
-
 .dropdown-menu {
   position: absolute;
   z-index: 999;
   top: -0.25em;
   display: none;
+  flex-direction: column;
   width: 220px;
   min-height: 50px;
   margin-top: $navHeight;
-  margin-left: -50px;
   padding-bottom: 0.5em;
+  text-align: left;
   border: 1px solid $neutralColor;
   background: $white;
   -webkit-box-shadow: 3px 8px 32px -13px $black;
   -moz-box-shadow: 3px 8px 32px -13px $black;
   box-shadow: 3px 8px 32px -13px $black;
+
+  align-items: stretch;
+
+  // For the right menu.
+  .menu {
+    flex-direction: column;
+    width: 100%;
+
+    align-items: stretch;
+  }
 
   ul {
     font-size: 0.8em;
@@ -163,10 +177,7 @@ a.navbar-link.active {
   a, a:visited {
     @include fast-color-trans;
     display: block;
-    box-sizing: border-box;
-    width: 100%;
     padding: 5px;
-    text-align: left;
   }
 
   ul a {
@@ -186,9 +197,8 @@ a.navbar-link.active {
 
   .dropdown-separator {
     display: block;
-    box-sizing: border-box;
-    width: 210px;
-    margin: 0.25em 4px 0.5em;
+    width: 96%;
+    margin: 0.25em 2% 0.5em;
     border-bottom: 1px solid $neutralColor;
   }
 
@@ -200,15 +210,25 @@ a.navbar-link.active {
 }
 
 .dropdown-menu.shown, .shown {
-  display: block;
+  display: flex;
 }
 
 .dropdown-menu.hidden, .hidden {
   display: none;
 }
 
-.navbar-dropdown-main .navbar-link i {
-  display: none;
+.navbar-main-links {
+  .dropdown-menu {
+    margin-left: 25px;
+  }
+
+  .navbar-link i {
+    display: none;
+  }
+}
+
+.navbar-user-links .dropdown-menu {
+  margin-left: -25px;
 }
 
 // Prevent the navbar from being sticky on mobile because that's annoying.
@@ -238,29 +258,30 @@ a.navbar-link.active {
     padding: 0 0.3rem;
 
     i {
-      display: block;
       font-size: 1.8rem;
+      display: block;
     }
   }
 
   .navbar-block {
     display: flex;
-    justify-content: center;
 
     flex-grow: 1;
+    justify-content: center;
   }
 
   .navbar-user-links {
     flex-grow: 2;
 
     a.navbar-link {
-      flex-grow: 1;
       display: flex;
+
+      flex-grow: 1;
       justify-content: center;
     }
   }
 
-  .navbar-dropdown-main a.navbar-link {
+  .navbar-main-links a.navbar-link {
     line-height: 100%;
     min-width: 3rem;
 
@@ -279,25 +300,37 @@ a.navbar-link.active {
 @media (max-width: 600px) {
   a.navbar-link {
     i {
-      display: block;
       font-size: 1.5rem;
+      display: block;
     }
   }
 
-  .navbar-dropdown-main a.navbar-link {
+  .navbar-main-links a.navbar-link {
     display: flex;
     flex-direction: column;
 
     i {
       display: block;
       padding: 0;
-      padding-top: 0.8rem;
     }
 
     label {
-      line-height: 100%;
       font-size: 0.8rem;
+      line-height: 100%;
       display: block;
+    }
+  }
+
+  .navbar-user-links .dropdown-menu,
+  .navbar-main-links .dropdown-menu {
+    left: 0;
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+    text-align: center;
+
+    h3 {
+      text-align: center;
     }
   }
 }
