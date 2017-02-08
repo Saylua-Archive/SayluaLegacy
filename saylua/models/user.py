@@ -32,7 +32,7 @@ class _DisplayNames(db.Model):
     __tablename__ = "display_names"
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column('user_id', Integer, ForeignKey("users.id"), nullable=False)
+    user_id = db.Column('user_id', db.Integer, db.ForeignKey("users.id"), nullable=False)
     display_name = db.Column(db.String(80), unique=True)
 
 class User(ndb.Model):
