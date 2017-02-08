@@ -139,6 +139,8 @@ canvas {
 
 // Specificity fight!
 div.main-body.dungeons-body {
+  flex-direction: column;
+
   padding: 0;
   max-width: 100%;
   width: 100%;
