@@ -14,6 +14,11 @@ class _User(db.Model):
     phash = db.Column(db.String(200))
     role = db.Column(db.String(100), default="user")
     ha_url = db.Column(db.String(100), default="/api/ha/m/")
+    permabanned = db.Column(db.Boolean, default=False)
+    star_shards = db.Column(db.Integer, default=0)
+    cloud_coins = db.Column(db.Integer, default=0)
+    bank_cc = db.Column(db.Integer, default=0)
+    bank_ss = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return '<User %r>' % self.display_name

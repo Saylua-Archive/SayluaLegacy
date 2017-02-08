@@ -11,8 +11,8 @@ window.addEventListener('load', function () {
   initializeDropMenus(document.getElementById('navbar-user-links'),
     document.getElementById('dropdown-user-menu'));
 
-  let links = document.getElementsByClassName('navbar-dropdown-main');
-  for (let i in links) {
+  let links = document.getElementsByClassName('navbar-main-links');
+  for (let i = 0; i < links.length; i++) {
     initializeDropMenus(links[i]);
   }
 
