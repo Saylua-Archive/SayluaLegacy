@@ -18,5 +18,5 @@ LAST_ACTION_OFFSET = 5
 # Maximum number of usernames that a single user can own
 MAX_USERNAMES = 10
 
-#Disable the Flask-SQLAlchemy event system for now as it's kinda buggy and not needed
+# Disable the Flask-SQLAlchemy event system for now as it's kinda buggy and not needed
 SQLALCHEMY_TRACK_MODIFICATIONS = False

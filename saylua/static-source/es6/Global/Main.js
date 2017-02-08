@@ -1,10 +1,12 @@
+import onDomReady from "ondomready";
+
 import {hasClass, removeClass, addClass, swapClass} from 'Utils';
 import CheckAll from 'Plugins/CheckAll';
 import FormValidation from 'Plugins/FormValidation/Main';
 import './Notifications';
 
 
-window.addEventListener('load', function () {
+onDomReady(function () {
   window.addEventListener('scroll', fixNavbar);
 
   // Get all of the right navbar links and bind click events to them
@@ -12,8 +14,8 @@ window.addEventListener('load', function () {
     document.getElementById('dropdown-user-menu'));
 
   let links = document.getElementsByClassName('navbar-main-links');
-  for (let i = 0; i < links.length; i++) {
-    initializeDropMenus(links[i]);
+  for (let l of links) {
+    initializeDropMenus(l);
   }
 
   // Bind dom behavior libraries to specific classes. Perhaps one day this
