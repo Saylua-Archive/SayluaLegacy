@@ -110,14 +110,14 @@ gulp.task('build-es6', [], function() {
   // Set additional dev options
   if (process.env.NODE_ENV === "dev") {
     webpackConfig['plugins'].push(
-      new webpack.DefinePlugin({
+      new _webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('development')
       })
     );
     webpackConfig['devtool'] = 'inline-source-map';
   } else {
     webpackConfig['plugins'].push(
-      new webpack.DefinePlugin({
+      new _webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('production')
       })
     );
