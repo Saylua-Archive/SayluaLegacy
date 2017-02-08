@@ -33,6 +33,22 @@ export function getBaseData(player, tileSet, tileLayer, dimensions, mapHeight, m
 }
 
 
+export function generateEntitySprite(dimensions, entityParentID) {
+  let [stageWidth, stageHeight] = dimensions;
+  let spriteHeight = (stageHeight / VIEWPORT_HEIGHT) * 0.8;
+  let spriteWidth = (stageWidth / VIEWPORT_WIDTH) * 0.8;
+
+  let spriteTexture = Graphics.getTexture(entityParentID);
+  let sprite = new PIXI.Sprite(spriteTexture);
+
+  sprite.visible = false;
+  sprite.height = spriteHeight;
+  sprite.width = spriteWidth;
+
+  return sprite;
+}
+
+
 export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
   // There are MUCH prettier ways to do this.
   // This, however, is the fastest. Blame Javascript's expensive array operations.
@@ -124,7 +140,6 @@ export function renderEntities(baseData, entityLayer, entitySprites, generateEnt
 
     // We've got a winner!
     if (baseData.within_x_bounds(x) && baseData.within_y_bounds(y)) {
-
       // Set entity visibility, if necessary
       let FOVEnabled = window.getStoreState().debug.FOVEnabled;
       let entityVisible;

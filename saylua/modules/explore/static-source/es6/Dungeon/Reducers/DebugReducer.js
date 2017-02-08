@@ -30,7 +30,7 @@ export const DebugReducer = (state, action) => {
         state.tileLayer.slice()
       );
 
-      return { ...state, 'tileLayer': newTileLayer, 'entityLayer': newEntityLayer, 'queuedSummon': false };
+      return { ...state, 'tileLayer': newTileLayer, 'entityLayer': newEntityLayer };
 
     case 'DEBUG_REGENERATE_DUNGEON':
       getInitialGameState(true).then((initialState) => {
@@ -52,7 +52,15 @@ export const DebugReducer = (state, action) => {
       return { ...state, 'debug': newDebug };
 
     case 'DEBUG_QUEUE_SUMMON':
-      var [newEntitySet, newTileSet] = Debug.updateItemSets(action.summon, cloneDeep(state.entitySet), cloneDeep(state.tileSet));
+      var newEntitySet, newTileSet;
+
+      if (action.summon === false) {
+        newEntitySet = state.entitySet;
+        newTileSet = state.tileSet;
+      } else {
+        [newEntitySet, newTileSet] = Debug.updateItemSets(action.summon, cloneDeep(state.entitySet), cloneDeep(state.tileSet));
+      }
+
       var newDebug = { ...state.debug, queuedSummon: action.summon };
 
       return { ...state, 'entitySet': newEntitySet, 'tileSet': newTileSet, 'debug': newDebug };

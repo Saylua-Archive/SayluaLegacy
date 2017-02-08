@@ -50,7 +50,9 @@ export function placeSummon(summon, location, entityLayer, tileLayer) {
   } else {
     entityLayer.push({
       "id": uuid(),
-      "meta": {},
+      "meta": {
+        "health": (summon.meta.maxHP !== undefined) ? summon.meta.maxHP : 100
+      },
       "parent": summon.id,
       "location": {
         "x": location.x,

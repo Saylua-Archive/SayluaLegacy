@@ -122,9 +122,6 @@ export default class GameRenderer {
     let tileHoverHandler = MouseInteractions.tileHover(sprites.HUD.mouse, this);
     let tileClickHandler = MouseInteractions.tileClick(this);
 
-    // Sprite creator. This should be replaced with a real sprite management system at some point.
-    this.generateEntitySprite = GameInit.generateEntitySprite(renderWidth, renderHeight, sprites.entities);
-
     sprites.tiles.map((sprite) => {
       // Bind mouse events
       sprite.interactive = true;
@@ -176,6 +173,18 @@ export default class GameRenderer {
     this.state.sprites.entities.map((sprite) => {
       this.state.stages.entities.addChild(sprite);
     });
+  }
+
+  generateEntitySprite(entityID) {
+    // Sprite creator. This should be replaced with a real sprite management system at some point.
+    let sprite = GameRender.generateEntitySprite(this.state.dimensions, entityID);
+    let entitySprites = this.state.sprites.entities;
+    let entityStage = this.state.stages.entities;
+
+    entitySprites.push(sprite);
+    entityStage.addChild(sprite);
+
+    return sprite;
   }
 
 
@@ -239,7 +248,7 @@ export default class GameRenderer {
         baseData,
         this.gameState.entityLayer,
         this.state.sprites.entities,
-        this.generateEntitySprite
+        this.generateEntitySprite.bind(this)
       );
 
       GameRender.renderMinimap(

@@ -13,7 +13,8 @@ export default class DebugSummoner extends Component {
       "tiles": [],
       "search": "",
       "searchActive": false,
-      "hoveredItem": ""
+      "hoveredItem": "",
+      "locked": false
     };
   }
 
@@ -52,6 +53,10 @@ export default class DebugSummoner extends Component {
       target = target[0];
     }
 
+    this.setState({
+      "locked": true
+    });
+
     this.props.debugQueueSummon(target);
   }
 
@@ -66,9 +71,11 @@ export default class DebugSummoner extends Component {
 
 
   handleItemHoverOut(e) {
-    this.setState({
-      "hoveredItem": ""
-    });
+    if (this.state.locked === false) {
+      this.setState({
+        "hoveredItem": ""
+      });
+    }
   }
 
 
@@ -82,6 +89,17 @@ export default class DebugSummoner extends Component {
       "search": e.target.value,
       "searchActive": searchActive
     });
+  }
+
+  handleUnlockClick(e) {
+    e.preventDefault();
+
+    this.setState({
+      "locked": false,
+      "hoveredItem": ""
+    });
+
+    this.props.debugQueueSummon(false);
   }
 
 
@@ -153,10 +171,18 @@ export default class DebugSummoner extends Component {
       searchTextClasses.push('active');
     }
 
+    let lock = false;
+
+    if (this.state.locked === true) {
+      lock = (
+        <a href="#" className="lock" onClick={ this.handleUnlockClick.bind(this) }>(unlock)</a>
+      );
+    }
+
     return (
       <div className="section-summoner">
         <div className="summoner-search">
-          <span className="hover-item">{ this.state.hoveredItem }</span>
+          <span className="hover-item">{ this.state.hoveredItem } { lock }</span>
           <span className={ searchTextClasses.join(' ') }>search</span>
           <input
             type="text"

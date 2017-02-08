@@ -16,27 +16,6 @@ window.textures['null'] = PIXI.Texture.fromImage("/static/img/dungeons/tiles/tes
 
 /******************************** RENDERER INIT ***********************************/
 
-
-export function generateEntitySprite(stageWidth, stageHeight, spriteLayer) {
-  let generator = (entityParentID) => {
-    let spriteHeight = (stageHeight / VIEWPORT_HEIGHT) * 0.8;
-    let spriteWidth = (stageWidth / VIEWPORT_WIDTH) * 0.8;
-
-    let spriteTexture = Graphics.getTexture(entityParentID);
-    let sprite = new PIXI.Sprite(spriteTexture);
-
-    sprite.visible = false;
-    sprite.height = spriteHeight;
-    sprite.width = spriteWidth;
-
-    spriteLayer.push(sprite);
-    return sprite;
-  };
-
-  return generator;
-}
-
-
 export function generateEntitySprites(stageWidth, stageHeight, entityLayer, entitySet) {
   let spriteLayer = [];
   let spriteHeight = (stageHeight / VIEWPORT_HEIGHT) * 0.8;

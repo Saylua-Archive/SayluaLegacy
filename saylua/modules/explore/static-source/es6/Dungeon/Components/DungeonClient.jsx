@@ -5,7 +5,6 @@
 // instead of a traditional one.
 
 import Inferno from "inferno";
-import onDomReady from "ondomready";
 import Component from "inferno-component";
 
 import * as CanvasUtils from "../Utils/canvas";
@@ -23,33 +22,32 @@ export default class DungeonClient extends Component {
 
   componentDidMount() {
     // Create a canvas context with Pixi, then initialize a new GameRenderer and pass said context.
-    onDomReady(() => {
-      // Store client wrapper, canvas wrapper.
-      this.clientWrapper = document.querySelectorAll(".dungeon-client-wrapper")[0];
-      this.canvasWrapper = this.refs.pixiCanvas;
 
-      // Calculate the height, and width of our canvas from the window size.
-      let [renderWidth, renderHeight] = CanvasUtils.calculateSize();
+    // Store client wrapper, canvas wrapper.
+    this.clientWrapper = document.querySelectorAll(".dungeon-client-wrapper")[0];
+    this.canvasWrapper = this.refs.pixiCanvas;
 
-      // Resize container
-      this.clientWrapper.style.height = renderHeight + "px";
-      this.clientWrapper.style.width = renderWidth + "px";
-      this.canvasWrapper.style.height = renderHeight + "px";
-      this.canvasWrapper.style.width = renderWidth + "px";
+    // Calculate the height, and width of our canvas from the window size.
+    let [renderWidth, renderHeight] = CanvasUtils.calculateSize();
 
-      // Start game, attach renderer to DOM
-      this.gameRenderer = new GameRenderer(renderWidth, renderHeight, this.props.store);
-      this.refs.pixiCanvas.appendChild(this.gameRenderer.getRenderer());
+    // Resize container
+    this.clientWrapper.style.height = renderHeight + "px";
+    this.clientWrapper.style.width = renderWidth + "px";
+    this.canvasWrapper.style.height = renderHeight + "px";
+    this.canvasWrapper.style.width = renderWidth + "px";
 
-      // Bind to the window.resize event.
-      window.addEventListener("resize", this.handleWindowResize.bind(this));
+    // Start game, attach renderer to DOM
+    this.gameRenderer = new GameRenderer(renderWidth, renderHeight, this.props.store);
+    this.refs.pixiCanvas.appendChild(this.gameRenderer.getRenderer());
 
-      // Match keyboard presses to events.
-      this.eventListener = window.addEventListener("keydown", this.handleKeyPress.bind(this));
+    // Bind to the window.resize event.
+    window.addEventListener("resize", this.handleWindowResize.bind(this));
 
-      // Start looping.
-      this.animate();
-    });
+    // Match keyboard presses to events.
+    this.eventListener = window.addEventListener("keydown", this.handleKeyPress.bind(this));
+
+    // Start looping.
+    this.animate();
   }
 
 
