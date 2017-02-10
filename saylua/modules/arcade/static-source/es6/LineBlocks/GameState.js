@@ -2,7 +2,7 @@ import BaseModel from "Models/BaseModel";
 import Matrix from "./Matrix";
 
 import cloneDeep from "lodash.clonedeep";
-import 'whatwg-fetch';
+import Reqwest from "reqwest";
 
 const GAME_ID = 1;
 const LB_FPS = 60;
@@ -97,24 +97,25 @@ export default class GameState extends BaseModel {
 
     let game = this;
 
-    fetch('/api/arcade/score/' + GAME_ID + '/', {
+    Reqwest({
+      url: '/api/arcade/score/' + GAME_ID + '/',
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      credentials: 'include',
-      body: JSON.stringify({
+      type: 'json',
+      contentType: 'application/json',
+      withCredentials: true,
+      data: {
         score: this.score,
         startTime: this.startTime,
         gameLog: this.gameLog,
         frames: this.frames
-      })
+      }
     }).then(function (response) {
       // TODO: Actually use the response. Retry this on failure.
       game.scoreSent = true;
       game.triggerUpdate();
-      return response.json();
+      console.log(response);
     });
+
     this.triggerUpdate();
   }
 
