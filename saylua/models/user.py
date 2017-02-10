@@ -22,6 +22,11 @@ class _User(db.Model):
     star_shards = db.Column(db.Integer, default=0)
     cloud_coins = db.Column(db.Integer, default=0)
 
+    # Misc profile stuff
+    gender = db.Column(db.String(100))
+    pronouns = db.Column(db.String(200))
+    bio = db.Column(db.String(1000))
+
     def __repr__(self):
         return '<User %r>' % self.display_name
 
