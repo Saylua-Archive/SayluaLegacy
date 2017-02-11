@@ -108,7 +108,7 @@ export const CoreReducer = (state, action) => {
     case 'TRIGGER_EVENT_ENTER':
 
       var [entities, tiles] = Scripting.interpretGameEvents({
-        'actionType': action.type,
+        'actionType': 'onEnter',
         'actionLocation': action.location,
         'nodeGraph': state.nodeGraph,
         'tileSet': state.tileSet,

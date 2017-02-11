@@ -1,8 +1,10 @@
+from saylua import db
 from saylua.models.role import Role
 from saylua.utils import is_devserver
 from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, ForumPost
 from saylua.models.user import User
 from saylua.modules.pets.soulnames import soulname
+from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
 
 # To run this import setup in the interactive console and run it as such
 # After that, edit a user's role to be admin to create the first admin
@@ -21,7 +23,7 @@ def generate_admin_user():
     admin_user = User(display_name=display_name, usernames=[username], phash=phash,
         email=email, role_id=role)
 
-    admin_user.put()
+    return admin_user
 
 def setup():
     # Create the role "admin" with all privileges
@@ -47,10 +49,17 @@ def setup():
     moderator_role.put()
     print("Moderator Role Created")
 
+    # Turn dungeon schemas into models
+    for model in provision_dungeon_schema():
+        db.session.add(model)
+
+    db.session.commit()
+
     # Add placeholders if on the dev server
     if is_devserver():
         print("Adding Initial Admin User")
-        generate_admin_user()
+        admin_user = generate_admin_user()
+        admin_user.put()
 
         print("Adding Placeholder Users")
         users = []
@@ -78,8 +87,6 @@ def setup():
                 new_board = Board(title=title, url_title=url_title,
                         category_key=category_key, description=description)
                 board_key = new_board.put()
-
-
 
 
 

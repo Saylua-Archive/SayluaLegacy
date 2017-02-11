@@ -38,7 +38,7 @@ Vagrant.configure(2) do |config|
     # Install Python and dependencies
     echo "%% Installing Python . . ."
     echo "========================================"
-    sudo apt-get install -qq python python-pip python-dev libffi-dev
+    sudo apt-get install -qq python python-pip python-dev libffi-dev libmysqlclient-dev
     cd /vagrant/
 
 

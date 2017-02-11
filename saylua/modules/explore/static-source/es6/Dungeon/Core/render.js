@@ -33,6 +33,22 @@ export function getBaseData(player, tileSet, tileLayer, dimensions, mapHeight, m
 }
 
 
+export function generateEntitySprite(dimensions, entityParentID) {
+  let [stageWidth, stageHeight] = dimensions;
+  let spriteHeight = (stageHeight / VIEWPORT_HEIGHT) * 0.8;
+  let spriteWidth = (stageWidth / VIEWPORT_WIDTH) * 0.8;
+
+  let spriteTexture = Graphics.getTexture(entityParentID);
+  let sprite = new PIXI.Sprite(spriteTexture);
+
+  sprite.visible = false;
+  sprite.height = spriteHeight;
+  sprite.width = spriteWidth;
+
+  return sprite;
+}
+
+
 export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
   // There are MUCH prettier ways to do this.
   // This, however, is the fastest. Blame Javascript's expensive array operations.
@@ -43,9 +59,18 @@ export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
 
     // Is this tile in our viewport?
     if (baseData.within_x_bounds(x) && baseData.within_y_bounds(y)) {
+
       // Set cell visibility, if necessary.
-      // Why would you write this? Masochists and code hygienists. For opposite reasons, of course.
-      let tileVisible = (baseData.validTiles[y] === undefined) ? false : ( (baseData.validTiles[y][x] === true) ? true : false );
+      let FOVEnabled = window.getStoreState().debug.FOVEnabled;
+      let tileVisible;
+
+      if (FOVEnabled === true) {
+        // Why would you write this? Masochists and code hygienists. For opposite reasons, of course.
+        tileVisible = (baseData.validTiles[y] === undefined) ? false : ( (baseData.validTiles[y][x] === true) ? true : false );
+      } else {
+        tileVisible = true;
+      }
+
       let tileSeen = (tile.meta.seen === true);
 
       // We must 'reveal' tiles, initially. We never unset this.
@@ -74,11 +99,11 @@ export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
       // Now, we change the tile state depending on whether or not we can see it, and whether or not we /have/ seen it.
       if (tileVisible) {
         sprite.alpha = 1;
-        sprite.texture = Graphics.getTexture(parentTile.slug);
+        sprite.texture = Graphics.getTexture(parentTile.id);
       } else {
         if (tileSeen) {
           sprite.alpha = 0.5;
-          sprite.texture = Graphics.getTexture(parentTile.slug);
+          sprite.texture = Graphics.getTexture(parentTile.id);
         } else {
           // Reasons
           sprite.meta.tile = 'fog';
@@ -92,12 +117,12 @@ export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
 }
 
 
-export function renderEntities(baseData, entityLayer, entitySprites) {
+export function renderEntities(baseData, entityLayer, entitySprites, generateEntitySprite) {
   entityLayer.map((entity, i) => {
     let x = entity.location.x;
     let y = entity.location.y;
 
-    let sprite = entitySprites[i];
+    let sprite = entitySprites[i] || generateEntitySprite(entity.parent);
 
     let [stageWidth, stageHeight] = baseData.dimensions;
 
@@ -116,7 +141,15 @@ export function renderEntities(baseData, entityLayer, entitySprites) {
     // We've got a winner!
     if (baseData.within_x_bounds(x) && baseData.within_y_bounds(y)) {
       // Set entity visibility, if necessary
-      let entityVisible = (baseData.validTiles[y] === undefined) ? false : ( (baseData.validTiles[y][x] === true) ? true : false );
+      let FOVEnabled = window.getStoreState().debug.FOVEnabled;
+      let entityVisible;
+
+      if (FOVEnabled === true) {
+        entityVisible = (baseData.validTiles[y] === undefined) ? false : ( (baseData.validTiles[y][x] === true) ? true : false );
+      } else {
+        entityVisible = true;
+      }
+
       let entitySeen = (entity.meta.seen === true);
 
       if (entityVisible === true) {
@@ -185,12 +218,12 @@ export function renderMinimap(baseData, tileSet, tileLayer, minimapSprites) {
 
     if (tileVisible) {
       sprite.alpha = 1 * baseVisibility;
-      sprite.texture = Graphics.getTexture(parentTile.slug);
+      sprite.texture = Graphics.getTexture(parentTile.id);
       sprite.visible = true;
     } else {
       if (tileSeen) {
         sprite.alpha = 0.5 * baseVisibility;
-        sprite.texture = Graphics.getTexture(parentTile.slug);
+        sprite.texture = Graphics.getTexture(parentTile.id);
         sprite.visible = true;
       } else {
         sprite.visible = false;
