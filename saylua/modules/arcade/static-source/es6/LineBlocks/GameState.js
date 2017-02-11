@@ -98,22 +98,25 @@ export default class GameState extends BaseModel {
     let game = this;
 
     Reqwest({
-      url: '/api/arcade/score/' + GAME_ID + '/',
-      method: 'POST',
-      type: 'json',
-      contentType: 'application/json',
-      withCredentials: true,
-      data: {
-        score: this.score,
-        startTime: this.startTime,
-        gameLog: this.gameLog,
-        frames: this.frames
+      'url': '/api/arcade/score/' + GAME_ID + '/',
+      'method': 'post',
+      'contentType': 'application/json',
+      'withCredentials': true,
+      'data': {
+        'score': this.score,
+        'startTime': this.startTime,
+        'gameLog': this.gameLog,
+        'frames': this.frames
+      },
+      success: function (response) {
+        // TODO: Actually use the response. Retry this on failure.
+        game.scoreSent = true;
+        game.triggerUpdate();
+        console.log(response);
+      },
+      error: function () {
+        console.error('Sending score failed!');
       }
-    }).then(function (response) {
-      // TODO: Actually use the response. Retry this on failure.
-      game.scoreSent = true;
-      game.triggerUpdate();
-      console.log(response);
     });
 
     this.triggerUpdate();
