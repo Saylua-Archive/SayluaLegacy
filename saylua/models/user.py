@@ -26,6 +26,7 @@ class _User(db.Model):
     gender = db.Column(db.String(100))
     pronouns = db.Column(db.String(200))
     bio = db.Column(db.String(1000))
+    status = db.Column(db.String(30))
 
     def __repr__(self):
         return '<User %r>' % self.display_name
