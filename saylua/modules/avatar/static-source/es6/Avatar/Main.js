@@ -8,9 +8,13 @@ window.addEventListener('load', function () {
 	var haEndpoint = '/api/ha/m/';
 
 	var wearing = [];
-	fetch(wardrobeEndpoint).then(function (response) {
-    return response.json();
-  }).then(function (clothing) {
+	fetch(wardrobeEndpoint, {
+		'credentials': 'include'
+	}).then((response) => {
+		if (response.ok) {
+			return response.json();
+		}
+	}).then((clothing) => {
     for (let i = 1; i < clothing.length; i++) {
     	let el = document.createElement('div');
     	let img = document.createElement('img');
@@ -24,7 +28,7 @@ window.addEventListener('load', function () {
     	el.innerHTML += clothing[i];
     	clothingContainer.appendChild(el);
     }
-  });
+	});
 
   function wear() {
   	var item = this.getAttribute('data-item');

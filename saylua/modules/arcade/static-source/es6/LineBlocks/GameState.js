@@ -2,7 +2,7 @@ import BaseModel from "Models/BaseModel";
 import Matrix from "./Matrix";
 
 import cloneDeep from "lodash.clonedeep";
-import 'whatwg-fetch';
+import "whatwg-fetch";
 
 const GAME_ID = 1;
 const LB_FPS = 60;
@@ -109,12 +109,18 @@ export default class GameState extends BaseModel {
         gameLog: this.gameLog,
         frames: this.frames
       })
-    }).then(function (response) {
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      console.error('Sending score failed!');
+    }).then((json) => {
       // TODO: Actually use the response. Retry this on failure.
       game.scoreSent = true;
       game.triggerUpdate();
-      return response.json();
+      console.log(json);
     });
+
     this.triggerUpdate();
   }
 

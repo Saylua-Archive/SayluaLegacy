@@ -1,15 +1,9 @@
 @import '../assets/transitions';
 @import '../assets/keyframes';
 
+@import 'entities/main';
 @import 'navbar';
 @import 'notifications';
-
-body {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  min-width: 300px;
-}
 
 .inner-container {
   width: 94%;
@@ -122,6 +116,10 @@ body {
 
 // The sidebar becomes horizontal at this width.
 @media (max-width: 800px) {
+  html {
+    font-size: 50%;
+  }
+
   .inner-container {
     width: 100%;
   }
