@@ -17,7 +17,7 @@ def api_send_score(game):
         if game == Game.LINE_BLOCKS:
             # TODO sanity check the game log and other variables sent to catch
             # low hanging fruit attempts at cheating.
-            data = request.form
+            data = request.get_json()
             GameLog.record_score(g.user.key, game, data['score'])
             cc, ss = User.update_currency(g.user.key, cc=data['score'])
             return json.dumps(dict(cloud_coins=cc, star_shards=ss))

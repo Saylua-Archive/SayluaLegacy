@@ -83,32 +83,39 @@ export default class BlocksInterface extends Component {
     }
     if (game.gameOver) {
       // Game over state.
-      overlay = <div className='blocks-overlay'>
-        <span className='blocks-big-text'>Game Over</span>
-        <br />Score: { game.score }
-        <br /><span className='blocks-small-text'>{ prizeText }</span>
-        <br /><span className='blocks-try-again' onClick={ game.start.bind(game) }>Try again?</span>
-      </div>;
+      overlay = (
+        <div className='blocks-overlay'>
+          <span className='blocks-big-text'>Game Over</span>
+          <span>Score: { game.score }</span>
+          <span className='blocks-small-text'>{ prizeText }</span>
+          <span className='blocks-click-text' onClick={ game.start.bind(game) }>Try again?</span>
+        </div>
+      );
     } else if (game.paused) {
       // Paused state.
-      overlay = <div className='blocks-overlay'>
-        <span className='blocks-big-text'>Paused</span>
-      </div>;
+      overlay = (
+        <div className='blocks-overlay'>
+          <span className='blocks-big-text'>Paused</span>
+          <span className='blocks-click-text' onClick={ game.pause.bind(game) }>Resume Playing</span>
+        </div>
+      );
     } else if (!game.isRunning()) {
       // Start screen.
-      return <div className='blocks-outer-container'>
-        <div className='blocks-start-screen'>
-          <span className='blocks-start-game' onClick={ game.start.bind(game) }>
-            Start Game
-          </span>
+      return (
+        <div className='blocks-container'>
+          <div className='blocks-start-screen'>
+            <span className='blocks-start-game' onClick={ game.start.bind(game) }>
+              Start Game
+            </span>
+          </div>
         </div>
-      </div>
+      );
     }
 
     return (
-      <div className='blocks-outer-container'>
+      <div className='blocks-container'>
         { overlay }
-        <div className='blocks-container'>
+        <div className='game-view'>
           <div className='blocks-info'>
             <div className='blocks-next-piece'>
               <BlockGrid matrix={ game.nextPiece } />
@@ -117,14 +124,36 @@ export default class BlocksInterface extends Component {
               Score: { game.score }
             </div>
             <div className='blocks-controls'>
-              &larr;&rarr; - Move piece
-              <br />&uarr;- Rotate piece
+              &larr;&rarr; - Move
+              <br />&uarr;- Rotate
               <br />&darr; - Speedup
-              <br />Space - Drop piece
-              <br />Enter/P - Pause
+              <br />Space - Drop
+              <br />P - Pause
             </div>
           </div>
           <BlockGrid className='blocks-grid' matrix={ game.gameMatrix } />
+        </div>
+        <div className='game-buttons'>
+          <button onClick={ game.moveLeft.bind(game) }>
+            &larr;
+            <small>Left</small>
+          </button>
+          <button onClick={ game.moveRight.bind(game) }>
+            &rarr;
+            <small>Right</small>
+          </button>
+          <button onClick={ game.rotate.bind(game) }>
+            &uarr;
+            <small>Rotate</small>
+          </button>
+          <button onClick={ game.drop.bind(game) }>
+            &#x268A;
+            <small>Drop</small>
+          </button>
+          <button onClick={ game.pause.bind(game) }>
+            P
+            <small>Pause</small>
+          </button>
         </div>
       </div>
     );
