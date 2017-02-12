@@ -16,7 +16,6 @@ window.textures['null'] = PIXI.Texture.fromImage("/static/img/dungeons/tiles/tes
 
 /******************************** RENDERER INIT ***********************************/
 
-
 export function generateEntitySprites(stageWidth, stageHeight, entityLayer, entitySet) {
   let spriteLayer = [];
   let spriteHeight = (stageHeight / VIEWPORT_HEIGHT) * 0.8;
@@ -24,7 +23,7 @@ export function generateEntitySprites(stageWidth, stageHeight, entityLayer, enti
 
   for (let entity of entityLayer) {
     let entityParent = entitySet[entity.parent];
-    let spriteTexture = Graphics.getTexture(entityParent.slug);
+    let spriteTexture = Graphics.getTexture(entityParent.id);
     let sprite = new PIXI.Sprite(spriteTexture);
 
     sprite.visible = false;
@@ -65,6 +64,7 @@ export function generateTileSprites(stageWidth, stageHeight) {
   return spriteLayer;
 }
 
+
 export function generateHUDSprites(data) {
   let playerStatusSprites = generatePlayerStatusSprites();
   let miniMapSprites = generateMinimapSprites(data);
@@ -78,6 +78,7 @@ export function generateHUDSprites(data) {
     'playerStatus': playerStatusSprites
   };
 }
+
 
 function generateMinimapSprites(data) {
   let spriteLayer = [];
@@ -115,23 +116,37 @@ function generateMinimapSprites(data) {
   return spriteLayer;
 }
 
+
 function generateMouseSprites(data) {
   let greenTexture = Graphics.getTexture("interface_tile_hover_green");
-  let redTexture = Graphics.getTexture("interface_tile_hover_red");
+  let redTexture = Graphics.getTexture("interface_tile_hover_red"); // Preload texture
+  let nullTexture = window.textures['null'];
 
   let spriteHeight = data.renderHeight / VIEWPORT_HEIGHT;
   let spriteWidth = data.renderWidth / VIEWPORT_WIDTH;
-  let sprite = new PIXI.Sprite(greenTexture);
 
-  sprite.height = spriteHeight;
-  sprite.width = spriteWidth;
+  let tileHoverSprite = new PIXI.Sprite(greenTexture);
 
-  sprite.x = 0;
-  sprite.y = 0;
-  sprite.visible = false;
+  tileHoverSprite.height = spriteHeight;
+  tileHoverSprite.width = spriteWidth;
 
-  return [sprite];
+  tileHoverSprite.x = 0;
+  tileHoverSprite.y = 0;
+  tileHoverSprite.visible = false;
+
+  let summonPreviewSprite = new PIXI.Sprite(nullTexture);
+
+  summonPreviewSprite.height = spriteHeight;
+  summonPreviewSprite.width = spriteWidth;
+
+  summonPreviewSprite.alpha = 0.45;
+  summonPreviewSprite.x = 0;
+  summonPreviewSprite.y = 0;
+  summonPreviewSprite.visible = false;
+
+  return [tileHoverSprite, summonPreviewSprite];
 }
+
 
 function generatePlayerStatusSprites() {
   // This is lame, but calculating sizes before the canvas has rendered is difficult.
@@ -192,6 +207,7 @@ export function generateNodeGraph(tileSet, tileLayer) {
 
   return nodeGraph;
 }
+
 
 export function initializeEntityHP(entitySet, entityLayer) {
   for (let key of Object.keys(entitySet)) {

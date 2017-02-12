@@ -1,15 +1,15 @@
-import Inferno from "inferno";
-import onDomReady from "ondomready";
-import Component from "inferno-component";
-
-import * as CanvasUtils from "../Utils/canvas";
-import GameRenderer from "../Core/GameRenderer";
-
 // DungeonClient -> Required by Main
 // --------------------------------------
 // The actual client. This handles input and renders the map.
 // Technically, this can and should be a stateless component
 // instead of a traditional one.
+
+import Inferno from "inferno";
+import Component from "inferno-component";
+
+import * as CanvasUtils from "../Utils/canvas";
+import GameRenderer from "../Core/GameRenderer";
+
 
 export default class DungeonClient extends Component {
   constructor(props) {
@@ -22,33 +22,32 @@ export default class DungeonClient extends Component {
 
   componentDidMount() {
     // Create a canvas context with Pixi, then initialize a new GameRenderer and pass said context.
-    onDomReady(() => {
-      // Store client wrapper, canvas wrapper.
-      this.clientWrapper = document.querySelectorAll(".dungeon-client-wrapper")[0];
-      this.canvasWrapper = this.refs.pixiCanvas;
 
-      // Calculate the height, and width of our canvas from the window size.
-      let [renderWidth, renderHeight] = CanvasUtils.calculateSize();
+    // Store client wrapper, canvas wrapper.
+    this.clientWrapper = document.querySelectorAll(".dungeon-client-wrapper")[0];
+    this.canvasWrapper = this.refs.pixiCanvas;
 
-      // Resize container
-      this.clientWrapper.style.height = renderHeight + "px";
-      this.clientWrapper.style.width = renderWidth + "px";
-      this.canvasWrapper.style.height = renderHeight + "px";
-      this.canvasWrapper.style.width = renderWidth + "px";
+    // Calculate the height, and width of our canvas from the window size.
+    let [renderWidth, renderHeight] = CanvasUtils.calculateSize();
 
-      // Start game, attach renderer to DOM
-      this.gameRenderer = new GameRenderer(renderWidth, renderHeight, this.props.store);
-      this.refs.pixiCanvas.appendChild(this.gameRenderer.getRenderer());
+    // Resize container
+    this.clientWrapper.style.height = renderHeight + "px";
+    this.clientWrapper.style.width = renderWidth + "px";
+    this.canvasWrapper.style.height = renderHeight + "px";
+    this.canvasWrapper.style.width = renderWidth + "px";
 
-      // Bind to the window.resize event.
-      window.addEventListener("resize", this.handleWindowResize.bind(this));
+    // Start game, attach renderer to DOM
+    this.gameRenderer = new GameRenderer(renderWidth, renderHeight, this.props.store);
+    this.refs.pixiCanvas.appendChild(this.gameRenderer.getRenderer());
 
-      // Match keyboard presses to events.
-      this.eventListener = window.addEventListener("keydown", this.handleKeyPress.bind(this));
+    // Bind to the window.resize event.
+    window.addEventListener("resize", this.handleWindowResize.bind(this));
 
-      // Start looping.
-      this.animate();
-    });
+    // Match keyboard presses to events.
+    this.eventListener = window.addEventListener("keydown", this.handleKeyPress.bind(this));
+
+    // Start looping.
+    this.animate();
   }
 
 
@@ -107,6 +106,12 @@ export default class DungeonClient extends Component {
     let movementKeys = ["up", "down", "left", "right"];
 
     if (movementKeys.indexOf(keyName) !== -1) {
+      // Disable keyboard input capture when the debugger tells us to.
+      let keyboardInputEnabled = window.getStoreState().debug.keyboardInputEnabled;
+      if (keyboardInputEnabled === false) {
+        return;
+      }
+
       // If we've gotten this far, prevent default behavior.
       event.preventDefault();
 
@@ -141,7 +146,7 @@ export default class DungeonClient extends Component {
 
   render() {
     return (
-      <div className="dungeon-wrapper" ref={(node) => this.refs.pixiCanvas = node} >
+      <div className="dungeon-wrapper" ref={ (node) => this.refs.pixiCanvas = node } >
       </div>
     );
   }

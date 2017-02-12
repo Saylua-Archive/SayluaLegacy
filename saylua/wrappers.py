@@ -1,7 +1,24 @@
 from flask import redirect as _redirect, url_for, render_template, g
+from saylua.utils import is_devserver
 from functools import wraps
 
 import json
+
+
+def devserver_only(f):
+    """Prevents non developer instances from viewing a route.
+
+    Usage: `@devserver_only`
+    """
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if is_devserver():
+            return f(*args, **kwargs)
+        return render_template('404.html'), 404
+
+    return decorated_function
+
 
 
 def login_required(f, redirect='users.login'):

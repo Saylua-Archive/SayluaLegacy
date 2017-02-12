@@ -24,7 +24,7 @@ def generate(options):
     width, height = options.get("size")
 
     # Prepare empty map
-    grid = TileGrid(width=width, height=height, default_tile='0x00')
+    grid = TileGrid(width=width, height=height, default_tile='tile_cave_ground')
 
     # Seed with cells. Enforce an exact fill percentage, with no overlap.
     cells_to_fill = int(round(options.get("fill_percentage") * (width * height)))
@@ -39,7 +39,7 @@ def generate(options):
         y = i // width
         x = i % width
 
-        grid.set((x, y), '0x01')
+        grid.set((x, y), 'tile_cave_wall')
 
     return grid
 
@@ -54,12 +54,12 @@ def iterate(options, grid):
         # Grab neighbor subset, flatten
         neighbors = grid.get((x - 1, y - 1), (x + 1, y + 1))
         neighbors = list(chain.from_iterable(neighbors))
-        floor_count = sum(1 for n in neighbors if n.get('tile') == '0x00')
+        floor_count = sum(1 for n in neighbors if n.get('tile') == 'tile_cave_ground')
 
         if floor_count >= options.get("minimum_neighbors"):
-            grid.set((x, y), '0x00')
+            grid.set((x, y), 'tile_cave_ground')
         else:
-            grid.set((x, y), '0x01')
+            grid.set((x, y), 'tile_cave_wall')
 
     return True
 
@@ -68,7 +68,7 @@ def finalize(options, grid):
     for x, y, cell in grid.iterate():
         # Ensure all edge cells are walls.
         if x in [0, (grid.width - 1)] or y in [0, (grid.height - 1)]:
-            grid.set((x, y), '0x01')
+            grid.set((x, y), 'tile_cave_wall')
 
     # Add cell-neighbor information. Fairly expensive, but it only runs once.
     # 0000: top, right, bottom, left.
@@ -80,7 +80,7 @@ def finalize(options, grid):
     else:
         neighbor_north = grid.get((x, y - 1))
 
-        if neighbor_north.get('tile') == '0x01':
+        if neighbor_north.get('tile') == 'tile_cave_wall':
             ordinals += "1"
         else:
             ordinals += "0"
@@ -91,7 +91,7 @@ def finalize(options, grid):
     else:
         neighbor_east = grid.get((x + 1, y))
 
-        if neighbor_east.get('tile') == '0x01':
+        if neighbor_east.get('tile') == 'tile_cave_wall':
             ordinals += "1"
         else:
             ordinals += "0"
@@ -102,7 +102,7 @@ def finalize(options, grid):
     else:
         neighbor_south = grid.get((x, y + 1))
 
-        if neighbor_south.get('tile') == '0x01':
+        if neighbor_south.get('tile') == 'tile_cave_wall':
             ordinals += "1"
         else:
             ordinals += "0"
@@ -113,7 +113,7 @@ def finalize(options, grid):
     else:
         neighbor_west = grid.get((x - 1, y))
 
-        if neighbor_west.get('tile') == '0x01':
+        if neighbor_west.get('tile') == 'tile_cave_wall':
             ordinals += "1"
         else:
             ordinals += "0"
@@ -123,22 +123,22 @@ def finalize(options, grid):
 
 def populate(options, grid):
     # Find a non-wall location and insert the player.
-    non_walls = grid.find(lambda x: x['tile'] == '0x00')
+    non_walls = grid.find(lambda x: x['tile'] == 'tile_cave_ground')
     shuffle(non_walls)
 
     player_location = non_walls[0]
     portal_location = non_walls[1]
 
     entities = EntityContainer()
-    entities.add(parent='0x1000', location=player_location)
-    entities.add(parent='0x1001', location=portal_location)
+    entities.add(parent='entity_default_player', location=player_location)
+    entities.add(parent='entity_default_portal', location=portal_location)
 
     # Add placeholder slimes in 5% of remaining space.
     non_walls = non_walls[2:]
     number_of_slimes = int(round(len(non_walls) * 0.05))
 
     for i in range(number_of_slimes):
-        entities.add(parent='0x2000', location=non_walls[i])
+        entities.add(parent='entity_enemy_slime', location=non_walls[i])
 
     return entities
 
@@ -154,20 +154,8 @@ API = APIWrapper({
         "size": [80, 50]
     },
     "tile_set": [
-        {
-            'id': '0x00',
-            'description': 'Ugh, gross. What did you just step in?',
-            'slug': 'tile_cave_ground',
-            'type': 'ground',
-            'meta': {}
-        },
-        {
-            'id': '0x01',
-            'description': 'The mottled walls of this cavern somehow manage to feel both rough and slimy simultaneously. You also feel a slow, heartbeat like thrumming. Curious.',
-            'slug': 'tile_cave_wall',
-            'type': 'wall',
-            'meta': {}
-        }
+        'tile_cave_ground',
+        'tile_cave_wall'
     ],
-    "entity_set": default_entities
+    "entity_set": default_entities + ['entity_enemy_slime']
 })
