@@ -1,11 +1,14 @@
 {% extends "layout.html" %}
 {% set page_title = "Forums" %}
+{% block header_scripts %}
+  <link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
+{% endblock %}
 {% block body %}
 <h2>Forums</h2>
 {% for forum_block in forum_blocks %}
 <table class="forum-table">
   <tr>
-    <th colspan="5" class="section-header">{{ forum_block[0] }}</th>
+    <th colspan="5" class="h3">{{ forum_block[0] }}</th>
   </tr>
   <tr>
     <td></td>

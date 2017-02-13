@@ -1,6 +1,9 @@
 {% from "_macros/pagination.html" import pagination %}
 {% extends "layout.html" %}
 {% set page_title = board.title %}
+{% block header_scripts %}
+  <link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
+{% endblock %}
 {% block body %}
 <h2>{{ board.title }}</h2>
 <span class="breadcrumb">
@@ -12,7 +15,7 @@
 
 <table class="forum-table">
   <tr>
-    <th class="section-header" colspan="5">
+    <th class="h3" colspan="5">
       Threads in {{ board.title }}
       <a class="right normal" href="#write-forum-thread">
         <img src="/static/img/icons/pencil.png">
