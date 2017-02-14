@@ -20,7 +20,10 @@ class _User(db.Model):
 
     role = db.Column(db.String(100), default="user")
     ha_url = db.Column(db.String(100), default="/api/ha/m/")
+
+    #Ban Status
     permabanned = db.Column(db.Boolean, default=False)
+    last_username_change = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
     star_shards = db.Column(db.Integer, default=0)
     cloud_coins = db.Column(db.Integer, default=0)
@@ -30,6 +33,10 @@ class _User(db.Model):
     pronouns = db.Column(db.String(200))
     bio = db.Column(db.String(1000))
     status = db.Column(db.String(15))
+
+    # Settings
+    autosubscribe_threads = db.Column(db.Boolean, default=True)
+    autosubscribe_posts = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<User %r>' % self.display_name
