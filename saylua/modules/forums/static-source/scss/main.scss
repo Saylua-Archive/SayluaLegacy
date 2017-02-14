@@ -34,11 +34,11 @@ ul.forum-main-list {
       color: $mainDarkColor;
       border-bottom: $neutralDarkColor 1px solid;
       border-radius: 10px 10px 0 0;
-      background: $mainSoftColor;
+      background: $mainSofterColor;
     }
 
     &.forum-board {
-      border-bottom: 1px $mainSoftColor solid;
+      border-bottom: 1px $mainSofterColor solid;
 
       &:hover {
         background-color: $accentSoftColor;
@@ -59,7 +59,7 @@ ul.forum-main-list {
     img {
       width: 5rem;
       height: 5rem;
-      border: $mainSoftColor 1px dotted;
+      border: $mainSofterColor 1px dotted;
       margin-right: 0.8rem;
     }
   }

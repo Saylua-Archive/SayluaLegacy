@@ -50,6 +50,8 @@ $navHeight: 4.5rem;
   display: flex;
   flex-direction: row;
 
+  background-color: $mainSoftColor;
+
   align-items: stretch;
   flex-grow: 1;
   justify-content: center;
@@ -102,7 +104,6 @@ a.navbar-link.active {
 }
 
 .navbar-block.search {
-  display: flex;
   padding: 1px 0.8rem 0;
 
   align-items: center;
@@ -119,7 +120,7 @@ a.navbar-link.active {
     padding: 0.3rem 2.5rem 0.3rem 0.5rem;
     color: $mainDarkColor;
     border: 0;
-    background: $mainSoftColor;
+    background: $mainSofterColor;
   }
 
   input:focus {
@@ -258,13 +259,6 @@ a.navbar-link.active {
       font-size: 18px;
       display: block;
     }
-  }
-
-  .navbar-block {
-    display: flex;
-
-    flex-grow: 1;
-    justify-content: center;
   }
 
   .navbar-user-links {
