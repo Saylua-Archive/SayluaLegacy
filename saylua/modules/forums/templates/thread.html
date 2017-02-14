@@ -1,6 +1,9 @@
 {% from "_macros/pagination.html" import pagination %}
 {% extends "layout.html" %}
 {% set page_title = thread.title %}
+{% block header_scripts %}
+  <link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
+{% endblock %}
 {% block body %}
 <h2>{{ thread.title }}</h2>
 <span class="breadcrumb">

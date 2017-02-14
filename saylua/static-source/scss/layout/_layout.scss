@@ -1,21 +1,17 @@
 @import '../assets/transitions';
 @import '../assets/keyframes';
 
+@import 'assets/sizes';
+
 @import 'entities/main';
 @import 'navbar';
 @import 'notifications';
-
-.inner-container {
-  width: 94%;
-  max-width: 1200px;
-  margin: auto;
-}
 
 .banner {
   height: 7.6rem;
   padding: 1.8rem;
   text-align: center;
-  background: $mainSoftColor url('/static/img/habitats/flat-bambooforest.jpg');
+  background: $mainSofterColor url('/static/img/habitats/flat-bambooforest.jpg');
   background-size: cover;
 
   .logo {
@@ -37,7 +33,7 @@
 }
 
 .main-body {
-  @extend .inner-container;
+  @extend %content-width;
   display: flex;
   flex-direction: row;
   min-height: 400px;
@@ -91,7 +87,7 @@
 }
 
 .footer {
-  @extend .inner-container;
+  @extend %content-width;
   font-size: 1.4rem;
   text-align: center;
 
@@ -108,20 +104,15 @@
   }
 }
 
-@media (max-width: 1100px) {
-  .inner-container {
-    width: 98%;
-  }
-}
-
 // The sidebar becomes horizontal at this width.
 @media (max-width: 800px) {
   html {
     font-size: 50%;
   }
 
-  .inner-container {
-    width: 100%;
+  .navbar-inner-container::before {
+    display: none;
+    width: 0%;
   }
 
   .main-body {

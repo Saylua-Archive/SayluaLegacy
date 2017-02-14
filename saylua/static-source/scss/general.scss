@@ -13,7 +13,7 @@
 }
 
 .tab.selected {
-  background: $mainSoftColor;
+  background: $mainSofterColor;
 }
 
 .clearfix {
@@ -94,11 +94,11 @@ a.tiny-button {
 }
 
 a.tiny-button:hover {
-  background-color: $mainSoftColor;
+  background-color: $mainSofterColor;
 }
 
 .divider {
   width: 100%;
   margin-bottom: 16px;
-  border-bottom: 1px $mainSoftColor solid;
+  border-bottom: 1px $mainSofterColor solid;
 }
