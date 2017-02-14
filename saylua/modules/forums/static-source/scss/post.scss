@@ -1,0 +1,27 @@
+@import 'assets/variables';
+@import 'assets/transitions';
+
+.forum-post {
+  width: 98%;
+  margin: 2rem 1%;
+  padding: 0;
+  border-collapse: collapse;
+  border: 1px $mainSoftColor solid;
+
+  th {
+    font-size: 1.4rem;
+    font-weight: normal;
+    padding: .3rem .8rem;
+    text-align: left;
+    background: $mainSoftColor;
+  }
+
+  td {
+    padding: .5rem;
+  }
+
+  .forum-post-info {
+    width: 15rem;
+    text-align: center;
+  }
+}

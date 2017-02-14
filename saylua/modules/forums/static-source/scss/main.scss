@@ -1,0 +1,111 @@
+@import 'assets/variables';
+@import 'assets/transitions';
+
+h1 {
+  font-weight: normal;
+  text-align: center;
+}
+
+ul.forum-main-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+  margin-bottom: 5rem;
+  padding: 0;
+
+  align-items: center;
+
+  li {
+    @include fast-color-trans;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+    align-items: center;
+    justify-content: space-between;
+
+    &.forum-category-header {
+      font-size: 2rem;
+      font-weight: normal;
+      line-height: 100%;
+      padding: 0.5em 1.6rem 0.25em;
+      text-align: left;
+      color: $mainDarkColor;
+      border-bottom: $neutralDarkColor 1px solid;
+      border-radius: 10px 10px 0 0;
+      background: $mainSoftColor;
+    }
+
+    &.forum-board {
+      border-bottom: 1px $mainSoftColor solid;
+
+      &:hover {
+        background-color: $accentSoftColor;
+      }
+    }
+  }
+
+  .forum-latest-post {
+    width: 30%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    font-size: 1.2rem;
+    line-height: 150%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    img {
+      width: 5rem;
+      height: 5rem;
+      border: $mainSoftColor 1px dotted;
+      margin-right: 0.8rem;
+    }
+  }
+
+  .forum-board-info {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+
+    align-items: center;
+    flex-grow: 1;
+    justify-content: flex-start;
+
+    .forum-board-icon {
+      width: 6rem;
+      min-width: 6rem;
+      height: 6rem;
+      margin: 0.5em 0.8rem;
+
+      flex-grow: 0;
+      flex-shrink: 0;
+    }
+
+    a {
+      font-size: 1.8rem;
+      line-height: 120%;
+      display: block;
+      overflow: auto;
+      height: 100%;
+      text-decoration: none;
+
+      flex-grow: 1;
+    }
+
+    a:hover .forum-board-link {
+      text-decoration: underline;
+    }
+
+    a p,
+    a:hover p {
+      font-size: 1.6rem;
+      line-height: 120%;
+      margin: 0;
+      text-decoration: none;
+      color: $black;
+      border: 0;
+    }
+  }
+}
