@@ -10,25 +10,46 @@ class _User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     display_name = db.Column(db.String(80), unique=True)
+    last_username_change = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    last_action = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    date_joined = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+
     email = db.Column(db.String(120), unique=True)
+    email_verified = db.Column(db.Boolean, default=False)
     phash = db.Column(db.String(200))
+
     role = db.Column(db.String(100), default="user")
     ha_url = db.Column(db.String(100), default="/api/ha/m/")
+
+    #Ban Status
     permabanned = db.Column(db.Boolean, default=False)
+    last_username_change = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+
+    star_shards = db.Column(db.Integer, default=0)
+    cloud_coins = db.Column(db.Integer, default=0)
+
+    # Misc profile stuff
+    gender = db.Column(db.String(100))
+    pronouns = db.Column(db.String(200))
+    bio = db.Column(db.String(1000))
+    status = db.Column(db.String(15))
+
+    # Settings
+    autosubscribe_threads = db.Column(db.Boolean, default=True)
+    autosubscribe_posts = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<User %r>' % self.display_name
 
-class _Accounts(db.Model):
-    __tablename__ = "accounts"
+class _BankAccount(db.Model):
+    __tablename__ = "bank_accounts"
 
     id = db.Column(db.Integer, primary_key=True)
-    star_shards = db.Column(db.Integer, default=0)
-    cloud_coins = db.Column(db.Integer, default=0)
-    bank_cc = db.Column(db.Integer, default=0)
+    user_id = db.Column('user_id', db.Integer, db.ForeignKey("users.id"), nullable=False)
     bank_ss = db.Column(db.Integer, default=0)
+    bank_cc = db.Column(db.Integer, default=0)
 
-class _DisplayNames(db.Model):
+class _DisplayName(db.Model):
     __tablename__ = "display_names"
 
     id = db.Column(db.Integer, primary_key=True)
