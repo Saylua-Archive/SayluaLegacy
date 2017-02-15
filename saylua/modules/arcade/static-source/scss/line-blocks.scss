@@ -1,158 +1,217 @@
-.blocks-outer-container {
+$textEmphasisColor: hsl(48, 100%, 76%);
+$textHoverColor: hsl(20, 100%, 67%);
+$textColor: hsl(0, 0, 100%);
+$textShadow: hsl(201, 36%, 42%);
+$textShadowDark: hsl(207, 32%, 25%);
+
+
+.blocks-container {
   font-family: 'Bitter', sans-serif;
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  height: 600px;
-  color: #fff;
+  min-width: 280px;
+  height: 650px;
+  color: $textColor;
   background-image: url('/static/img/bg/21.jpg');
   background-size: cover;
-  text-shadow: 2px 2px #457792;
+  text-shadow: 2px 2px $textShadow;
+
+  align-items: center;
+  justify-content: center;
 
   .blocks-overlay {
-    font-size: 40px;
+    font-size: 4rem;
     line-height: 150%;
     position: absolute;
     z-index: 100;
     top: 0;
     left: 0;
-    display: -ms-flexbox;
-    display: -moz-box;
-    display: -webkit-box;
-    display: box;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     text-align: center;
-    background: rgba(34, 34, 34, 0.7);
-    text-shadow: 2px 2px #2c4356;
+    background: hsla(0, 0%, 13%, 0.7);
+    text-shadow: 0.2rem 0.2rem $textShadowDark;
 
-    -webkit-box-align: center;
-    -moz-box-align: center;
-    box-align: center;
-    -webkit-box-pack: center;
-    -moz-box-pack: center;
-    box-pack: center;
-    -ms-flex-align: center;
-    -ms-flex-pack: center;
+    align-items: center;
+    justify-content: center;
 
     .blocks-big-text {
-      font-size: 80px;
+      font-size: 8rem;
       line-height: 150%;
-      text-shadow: 4px 4px #2c4356;
+      text-shadow: 0.4rem 0.4rem $textShadowDark;
     }
 
     .blocks-big-text {
-      font-size: 80px;
+      font-size: 8rem;
       line-height: 150%;
     }
 
     .blocks-small-text {
-      font-size: 20px;
+      font-size: 2rem;
       line-height: 150%;
     }
 
-    .blocks-try-again {
+    .blocks-click-text {
       cursor: pointer;
       transition: color 0.5s ease;
-      color: #ffe784;
+      color: $textEmphasisColor;
     }
 
-    .blocks-try-again:hover {
-      color: #ff9059;
+    .blocks-click-text:hover {
+      color: $textHoverColor;
     }
   }
 
   .blocks-start-screen {
+    display: flex;
+    width: 100%;
+    height: 100%;
     text-align: center;
 
+    align-items: center;
+    justify-content: center;
+
     .blocks-start-game {
-      font-size: 80px;
-      line-height: 500%;
+      font-size: 8rem;
+      line-height: 150%;
+      margin-top: -10rem;
       cursor: pointer;
       transition: color 0.5s ease;
-      color: #ffe784;
+      color: $textEmphasisColor;
     }
 
     .blocks-start-game:hover {
-      color: #ff9059;
+      color: $textHoverColor;
     }
   }
 }
 
-.blocks-container {
-  width: 408px;
-  margin: auto;
-  padding-top: 50px;
+.game-view {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding-top: 3rem;
 
+  align-items: flex-start;
+  justify-content: center;
 
   .blocks-info {
-    font-size: 16px;
+    font-size: 1.8rem;
     font-weight: bold;
     line-height: 200%;
-    float: left;
-    width: 150px;
+    padding: 0 1.5rem;
 
     .blocks-controls {
       font-family: sans-serif;
     }
 
     .blocks-score {
-      font-size: 24px;
+      font-size: 2.4rem;
       line-height: 150%;
       height: 80px;
-      padding-top: 24px;
+      padding-top: 2.4rem;
     }
   }
 
   .blocks-grid {
-    float: left;
     margin-top: 1px;
+    padding: 0 1.5rem;
   }
+}
 
-  .grid-container {
-    padding: 2px;
-    border-spacing: 0;
-    background: rgba(255, 255, 255, 0.7);
-  }
+.grid-table {
+  padding: 0.2rem;
+  border-spacing: 0;
+  background: hsla(0, 0%, 100%, 0.7);
 
-  .grid-container td {
-    box-sizing: border-box;
-    width: 24px;
-    height: 24px;
+  td {
+    width: 26px;
+    height: 26px;
     border-radius: 3px;
   }
+}
 
-  .grid-square-1 {
-    border: #a200c6 1px solid;
-    background: #d500f9;
+.grid-square-1 {
+  border: hsl(289, 100%, 39%) 1px solid;
+  background: hsl(291, 100%, 49%);
+}
+
+.grid-square-2 {
+  border: hsl(340, 87%, 39%) 1px solid;
+  background: hsl(340, 82%, 59%);
+}
+
+.grid-square-3 {
+  border: hsl(231, 91%, 42%) 1px solid;
+  background: hsl(231, 99%, 62%);
+}
+
+.grid-square-4 {
+  border: hsl(200, 100%, 38%) 1px solid;
+  background: hsl(199, 92%, 56%);
+}
+
+.grid-square-5 {
+  border: hsl(4, 97%, 38%) 1px solid;
+  background: hsl(4, 90%, 58%);
+}
+
+.grid-square-6 {
+  border: hsl(133, 100%, 29%) 1px solid;
+  background: hsl(145, 100%, 39%);
+}
+
+.grid-square-7 {
+  border: hsl(34, 100%, 40%) 1px solid;
+  background: hsl(36, 100%, 57%);
+}
+
+.game-buttons {
+  display: flex;
+  flex-direction: row;
+
+  justify-content: center;
+
+  button {
+    font-size: 2rem;
+    line-height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 5.5rem;
+    height: 5.5rem;
+    margin: 1.5rem 0.3rem;
+    text-align: center;
+    color: #222;
+    background: hsla(0, 0%, 100%, 0.7);
+
+    align-items: center;
+    justify-content: center;
+
+    small {
+      font-size: 1rem;
+      line-height: 100%;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .blocks-container {
+    height: 500px;
   }
 
-  .grid-square-2 {
-    border: #b90d47 1px solid;
-    background: #ec407a;
+  .grid-table td {
+    width: 22px;
+    height: 22px;
   }
+}
 
-  .grid-square-3 {
-    border: #0a27cb 1px solid;
-    background: #3d5afe;
-  }
-
-  .grid-square-4 {
-    border: #0083c3 1px solid;
-    background: #29b6f6;
-  }
-
-  .grid-square-5 {
-    border: #c11003 1px solid;
-    background: #f44336;
-  }
-
-  .grid-square-6 {
-    border: #009520 1px solid;
-    background: #00c853;
-  }
-
-  .grid-square-7 {
-    border: #cc7400 1px solid;
-    background: #ffa726;
+@media (max-width: 400px) {
+  .grid-table td {
+    width: 15px;
+    height: 15px;
   }
 }

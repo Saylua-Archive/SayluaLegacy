@@ -1,0 +1,6 @@
+{
+    "name":        "Wooden Door",
+    "description": "Ah, the classic three-timber dungeon door. Generic, but quite homely. You can\"t deny that it has an almost...adoorable look to it.",
+    "type":        "door",
+    "meta":        { "locked": false }
+}

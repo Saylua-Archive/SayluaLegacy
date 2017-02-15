@@ -5,11 +5,12 @@
   <link rel="stylesheet" type="text/css" href="{{ include_static('css/explore.min.css') }}">
   <!--<script src="{{ include_static('js/lib/pixi.min.js') }}"></script>-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.3.0/pixi.min.js"></script>
+
   <script src="{{ include_static('js/Dungeon.min.js') }}"></script>
 {% endblock %}
 
 {% block container %}
-  <div class="container">
+  <div class="main-body dungeons-body">
     <div class="dungeon-theatre">
       <div class="dungeon-client-wrapper">
         <div class="notifications-container">
@@ -28,8 +29,10 @@
         <div id="dungeon-client-mount"></div>
       </div>
     </div>
-    <div class="page-area">
+    <div class="debug-container">
       <div id="dungeon-debug-mount"></div>
+    </div>
+    <div class="main-body-content">
     </div>
   </div>
 {% endblock %}

@@ -30,21 +30,21 @@ const ENABLED_SPECIAL_VARIABLES = [
   '__debugAttack'
 ];
 
-const WORKERS_ENABLED = (window.Worker !== undefined);
+//const WORKERS_ENABLED = (window.Worker !== undefined);
 
 
-function compileScript(id, payload) {
+export function compileScript(id, payload, event, recompile=false) {
   // Initialize if necessary.
   window.scriptEngineFunctions = window.scriptEngineFunctions || {};
   window.scriptEngineFunctions[id] = window.scriptEngineFunctions[id] || {};
+  window.scriptEngineFunctions[id][event] = window.scriptEngineFunctions[id][event] || {};
 
-  // Prevent re-compiling, for speed reasons. May want to add a recompile flag later.
-  if (window.scriptEngineFunctions[id]['function'] !== undefined) {
-    return window.scriptEngineFunctions[id];
+  // Prevent re-compiling, for speed reasons.
+  if (window.scriptEngineFunctions[id][event]['function'] !== undefined) {
+    if (recompile === false) {
+      return window.scriptEngineFunctions[id][event];
+    }
   }
-
-  // Reasons.
-  window.scriptEngineFunctions[id]['id'] = id;
 
   // Build a list of the special variables that a function requires.
   let requires = [];
@@ -98,12 +98,13 @@ function compileScript(id, payload) {
   //console.log("Compiling: " + `window.__tfunc = function(${args}) { ${payload} }`);
   eval(`window.__tfunc = ${functionString};`);
 
-  window.scriptEngineFunctions[id]['requires'] = requires;
-  window.scriptEngineFunctions[id]['function'] = window.__tfunc;
-  window.scriptEngineFunctions[id]['functionString'] = functionString;
+  window.scriptEngineFunctions[id][event]['requires'] = requires;
+  window.scriptEngineFunctions[id][event]['function'] = window.__tfunc;
+  window.scriptEngineFunctions[id][event]['payload'] = payload;
+  //window.scriptEngineFunctions[id][event]['functionString'] = functionString;
 
   delete window.__tfunc;
-  return window.scriptEngineFunctions[id];
+  return window.scriptEngineFunctions[id][event];
 }
 
 
@@ -131,8 +132,6 @@ function executeScript(scriptFunction, meta) {
 
   try {
     scriptFunction.function.apply(this, args);
-    window.testA = scriptFunction.function.toString();
-    window.testB = args;
   } catch(e) {
     console.log(`Script ${scriptFunction.id} failed: `);
     console.log(e);
@@ -156,7 +155,7 @@ function resolveActorScripts(event, actor, data) {
   // First, we run the local instance's scripts, if possible.
   if (actor.events !== undefined) {
     if (actor.events[event] !== undefined) {
-      script = compileScript(actor.id, actor.events[event]);
+      script = compileScript(actor.id, actor.events[event], event);
       executeScript(script, data);
 
       return 1;
@@ -167,7 +166,7 @@ function resolveActorScripts(event, actor, data) {
   if (parent) {
     if (parent.events !== undefined) {
       if (parent.events[event] !== undefined) {
-        script = compileScript(parent.id, parent.events[event]);
+        script = compileScript(parent.id, parent.events[event], event);
         executeScript(script, data);
 
         return 2;
@@ -191,7 +190,7 @@ export function interpretGameEvents(data) {
   /*
     Example Usage:
     {
-      'actionType': 'TRIGGER_EVENT_ENTER',
+      'actionType': 'onEnter',
       'actionLocation', { 'x': 0, 'y': 0}
       'tileSet': <object:tileSet>,
       'tileLayer': <array:tileLayer>,
@@ -201,7 +200,7 @@ export function interpretGameEvents(data) {
   */
 
   // What are we trying to find matching events for, here?
-  let event = data.actionType.replace("TRIGGER_EVENT_", "").toLowerCase();
+  let event = data.actionType;
 
   // Assume we have been provided a copy, for performance reasons.
   let newTileLayer = data.tileLayer;
@@ -220,7 +219,7 @@ export function interpretGameEvents(data) {
   };
 
   // Trigger events.enter on specified location.
-  if (event === 'enter') {
+  if (event === 'onEnter') {
     baseData.location = data.actionLocation;
 
     // Entities first
@@ -246,7 +245,7 @@ export function interpretGameEvents(data) {
   }
 
   // Process AI behaviors.
-  if (event === 'idle') {
+  if (event === 'onIdle') {
     baseData.this = data.target;
     baseData.location = data.target.location;
     resolveActorScripts(event, data.target, baseData);

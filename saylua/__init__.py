@@ -41,6 +41,8 @@ enabled_modules = [
 
 routing.register_urls(app, enabled_modules)
 
+with app.app_context():
+    db.create_all()
 
 @app.route('/favicon.ico')
 def favicon():

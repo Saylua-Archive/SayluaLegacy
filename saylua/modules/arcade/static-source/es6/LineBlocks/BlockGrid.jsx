@@ -18,7 +18,7 @@ export default class BlockGrid extends Component {
       );
     });
     return (
-      <table className="grid-container">
+      <table className="grid-table">
         { rows }
       </table>
     );
