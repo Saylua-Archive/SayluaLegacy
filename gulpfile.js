@@ -11,23 +11,17 @@ var glob = require('glob');
 var path = require('path');
 var stream = require('stream');
 
-var _webpack = require('webpack');
-var webpack = require('webpack-stream');
+var webpack = require('webpack');
 var webpackConfig = require('./webpack.config.js');
 
-var paths = {
-  es6: 'saylua/**/static-source/es6',
-  sass: 'saylua/**/static-source/scss'
-};
-
-var dests = {
-  scripts: 'static/js',           // Relative to script location
-  sass: 'saylua/static/css/'      // All sass styles compile to style.min.css at the application root.
-};
+var tempConfig = require('./temporary.config.js');
+var paths = tempConfig.paths;
+var dests = tempConfig.dests;
 
 gulp.task('lint', function () {
   console.log("Go away!");
 });
+
 
 gulp.task('build-sass', function () {
   // Compile our initial, root level styles
@@ -66,64 +60,32 @@ gulp.task('build-sass', function () {
   });
 });
 
-gulp.task('build-es', ['build-es6']);
-gulp.task('build-es6', [], function() {
-  // Look for Main.js(x) within <FolderName>, compile to <FolderName>.min.js
-  var pkgGlob = paths.es6 + "/**/Main.js*";
-  var packages = glob.sync(pkgGlob);
 
-  // Compile hashmap from paths
-  var hashmap = {};
-
-  packages.forEach(function(pkg) {
-    // First, we grab the name of the package
-    var pkgName = pkg.split("/").splice(-2)[0];
-
-    // Then, we separate the module path from the absolute path.
-    var modulePath = pkg.split("/static-source/")[0];
-
-    // Then, we combine the two to obtain a static path location.
-    var pkgPath = path.join(modulePath, dests.scripts, pkgName);
-
-    // Filter deprecated / hidden packages
-    if (pkgName.indexOf("_") == -1) {
-      hashmap[pkgPath] = "./" + pkg;
-    }
-  });
-
-  webpackConfig['entry'] = hashmap;
-
-  // Always display progress.
-  webpackConfig['plugins'] = [
-    new _webpack.ProgressPlugin(function (percentage, message) {
-      var percent = Math.round(percentage * 100);
-      var ending = (percent == 100) ? "\n" : "";
-
-      process.stderr.clearLine();
-      process.stderr.cursorTo(0);
-      process.stderr.moveCursor(0, -1);
-      process.stderr.clearLine();
-      process.stderr.write("\033[33m" + "[Building] ... " + percent + '% ' + message + "\033[0m" + "\n");
-    })
-  ];
+gulp.task('build-js', ['build-es']);
+gulp.task('build-es6', ['build-es']);
+gulp.task('build-es', [], function() {
+  // Create a local copy of the config.
+  var config = webpackConfig;
 
   // Set additional dev options
   if (process.env.NODE_ENV === "dev") {
-    webpackConfig['plugins'].push(
-      new _webpack.DefinePlugin({
+    config['plugins'].push(
+      new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('development')
       })
     );
-    webpackConfig['devtool'] = 'inline-source-map';
+    config['devtool'] = 'inline-source-map';
+    config.watch = true;
   } else {
-    webpackConfig['plugins'].push(
-      new _webpack.DefinePlugin({
+    config['plugins'].push(
+      new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('production')
       })
     );
-    webpackConfig['plugins'].push(new _webpack.optimize.DedupePlugin());
-    webpackConfig['plugins'].push(
-      new _webpack.optimize.UglifyJsPlugin({
+
+    // Minify output
+    config['plugins'].push(
+      new webpack.optimize.UglifyJsPlugin({
         "compress": {
           "warnings": false
         }
@@ -131,45 +93,78 @@ gulp.task('build-es6', [], function() {
     );
   }
 
-  return gulp.src("")
-    .pipe(webpack(webpackConfig)).on('error', function(err) {
-      gutil.log(err);
-      this.emit('end');
-    })
-    .pipe(gulp.dest("./"));
+  // Pre-configure compiler, stream.
+  var compiler = webpack(webpackConfig);
+  var _stream = new stream.Stream();
+
+  // Build info config
+  var statsConfig = {
+    "assetsSort": "name",
+    "colors": true,
+    "chunks": false,
+    "chunkModules": false
+  };
+
+  // Determine whether or not to 'watch'
+  if (process.env.NODE_ENV === "dev") {
+    var watch = compiler.watch({}, (err, stats) => {
+      gutil.beep();
+      gutil.log(stats.toString(statsConfig));
+    });
+  } else {
+    compiler.run((err, stats) => {
+      if (err || stats.hasErrors()) {
+        gutil.log(err);
+      } else {
+        gutil.log(stats.toString(statsConfig));
+      }
+    });
+
+    return _stream;
+  }
 });
+
 
 // Build everything. Check under every stone. Leave no survivors.
 gulp.task('build', ['build-es6', 'build-sass']);
+
 
 // Rerun the task when a file changes
 gulp.task('watch', function() {
   process.env.NODE_ENV = "dev";
 
+  // Special treatment for sass files.
   var reportChange = function(vinyl) {
     var event = vinyl.event;
     event = event[0].toUpperCase() + event.slice(1);
 
-    process.stdout.write("\033[33m[Watching]\033[0m " + event + ": " + vinyl.path + "\n");
+    process.stdout.write("\x1b[33m[Watching]\x1b[0m " + event + ": " + vinyl.path + "\n");
   };
-
-  watch([paths.es6 + "/**/*"], { 'usePolling': true }, function(vinyl) {
-    reportChange(vinyl);
-    gulp.start('build-es6');
-  });
 
   watch([paths.sass + "/**/*"], { 'usePolling': true }, function(vinyl) {
     reportChange(vinyl);
     gulp.start('build-sass');
   });
 
+
+  // Watch is automatically determined by using the node-env in `build-es`, so we can continue as usual.
+  var res = gulp.start('build-es');
+
+
+  // Print the paths we're watching, because we're nice.
   var _paths = Object.keys(paths).map(function(key) { return paths[key]; });
   process.stdout.write("\n" + "Watching:" + "\n========================\n" + _paths.join("\n") + "\n\n");
+
 
   // Purely for aesthetic reasons.
   // Prevents the "Finished" line from printing.
   return new stream.Stream();
 });
 
+
 // The default task (called when you run `gulp` from cli)
 gulp.task('default', ['build']);
+
+
+module.exports.dests = dests;
+module.exports.paths = paths;

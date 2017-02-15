@@ -1,9 +1,12 @@
 var path = require('path');
 var glob = require('glob');
 var webpack = require('webpack');
-var gulpConfig = require('./gulpfile.js');
 
-var pkgGlob = "./" + gulpConfig.paths.es6 + "/**/Main.js*";
+var tempConfig = require('./temporary.config.js');
+var paths = tempConfig.paths;
+var dests = tempConfig.dests;
+
+var pkgGlob = "./" + tempConfig.paths.es6 + "/**/Main.js*";
 var packages = glob.sync(pkgGlob);
 
 
