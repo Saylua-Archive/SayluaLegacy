@@ -3,17 +3,11 @@
 
 $boardIconSize: 6rem;
 
-h1 {
-  font-weight: normal;
-  text-align: center;
-}
-
 ul.forum-main-list {
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin: 0;
-  margin-bottom: 5rem;
+  margin: 1em 0 5em;
   padding: 0;
 
   align-items: center;
@@ -49,9 +43,11 @@ ul.forum-main-list {
     }
 
     &.forum-category-header {
+      font-family: $headerFont;
       font-size: 2rem;
-      font-weight: normal;
-      line-height: 100%;
+      font-weight: bold;
+      letter-spacing: 1px;
+      line-height: 120%;
       padding: 0.5em .8rem 0.25em;
       text-align: left;
       color: $mainDarkColor;

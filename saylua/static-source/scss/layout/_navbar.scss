@@ -52,6 +52,7 @@ $navHeight: 4.5rem;
 
 a.navbar-link {
   @include slow-color-trans;
+  font-family: $headerFont;
   font-size: 1.7rem;
   display: flex;
   padding: 0 1rem;

@@ -4,7 +4,19 @@
   <link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
 {% endblock %}
 {% block body %}
-<h1>Forums</h1>
+<h1>
+  <i class="fa fa-fw fa-comment" aria-hidden="true"></i>
+  Forums
+</h1>
+<p class="center">
+  <a href="/forums/">My Posts</a> |
+  <a href="/forums/">My Threads</a> |
+  <a href="/forums/">My Subscriptions</a> |
+  <a href="/forums/">My Mentions</a>
+</p>
+<p class="center">
+  <a href="/forums/">Latest Threads and Posts</a>
+</p>
 {% for forum_block in forum_blocks %}
 <ul class="forum-main-list">
   <li class="forum-category-header">
@@ -13,7 +25,7 @@
   {% for board in forum_block[1] %}
   <li class="forum-board">
     <div class="forum-board-info">
-      <img src="http://sayluawiki.com/images/3/35/WikiLogo.png" class="faded">
+      <img src="/static/img/items/160/glowfruit.png" class="faded">
       <a href="/forums/board/{{ board.url_title }}/">
         <span class="forum-board-link">{{ board.title }}</span>
         <p>

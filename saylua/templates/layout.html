@@ -21,6 +21,7 @@
   <script src="{{ include_static('js/Global.min.js') }}"></script>
   {% block header_scripts %}{% endblock %}
 
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
   <!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -40,23 +41,24 @@
 </div>
 {% block container %}
 <div id="main-body" class="main-body">
-  <div id="notifications-container" class="notifications-container">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          {% if category == 'error' %}
-            <div class="notification error">Error: {{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
-          {% else %}
-            <div class="notification">{{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-  </div>
   {% include "sidebar.html" %}
-
-  <div id="main-body-content" class="main-body-content">
-    {% block body %}{% endblock %}
+  <div id="main-body-column" class="main-body-column">
+    <div id="notifications-container" class="notifications-container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            {% if category == 'error' %}
+              <div class="notification error">Error: {{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
+            {% else %}
+              <div class="notification">{{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
+    <div id="main-body-content" class="main-body-content">
+      {% block body %}{% endblock %}
+    </div>
   </div>
 </div>
 {% endblock %}
@@ -74,16 +76,16 @@
       <a href="#">Staff</a> &bull;
       <span id="social-icons">
         <a href="https://www.facebook.com/officialsaylua/" target="_blank">
-          <i class="fa fa-facebook" aria-hidden="true"></i>
+          <i class="fa fa-fw fa-facebook" aria-hidden="true"></i>
         </a>
         <a href="https://twitter.com/officialsaylua" target="_blank">
-          <i class="fa fa-twitter" aria-hidden="true"></i>
+          <i class="fa fa-fw fa-twitter" aria-hidden="true"></i>
         </a>
         <a href="http://saylua.tumblr.com/" target="_blank">
-          <i class="fa fa-tumblr" aria-hidden="true"></i>
+          <i class="fa fa-fw fa-tumblr" aria-hidden="true"></i>
         </a>
         <a href="https://www.reddit.com/r/saylua" target="_blank">
-          <i class="fa fa-reddit" aria-hidden="true"></i>
+          <i class="fa fa-fw fa-reddit" aria-hidden="true"></i>
         </a>
       </span>
     </p>

@@ -26,6 +26,7 @@ body {
   padding: 0;
   color: $black;
   background: $mainBgColor;
+
   align-items: center;
 }
 
@@ -42,16 +43,18 @@ ul li {
   margin: 0;
 }
 
-h2 {
-  font-size: 2.2rem;
-  line-height: 150%;
+h1 {
+  font-size: 2.6rem;
+  line-height: 100%;
   width: 100%;
   margin: 0;
   margin-bottom: 0.5em;
-  padding: 0.25em 0px;
+  padding: 0.5em 0 0.25em;
   text-align: center;
   color: $mainDarkColor;
-  background: $mainSofterColor;
+  font-family: $headerFont;
+  letter-spacing: 1px;
+  font-weight: bold;
 }
 
 h3, h4, th.h3, .h3 {
@@ -59,14 +62,15 @@ h3, h4, th.h3, .h3 {
   font-weight: normal;
   line-height: 120%;
   width: 100%;
-  padding: 4px;
+  padding: 0.5em.4rem;
   text-align: left;
   border-bottom: 1px $neutralDarkColor solid;
   background: none;
+  font-family: $headerFont;
 }
 
 h4 {
-  font-size: 1em;
+  font-size: 1.5rem;
 }
 
 p, pre {
