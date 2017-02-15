@@ -13,7 +13,7 @@ else
   echo " "
   echo "%% Updating Node Dependencies . . ."
   echo "========================================"
-  npm update
+  npm update --dev
   echo "Done."
 
   # Update Python dependencies
