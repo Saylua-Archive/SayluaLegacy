@@ -1,6 +1,8 @@
 @import 'assets/variables';
 @import 'assets/transitions';
 
+$boardIconSize: 6rem;
+
 h1 {
   font-weight: normal;
   text-align: center;
@@ -25,15 +27,35 @@ ul.forum-main-list {
     align-items: center;
     justify-content: space-between;
 
+    @media (max-width: 500px) {
+      flex-direction: column;
+      align-items: flex-start;
+
+      .forum-board-info img {
+        margin-top: 2em;
+      }
+
+      .forum-latest-post {
+        margin-top: -2em;
+        width: 100%;
+        padding-left: $boardIconSize;
+        min-height: 3rem;
+
+        img {
+          width: 3rem;
+          height: 3rem;
+        }
+      }
+    }
+
     &.forum-category-header {
       font-size: 2rem;
       font-weight: normal;
       line-height: 100%;
-      padding: 0.5em 1.6rem 0.25em;
+      padding: 0.5em .8rem 0.25em;
       text-align: left;
       color: $mainDarkColor;
       border-bottom: $neutralDarkColor 1px solid;
-      border-radius: 10px 10px 0 0;
       background: $mainSofterColor;
     }
 
@@ -55,12 +77,13 @@ ul.forum-main-list {
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-left: 0.8rem;
 
     img {
       width: 5rem;
       height: 5rem;
       border: $mainSofterColor 1px dotted;
-      margin-right: 0.8rem;
+      margin: .5em .8rem;
     }
   }
 
@@ -73,11 +96,10 @@ ul.forum-main-list {
     flex-grow: 1;
     justify-content: flex-start;
 
-    .forum-board-icon {
-      width: 6rem;
-      min-width: 6rem;
-      height: 6rem;
-      margin: 0.5em 0.8rem;
+    img {
+      width: $boardIconSize;
+      height: $boardIconSize;
+      margin: 1em 0.8rem;
 
       flex-grow: 0;
       flex-shrink: 0;

@@ -27,7 +27,7 @@
   <![endif]-->
 </head>
 
-<body{% if is_admin %} class="theme-admin"{% endif %}>
+<body class="{% if is_admin %}theme-admin{% endif %} {% if fullscreen %}hide-sidebar{% endif %}">
 <div id="banner" class="banner">
   <a id="logo" href="/" class="logo">
     <img id="logo-image" src="/static/img/logo.png" alt="Saylua" title="Saylua" />
@@ -53,46 +53,48 @@
       {% endif %}
     {% endwith %}
   </div>
-  {% if not fullscreen %}
-    {% include "sidebar.html" %}
-  {% endif %}
+  {% include "sidebar.html" %}
+
   <div id="main-body-content" class="main-body-content">
     {% block body %}{% endblock %}
   </div>
 </div>
 {% endblock %}
 
-<div id="footer" class="footer">
-  <p>
-    <a href="/online/">{{users_online_count|pluralize('User')}} Online</a> &bull;
-    <a href="#">Back to Top</a> &bull;
-    <a href="#">About</a> &bull;
-    <a href="#">Credits</a> &bull;
-    <a href="#">Terms of Service</a> &bull;
-    <a href="#">Contact Us</a> &bull;
-    <a href="#">Staff</a> &bull;
-    <span id="social-icons">
-      <a href="https://www.facebook.com/officialsaylua/" target="_blank">
-        <i class="fa fa-facebook" aria-hidden="true"></i>
-      </a>
-      <a href="https://twitter.com/officialsaylua" target="_blank">
-        <i class="fa fa-twitter" aria-hidden="true"></i>
-      </a>
-      <a href="http://saylua.tumblr.com/" target="_blank">
-        <i class="fa fa-tumblr" aria-hidden="true"></i>
-      </a>
-      <a href="https://www.reddit.com/r/saylua" target="_blank">
-        <i class="fa fa-reddit" aria-hidden="true"></i>
-      </a>
-    </span>
-  </p>
-  <p>
-    &copy; 2016 <a href="/">Saylua</a>
-  </p>
-  <p>
-    <a href="/admin/">Admin Panel</a>
-  </p>
-</div>
+<footer id="footer">
+  <div class="sidebar-filler"></div>
+  <div class="footer-content">
+    <p>
+      <a href="/online/">{{users_online_count|pluralize('User')}} Online</a> &bull;
+      <a href="#">Back to Top</a> &bull;
+      <a href="#">About</a> &bull;
+      <a href="#">Credits</a> &bull;
+      <a href="#">Terms of Service</a> &bull;
+      <a href="#">Contact Us</a> &bull;
+      <a href="#">Staff</a> &bull;
+      <span id="social-icons">
+        <a href="https://www.facebook.com/officialsaylua/" target="_blank">
+          <i class="fa fa-facebook" aria-hidden="true"></i>
+        </a>
+        <a href="https://twitter.com/officialsaylua" target="_blank">
+          <i class="fa fa-twitter" aria-hidden="true"></i>
+        </a>
+        <a href="http://saylua.tumblr.com/" target="_blank">
+          <i class="fa fa-tumblr" aria-hidden="true"></i>
+        </a>
+        <a href="https://www.reddit.com/r/saylua" target="_blank">
+          <i class="fa fa-reddit" aria-hidden="true"></i>
+        </a>
+      </span>
+    </p>
+    <p>
+      &copy; 2016 <a href="/">Saylua</a>
+    </p>
+    <p>
+      <a href="/admin/">Admin Panel</a>
+    </p>
+  </div>
+</footer>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

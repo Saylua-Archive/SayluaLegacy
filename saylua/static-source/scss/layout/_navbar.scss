@@ -1,7 +1,6 @@
 @import '../assets/transitions';
 
 @import 'assets/sizes';
-
 $navHeight: 4.5rem;
 
 // This is used to prevent the navbar from leaving an empty space in the layout
@@ -21,23 +20,18 @@ $navHeight: 4.5rem;
   height: $navHeight;
   background: $mainColor;
 
-  justify-content: center;
   align-items: stretch;
+  justify-content: center;
 }
 
 .navbar-inner-container {
   @extend %content-width;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
-  align-items: stretch;
-}
+  height: 100%;
 
-.navbar-inner-container::before {
-  content: "";
-  width: 20%;
-  flex-shrink: 0;
-  flex-grow: 0;
+  align-items: stretch;
+  justify-content: flex-start;
 }
 
 .navbar.navbar-fixed {
@@ -49,7 +43,6 @@ $navHeight: 4.5rem;
 .navbar-block {
   display: flex;
   flex-direction: row;
-
   background-color: $mainSoftColor;
 
   align-items: stretch;
@@ -69,7 +62,7 @@ a.navbar-link {
   justify-content: center;
 
   i {
-    font-size: 21px;
+    font-size: 2.1rem;
   }
 
   label {
