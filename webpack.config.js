@@ -98,7 +98,10 @@ const config = {
     "filename": "./[name:1]/static/js/[name:2].min.js"
   },
   "plugins": [
-    new DynamicPathPlugin({ "root": "saylua" })
+    new DynamicPathPlugin({ "root": "saylua" }),
+    new webpack.ProvidePlugin({
+      'Promise': 'es6-promise'
+    })
   ],
   "resolve": {
     "extensions": [".js", ".min.js", ".jsx"],

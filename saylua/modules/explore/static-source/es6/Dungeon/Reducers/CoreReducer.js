@@ -5,8 +5,8 @@
 // Holds the actual data that makes up Dungeons.
 
 import cloneDeep from "lodash.clonedeep";
-import Reqwest from "reqwest";
 import astar from "astar";
+import 'whatwg-fetch';
 
 import * as Scripting from "../Core/scripting";
 import * as GameLogic from "../Core/logic";
@@ -16,46 +16,50 @@ import { DebugReducer } from "./DebugReducer";
 
 
 export function getInitialGameState() {
-  return Reqwest({
-    "url": '/explore/api/generate_dungeon',
-    "type": 'json',
-    "method": 'post',
-    "error": (error) => {
-      throw("Error contacting the Dungeon API.");
-    },
-    "success": (result) => {
-      let newTileSet = {};
-      result.tileSet.map((tile) => {
-        newTileSet[tile.id] = tile;
-      });
-
-      let newEntitySet = {};
-      result.entitySet.map((entity) => {
-        newEntitySet[entity.id] = entity;
-      });
-
-      // Normalize our tileLayer into a shallow array.
-      let [mapHeight, mapWidth, newTileLayer] = GameInit.normalizeTileLayer(result.tileLayer);
-
-      // Initialize entity HP
-      let newEntityLayer = GameInit.initializeEntityHP(newEntitySet, result.entityLayer);
-
-      result.mapHeight = mapHeight;
-      result.mapWidth = mapWidth;
-      result.tileLayer = newTileLayer;
-      result.tileSet = newTileSet;
-      result.entityLayer = newEntityLayer;
-      result.entitySet = newEntitySet;
-      result.nodeGraph = new astar.Graph(GameInit.generateNodeGraph(result.tileSet, result.tileLayer), { diagonal: true });
-      result.gameClock = 0;
-      result.UI = {
-        "canMove": true,
-        "showMinimap": false,
-        "waitingOnDungeonRequest": false
-      };
-      result.log = [];
+  let request = fetch('/explore/api/generate_dungeon', {
+    "credentials": 'same-origin',
+    "method": 'POST',
+    "headers": {
+      'Content-Type': 'application/json'
     }
+  })
+  .then(response => response.json())
+  .then((result) => {
+    let newTileSet = {};
+    result.tileSet.map((tile) => {
+      newTileSet[tile.id] = tile;
+    });
+
+    let newEntitySet = {};
+    result.entitySet.map((entity) => {
+      newEntitySet[entity.id] = entity;
+    });
+
+    // Normalize our tileLayer into a shallow array.
+    let [mapHeight, mapWidth, newTileLayer] = GameInit.normalizeTileLayer(result.tileLayer);
+
+    // Initialize entity HP
+    let newEntityLayer = GameInit.initializeEntityHP(newEntitySet, result.entityLayer);
+
+    result.mapHeight = mapHeight;
+    result.mapWidth = mapWidth;
+    result.tileLayer = newTileLayer;
+    result.tileSet = newTileSet;
+    result.entityLayer = newEntityLayer;
+    result.entitySet = newEntitySet;
+    result.nodeGraph = new astar.Graph(GameInit.generateNodeGraph(result.tileSet, result.tileLayer), { diagonal: true });
+    result.gameClock = 0;
+    result.UI = {
+      "canMove": true,
+      "showMinimap": false,
+      "waitingOnDungeonRequest": false
+    };
+    result.log = [];
+
+    return result;
   });
+
+  return request;
 }
 
 /**

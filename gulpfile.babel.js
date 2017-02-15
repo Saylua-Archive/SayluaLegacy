@@ -115,6 +115,7 @@ gulp.task('build-es', [], function() {
     compiler.run((err, stats) => {
       if (err || stats.hasErrors()) {
         gutil.log(err);
+        _stream.emit('end');
       } else {
         gutil.log(stats.toString(statsConfig));
       }
@@ -148,6 +149,9 @@ gulp.task('watch', () => {
 
 
   // Watch is automatically determined by using the node-env in `build-es`, so we can continue as usual.
+  watch([paths.es6 + "/**/*"], { 'usePolling': true }, (vinyl) => {
+    reportChange(vinyl);
+  });
   gulp.start('build-es');
 
 
