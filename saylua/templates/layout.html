@@ -48,10 +48,11 @@
         {% if messages %}
           {% for category, message in messages %}
             {% if category == 'error' %}
-              <div class="notification error">Error: {{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
-            {% else %}
-              <div class="notification">{{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
+              {% set className = ' error' %}
             {% endif %}
+            <div class="notification{{ className }}">{{ message }}
+              <a class="close-button" href="#" title="close">&#x00d7;</a>
+            </div>
           {% endfor %}
         {% endif %}
       {% endwith %}

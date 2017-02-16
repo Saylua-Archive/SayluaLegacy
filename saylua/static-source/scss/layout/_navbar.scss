@@ -98,7 +98,7 @@ a.navbar-link.active {
 }
 
 .navbar-block.search {
-  padding: 1px 0.8rem 0;
+  padding: 1px 0.8rem 0 0.8rem;
 
   align-items: center;
   flex-grow: 10;
@@ -183,8 +183,8 @@ a.navbar-link.active {
   }
 
   ul a {
-    padding: 0.25em 2px;
-    padding-left: 32px;
+    padding: 0.25em 0.2rem;
+    padding-left: 3.2rem;
     color: $gray;
   }
 
@@ -200,7 +200,7 @@ a.navbar-link.active {
   .dropdown-separator {
     display: block;
     width: 96%;
-    margin: 0.25em 2% 0.5em;
+    margin: 0.25em 2% 0.5em 2%;
     border-bottom: 1px solid $neutralColor;
   }
 

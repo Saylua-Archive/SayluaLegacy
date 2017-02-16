@@ -6,20 +6,21 @@
   margin: auto;
   text-align: center;
   vertical-align: middle;
+  max-width: 100%;
 }
 
 .pet {
-  @include square(320px);
+  @include square(32rem);
 }
 
 .mini {
-  @include square(160px);
+  @include square(16rem);
 }
 
 .item {
-  @include square(80px);
+  @include square(8rem);
 }
 
 .item-big {
-  @include square(160px);
+  @include square(16rem);
 }
