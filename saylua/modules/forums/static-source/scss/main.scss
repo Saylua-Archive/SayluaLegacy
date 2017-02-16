@@ -34,12 +34,10 @@ ul.forum-main-list {
 
     &.forum-category-header {
       font-family: $headerFont;
-      font-size: 2rem;
       font-weight: bold;
-      line-height: 120%;
-      padding-top: 0.5em;
-      padding-bottom: 0.25em;
-      text-align: left;
+      font-size: 1.8rem;
+      line-height: 130%;
+      padding: 0.5em 0.8rem 0.25em 0.8rem;
       letter-spacing: 1px;
       color: $mainDarkColor;
       border-bottom: $neutralDarkColor 1px solid;
