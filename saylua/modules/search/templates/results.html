@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% set page_title = "Search Results" %}
 {% block body %}
-<h1>Search Saylua{% if query %}: {{query}}{% endif %}</h1>
+<h1>Search Saylua{{ ": {}".format(query) if query }}</h1>
 <form method="get">
   <div class="center full padded">
     <input name="q" class="half" type="text" value="{{query}}" placeholder="Search Saylua">
