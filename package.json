@@ -2,8 +2,11 @@
   "name": "saylua",
   "version": "1.0.0",
   "description": "saylua",
-  "main": "gulpfile.js",
-  "scripts": {},
+  "main": "gulpfile.babel.js",
+  "scripts": {
+    "lint": "eslint saylua/**/static-source/**/*.js* && flake8 saylua/ --statistics --count",
+    "test": "npm run lint && python -m pytest"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://bitbucket.org/saylua/saylua.git"
@@ -39,7 +42,6 @@
     "inferno": "~1.3.0-rc.3",
     "inferno-component": "~1.3.0-rc.3",
     "mocha": "~3.2.0",
-    "pixi.js": "~4.3.5",
     "redux": "~3.6.0",
     "webpack": "~2.2.1",
     "whatwg-fetch": "~2.0.2"

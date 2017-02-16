@@ -1,4 +1,6 @@
-*.pyc
+__pycache__/
+*.py[cod]
+*$py.class
 .DS_Store
 node_modules
 **/static/js/*
@@ -6,6 +8,7 @@ node_modules
 !**/static/js/lib
 .vagrant
 build
+npm-debug.log
 yarn.lock
 secure.py
 
@@ -18,3 +21,14 @@ ubuntu*.log
 
 # Noddy nonsense
 adminer
+
+# Testing nonsense
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+.hypothesis/

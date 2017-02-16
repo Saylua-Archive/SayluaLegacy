@@ -26,6 +26,9 @@
         "SwitchCase": 1
       }
     ],
+    "inferno/prop-types": [
+      "off"
+    ],
     "linebreak-style": [
       "error",
       "unix"
@@ -35,6 +38,16 @@
       {
         "varsIgnorePattern": "Inferno*",
         "argsIgnorePattern": "_*"
+      }
+    ],
+    "no-warning-comments" : [
+      "warn",
+      {
+        "terms": [
+          "todo",
+          "fixme",
+          "hack"
+        ]
       }
     ],
     "semi": [

@@ -138,6 +138,7 @@ export const CoreReducer = (state, action) => {
       var newGameClock = state.gameClock;
       newGameClock = playerMoved ? newGameClock + 1 : newGameClock;
 
+      // HACK: This must be removed ASAP.
       /****** begin TEMPORARY CODE, REMOVE ASAP ********/
       // Did we attack something?
       // As a temporary measure, we'll apply the attack manually here.

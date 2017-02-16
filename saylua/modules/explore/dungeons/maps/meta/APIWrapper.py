@@ -2,6 +2,7 @@
 # Syntax sugar.
 # ===================================================
 
+
 class APIWrapper(dict):
     def __init__(self, *args, **kwargs):
         super(APIWrapper, self).__init__(*args, **kwargs)

@@ -46,6 +46,7 @@ Vagrant.configure(2) do |config|
     echo "%% Installing Python dependencies . . ."
     echo "========================================"
     sudo apt-get -qq install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
+    sudo pip install -r requirements-dev.txt
     sudo pip install -r requirements.txt -t lib
 
 
@@ -75,7 +76,7 @@ Vagrant.configure(2) do |config|
     # Install Global deps
     echo "%% Installing Global Node.js dependencies . . ."
     echo "========================================"
-    sudo npm install -g gulp eslint eslint-plugin-react webpack --loglevel=error
+    sudo npm install -g gulp eslint eslint-plugin-inferno webpack --loglevel=error
 
     echo "%% Installing Local Node.js dependencies . . ."
     echo "========================================"

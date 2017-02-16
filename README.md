@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/LikeMyBread/Saylua.svg?branch=master)](https://travis-ci.org/LikeMyBread/Saylua)
+[![Coverage Status](https://coveralls.io/repos/github/LikeMyBread/Saylua/badge.svg)](https://coveralls.io/github/LikeMyBread/Saylua)
+
 ## Saylua
 
 ## Run Locally
@@ -33,18 +35,14 @@ If you are on Windows, it is heavily suggested you use Vagrant.
       OS X users need only install libjpeg:
       See: https://dzone.com/articles/installing-libjpeg-os-x
 
-7. Install SQLAlchemy dependency MySQLdb.
-
-     `pip install mysqlclient`
-
 8. Install python dependencies locally.
-
+      `pip install -r requirements-dev.txt`
       `pip install -r requirements.txt -t lib`
 
 
 9. Install NodeJS dependencies.
 
-      `npm install && npm install -g gulp eslint eslint-plugin-react webpack`
+      `npm install && npm install -g gulp eslint eslint-plugin-inferno webpack`
 
 10. Create the file saylua/config/secure.py based on saylua/config/example_secure.py
 
@@ -98,6 +96,6 @@ Making the following change reduces startup time exponentially, and gets rid of 
 
 ## Authors
 
-Mike Bradley  
-Noi Sek  
-Tiffany Zhang  
+Mike Bradley
+Noi Sek
+Tiffany Zhang

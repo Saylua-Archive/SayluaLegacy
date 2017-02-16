@@ -1,6 +1,5 @@
-# Import the Flask Framework
-# from flask import Flask
-from routing import SayluaApp
+# flake8: noqa
+from .routing import SayluaApp
 
 # Note: We don't need to call run() since our application is embedded within
 # the App Engine WSGI application server.
@@ -15,11 +14,13 @@ app.config.from_pyfile('config/settings.py')
 
 db = SQLAlchemy(app)
 
-import routing
-import wrappers
-import g_globals
-import context_processors
-import template_filters
+from . import (
+    context_processors,
+    g_globals,
+    routing,
+    template_filters,
+    wrappers,
+)
 
 # Populate app with blueprints
 enabled_modules = [

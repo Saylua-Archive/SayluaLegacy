@@ -1,3 +1,5 @@
+// TODO: Submit a PR for htmlFor in eslint-inferno. This rule is no longer valid.
+/* eslint { inferno/no-unknown-property: 0 } */
 import Inferno from "inferno";
 
 // We are creating the actions and options this way primarily

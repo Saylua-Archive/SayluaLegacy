@@ -16,11 +16,6 @@ import tempConfig from './temporary.config.js';
 const paths = tempConfig.paths;
 const dests = tempConfig.dests;
 
-gulp.task('lint', () => {
-  console.log("Go away!");
-});
-
-
 gulp.task('build-sass', () => {
   // Compile our initial, root level styles
   let rootGlob = "saylua/static-source/scss/**/*.scss";

@@ -1,0 +1,14 @@
+# Default requirements
+#-r requirements.txt
+
+# Local dependencies (Stuff we don't need in prod)
+pillow
+mysqlclient
+
+# Test requirements
+flake8
+coveralls
+pytest
+pytest-cov
+pytest-pythonpath
+pytest-flake8

@@ -3,9 +3,6 @@ var glob = require('glob');
 var webpack = require('webpack');
 
 var tempConfig = require('./temporary.config.js');
-var paths = tempConfig.paths;
-var dests = tempConfig.dests;
-
 var pkgGlob = "./" + tempConfig.paths.es6 + "/**/Main.js*";
 var packages = glob.sync(pkgGlob);
 

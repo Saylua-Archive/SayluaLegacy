@@ -24,7 +24,9 @@ class EntityContainer():
 
     def calculate_visible(self, grid):
         # Track unit visibility.
-        search = lambda x: x['meta'].get('visible') == True
+        def search(tile):
+            return (tile['meta'].get('visible') == True)
+
         visible_tiles = grid.find(search)
 
         for entity in self.iterate():
@@ -65,7 +67,7 @@ class EntityContainer():
 
     def update_entity(self, entity):
         # Replace entity with an updated copy of itself
-        for i in xrange(len(self.entities)):
+        for i in xrange(len(self.entities)): # noqa
             if self.entities[i]['id'] == entity['id']:
                 self.entities[i] = entity
                 break
