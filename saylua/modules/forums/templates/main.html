@@ -4,46 +4,45 @@
   <link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
 {% endblock %}
 {% block body %}
-<h1>
-  <i class="fa fa-fw fa-comment" aria-hidden="true"></i>
-  Forums
-</h1>
-<p class="center">
-  <a href="/forums/">My Posts</a> |
-  <a href="/forums/">My Threads</a> |
-  <a href="/forums/">My Subscriptions</a> |
-  <a href="/forums/">My Mentions</a>
-</p>
-<p class="center">
-  <a href="/forums/">Latest Threads and Posts</a>
-</p>
+<div class="forum-main-header">
+  <h1>
+    <i class="fa fa-fw fa-comment" aria-hidden="true"></i>
+    The Saylua Forums
+  </h1>
+  <div class="forum-main-navigation">
+    <a href="/forums/">My Posts</a> |
+    <a href="/forums/">My Threads</a> |
+    <a href="/forums/">My Subscriptions</a> |
+    <a href="/forums/">My Mentions</a>
+  </div>
+</div>
 {% for forum_block in forum_blocks %}
 <ul class="forum-main-list">
   <li class="forum-category-header">
     {{ forum_block[0] }}
   </li>
   {% for board in forum_block[1] %}
-  <li class="forum-board">
+  <li class="forum-board-row">
+    <img src="/static/img/items/160/glowfruit.png" class="forum-board-icon faded" />
     <div class="forum-board-info">
-      <img src="/static/img/items/160/glowfruit.png" class="faded">
-      <a href="/forums/board/{{ board.url_title }}/">
+      <a href="/forums/board/{{ board.url_title }}/" class="forum-board-text">
         <span class="forum-board-link">{{ board.title }}</span>
         <p>
           {{ board.description }}
         </p>
       </a>
-    </div>
-    <div class="forum-latest-post">
-      {% set last_post = board.key.id()|last_post_board %}
-      {% if last_post is not none %}
-      <img src="/static/img/pets/eydrun.png" />
-      <p>
-        <a href="/forums/thread/{{ last_post.thread_id }}">{{ (last_post.thread_id|thread_by_id).title }}
-        </a> by <a href="/user/{{ last_post.creator_key|name_from_key_string }}">
-          {{ last_post.creator_key|name_from_key_string }}</a>
-        on {{ last_post.created_time|show_datetime }}
-      </p>
-      {% endif %}
+      <div class="forum-latest-post">
+        {% set last_post = board.key.id()|last_post_board %}
+        {% if last_post is not none %}
+        <img src="/static/img/pets/eydrun.png" />
+        <p>
+          <a href="/forums/thread/{{ last_post.thread_id }}">{{ (last_post.thread_id|thread_by_id).title }}
+          </a> by <a href="/user/{{ last_post.creator_key|name_from_key_string }}">
+            {{ last_post.creator_key|name_from_key_string }}</a>
+          on {{ last_post.created_time|show_datetime }}
+        </p>
+        {% endif %}
+      </div>
     </div>
   </li>
   {% endfor %}
