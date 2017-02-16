@@ -3,7 +3,7 @@
 {% extends "layout.html" %}
 {% set page_title = "Users Online" %}
 {% block body %}
-<h2>Users Online</h2>
+<h1>Users Online</h1>
 <div class="full center">
   {{ pagination(page_count=(users_online_count/50)|int) }}
 </div>

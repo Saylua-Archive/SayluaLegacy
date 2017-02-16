@@ -4,7 +4,10 @@ from wtforms import validators
 from saylua.models.user import User
 
 
-# Base class for other validators
+# Base class for other validators. This is mostly used for two reasons:
+# - The custom validators have custom default error messages.
+# - Validators that implement this class integrate with Saylua's custom
+#   clientside validation library.
 class SayluaValidator:
     def __init__(self, message=None):
         self.message = message
@@ -22,15 +25,16 @@ class SayluaValidator:
     def validate(self, form, field):
         return True
 
-    # This is the name for the data attribute of the client side
+    # This is the name for the data attribute of the client side.
     def clientValidatorName(self):
         return None
 
+    # This specifies a parameter to pass into the clientside validator.
     def clientValidatorValue(self):
         return None
 
     # Tells the client to overwrite its default message with the server's
-    # custom message if a custom message exists
+    # custom message if a custom message exists.
     def clientValidatorMessage(self):
         return self.message
 

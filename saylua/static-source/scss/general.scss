@@ -45,12 +45,7 @@
 }
 
 .full {
-  float: left;
   width: 100%;
-}
-
-.full.padded, .vertical-padded {
-  padding: 8px 0;
 }
 
 .half {
@@ -71,10 +66,6 @@
 
 .normal {
   font-size: 14px;
-}
-
-table.center {
-  text-align: left;
 }
 
 p.error {

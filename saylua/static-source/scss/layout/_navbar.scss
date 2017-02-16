@@ -1,7 +1,6 @@
 @import '../assets/transitions';
 
 @import 'assets/sizes';
-
 $navHeight: 4.5rem;
 
 // This is used to prevent the navbar from leaving an empty space in the layout
@@ -21,23 +20,18 @@ $navHeight: 4.5rem;
   height: $navHeight;
   background: $mainColor;
 
-  justify-content: center;
   align-items: stretch;
+  justify-content: center;
 }
 
 .navbar-inner-container {
   @extend %content-width;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
-  align-items: stretch;
-}
+  height: 100%;
 
-.navbar-inner-container::before {
-  content: "";
-  width: 20%;
-  flex-shrink: 0;
-  flex-grow: 0;
+  align-items: stretch;
+  justify-content: flex-start;
 }
 
 .navbar.navbar-fixed {
@@ -49,7 +43,6 @@ $navHeight: 4.5rem;
 .navbar-block {
   display: flex;
   flex-direction: row;
-
   background-color: $mainSoftColor;
 
   align-items: stretch;
@@ -59,6 +52,7 @@ $navHeight: 4.5rem;
 
 a.navbar-link {
   @include slow-color-trans;
+  font-family: $headerFont;
   font-size: 1.7rem;
   display: flex;
   padding: 0 1rem;
@@ -69,7 +63,7 @@ a.navbar-link {
   justify-content: center;
 
   i {
-    font-size: 21px;
+    font-size: 2.1rem;
   }
 
   label {
@@ -104,7 +98,7 @@ a.navbar-link.active {
 }
 
 .navbar-block.search {
-  padding: 1px 0.8rem 0;
+  padding: 1px 0.8rem 0 0.8rem;
 
   align-items: center;
   flex-grow: 10;
@@ -189,8 +183,8 @@ a.navbar-link.active {
   }
 
   ul a {
-    padding: 0.25em 2px;
-    padding-left: 32px;
+    padding: 0.25em 0.2rem;
+    padding-left: 3.2rem;
     color: $gray;
   }
 
@@ -206,7 +200,7 @@ a.navbar-link.active {
   .dropdown-separator {
     display: block;
     width: 96%;
-    margin: 0.25em 2% 0.5em;
+    margin: 0.25em 2% 0.5em 2%;
     border-bottom: 1px solid $neutralColor;
   }
 
