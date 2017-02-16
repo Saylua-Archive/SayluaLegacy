@@ -5,7 +5,9 @@
   "main": "gulpfile.babel.js",
   "scripts": {
     "lint": "eslint saylua/**/static-source/**/*.js* && flake8 saylua/ --statistics --count",
-    "test": "npm run lint && python -m pytest"
+    "js-test": "mocha --compilers js:babel-register saylua/**/static-source/**/tests/*.js*",
+    "py-test": "python -m pytest",
+    "test": "npm run lint && npm run py-test && npm run js-test"
   },
   "repository": {
     "type": "git",

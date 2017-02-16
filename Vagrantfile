@@ -76,7 +76,7 @@ Vagrant.configure(2) do |config|
     # Install Global deps
     echo "%% Installing Global Node.js dependencies . . ."
     echo "========================================"
-    sudo npm install -g gulp eslint eslint-plugin-inferno webpack --loglevel=error
+    sudo npm install -g gulp eslint eslint-plugin-inferno mocha webpack --loglevel=error
 
     echo "%% Installing Local Node.js dependencies . . ."
     echo "========================================"

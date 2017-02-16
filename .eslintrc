@@ -5,7 +5,9 @@
     "node": true
   },
   "globals": {
-    "PIXI": true
+    "PIXI": true,
+    "describe": true,
+    "it": true
   },
   "extends": ["eslint:recommended", "plugin:inferno/recommended"],
   "parserOptions": {
