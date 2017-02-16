@@ -6,17 +6,17 @@ from saylua.models.user import User
 from saylua.modules.pets.soulnames import soulname
 from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
 
+
 # To run this import setup in the interactive console and run it as such
 # After that, edit a user's role to be admin to create the first admin
 # Then, flush the memcache to make sure the user's role is updated
 #
 # from saylua.provisioner import setup
 # setup()
-
 def generate_admin_user():
     display_name = "admin"
     username = "admin"
-    phash = User.hash_password("password") #Yes, the default password is password
+    phash = User.hash_password("password")  # Yes, the default password is password
     email = "admin@saylua.wizards"
     role = "admin"
 
@@ -24,6 +24,7 @@ def generate_admin_user():
         email=email, role_id=role)
 
     return admin_user
+
 
 def setup():
     # Create the role "admin" with all privileges
@@ -67,18 +68,16 @@ def setup():
         for i in range(4):
             display_name = soulname(7)
             username = display_name
-            phash = User.hash_password("password") #Yes, the default password is password
+            phash = User.hash_password("password")  # Yes, the default password is password
             email = username + "@" + username + ".biz"
             new_user = User(display_name=display_name, usernames=[username], phash=phash,
                 email=email, star_shards=15, cloud_coins=50000)
-            users.append(new_user.put().id()) #Add users to database, and their IDs to a list
-
+            users.append(new_user.put().id())  # Add users to database, and their IDs to a list
 
         print("Adding Placeholder Boards")
         categories = ["Saylua Talk", "Help", "Real Life", "Your Pets"]
-        category_keys = []
         for category in categories:
-            category_key = BoardCategory(title=category).put().urlsafe() #Keys currently in old form
+            category_key = BoardCategory(title=category).put().urlsafe()  # Keys currently in old form
 
             for n in range(4):
                 title = soulname(7)
@@ -87,8 +86,5 @@ def setup():
                 new_board = Board(title=title, url_title=url_title,
                         category_key=category_key, description=description)
                 board_key = new_board.put()
-
-
-
 
     print("Database Setup Complete")
