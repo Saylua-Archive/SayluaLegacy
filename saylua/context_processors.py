@@ -6,6 +6,9 @@ from saylua.utils import make_ndb_key, get_static_version_id
 
 from flask import g, url_for
 
+import os
+import random
+
 import datetime
 
 
@@ -17,6 +20,17 @@ def inject_include_static():
         return url_for('static', filename=file_path) + '?v=' + str(get_static_version_id())
 
     return dict(include_static=include_static)
+
+
+@app.context_processor
+def inject_random_pet_image():
+    def random_pet_image():
+        path = os.path.join(app.static_folder, 'img/pets/')
+        name = random.choice(os.listdir(path))
+        return (url_for('static', filename='img/pets/' + name) +
+            '?v=' + str(get_static_version_id()))
+
+    return dict(random_pet_image=random_pet_image)
 
 
 @app.context_processor

@@ -19,7 +19,15 @@
 {% for forum_block in forum_blocks %}
 <ul class="forum-main-list">
   <li class="forum-category-header">
-    {{ forum_block[0] }}
+    <div class="forum-board-icon">
+      <img src="{{ random_pet_image() }}" />
+    </div>
+    <div class="forum-category-text">
+      {{ forum_block[0] }}
+      <span class="latest-post-header">
+        Latest Post
+      </span>
+    </div>
   </li>
   {% for board in forum_block[1] %}
   <li class="forum-board-row">

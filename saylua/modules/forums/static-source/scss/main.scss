@@ -1,6 +1,5 @@
 @import 'assets/variables';
 @import 'assets/transitions';
-$boardIconSize: 6rem;
 
 .forum-main-header {
   line-height: 100%;
@@ -33,15 +32,43 @@ ul.forum-main-list {
     justify-content: space-between;
 
     &.forum-category-header {
+      align-items: flex-end;
+      justify-content: flex-start;
       font-family: $headerFont;
-      font-weight: bold;
-      font-size: 1.8rem;
-      line-height: 130%;
-      padding: 0.5em 0.8rem 0.25em 0.8rem;
+      font-size: 2rem;
+      min-height: 6rem;
+      line-height: 120%;
+      padding: 0 0.8rem;
       letter-spacing: 1px;
-      color: $mainDarkColor;
       border-bottom: $neutralDarkColor 1px solid;
-      background: $mainSofterColor;
+
+      .forum-board-icon {
+        overflow: hidden;
+        height: 3.5rem;
+        transition: height 1s;
+        transition-delay: 0.1s;
+
+        &:hover {
+          height: 5rem;
+        }
+      }
+
+      .forum-category-text {
+        display: flex;
+        flex-grow: 1;
+        align-items: baseline;
+        justify-content: space-between;
+        padding: 0.25em 0.8rem;
+
+        .latest-post-header {
+          font-size: 1.2rem;
+          line-height: 120%;
+          width: 40%;
+          @media (max-width: 500px) {
+            display: none;
+          }
+        }
+      }
     }
 
     &.forum-board-row {
@@ -54,8 +81,7 @@ ul.forum-main-list {
   }
 
   .forum-board-icon {
-    width: $boardIconSize;
-    height: $boardIconSize;
+    width: 6rem;
     margin-right: 0.8rem;
 
     flex-grow: 0;
@@ -66,16 +92,21 @@ ul.forum-main-list {
     display: flex;
     flex-direction: row;
     flex-grow: 1;
-    flex-shrink: 0;
+    flex-shrink: 1;
     align-items: center;
 
     @media (max-width: 500px) {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: stretch;
 
       .forum-latest-post {
         width: 100%;
         padding-top: 1em;
+
+        img {
+          width: 3rem;
+          height: 3rem;
+        }
       }
     }
   }
@@ -85,7 +116,7 @@ ul.forum-main-list {
     line-height: 150%;
     display: flex;
     flex-direction: row;
-    width: 30%;
+    width: 40%;
 
     align-items: center;
     flex-grow: 0;
