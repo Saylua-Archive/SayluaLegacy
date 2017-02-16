@@ -13,6 +13,7 @@ git+https://github.com/brmullikin/flask-markdown
 mdx_linkify
 flask_sqlalchemy
 pytest
+PyMySQL
 
 # Local dependencies (Stuff we don't need in prod).
 pillow

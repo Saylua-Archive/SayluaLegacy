@@ -56,3 +56,6 @@ skip_files:
 - ^saylua/static/source/.*
 - ^node_modules/.*
 - ^lib/PIL*
+
+beta_settings:
+    cloud_sql_instances: saylua-1280:us-central1:main-db
