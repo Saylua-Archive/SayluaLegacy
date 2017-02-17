@@ -5,58 +5,77 @@ from saylua.models.role import Role
 from saylua import db
 
 
-class _User(db.Model):
-    __tablename__ = "users"
+# class User(db.Model):
+#     """The greatest User model of all time.
+#     """
 
-    id = db.Column(db.Integer, primary_key=True)
-    display_name = db.Column(db.String(80), unique=True)
-    last_username_change = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
-    last_action = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
-    date_joined = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+#     # An exception thrown if an operation would make a user's currency negative
+#     class InvalidCurrencyException(Exception):
+#         pass
 
-    email = db.Column(db.String(120), unique=True)
-    email_verified = db.Column(db.Boolean, default=False)
-    phash = db.Column(db.String(200))
+#     __tablename__ = "users"
 
-    role = db.Column(db.String(100), default="user")
-    ha_url = db.Column(db.String(100), default="/api/ha/m/")
+#     id = db.Column(db.Integer, primary_key=True)
+#     usernames =
+#     display_name = db.Column(db.String(80), unique=True)
+#     last_username_change = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+#     last_action = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+#     date_joined = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
-    # Ban Status
-    permabanned = db.Column(db.Boolean, default=False)
-    last_username_change = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+#     email = db.Column(db.String(120), unique=True)
+#     email_verified = db.Column(db.Boolean, default=False)
+#     phash = db.Column(db.String(200))
 
-    star_shards = db.Column(db.Integer, default=0)
-    cloud_coins = db.Column(db.Integer, default=0)
+#     role = db.Column(db.String(100), default="user")
+#     ha_url = db.Column(db.String(100), default="/api/ha/m/")
 
-    # Misc profile stuff
-    gender = db.Column(db.String(100))
-    pronouns = db.Column(db.String(200))
-    bio = db.Column(db.String(1000))
-    status = db.Column(db.String(15))
+#     # Ban Status
+#     permabanned = db.Column(db.Boolean, default=False)
+#     last_username_change = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
-    # Settings
-    autosubscribe_threads = db.Column(db.Boolean, default=True)
-    autosubscribe_posts = db.Column(db.Boolean, default=False)
+#     # Currency
+#     star_shards = ndb.IntegerProperty(default=0)
+#     cloud_coins = ndb.IntegerProperty(default=0)
+#     bank_cc = ndb.IntegerProperty(default=0)
+#     bank_ss = ndb.IntegerProperty(default=0)
 
-    def __repr__(self):
-        return '<User %r>' % self.display_name
+#     # Misc profile stuff
+#     gender = db.Column(db.String(100))
+#     pronouns = db.Column(db.String(200))
+#     bio = db.Column(db.String(1000))
+#     status = db.Column(db.String(15))
+
+#     # Settings
+#     notified_on_pings = db.Column(db.Boolean)
+#     ha_disabled = db.Column(db.Boolean)
+#     autosubscribe_threads = db.Column(db.Boolean)
+#     autosubscribe_posts = db.Column(db.Boolean)
+
+#     # Misc profile stuff
+#     css = db.Column(db.Text) # FIXME: This should really have a limit.
+#     gender = db.Column(db.String(32))
+#     pronouns = db.Column(db.String(128))
+#     bio = db.Column(db.Text()) # FIXME: This should really have a limit.
+
+#     def __repr__(self):
+#         return '<User %r>' % self.display_name
 
 
-class _BankAccount(db.Model):
-    __tablename__ = "bank_accounts"
+# class _BankAccount(db.Model):
+#     __tablename__ = "bank_accounts"
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column('user_id', db.Integer, db.ForeignKey("users.id"), nullable=False)
-    bank_ss = db.Column(db.Integer, default=0)
-    bank_cc = db.Column(db.Integer, default=0)
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column('user_id', db.Integer, db.ForeignKey("users.id"), nullable=False)
+#     bank_ss = db.Column(db.Integer, default=0)
+#     bank_cc = db.Column(db.Integer, default=0)
 
 
-class _DisplayName(db.Model):
-    __tablename__ = "display_names"
+# class _DisplayName(db.Model):
+#     __tablename__ = "display_names"
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column('user_id', db.Integer, db.ForeignKey("users.id"), nullable=False)
-    display_name = db.Column(db.String(80), unique=True)
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column('user_id', db.Integer, db.ForeignKey("users.id"), nullable=False)
+#     display_name = db.Column(db.String(80), unique=True)
 
 
 class User(ndb.Model):

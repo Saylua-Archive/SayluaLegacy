@@ -41,36 +41,38 @@
   </tr>
 
   {% for thread in threads %}
-  <tr class="forum-thread-row{% if thread.is_pinned %} highlight{% endif %}">
-    <td class="forum-thread-icon">
-      {% if thread.is_pinned %}
-      <img src="/static/img/icons/pin.png">
-      {% endif %}
-      {% if thread.is_locked %}
-      <img src="/static/img/icons/lock.png">
-      {% endif %}
-    </td>
-    <td class="forum-thread-info">
-      <a href="/forums/thread/{{ thread.key.id() }}/">
-        <span class="forum-thread-link">{{ thread.title }}</span>
-        <p class="small">Created on {{ thread.created_time|expanded_relative_time }}</p>
-      </a>
-    </td>
-    <td>
-      {{ thread.key.id()|count_thread_posts - 1 }}
-    </td>
-    <td>
-      <a href="/user/{{ thread.creator_key|name_from_key_string }}">{{ thread.creator_key|name_from_key_string }}</a>
-    </td>
-    {% set last_post = thread.key.id()|last_post_thread %}
-    <td class="forum-latest-post">
-      {% if last_post is not none %}
-      by <a href="/user/{{ last_post.creator_key|name_from_key_string }}">
-        {{ last_post.creator_key|name_from_key_string }}</a>
-       {{ last_post.created_time|relative_time }}
-      {% endif %}
-    </td>
-  </tr>
+    {% set author_name = thread.author_id|name_from_author_id %}
+    <tr class="forum-thread-row {{ 'highlight' if thread.is_pinned else '' }}">
+      <td class="forum-thread-icon">
+        {% if thread.is_pinned %}
+        <img src="/static/img/icons/pin.png">
+        {% endif %}
+        {% if thread.is_locked %}
+        <img src="/static/img/icons/lock.png">
+        {% endif %}
+      </td>
+      <td class="forum-thread-info">
+        <a href="/forums/thread/{{ thread.id }}/">
+          <span class="forum-thread-link">{{ thread.title }}</span>
+          <p class="small">Created on {{ thread.date_created|expanded_relative_time }}</p>
+        </a>
+      </td>
+      <td>
+        {{ thread.id|count_thread_posts - 1 }}
+      </td>
+      <td>
+        <a href="/user/{{ author_name }}">{{ author_name }}</a>
+      </td>
+      {% set last_post = thread.id|last_post_thread %}
+      <td class="forum-latest-post">
+        {% if last_post is not none %}
+          {% set author_name = last_post.author_id|name_from_author_id %}
+          &nbsp;by&nbsp;
+          <a href="/user/{{ author_name }}">{{ author_name }}</a>
+          &nbsp;{{ last_post.date_created|relative_time }}
+        {% endif %}
+      </td>
+    </tr>
   {% endfor %}
 </table>
 

@@ -1,4 +1,5 @@
 from saylua import app, db
+from saylua.models import User
 from saylua.utils import pluralize, saylua_time
 from saylua.modules.forums.models.db import ForumPost, ForumThread
 
@@ -118,44 +119,57 @@ def display_name_from_user_id(user_id):
 
 @app.template_filter('last_post_thread')
 def last_post_thread(thread_id):
-    post_query = ForumPost.query(ForumPost.thread_id == thread_id).order(
-        -ForumPost.created_time)
-    post = post_query.fetch(1)
-    if len(post) > 0:
-        return post[0]
-    return None
+    return (
+        db.session.query(ForumPost)
+        .filter(ForumPost.thread_id == thread_id)
+        .order_by(ForumPost.date_modified.desc())
+        .first()
+    )
 
 
 @app.template_filter('last_post_board')
 def last_post_board(board_id):
-    post_query = (
+    return (
         db.session.query(ForumPost)
         .join(ForumThread, ForumPost.thread)
         .filter(ForumThread.board_id == board_id)
-        .order_by(ForumPost.last_action.desc())
+        .order_by(ForumPost.date_modified.desc())
+        .first()
     )
-
-    return post_query.first()
 
 
 @app.template_filter('thread_by_id')
 def thread_by_id(thread_id):
-    return db.session.query(ForumThread).filter_by(id=thread_id).first()
+    return (
+        db.session.query(ForumThread)
+        .filter(ForumThread.id == thread_id)
+        .first()
+    )
 
 
 @app.template_filter('count_thread_posts')
 def count_thread_posts(thread_id):
-    return len(ForumPost.query(ForumPost.thread_id == thread_id).fetch(
-        keys_only=True))
+    return (
+        db.session.query(ForumPost)
+        .filter(ForumPost.thread_id == thread_id)
+        .count()
+    )
 
 
 @app.template_filter('count_board_posts')
 def count_board_posts(board_id):
-    return len(ForumPost.query(ForumPost.board_id == board_id).fetch(
-        keys_only=True))
+    return (
+        db.session.query(ForumPost)
+        .join(ForumThread, ForumPost.thread)
+        .filter(ForumThread.board_id == board_id)
+        .count()
+    )
 
 
 @app.template_filter('count_board_threads')
 def count_board_threads(board_id):
-    return len(ForumThread.query(ForumThread.board_id == board_id).fetch(
-        keys_only=True))
+    return (
+        db.session.query(ForumThread)
+        .filter(ForumThread.board_id == board_id)
+        .count()
+    )

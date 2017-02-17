@@ -14,13 +14,11 @@ app.config.from_pyfile('config/settings.py')
 
 db = SQLAlchemy(app)
 
-from . import (
-    context_processors,
-    g_globals,
-    routing,
-    template_filters,
-    wrappers,
-)
+import context_processors
+import g_globals
+import routing
+import template_filters
+import wrappers
 
 # Populate app with blueprints
 enabled_modules = [

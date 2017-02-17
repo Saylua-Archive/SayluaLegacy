@@ -1,5 +1,6 @@
 from flask import render_template, redirect, g, flash, request
 from google.appengine.ext import ndb
+import flask_sqlalchemy
 from saylua import db
 import math
 
@@ -15,12 +16,10 @@ def forums_home():
     return render_template("main.html", categories=categories)
 
 
-def forums_board(board_id):
-    boards = Board.query(Board.url_title == board_id).fetch()
-    if len(boards) != 1:
-        return render_template('404.html'), 404
-    else:
-        board = boards[0]
+def forums_board(board_slug):
+    try:
+        board = db.session.query(Board).filter(Board.url_slug == board_slug).one()
+
         if request.method == 'POST':
             title = request.form.get('title')
             body = request.form.get('body')
@@ -28,19 +27,29 @@ def forums_board(board_id):
             board_id = board.key.id()
             url_title = post_new_thread(title, body, creator_key, board_id, board)
             return redirect("/forums/board/" + url_title + "/")
-        page_number = request.args.get('page')
-        if page_number is None:
-            page_number = 1
 
+        page_number = request.args.get('page', 1)
         page_number = int(page_number)
-        thread_query = ForumThread.query(ForumThread.board_id == board.key.id()).order(
-            -ForumThread.is_pinned, -ForumThread.last_action)
-        threads = thread_query.fetch(limit=THREADS_PER_PAGE,
-            offset=((page_number - 1) * THREADS_PER_PAGE))
 
-        total_threads = len(thread_query.fetch(keys_only=True))
-        page_count = int(math.ceil(total_threads / float(THREADS_PER_PAGE)))
-    return render_template("board.html", board=board, threads=threads, page_count=page_count)
+        threads_query = (
+            db.session.query(ForumThread)
+            .filter(ForumThread.board_id == board.id)
+            .order_by(ForumThread.is_pinned.desc(), ForumThread.date_modified.desc())
+        )
+
+        threads = (
+            threads_query
+            .limit(THREADS_PER_PAGE)
+            .offset((page_number - 1) * THREADS_PER_PAGE)
+            .all()
+        )
+
+        page_count = threads_query.count() // THREADS_PER_PAGE
+
+        return render_template("board.html", board=board, threads=threads, page_count=page_count)
+
+    except (flask_sqlalchemy.orm.exc.MultipleResultsFound, flask_sqlalchemy.orm.exc.NoResultFound):
+        return render_template('404.html'), 404
 
 
 def post_new_thread(title, body, creator_key, board_id, board=None):
