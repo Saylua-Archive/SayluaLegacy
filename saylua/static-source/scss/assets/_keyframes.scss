@@ -16,15 +16,32 @@
 
 @keyframes bounce-margin {
   0%, 100% {
-    margin-bottom: 0px;
+    transform: translateY(0px);
   }
 
   50% {
-    margin-bottom: 5px;
+    transform: translateY(-5px);
   }
 }
 
 @mixin bounce-margin {
   -webkit-animation: bounce-margin 1s linear infinite; /* Chrome, Safari, Opera */
   animation: bounce-margin 1s linear infinite;
+}
+
+
+@keyframes notification-fadeup {
+  0% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+
+  70% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 }
