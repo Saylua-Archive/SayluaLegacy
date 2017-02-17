@@ -9,5 +9,15 @@
   <a href="/news/">Headlines</a> /
   <a href="/news/puzzle/">Daily Puzzle</a>
 </div>
-  {% block section_body %}{% endblock %}
+<div class="newspaper-body">
+  <div class="newspaper-main">
+    {% block section_body %}{% endblock %}
+  </div>
+  <div class="newspaper-side">
+    <h3>Random Pet</h3>
+    <div class="newspaper-side-box">
+      <img src="{{ random_pet_image() }}" />
+    </div>
+  </div>
+</div>
 {% endblock %}
