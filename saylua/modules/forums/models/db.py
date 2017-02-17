@@ -51,7 +51,7 @@ class ForumThread(db.Model):
     __tablename__ = "forum_threads"
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.column(db.String(256))
+    title = db.Column(db.String(256))
     author = db.Column(db.Integer)
 
     created_time = db.Column(db.DateTime(timezone=True), server_default=db.func.now())

@@ -16,20 +16,20 @@
     <a href="/forums/">My Mentions</a>
   </div>
 </div>
-{% for forum_block in forum_blocks %}
+{% for category in categories %}
 <ul class="forum-main-list">
   <li class="forum-category-header">
     <div class="forum-board-icon">
       <img src="{{ random_pet_image() }}" />
     </div>
     <div class="forum-category-text">
-      {{ forum_block[0] }}
+      {{ category.title }}
       <span class="latest-post-header">
         Latest Post
       </span>
     </div>
   </li>
-  {% for board in forum_block[1] %}
+  {% for board in category.boards %}
   <li class="forum-board-row">
     <img src="/static/img/items/160/glowfruit.png" class="forum-board-icon faded" />
     <div class="forum-board-info">
@@ -40,15 +40,16 @@
         </p>
       </a>
       <div class="forum-latest-post">
-        {% set last_post = board.key.id()|last_post_board %}
+        {% set last_post = board.id|last_post_board %}
         {% if last_post is not none %}
-        <img src="/static/img/pets/eydrun.png" />
-        <p>
-          <a href="/forums/thread/{{ last_post.thread_id }}">{{ (last_post.thread_id|thread_by_id).title }}
-          </a> by <a href="/user/{{ last_post.creator_key|name_from_key_string }}">
-            {{ last_post.creator_key|name_from_key_string }}</a>
-          on {{ last_post.created_time|show_datetime }}
-        </p>
+          {% set author_name = last_post.author|name_from_author_id %}
+          <img src="/static/img/pets/eydrun.png" />
+          <p>
+            <a href="/forums/thread/{{ last_post.thread_id }}">{{ (last_post.thread_id|thread_by_id).title }}</a>
+            &nbsp;by&nbsp;
+            <a href="/user/{{ author_name }}">{{ author_name }}</a>
+            on {{ last_post.created_time|show_datetime }}
+          </p>
         {% endif %}
       </div>
     </div>

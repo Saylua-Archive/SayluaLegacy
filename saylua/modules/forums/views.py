@@ -1,5 +1,6 @@
 from flask import render_template, redirect, g, flash, request
 from google.appengine.ext import ndb
+from saylua import db
 import math
 
 from .models.db import Board, BoardCategory, ForumThread, ForumPost
@@ -10,15 +11,8 @@ POSTS_PER_PAGE = 10
 
 
 def forums_home():
-    categories = BoardCategory.query().fetch()
-    blocks = []
-    for category in categories:
-        block = []
-        block.append(category.title)
-        boards = Board.query(Board.category_key == category.key.urlsafe()).fetch()
-        block.append(boards)
-        blocks.append(block)
-    return render_template("main.html", forum_blocks=blocks)
+    categories = db.session.query(BoardCategory).all()
+    return render_template("main.html", categories=categories)
 
 
 def forums_board(board_id):

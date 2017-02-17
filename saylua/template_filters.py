@@ -1,8 +1,7 @@
-from saylua import app
-from saylua.utils import make_ndb_key, pluralize, saylua_time
+from saylua import app, db
+from saylua.utils import pluralize, saylua_time
 from saylua.modules.forums.models.db import ForumPost, ForumThread
 
-from google.appengine.ext import ndb
 from flask_markdown import Markdown
 
 import datetime
@@ -110,14 +109,11 @@ def saylua_conversation_url(conversation):
 
 
 # Query filters. Use these only when necessary.
-@app.template_filter('name_from_key_string')
-def display_name_from_key(user_key):
-    u_key = make_ndb_key(user_key)
-    found = u_key.get()
-    if found:
-        return found.display_name
-    else:
-        return "Unknown User"
+@app.template_filter('name_from_author_id')
+def display_name_from_user_id(user_id):
+    #user = db.session.query(User).filter_by(id=user_id)
+    #return user or "Unknown User"
+    return "Frank"
 
 
 @app.template_filter('last_post_thread')
@@ -132,18 +128,19 @@ def last_post_thread(thread_id):
 
 @app.template_filter('last_post_board')
 def last_post_board(board_id):
-    post_query = ForumPost.query(ForumPost.board_id == board_id).order(
-        -ForumPost.created_time)
-    post = post_query.fetch(1)
-    if len(post) > 0:
-        return post[0]
-    return None
+    post_query = (
+        db.session.query(ForumPost)
+        .join(ForumThread, ForumPost.thread)
+        .filter(ForumThread.board_id == board_id)
+        .order_by(ForumPost.last_action.desc())
+    )
+
+    return post_query.first()
 
 
 @app.template_filter('thread_by_id')
 def thread_by_id(thread_id):
-    thread_key = ndb.Key(ForumThread, thread_id)
-    return thread_key.get()
+    return db.session.query(ForumThread).filter_by(id=thread_id).first()
 
 
 @app.template_filter('count_thread_posts')
