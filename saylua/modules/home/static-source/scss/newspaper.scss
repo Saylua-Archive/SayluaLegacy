@@ -5,7 +5,6 @@ $newsBorderColor: $neutralDarkColor;
   font-size: 2rem;
   line-height: 200%;
   width: 100%;
-  margin-bottom: 1em;
   text-align: center;
   border-top: 4px $newsBorderColor double;
   border-bottom: 4px $newsBorderColor double;
@@ -21,17 +20,40 @@ h1.news-header {
 .newspaper-body {
   display: flex;
   flex-direction: row;
+  padding: 1em 0.8rem;
 
   align-items: baseline;
 
   .newspaper-main {
-    padding-right: 1rem;
+    padding-right: 1.6rem;
 
     flex-grow: 1;
     flex-shrink: 1;
 
     h2 {
+      margin-bottom: 0;
       border-bottom: $newsBorderColor 1px solid;
+
+      .news-post-avatar {
+        float: left;
+        width: 6rem;
+        height: 6rem;
+        margin-right: 0.8rem;
+        border: $newsBorderColor 3px double;
+        background: $mainSoftestColor;
+      }
+    }
+
+    .news-post-attribution {
+      font-size: 1.2rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    article {
+      width: 100%;
+      margin: 2em 0;
+      padding: 0 0.8rem;
     }
   }
 
