@@ -48,6 +48,7 @@ def forums_board(board_id):
         page_count = int(math.ceil(total_threads / float(THREADS_PER_PAGE)))
     return render_template("board.html", board=board, threads=threads, page_count=page_count)
 
+
 def post_new_thread(title, body, creator_key, board_id, board=None):
     if board is None:
         board = Board.query(Board.url_title == board_id).fetch()[0]

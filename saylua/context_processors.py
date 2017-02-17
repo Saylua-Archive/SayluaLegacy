@@ -36,7 +36,7 @@ def inject_random_pet_image():
 @app.context_processor
 def inject_user_from_key():
     def user_from_key(key):
-        if type(key) is str or type(key) is unicode:
+        if type(key) is str or type(key) is unicode: # noqa
             key = make_ndb_key(key)
         return key.get()
 

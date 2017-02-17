@@ -133,8 +133,8 @@ function executeScript(scriptFunction, meta) {
   try {
     scriptFunction.function.apply(this, args);
   } catch(e) {
-    console.log(`Script ${scriptFunction.id} failed: `);
-    console.log(e);
+    console.log(`Script ${scriptFunction.id} failed: `); // eslint-disable-line no-console
+    console.log(e); // eslint-disable-line no-console
   }
 }
 

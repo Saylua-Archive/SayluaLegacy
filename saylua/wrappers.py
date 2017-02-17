@@ -20,7 +20,6 @@ def devserver_only(f):
     return decorated_function
 
 
-
 def login_required(f, redirect='users.login'):
     """Redirects non-logged in users to a specified location.
 

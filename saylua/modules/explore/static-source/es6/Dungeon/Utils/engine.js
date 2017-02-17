@@ -1,3 +1,4 @@
+/* eslint { no-console: 0} */
 // engine
 // --------------------------------------
 // Primarily relates to app level functions outside of the logic of the game itself.

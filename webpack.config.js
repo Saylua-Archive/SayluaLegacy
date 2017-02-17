@@ -3,9 +3,6 @@ var glob = require('glob');
 var webpack = require('webpack');
 
 var tempConfig = require('./temporary.config.js');
-var paths = tempConfig.paths;
-var dests = tempConfig.dests;
-
 var pkgGlob = "./" + tempConfig.paths.es6 + "/**/Main.js*";
 var packages = glob.sync(pkgGlob);
 
@@ -98,7 +95,10 @@ const config = {
     "filename": "./[name:1]/static/js/[name:2].min.js"
   },
   "plugins": [
-    new DynamicPathPlugin({ "root": "saylua" })
+    new DynamicPathPlugin({ "root": "saylua" }),
+    new webpack.ProvidePlugin({
+      'Promise': 'es6-promise'
+    })
   ],
   "resolve": {
     "extensions": [".js", ".min.js", ".jsx"],

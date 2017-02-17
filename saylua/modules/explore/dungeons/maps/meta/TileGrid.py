@@ -1,3 +1,5 @@
+# flake8: noqa
+# TODO: noqa needs to be removed once xrange situation is resolved.
 #from . import Terrain
 from . import helpers
 
@@ -199,48 +201,49 @@ class TileGrid():
             if meta and (type(meta) == dict):
                 self.cell_map[y][x]['meta'] = meta
 
-    def calculate_visible(self, player_position, distance):
-        def tile_obstructs_vision(x, y):
-            obstacle_types = ['wall']
-            cell = self.cell_map[y][x]
+    # TODO: Determine the future usefulness of this or deprecate.
+    # def calculate_visible(self, player_position, distance):
+    #     def tile_obstructs_vision(x, y):
+    #         obstacle_types = ['wall']
+    #         cell = self.cell_map[y][x]
 
-            matching_tile = filter(lambda tile: tile.get('id') == cell['tile'], Terrain.tiles)
-            matching_tile = list(matching_tile)[0]
+    #         matching_tile = filter(lambda tile: tile.get('id') == cell['tile'], Terrain.tiles)
+    #         matching_tile = list(matching_tile)[0]
 
-            return matching_tile['type'] in obstacle_types
+    #         return matching_tile['type'] in obstacle_types
 
-        def reveal_tile(x, y):
-            self.cell_map[y][x]['meta']['visible'] = True
+    #     def reveal_tile(x, y):
+    #         self.cell_map[y][x]['meta']['visible'] = True
 
-        # Because reasons
-        p_x, p_y = player_position
+    #     # Because reasons
+    #     p_x, p_y = player_position
 
-        for x, y, cell in self.iterate():
-            # First, make sure that we're always resetting visibility
-            self.cell_map[y][x]['meta']['visible'] = False
+    #     for x, y, cell in self.iterate():
+    #         # First, make sure that we're always resetting visibility
+    #         self.cell_map[y][x]['meta']['visible'] = False
 
-        # Yes, I *am* the dev who will put each arg on it's own line.
-        helpers.fieldOfView(
-            startX=p_x,
-            startY=p_y,
-            mapWidth=self.width,
-            mapHeight=self.height,
-            radius=distance,
-            funcVisitTile=reveal_tile,
-            funcTileBlocked=tile_obstructs_vision
-        )
+    #     # Yes, I *am* the dev who will put each arg on it's own line.
+    #     helpers.fieldOfView(
+    #         startX=p_x,
+    #         startY=p_y,
+    #         mapWidth=self.width,
+    #         mapHeight=self.height,
+    #         radius=distance,
+    #         funcVisitTile=reveal_tile,
+    #         funcTileBlocked=tile_obstructs_vision
+    #     )
 
-    def get_visible(self):
-        cell_map = []
+    # def get_visible(self):
+    #     cell_map = []
 
-        for row in xrange(self.height):
-            cell_map.append([copy.copy({}) for i in range(self.width)])
+    #     for row in xrange(self.height):
+    #         cell_map.append([copy.copy({}) for i in range(self.width)])
 
-        for x, y, cell in self.iterate():
-            if cell['meta'].get('visible') == True:
-                cell_map[y][x] = cell
+    #     for x, y, cell in self.iterate():
+    #         if cell['meta'].get('visible') == True:
+    #             cell_map[y][x] = cell
 
-        return cell_map
+    #     return cell_map
 
     def render(self):
         return self.cell_map

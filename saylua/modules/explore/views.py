@@ -4,7 +4,6 @@ from .dungeons import Dungeon
 from .models.db import DungeonEntity, DungeonTile
 
 from flask import render_template
-from random import randint
 
 import json
 

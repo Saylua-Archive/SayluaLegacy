@@ -1,6 +1,7 @@
-import Reqwest from "reqwest";
 import Inferno from "inferno";
 import Component from "inferno-component";
+
+import 'whatwg-fetch';
 
 import { resolveImage } from "../../Core/graphics";
 
@@ -19,17 +20,15 @@ export default class DebugSummoner extends Component {
   }
 
   componentWillMount() {
-    let entities = Reqwest({
-      "url": '/explore/api/list_entities',
-      "type": 'json',
-      "method": 'post'
-    });
+    let entities = fetch('/explore/api/list_entities', {
+      "credentials": 'same-origin',
+      "method": 'POST'
+    }).then(response => response.json());
 
-    let tiles = Reqwest({
-      "url": '/explore/api/list_tiles',
-      "type": 'json',
-      "method": 'post'
-    });
+    let tiles = fetch('/explore/api/list_tiles', {
+      "credentials": 'same-origin',
+      "method": 'POST'
+    }).then(response => response.json());
 
     Promise.all([entities, tiles]).then((results) => {
       this.setState({
