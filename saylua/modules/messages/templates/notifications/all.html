@@ -2,7 +2,7 @@
 {% extends "layout.html" %}
 {% set page_title = "Notifications" %}
 {% block body %}
-<h2>View All Notifications</h2>
+<h1>View All Notifications</h1>
 {% if viewed_notifications|length > 0 %}
 <div class="padded full center">
   {{ simple_pagination(current_page=page, has_more_pages=more_pages) }}

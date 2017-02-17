@@ -1,6 +1,13 @@
 %content-width {
   width: 94%;
   max-width: 1200px;
+  margin: auto;
+}
+
+.hide-sidebar {
+  %content-width {
+    width: 80%;
+  }
 }
 
 @media (max-width: 1100px) {

@@ -6,13 +6,13 @@ from saylua.models.user import User
 from saylua.modules.pets.soulnames import soulname
 from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
 
+
 # To run this import setup in the interactive console and run it as such
 # After that, edit a user's role to be admin to create the first admin
 # Then, flush the memcache to make sure the user's role is updated
 #
 # from saylua.provisioner import setup
 # setup()
-
 
 def generate_admin_user():
     display_name = "admin"
@@ -77,10 +77,8 @@ def setup():
 
         print("Adding Placeholder Boards")
         categories = ["Saylua Talk", "Help", "Real Life", "Your Pets"]
-        category_keys = []
         for category in categories:
             category_key = BoardCategory(title=category).put().urlsafe()
-
             for n in range(4):
                 title = soulname(7)
                 url_title = title

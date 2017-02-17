@@ -1,2 +1,5 @@
 @import '../assets/variables-admin';
-@import 'section-menu';
+
+.theme-admin {
+  @import 'section-menu';
+}
