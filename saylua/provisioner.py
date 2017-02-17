@@ -27,6 +27,19 @@ def generate_admin_user():
     return admin_user
 
 
+def purge(absolutely_sure_about_this=False):
+    """Removes existing models from the database."""
+
+    if is_devserver() or absolutely_sure_about_this:
+        db.drop_all()
+        db.session.commit()
+        db.session.flush()
+        db.create_all()
+
+    else:
+        raise Exception("Get out of here.")
+
+
 def setup():
     # Create the role "admin" with all privileges
     admin_role = Role(id="admin")
@@ -78,14 +91,23 @@ def setup():
         print("Adding Placeholder Boards")
         categories = ["Saylua Talk", "Help", "Real Life", "Your Pets"]
         for category in categories:
-            category_key = BoardCategory(title=category).put().urlsafe()  # Keys currently in old form
+            category = BoardCategory(title=category)
+            db.session.add(category)
 
             for n in range(4):
                 title = soulname(7)
-                url_title = title
+                url_slug = title
                 description = "A board for talking about " + title
-                new_board = Board(title=title, url_title=url_title,
-                        category_key=category_key, description=description)
-                new_board.put()
+
+                new_board = Board(
+                    title=title,
+                    url_slug=url_slug,
+                    categories=[category],
+                    description=description
+                )
+
+                db.session.add(new_board)
+
+        db.session.commit()
 
     print("Database Setup Complete")

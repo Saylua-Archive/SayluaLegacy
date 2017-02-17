@@ -1,31 +1,88 @@
-from google.appengine.ext import ndb
+from saylua import db
 
 
-class Board(ndb.Model):
-    title = ndb.StringProperty()
-    url_title = ndb.StringProperty()
-    board_id = ndb.StringProperty()
-    category_key = ndb.StringProperty()
-    description = ndb.TextProperty()
+r_board_categories = db.Table('r_board_categories',
+    db.Column('board_id', db.Integer, db.ForeignKey('forum_boards.id')),
+    db.Column('category_id', db.Integer, db.ForeignKey('forum_board_categories.id'))
+)
 
 
-class BoardCategory(ndb.Model):
-    title = ndb.StringProperty()
+class Board(db.Model):
+    """Forum Boards. Container for threads.
+    Many to Many relationship with `BoardCategory`.
+    """
+
+    __tablename__ = 'forum_boards'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(256))
+    url_slug = db.Column(db.String(256))
+    description = db.Column(db.Text())
+
+    categories = db.relationship("BoardCategory",
+        secondary=r_board_categories,
+        back_populates="boards"
+    )
+
+    threads = db.relationship("ForumThread", back_populates="board")
 
 
-class ForumThread(ndb.Model):
-    creator_key = ndb.StringProperty()
-    created_time = ndb.DateTimeProperty(auto_now_add=True)
-    last_action = ndb.DateTimeProperty(auto_now=True)
-    board_id = ndb.IntegerProperty()
-    title = ndb.StringProperty()
-    is_pinned = ndb.BooleanProperty(default=False)
-    is_locked = ndb.BooleanProperty(default=False)
+class BoardCategory(db.Model):
+    """Forum Board Categories.
+    Many to Many relationship with `Board`.
+    """
+
+    __tablename__ = "forum_board_categories"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(128))
+
+    boards = db.relationship("Board",
+        secondary=r_board_categories,
+        back_populates="categories"
+    )
 
 
-class ForumPost(ndb.Model):
-    creator_key = ndb.StringProperty()
-    thread_id = ndb.IntegerProperty()
-    board_id = ndb.IntegerProperty()
-    body = ndb.TextProperty()
-    created_time = ndb.DateTimeProperty(auto_now_add=True)
+class ForumThread(db.Model):
+    """Forum Threads.
+    Many to One relationship with `Board`.
+    """
+
+    __tablename__ = "forum_threads"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.column(db.String(256))
+    author = db.Column(db.Integer)
+
+    created_time = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    last_action = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+
+    is_pinned = db.Column(db.Boolean())
+    is_locked = db.Column(db.Boolean())
+
+    board_id = db.Column(db.Integer, db.ForeignKey('forum_boards.id'))
+    board = db.relationship("Board", back_populates="threads")
+
+    posts = db.relationship("ForumPost", back_populates="thread")
+
+    def __init__(self):
+        self.is_pinned = False
+        self.is_locked = False
+
+
+class ForumPost(db.Model):
+    """Forum Thread Posts.
+    Many to One relationship with `ForumThread`.
+    """
+
+    __tablename__ = "forum_thread_posts"
+
+    id = db.Column(db.Integer, primary_key=True)
+    author = db.Column(db.Integer)
+    body = db.Column(db.Text())
+
+    created_time = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    last_action = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+
+    thread_id = db.Column(db.Integer, db.ForeignKey('forum_threads.id'))
+    thread = db.relationship("ForumThread", back_populates="posts")
