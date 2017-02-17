@@ -1,12 +1,14 @@
 @import 'assets/variables';
+$newsBorderColor: $neutralDarkColor;
 
 .news-navigation {
   font-size: 2rem;
   line-height: 200%;
   width: 100%;
+  margin-bottom: 1em;
   text-align: center;
-  border-top: 4px $neutralDarkColor double;
-  border-bottom: 4px $neutralDarkColor double;
+  border-top: 4px $newsBorderColor double;
+  border-bottom: 4px $newsBorderColor double;
 }
 
 h1.news-header {
@@ -14,4 +16,40 @@ h1.news-header {
   margin: 0.5em 0 0.25em 0;
   padding: 0;
   word-spacing: 0.5rem;
+}
+
+.newspaper-body {
+  display: flex;
+  flex-direction: row;
+
+  align-items: baseline;
+
+  .newspaper-main {
+    padding-right: 1rem;
+
+    flex-grow: 1;
+    flex-shrink: 1;
+
+    h2 {
+      border-bottom: $newsBorderColor 1px solid;
+    }
+  }
+
+  .newspaper-side {
+    width: 30%;
+
+    flex-grow: 0;
+    flex-shrink: 0;
+
+    h3 {
+      margin: 0;
+      text-align: center;
+      border: 0;
+    }
+
+    .newspaper-side-box {
+      margin-bottom: 3em;
+      border: $newsBorderColor 4px double;
+    }
+  }
 }
