@@ -5,4 +5,4 @@ urlpatterns = [
     url('/avatar/', view_func=views.customize, name='avatar_customize', methods=['GET', 'POST'])
 ]
 
-import api
+import api # noqa

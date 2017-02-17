@@ -1,3 +1,4 @@
+/* eslint { indent: 0 } */
 import BaseModel from "Models/BaseModel";
 import Matrix from "./Matrix";
 
@@ -113,12 +114,12 @@ export default class GameState extends BaseModel {
       if (response.ok) {
         return response.json();
       }
-      console.error('Sending score failed!');
+      console.error('Sending score failed!'); // eslint-disable-line no-console
     }).then((json) => {
       // TODO: Actually use the response. Retry this on failure.
       game.scoreSent = true;
       game.triggerUpdate();
-      console.log(json);
+      //console.log(json);
     });
 
     this.triggerUpdate();

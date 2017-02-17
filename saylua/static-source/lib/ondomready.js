@@ -1,4 +1,5 @@
-/*! 
+/* eslint-disable */
+/*!
  * onDomReady.js 1.4.0 (c) 2013 Tubal Martin - MIT license
  */
 ;(function (definition) {
@@ -10,7 +11,7 @@
         window['onDomReady'] = definition();
     }
 }(function() {
-    
+
     'use strict';
 
     var win = window,
@@ -38,16 +39,16 @@
 
         // Callbacks pending execution until DOM is ready
         callbacks = [];
-    
+
     // Handle when the DOM is ready
     function ready( fn ) {
         if ( !isReady ) {
-            
+
             // Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
             if ( !doc.body ) {
                 return defer( ready );
             }
-            
+
             // Remember that the DOM is ready
             isReady = true;
 
@@ -55,7 +56,7 @@
             while ( fn = callbacks.shift() ) {
                 defer( fn );
             }
-        }    
+        }
     }
 
     // The ready event handler
@@ -77,13 +78,13 @@
             win[DETACHEVENT]( ONLOAD, completed );
         }
     }
-    
+
     // Defers a function, scheduling it to run after the current call stack has cleared.
     function defer( fn, wait ) {
         // Allow 0 to be passed
         setTimeout( fn, +wait >= 0 ? wait : 1 );
     }
-    
+
     // Attach the listeners:
 
     // Catch cases where onDomReady is called after the browser event has already occurred.
@@ -93,7 +94,7 @@
         // Handle it asynchronously to allow scripts the opportunity to delay ready
         defer( ready );
 
-    // Standards-based browsers support DOMContentLoaded    
+    // Standards-based browsers support DOMContentLoaded
     } else if ( w3c ) {
         // Use the handy event callback
         doc[ADDEVENTLISTENER]( DOMCONTENTLOADED, completed, FALSE );
@@ -102,7 +103,7 @@
         win[ADDEVENTLISTENER]( LOAD, completed, FALSE );
 
     // If IE event model is used
-    } else {            
+    } else {
         // Ensure firing before onload, maybe late but safe also for iframes
         doc[ATTACHEVENT]( ONREADYSTATECHANGE, completed );
 
@@ -133,20 +134,20 @@
                     ready();
                 }
             })();
-        } 
-    } 
-    
-    function onDomReady( fn ) { 
+        }
+    }
+
+    function onDomReady( fn ) {
         // If DOM is ready, execute the function (async), otherwise wait
         isReady ? defer( fn ) : callbacks.push( fn );
     }
-    
+
     // Add version
     onDomReady.version = "1.4.0";
     // Add method to check if DOM is ready
     onDomReady.isReady = function(){
         return isReady;
     };
-    
+
     return onDomReady;
 }));

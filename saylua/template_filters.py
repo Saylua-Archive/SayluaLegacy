@@ -1,5 +1,4 @@
 from saylua import app
-from saylua.models.user import User
 from saylua.utils import make_ndb_key, pluralize, saylua_time
 from saylua.modules.forums.models.db import ForumPost, ForumThread
 

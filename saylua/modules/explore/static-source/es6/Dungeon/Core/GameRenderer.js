@@ -44,7 +44,7 @@ export default class GameRenderer {
 
       window.average = window.average || 0;
       window.average = Math.floor(((window.average + timeElapsed) / 2) * 100) / 100;
-      console.log(`This update took ${ timeElapsed } milliseconds. Average: ${ window.average }ms`);
+      console.log(`This update took ${ timeElapsed } milliseconds. Average: ${ window.average }ms`); // eslint-disable-line no-console
     });
 
     // Store the Animation Engine

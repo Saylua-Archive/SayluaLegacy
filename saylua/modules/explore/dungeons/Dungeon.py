@@ -32,7 +32,7 @@ class Dungeon:
         self.grid = self.api.generate(self.options)
 
         # Iterate Dungeon
-        for i in xrange(self.options.get('iterations', 1)):
+        for i in xrange(self.options.get('iterations', 1)): # noqa
             self.api.iterate(self.options, self.grid)
 
         # Make last-step changes.

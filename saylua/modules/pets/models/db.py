@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 
+
 # This is to store alternate linart versions of the same pets
 class SpeciesVersion(ndb.Model):
     name = ndb.StringProperty()
@@ -7,16 +8,19 @@ class SpeciesVersion(ndb.Model):
     base_psd = ndb.StringProperty()
     default_image = ndb.StringProperty()
 
+
 # Pets are divided into species and species are divided into variations
 class Species(ndb.Model):
     name = ndb.StringProperty()
     versions = ndb.StructuredProperty(SpeciesVersion)
     description = ndb.TextProperty()
 
+
 class SpeciesVariation(ndb.Model):
     species_id = ndb.IntegerProperty()
     name = ndb.StringProperty()
     description = ndb.TextProperty()
+
 
 class Pet(ndb.Model):
     pet_id = ndb.StringProperty()

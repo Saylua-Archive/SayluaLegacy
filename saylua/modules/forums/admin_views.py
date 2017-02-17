@@ -13,6 +13,7 @@ def new_board_category():
         flash("New category: " + category + " successfully created.")
     return render_template("admin/newcategory.html")
 
+
 def add_board_category(title):
     new_category = BoardCategory(title=title)
     new_category.put()
@@ -28,6 +29,7 @@ def new_board():
         add_new_board(title, category, description)
         flash("New board: \"" + title + "\" successfully created!")
     return render_template("admin/newboard.html", categories=categories)
+
 
 def add_new_board(title, category, description):
     url_title = urlize(title)

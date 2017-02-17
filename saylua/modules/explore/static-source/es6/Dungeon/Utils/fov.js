@@ -1,3 +1,4 @@
+/* eslint-disable */
 // fov -> Required by Core/graphics
 // --------------------------------------
 // Exists solely to abstract the long and exhaustive

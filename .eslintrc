@@ -5,7 +5,9 @@
     "node": true
   },
   "globals": {
-    "PIXI": true
+    "PIXI": true,
+    "describe": true,
+    "it": true
   },
   "extends": ["eslint:recommended", "plugin:inferno/recommended"],
   "parserOptions": {
@@ -26,6 +28,9 @@
         "SwitchCase": 1
       }
     ],
+    "inferno/prop-types": [
+      "off"
+    ],
     "linebreak-style": [
       "error",
       "unix"
@@ -35,6 +40,16 @@
       {
         "varsIgnorePattern": "Inferno*",
         "argsIgnorePattern": "_*"
+      }
+    ],
+    "no-warning-comments" : [
+      "warn",
+      {
+        "terms": [
+          "todo",
+          "fixme",
+          "hack"
+        ]
       }
     ],
     "semi": [

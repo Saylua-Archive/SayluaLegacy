@@ -1,7 +1,7 @@
 from saylua import db
 from saylua.models.role import Role
 from saylua.utils import is_devserver
-from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, ForumPost
+from saylua.modules.forums.models.db import Board, BoardCategory
 from saylua.models.user import User
 from saylua.modules.pets.soulnames import soulname
 from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
@@ -13,6 +13,7 @@ from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
 #
 # from saylua.provisioner import setup
 # setup()
+
 def generate_admin_user():
     display_name = "admin"
     username = "admin"
@@ -85,6 +86,6 @@ def setup():
                 description = "A board for talking about " + title
                 new_board = Board(title=title, url_title=url_title,
                         category_key=category_key, description=description)
-                board_key = new_board.put()
+                new_board.put()
 
     print("Database Setup Complete")

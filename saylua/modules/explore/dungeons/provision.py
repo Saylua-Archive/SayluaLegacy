@@ -3,6 +3,7 @@ import os
 
 ## Reasons
 
+
 class InvalidScriptName(Exception):
     pass
 
@@ -141,10 +142,13 @@ def generate_models_from_schema(schema):
                 )
             )
 
-
-    # Reasons
     try:
-        from saylua.modules.explore.models.db import DungeonScript, DungeonScriptWrapper, DungeonTrait, DungeonEntity, DungeonTile
+        from saylua.modules.explore.models.db import (
+            DungeonScript, DungeonScriptWrapper,
+            DungeonTrait, DungeonEntity,
+            DungeonTile
+        )
+
     except ImportError:
         try:
             from ..models.db import DungeonScript, DungeonScriptWrapper, DungeonTrait, DungeonEntity, DungeonTile
