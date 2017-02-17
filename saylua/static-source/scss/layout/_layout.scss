@@ -61,17 +61,14 @@
   flex-grow: 1;
 }
 
-.breadcrumb {
-  font-size: 1.4rem;
-  display: block;
-  width: 100%;
-  padding: 0.5rem 1rem;
+.sidebar-login-form th.h3 {
+  text-align: center;
+  border-bottom: 1px $neutralDarkColor dotted;
 }
 
-.sidebar-login-form th.section-header {
-  border-bottom: 1px $gray dotted;
-}
 
+// .sidebar-filler is not my favorite, but it's a simple way to make sure things
+// align nicely with (or without) the sidebar without having to make too many hacks.
 .sidebar,
 .sidebar-filler {
   display: flex;

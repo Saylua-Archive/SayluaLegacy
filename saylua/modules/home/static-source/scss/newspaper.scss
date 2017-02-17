@@ -1,6 +1,17 @@
+@import 'assets/variables';
+
 .news-navigation {
+  font-size: 2rem;
+  line-height: 200%;
   width: 100%;
   text-align: center;
-  font-size: 18px;
-  line-height: 200%;
+  border-top: 4px $neutralDarkColor double;
+  border-bottom: 4px $neutralDarkColor double;
+}
+
+h1.news-header {
+  line-height: 150%;
+  margin: 0.5em 0 0.25em 0;
+  padding: 0;
+  word-spacing: 0.5rem;
 }
