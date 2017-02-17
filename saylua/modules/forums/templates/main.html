@@ -33,7 +33,7 @@
   <li class="forum-board-row">
     <img src="/static/img/items/160/glowfruit.png" class="forum-board-icon faded" />
     <div class="forum-board-info">
-      <a href="/forums/board/{{ board.url_title }}/" class="forum-board-text">
+      <a href="/forums/board/{{ board.url_slug }}/" class="forum-board-text">
         <span class="forum-board-link">{{ board.title }}</span>
         <p>
           {{ board.description }}
@@ -48,7 +48,7 @@
             <a href="/forums/thread/{{ last_post.thread_id }}">{{ (last_post.thread_id|thread_by_id).title }}</a>
             &nbsp;by&nbsp;
             <a href="/user/{{ author_name }}">{{ author_name }}</a>
-            on {{ last_post.created_time|show_datetime }}
+            on {{ last_post.date_created|show_datetime }}
           </p>
         {% endif %}
       </div>
