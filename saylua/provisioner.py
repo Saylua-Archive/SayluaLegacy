@@ -1,7 +1,7 @@
 from saylua import db
 from saylua.models.role import Role
 from saylua.utils import is_devserver
-from saylua.modules.forums.models.db import Board, BoardCategory
+from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, ForumPost
 from saylua.models.user import User
 from saylua.modules.pets.soulnames import soulname
 from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
@@ -25,6 +25,77 @@ def generate_admin_user():
         email=email, role_id=role)
 
     return admin_user
+
+
+def generate_boards():
+    categories = ["Saylua Talk", "Help", "Real Life", "Your Pets"]
+
+    for category in categories:
+        category = BoardCategory(title=category)
+        yield category
+
+        for n in range(4):
+            title = soulname(7)
+            url_slug = title
+            description = "A board for talking about " + title
+
+            yield Board(
+                title=title,
+                url_slug=url_slug,
+                categories=[category],
+                description=description
+            )
+
+
+def generate_threads():
+    for board in db.session.query(Board).all():
+        for i in range(3):
+            title = "I really, really like {}!".format(soulname(24))
+            author = 1
+
+            yield ForumThread(title=title, author=author, board=board)
+
+
+def generate_posts():
+    from random import randrange, choice
+
+    content_phrases = [
+        "I'm a big fan of {}.",
+        "This post fills me with determination.",
+        "Don't forget about the power of {}!",
+        "Wow! I've never heard that before!",
+        "{} is how I remember to smile at night.",
+        "Calm down.",
+        "Why isn't anyone talking about {}?",
+        "I was thinking the same thing, actually."
+        "Is {} even real?",
+        "Why would you say that???",
+        "Absolutely phenomenal!!!! Did you guys see {} last night?!?",
+        "Look, do you even know what that means?",
+        "This is all meaningless. {} is just a societal construct.",
+        "That sounds great, but I don't know if I can trust your opinion.",
+        "I really, really like {}!"
+    ]
+
+    for thread in db.session.query(ForumThread).all():
+        for i in range(randrange(1, 15)):
+            body = choice(content_phrases).format(soulname(24))
+            author = 1
+
+            yield ForumPost(body=body, author=author, thread=thread)
+
+
+def generate_users():
+    users = []
+
+    for i in range(4):
+        display_name = soulname(7)
+        username = display_name
+        phash = User.hash_password("password")  # Yes, the default password is password
+        email = username + "@" + username + ".biz"
+        new_user = User(display_name=display_name, usernames=[username], phash=phash,
+            email=email, star_shards=15, cloud_coins=50000)
+        users.append(new_user.put().id())  # Add users to database, and their IDs to a list
 
 
 def purge(absolutely_sure_about_this=False):
@@ -77,36 +148,19 @@ def setup():
         admin_user.put()
 
         print("Adding Placeholder Users")
-        users = []
-
-        for i in range(4):
-            display_name = soulname(7)
-            username = display_name
-            phash = User.hash_password("password")  # Yes, the default password is password
-            email = username + "@" + username + ".biz"
-            new_user = User(display_name=display_name, usernames=[username], phash=phash,
-                email=email, star_shards=15, cloud_coins=50000)
-            users.append(new_user.put().id())  # Add users to database, and their IDs to a list
+        generate_users()
 
         print("Adding Placeholder Boards")
-        categories = ["Saylua Talk", "Help", "Real Life", "Your Pets"]
-        for category in categories:
-            category = BoardCategory(title=category)
-            db.session.add(category)
+        for item in generate_boards():
+            db.session.add(item)
 
-            for n in range(4):
-                title = soulname(7)
-                url_slug = title
-                description = "A board for talking about " + title
+        print("Adding Placeholder Threads")
+        for item in generate_threads():
+            db.session.add(item)
 
-                new_board = Board(
-                    title=title,
-                    url_slug=url_slug,
-                    categories=[category],
-                    description=description
-                )
-
-                db.session.add(new_board)
+        print("Adding Placeholder Posts")
+        for item in generate_posts():
+            db.session.add(item)
 
         db.session.commit()
 

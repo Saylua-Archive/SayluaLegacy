@@ -65,9 +65,14 @@ class ForumThread(db.Model):
 
     posts = db.relationship("ForumPost", back_populates="thread")
 
-    def __init__(self):
+    def __init__(self, title, author, board):
         self.is_pinned = False
         self.is_locked = False
+
+        self.title = title
+        self.author = author
+        self.board = board
+
 
 
 class ForumPost(db.Model):
