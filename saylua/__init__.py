@@ -44,6 +44,7 @@ routing.register_urls(app, enabled_modules)
 with app.app_context():
     db.create_all()
 
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(join(app.root_path, 'static'), 'favicon.ico',
