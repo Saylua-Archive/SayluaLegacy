@@ -23,7 +23,7 @@ def forums_board(board_slug):
         if request.method == 'POST':
             title = request.form.get('title')
             body = request.form.get('body')
-            creator_key = g.user.key.urlsafe()
+            creator_key = g.user.id.urlsafe()
             board_id = board.key.id()
             url_title = post_new_thread(title, body, creator_key, board_id, board)
             return redirect("/forums/board/" + url_title + "/")
@@ -84,7 +84,7 @@ def forums_thread(thread_id):
                 flash("Thread moved successfully!")
                 return redirect("forums/thread/" + str(thread_id) + "/")
             else:
-                creator_key = g.user.key.urlsafe()
+                creator_key = g.user.id.urlsafe()
                 body = request.form.get('body')
                 board_id = board.key.id()
                 new_post = ForumPost(creator_key=creator_key, thread_id=thread_id,

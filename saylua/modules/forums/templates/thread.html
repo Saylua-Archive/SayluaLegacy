@@ -42,7 +42,7 @@
 {{ pagination(page_count=page_count) }}
 </div>
 {% for post in posts %}
-{# set creator = user_from_key(post.creator_key) #}
+{% set creator = user_from_id(post.author) %}
 <table class="forum-post" id="forum-post-{{ loop.index }}">
   <tr>
     <th colspan="2">
@@ -56,12 +56,12 @@
   </tr>
   <tr>
     <td class="forum-post-info">
-      <a href="/avatar/"><img src="FRANK{# creator.ha_url #}"></a>
+      <a href="/avatar/"><img src="{{ creator.ha_url }}"></a>
     </td>
     <td class="forum-post-body">
       {{ post.body|markdown }}
       <div class="divider"></div>
-      {{ "Frank" }} hasn't set a signature yet.
+      {{ creator.display_name.display_name }} hasn't set a signature yet.
     </td>
   </tr>
 </table>

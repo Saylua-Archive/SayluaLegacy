@@ -27,7 +27,7 @@ def bank_transfer():
         else:
             recipient = recipient_check.user
             try:
-                User.transfer_currency(g.user.key, recipient.key, cc, ss)
+                User.transfer_currency(g.user.id, recipient.id, cc, ss)
             except User.InvalidCurrencyException:
                 flash('You do not have enough funds to send the amount entered.', 'error')
             except:
@@ -38,7 +38,7 @@ def bank_transfer():
                     % (ss, cc, recipient.display_name))
 
                 # Send a notification to the user who received the currency
-                Notification.send(recipient.key, '%s sent you %d SS and %d CC'
+                Notification.send(recipient.id, '%s sent you %d SS and %d CC'
                     % (g.user.display_name, ss, cc), '/bank/')
                 return redirect('/bank/transfer/')
     flash_errors(form)

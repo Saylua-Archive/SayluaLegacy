@@ -12,7 +12,7 @@ from saylua.utils.form import flash_errors
 # The main page where the user views all of their messages.
 @login_required
 def messages_main():
-    messages = UserConversation.query(UserConversation.user_key == g.user.key,
+    messages = UserConversation.query(UserConversation.user_id == g.user.id,
         UserConversation.is_deleted == False).order(
         UserConversation.is_read, -UserConversation.time).fetch()
     if not messages:
@@ -37,7 +37,7 @@ def messages_main_post():
         if not m:
             flash('You are attempting to edit a message which does not exist!', 'error')
             return redirect('/messages/', code=302)
-        if m.user_key != g.user.key:
+        if m.user_id != g.user.id:
             flash('You do not have permission to edit these messages!', 'error')
             return redirect('/messages/', code=302)
 
@@ -63,7 +63,7 @@ def messages_write_new():
 
     if request.method == 'POST' and form.validate():
         to = recipient_check.user.key
-        key = Conversation.start(g.user.key, to, form.title.data, form.text.data)
+        key = Conversation.start(g.user.id, to, form.title.data, form.text.data)
         return redirect('/conversation/' + key.urlsafe() + '/', code=302)
 
     flash_errors(form)
@@ -78,7 +78,7 @@ def messages_write_new():
 def messages_read(key):
     conversation_key = make_ndb_key(key)
     if conversation_key:
-        conversation = UserConversation.query(UserConversation.user_key == g.user.key,
+        conversation = UserConversation.query(UserConversation.user_id == g.user.id,
             UserConversation.conversation_key == conversation_key).get()
         if conversation:
             conversation.is_read = True
@@ -98,7 +98,7 @@ def messages_view_conversation(key):
     form = ConversationReplyForm()
     form.text.data = get_from_request(request, 'text')
     if request.method == 'POST' and form.validate():
-        result = Conversation.reply(key, g.user.key, form.text.data)
+        result = Conversation.reply(key, g.user.id, form.text.data)
         if result:
             flash('You have replied to the message!')
             return redirect('/conversation/' + key.urlsafe() + '/', code=302)
@@ -115,6 +115,6 @@ def get_conversation_if_valid(key):
         conversation = Conversation.get_by_id(key.id())
         if conversation:
             # Check that the user has permission to view the message
-            if g.user.key in conversation.user_keys:
+            if g.user.id in conversation.user_ids:
                 return conversation
     return None

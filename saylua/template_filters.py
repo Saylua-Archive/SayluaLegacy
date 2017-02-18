@@ -91,7 +91,7 @@ def saylua_message_status(user_conversation):
 
 @app.template_filter('user_url')
 def saylua_user_url(user):
-    return '/user/' + user.display_name.lower() + '/'
+    return '/user/' + user.display_name.display_name.lower() + '/'
 
 
 # Conversation can be either a UserConversation or Conversation model.
@@ -112,9 +112,16 @@ def saylua_conversation_url(conversation):
 # Query filters. Use these only when necessary.
 @app.template_filter('name_from_author_id')
 def display_name_from_user_id(user_id):
-    #user = db.session.query(User).filter_by(id=user_id)
-    #return user or "Unknown User"
-    return "Frank"
+    user = (
+        db.session.query(User)
+        .filter(User.id == user_id)
+        .one_or_none()
+    )
+
+    if user:
+        return user.display_name.display_name
+
+    return "Unknown User"
 
 
 @app.template_filter('last_post_thread')

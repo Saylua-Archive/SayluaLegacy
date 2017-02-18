@@ -55,7 +55,7 @@
       <td>
         With
         {% for recipient_key in message.recipient_keys %}
-          {% set recipient = user_from_key(recipient_key) %}
+          {% set recipient = user_from_id(recipient_key) %}
           {{ user_link(recipient) }}
         {% endfor %}
       </td>
