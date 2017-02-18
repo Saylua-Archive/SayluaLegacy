@@ -1,6 +1,8 @@
 from bcryptmaster import bcrypt
+from uuid import uuid4
 
 from saylua import db
+
 
 # An exception thrown if an operation would make a user's currency negative
 class InvalidCurrencyException(Exception):
@@ -65,10 +67,10 @@ class User(db.Model):
         return Role.get_by_name(self.role)
 
     @classmethod
-    def by_username(cls, username):
+    def from_username(cls, username):
         return (
             db.session.query(cls)
-            .filter(cls.display_name.display_name == username.lower())
+            .filter(cls.display_name.display_name.lower() == username.lower())
             .one()
         )
 
@@ -114,6 +116,22 @@ class User(db.Model):
     #     if user.star_shards < 0 or user.cloud_coins < 0:
     #         raise InvalidCurrencyException('Currency cannot be negative!')
 
+    def __init__(self, display_name, email, phash, role_name=None, star_shards=None, cloud_coins=None):
+        self.display_name = DisplayName(display_name=display_name)
+        self.email = email
+        self.phash = phash
+
+        if role_name:
+            self.role_name = role_name
+
+        if star_shards:
+            self.star_shards = star_shards
+
+        if cloud_coins:
+            self.cloud_coins = cloud_coins
+
+        self.bank_account = BankAccount()
+
 
 class BankAccount(db.Model):
     """Permanently assigned bank account for the `User` class.
@@ -153,11 +171,17 @@ class DisplayName(db.Model):
 
 
 class LoginSession(db.Model):
-    """Yes.
+    """User login session.
     """
 
     __tablename__ = "sessions"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(256), primary_key=True)
     user_id = db.Column(db.Integer)
     expires = db.Column(db.DateTime)
+
+    def __init__(self, user_id, expires):
+        self.id = str(uuid4())
+        self.user_id = user_id
+        self.expires = expires
+

@@ -30,18 +30,17 @@ def login():
 
     if request.method == 'POST' and form.validate():
         found = login_check.user
-        found_key = found.key.urlsafe()
+        found_id = found.id
 
         # Add a session to the datastore
         expires = datetime.datetime.utcnow()
         expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
-        new_session = LoginSession(user_key=found_key, expires=expires)
-        session_key = new_session.put().urlsafe()
+        new_session = LoginSession(user_id=found_id, expires=expires)
+        db.session.add(new_session)
 
-        # Generate a matching cookie and redirct
+        # Generate a matching cookie and redirect
         resp = make_response(redirect('/'))
-        resp.set_cookie("user_key", found_key, expires=expires)
-        resp.set_cookie("session_key", session_key, expires=expires)
+        resp.set_cookie("session_id", new_session.id, expires=expires)
 
         return resp
 
@@ -74,16 +73,19 @@ def logout():
 # Registration form shown to the user
 def register():
     form = RegisterForm(request.form)
+
     if request.method == 'POST' and form.validate():
         display_name = form.username.data
-        username = display_name.lower()
         password = form.password.data
         email = form.email.data
 
         phash = User.hash_password(password)
-        new_user = User(display_name=display_name, usernames=[username], phash=phash,
-                email=email)
-        user_key = new_user.put().urlsafe()
+        new_user = User(
+            display_name=display_name,
+            phash=phash,
+            email=email
+        )
+
 
         # Add a session to the datastore
         expires = datetime.datetime.utcnow()
@@ -96,5 +98,6 @@ def register():
         resp.set_cookie('user_key', user_key, expires=expires)
         resp.set_cookie('session_key', session_key, expires=expires)
         return resp
+
     flash_errors(form)
     return render_template('login/register.html', form=form)

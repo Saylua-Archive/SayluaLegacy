@@ -15,16 +15,10 @@ from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
 # setup()
 
 def generate_admin_user():
-    _display_name = "admin"
+    display_name = "admin"
     role_name = "admin"
     phash = User.hash_password("password")  # Yes, the default password is password
     email = "admin@saylua.wizards"
-
-    # This is weird. It shouldn't be this weird.
-    # Should probably be done such that this is created automatically.
-    display_name = DisplayName(display_name=_display_name)
-
-    yield display_name
 
     yield User(
         display_name=display_name,
@@ -96,16 +90,9 @@ def generate_posts():
 
 def generate_users():
     for i in range(4):
-        _display_name = soulname(7)
-        username = _display_name
+        display_name = soulname(7)
         phash = User.hash_password("password")  # Yes, the default password is password
-        email = username + "@" + username + ".biz"
-
-        # This is weird. It shouldn't be this weird.
-        # Should probably be done such that this is created automatically.
-        display_name = DisplayName(display_name=_display_name)
-
-        yield display_name
+        email = "{0}@dongs.{0}.biz".format(display_name)
 
         yield User(
             display_name=display_name,
@@ -131,26 +118,29 @@ def purge(absolutely_sure_about_this=False):
 
 def setup():
     # Create the role "admin" with all privileges
-    admin_role = Role(id="admin")
-    admin_dict = admin_role.to_dict()
-    for entry in admin_dict:
-        setattr(admin_role, entry, True)
-    admin_role.put()
+    admin_role = Role(name="admin")
+    role_columns = [column.key for column in admin_role.__table__.columns]
+
+    for key in role_columns:
+        if key.startswith("can"):
+            setattr(admin_role, key, True)
+
+    db.session.add(admin_role)
     print("Admin Role Created")
 
     # Add the "user" role
-    user_role = Role(id="user")
+    user_role = Role(name="user")
     user_role.can_post_threads = True
     user_role.can_comment = True
-    user_role.put()
+    db.session.add(user_role)
     print("User Role Created")
 
     # Add the "moderator" role
-    moderator_role = Role(id="moderator")
+    moderator_role = Role(name="moderator")
     moderator_role.can_post_threads = True
     moderator_role.can_move_threads = True
     moderator_role.can_comment = True
-    moderator_role.put()
+    db.session.add(moderator_role)
     print("Moderator Role Created")
 
     # Turn dungeon schemas into models
@@ -162,11 +152,12 @@ def setup():
     # Add placeholders if on the dev server
     if is_devserver():
         print("Adding Initial Admin User")
-        admin_user = generate_admin_user()
-        admin_user.put()
+        for item in generate_admin_user():
+            db.session.add(item)
 
         print("Adding Placeholder Users")
-        generate_users()
+        for item in generate_users():
+            db.session.add(item)
 
         print("Adding Placeholder Boards")
         for item in generate_boards():
