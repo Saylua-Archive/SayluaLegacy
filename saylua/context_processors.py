@@ -5,6 +5,7 @@ from saylua.modules.messages.models.db import Notification
 from saylua.utils import make_ndb_key, get_static_version_id
 
 from flask import g, url_for
+from saylua import db
 
 import os
 import random
@@ -88,5 +89,11 @@ def inject_time():
 def inject_users_online():
     mins_ago = datetime.datetime.now() - datetime.timedelta(
         minutes=app.config['USERS_ONLINE_RANGE'])
-    user_count = User.query(User.last_action >= mins_ago).count()
+
+    user_count = (
+        db.session.query(User)
+        .filter(User.last_action >= mins_ago)
+        .count()
+    )
+
     return dict(users_online_count=user_count)

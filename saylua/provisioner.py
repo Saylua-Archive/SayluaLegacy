@@ -2,7 +2,7 @@ from saylua import db
 from saylua.models.role import Role
 from saylua.utils import is_devserver
 from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, ForumPost
-from saylua.models.user import User
+from saylua.models.user import User, DisplayName
 from saylua.modules.pets.soulnames import soulname
 from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
 
@@ -15,16 +15,25 @@ from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
 # setup()
 
 def generate_admin_user():
-    display_name = "admin"
-    username = "admin"
+    _display_name = "admin"
+    role_name = "admin"
     phash = User.hash_password("password")  # Yes, the default password is password
     email = "admin@saylua.wizards"
-    role = "admin"
 
-    admin_user = User(display_name=display_name, usernames=[username], phash=phash,
-        email=email, role_id=role)
+    # This is weird. It shouldn't be this weird.
+    # Should probably be done such that this is created automatically.
+    display_name = DisplayName(display_name=_display_name)
 
-    return admin_user
+    yield display_name
+
+    yield User(
+        display_name=display_name,
+        phash=phash,
+        email=email,
+        role_name=role_name,
+        star_shards=15,
+        cloud_coins=50000
+    )
 
 
 def generate_boards():
@@ -86,16 +95,25 @@ def generate_posts():
 
 
 def generate_users():
-    users = []
-
     for i in range(4):
-        display_name = soulname(7)
-        username = display_name
+        _display_name = soulname(7)
+        username = _display_name
         phash = User.hash_password("password")  # Yes, the default password is password
         email = username + "@" + username + ".biz"
-        new_user = User(display_name=display_name, usernames=[username], phash=phash,
-            email=email, star_shards=15, cloud_coins=50000)
-        users.append(new_user.put().id())  # Add users to database, and their IDs to a list
+
+        # This is weird. It shouldn't be this weird.
+        # Should probably be done such that this is created automatically.
+        display_name = DisplayName(display_name=_display_name)
+
+        yield display_name
+
+        yield User(
+            display_name=display_name,
+            phash=phash,
+            email=email,
+            star_shards=15,
+            cloud_coins=50000
+        )
 
 
 def purge(absolutely_sure_about_this=False):

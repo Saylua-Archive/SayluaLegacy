@@ -1,5 +1,5 @@
 from saylua import app, db
-from saylua.models import User
+from saylua.models.user import User
 from saylua.utils import pluralize, saylua_time
 from saylua.modules.forums.models.db import ForumPost, ForumThread
 
