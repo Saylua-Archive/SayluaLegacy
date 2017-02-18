@@ -7,10 +7,13 @@ from .routing import SayluaApp
 from os.path import join
 from flask import send_from_directory, render_template
 from flask_sqlalchemy import SQLAlchemy
+from saylua.utils import is_devserver
 
 app = SayluaApp(__name__)
 app.config.from_pyfile('config/secure.py')
 app.config.from_pyfile('config/settings.py')
+if is_devserver():
+    app.config.from_pyfile('config/local_settings.py')
 
 db = SQLAlchemy(app)
 
