@@ -70,7 +70,7 @@ def generate_posts():
         "{} is how I remember to smile at night.",
         "Calm down.",
         "Why isn't anyone talking about {}?",
-        "I was thinking the same thing, actually."
+        "I was thinking the same thing, actually.",
         "Is {} even real?",
         "Why would you say that???",
         "Absolutely phenomenal!!!! Did you guys see {} last night?!?",
@@ -80,10 +80,12 @@ def generate_posts():
         "I really, really like {}!"
     ]
 
+    users = db.session.query(User).all()
+
     for thread in db.session.query(ForumThread).all():
         for i in range(randrange(1, 15)):
             body = choice(content_phrases).format(soulname(24))
-            author = 1
+            author = choice(users).id
 
             yield ForumPost(body=body, author=author, thread=thread)
 
