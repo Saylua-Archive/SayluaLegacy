@@ -9,7 +9,6 @@ export default class BlockGrid extends Component {
 
   render() {
     let model = this.props.matrix;
-    let getColor = this.getColor;
     let rows = model.rows().map(function(col) {
       return (
         <tr>{col.map(function(num) {
