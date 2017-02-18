@@ -39,11 +39,12 @@
   @extend %content-width;
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
   min-height: 400px;
-  margin: auto;
   padding: 1em 0;
 
   flex-shrink: 0;
+  flex-grow: 1;
 }
 
 .main-body-column {
@@ -97,7 +98,7 @@
   }
 
   .active-pet-view:hover {
-    @include bounce-margin;
+    @include bounce-up;
   }
 }
 
@@ -137,6 +138,8 @@ footer {
 
   .main-body {
     flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
   }
 
   .avatar-view {
