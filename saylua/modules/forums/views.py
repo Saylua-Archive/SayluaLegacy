@@ -1,8 +1,6 @@
 from flask import render_template, redirect, g, flash, request
-from google.appengine.ext import ndb
 import flask_sqlalchemy
 from saylua import db
-import math
 
 from .models.db import Board, BoardCategory, ForumThread, ForumPost
 

@@ -2,7 +2,7 @@ from saylua import app
 from saylua.models.user import User
 from saylua.modules.messages.models.db import UserConversation
 from saylua.modules.messages.models.db import Notification
-from saylua.utils import make_ndb_key, get_static_version_id
+from saylua.utils import get_static_version_id
 
 from flask import g, url_for
 from saylua import db

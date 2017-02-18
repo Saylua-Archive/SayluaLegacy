@@ -6,7 +6,6 @@ from saylua.wrappers import login_required
 
 from ..forms.login import LoginForm, RegisterForm, login_check
 
-from google.appengine.ext import ndb
 from flask import render_template, redirect, make_response, request, g
 
 import datetime
