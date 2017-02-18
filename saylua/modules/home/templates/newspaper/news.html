@@ -2,9 +2,22 @@
 {% set section_title = "News" %}
 {% block section_body %}
 <div class="news-post">
-  <h3>Explore in our map on Saylua</h3>
-  <p>
-    Check out the WIP explore feature here: <a href="/explore/">Explore</a>
-  </p>
+  {% for i in range(5) %}
+  <h2>
+    <img src="{{ random_pet_image() }}" class="news-post-avatar"/>
+    Explore in our map on Saylua
+  </h2>
+  <div class="news-post-attribution">by <a href="/user/">Tiff</a> on Feb 17, 2017 9:43PM SMT</div>
+  <article>
+    <p>
+      Check out the WIP explore feature here: <a href="/explore/">Explore</a>
+    </p>
+    <p>
+      Saylua is a pet about the beauty where the site conquers all. Virtualize your collections into
+      pets on this Smashing Hulk Hogan simulator. Loxi Vela ipsum.
+    </p>
+    <a href="/forums/">View Comments (0)</a>
+  </article>
+  {% endfor %}
 </div>
 {% endblock %}

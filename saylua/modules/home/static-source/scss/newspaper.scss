@@ -1,6 +1,77 @@
+@import 'assets/variables';
+$newsBorderColor: $neutralDarkColor;
+
 .news-navigation {
+  font-size: 2rem;
+  line-height: 200%;
   width: 100%;
   text-align: center;
-  font-size: 18px;
-  line-height: 200%;
+  border-top: 4px $newsBorderColor double;
+  border-bottom: 4px $newsBorderColor double;
+}
+
+h1.news-header {
+  line-height: 150%;
+  margin: 0.5em 0 0.25em 0;
+  padding: 0;
+  word-spacing: 0.5rem;
+}
+
+.newspaper-body {
+  display: flex;
+  flex-direction: row;
+  padding: 1em 0.8rem;
+
+  align-items: baseline;
+
+  .newspaper-main {
+    padding-right: 1.6rem;
+
+    flex-grow: 1;
+    flex-shrink: 1;
+
+    h2 {
+      margin-bottom: 0;
+      border-bottom: $newsBorderColor 1px solid;
+
+      .news-post-avatar {
+        float: left;
+        width: 6rem;
+        height: 6rem;
+        margin-right: 0.8rem;
+        border: $newsBorderColor 3px double;
+        background: $mainSoftestColor;
+      }
+    }
+
+    .news-post-attribution {
+      font-size: 1.2rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    article {
+      width: 100%;
+      margin: 2em 0;
+      padding: 0 0.8rem;
+    }
+  }
+
+  .newspaper-side {
+    width: 30%;
+
+    flex-grow: 0;
+    flex-shrink: 0;
+
+    h3 {
+      margin: 0;
+      text-align: center;
+      border: 0;
+    }
+
+    .newspaper-side-box {
+      margin-bottom: 3em;
+      border: $newsBorderColor 4px double;
+    }
+  }
 }
