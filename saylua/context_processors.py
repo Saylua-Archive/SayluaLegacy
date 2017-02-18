@@ -35,13 +35,15 @@ def inject_random_pet_image():
 
 
 @app.context_processor
-def inject_user_from_key():
-    def user_from_key(key):
-        if type(key) is str or type(key) is unicode: # noqa
-            key = make_ndb_key(key)
-        return key.get()
+def inject_user_from_id():
+    def user_from_id(id):
+        return (
+            db.session.query(User)
+            .filter(User.id == id)
+            .one_or_none()
+        )
 
-    return dict(user_from_key=user_from_key)
+    return dict(user_from_id=user_from_id)
 
 
 # Injected variables.
@@ -55,9 +57,9 @@ def inject_version_id():
 def inject_notifications():
     if not g.logged_in:
         return {}
-    notifications_count = Notification.query(Notification.user_key == g.user.key,
+    notifications_count = Notification.query(Notification.user_id == g.user.id,
         Notification.is_read == False).count(limit=100)
-    notifications = Notification.query(Notification.user_key == g.user.key).order(
+    notifications = Notification.query(Notification.user_id == g.user.id).order(
         Notification.is_read, -Notification.time).fetch(limit=5)
     if not notifications:
         notifications = []
@@ -69,10 +71,10 @@ def inject_messages():
     if not g.logged_in:
         return {}
     messages_count = UserConversation.query(
-        UserConversation.user_key == g.user.key,
+        UserConversation.user_id == g.user.id,
         UserConversation.is_read == False,
         UserConversation.is_deleted == False).count(limit=100)
-    messages = UserConversation.query(UserConversation.user_key == g.user.key,
+    messages = UserConversation.query(UserConversation.user_id == g.user.id,
         UserConversation.is_deleted == False).order(
         UserConversation.is_read, -UserConversation.time).fetch(limit=5)
     if not messages:

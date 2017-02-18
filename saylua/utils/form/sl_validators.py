@@ -206,4 +206,4 @@ class UsernameUnique(SayluaValidator):
         username = field.data.lower()
         if self.whitelist and username in self.whitelist:
             return True
-        return not User.key_by_username(username)
+        return not User.from_username(username)

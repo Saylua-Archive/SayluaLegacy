@@ -1,5 +1,6 @@
 from bcryptmaster import bcrypt
 from uuid import uuid4
+import datetime
 
 from saylua import db
 
@@ -70,8 +71,9 @@ class User(db.Model):
     def from_username(cls, username):
         return (
             db.session.query(cls)
-            .filter(cls.display_name.display_name.lower() == username.lower())
-            .one()
+            .join(DisplayName, cls.display_name)
+            .filter(db.func.lower(DisplayName.display_name) == username.lower())
+            .one_or_none()
         )
 
     @classmethod
@@ -101,8 +103,8 @@ class User(db.Model):
     #     ndb.put_multi([from_user, to_user])
 
     # @classmethod
-    # def update_currency(cls, user_key, cc=0, ss=0):
-    #     user = user_key.get()
+    # def update_currency(cls, user_id, cc=0, ss=0):
+    #     user = user_id.get()
     #     user.star_shards += ss
     #     user.cloud_coins += cc
 
@@ -185,3 +187,13 @@ class LoginSession(db.Model):
         self.user_id = user_id
         self.expires = expires
 
+    @property
+    def active(self):
+        return (self.expires > datetime.datetime.now())
+
+    def get_user(self):
+        return (
+            db.session.query(User)
+            .filter(User.id == self.user_id)
+            .one_or_none()
+        )

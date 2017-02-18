@@ -1,4 +1,4 @@
-from saylua import app
+from saylua import app, db
 
 from saylua.utils.form import flash_errors
 from saylua.models.user import LoginSession, User
@@ -36,7 +36,9 @@ def login():
         expires = datetime.datetime.utcnow()
         expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
         new_session = LoginSession(user_id=found_id, expires=expires)
+
         db.session.add(new_session)
+        db.session.commit()
 
         # Generate a matching cookie and redirect
         resp = make_response(redirect('/'))
@@ -58,15 +60,18 @@ def reset_password(user, code):
 
 @login_required
 def logout():
-    user_key = request.cookies.get('user_key')
-    session_key = request.cookies.get('session_key')
-    key = ndb.Key(urlsafe=session_key)
-    found = key.get()
-    if found is not None and found.user_key == user_key:
-        found.key.delete()
+    session_id = request.cookies.get('session_id')
+    session = (
+        db.session.query(LoginSession)
+        .filter(LoginSession.id == session_id)
+        .first()
+    )
+
+    if session:
+        session.delete()
+
     resp = make_response(redirect('/'))
-    resp.set_cookie('user_key', '', expires=0)
-    resp.set_cookie('session_key', '', expires=0)
+    resp.set_cookie('session_id', '', expires=0)
     return resp
 
 
@@ -86,17 +91,20 @@ def register():
             email=email
         )
 
+        db.session.add(new_user)
+        db.session.commit()
 
         # Add a session to the datastore
         expires = datetime.datetime.utcnow()
         expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
-        new_session = LoginSession(user_key=user_key, expires=expires)
-        session_key = new_session.put().urlsafe()
+        new_session = LoginSession(user_id=new_user.id, expires=expires)
+
+        db.session.add(new_session)
+        db.session.commit()
 
         # Generate a matching cookie and redirct
         resp = make_response(redirect('/'))
-        resp.set_cookie('user_key', user_key, expires=expires)
-        resp.set_cookie('session_key', session_key, expires=expires)
+        resp.set_cookie('session_id', new_session.id, expires=expires)
         return resp
 
     flash_errors(form)
