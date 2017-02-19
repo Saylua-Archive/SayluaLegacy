@@ -1,5 +1,5 @@
 from google.appengine.ext import ndb
-
+from saylua import db
 
 # This is to store alternate linart versions of the same pets
 class SpeciesVersion(ndb.Model):
