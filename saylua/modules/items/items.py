@@ -1,20 +1,9 @@
-from saylua import app
 from .models.db import Item
 from flask import render_template
 
-import os
-import random
-
 
 def items_inventory(category=None):
-    path = os.path.join(app.static_folder, 'img/items/160/')
-    items = []
-
-    for i in xrange(60): # noqa
-        name = random.choice(os.listdir(path))
-        items.append({'name': name, 'img_url': '/static/img/items/160/' + name})
-
-    return render_template('inventory.html', items=items, category=category)
+    return render_template('inventory.html', category=category)
 
 
 def items_view_all():

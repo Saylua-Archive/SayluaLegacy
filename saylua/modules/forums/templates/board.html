@@ -5,24 +5,28 @@
   <link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
 {% endblock %}
 {% block body %}
-<h1>{{ board.title }}</h1>
-<span class="breadcrumb">
+<h1>Viewing Board: {{ board.title }}</h1>
+<span class="forum-breadcrumb">
   <a href="/forums/">Forums</a> &#187; {{ board.title }}
 </span>
 <div class="center">
   {{ pagination(page_count=page_count) }}
 </div>
 
+
+<h2 class="forum-board-header">
+  <div class="forum-board-header-icon">
+    <img src="{{ random_item_image() }}" />
+  </div>
+  <div class="forum-board-header-content">
+    Threads in {{ board.title }}
+    <a class="write-thread-link" href="#write-thread">
+      <img src="/static/img/icons/pencil.png">
+      Make a New Thread
+    </a>
+  </div>
+</h2>
 <table class="forum-board-table">
-  <tr>
-    <th class="h3" colspan="5">
-      Threads in {{ board.title }}
-      <a class="right normal" href="#write-forum-thread">
-        <img src="/static/img/icons/pencil.png">
-        Make a New Thread
-      </a>
-    </th>
-  </tr>
   <tr>
     <th>
     </th>
@@ -41,7 +45,7 @@
   </tr>
 
   {% for thread in threads %}
-  <tr class="forum-thread-row{% if thread.is_pinned %} highlight{% endif %}">
+  <tr class="alternating-row {% if thread.is_pinned %} highlight{% endif %}">
     <td class="forum-thread-icon">
       {% if thread.is_pinned %}
       <img src="/static/img/icons/pin.png">
@@ -53,7 +57,7 @@
     <td class="forum-thread-info">
       <a href="/forums/thread/{{ thread.key.id() }}/">
         <span class="forum-thread-link">{{ thread.title }}</span>
-        <p class="small">Created on {{ thread.created_time|expanded_relative_time }}</p>
+        <small>Created on {{ thread.created_time|expanded_relative_time }}</small>
       </a>
     </td>
     <td>
@@ -78,13 +82,14 @@
 {{ pagination(page_count=page_count) }}
 </div>
 
+<h2 class="forum-board-header" id="write-thread">
+  <div class="forum-board-header-icon">
+    <img src="{{ random_item_image() }}" />
+  </div>
+  Make a New Thread
+</h2>
 <form method="post" class="validated-form" data-error-id="forum-board-error">
-  <table class="form-table" id="write-forum-thread">
-    <tr>
-      <th class="h3" colspan="2">
-        Quick Thread
-      </th>
-    </tr>
+  <table class="form-table">
     <tr>
       <td colspan="2" id="forum-board-error"></td>
     </tr>

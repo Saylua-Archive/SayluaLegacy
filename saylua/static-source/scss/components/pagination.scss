@@ -17,28 +17,3 @@
 .pagination .active {
   background-color: $mainSofterColor;
 }
-
-.binary-pagination {
-  font-size: 2em;
-  width: 90%;
-  margin: auto;
-}
-
-.binary-pagination span {
-  color: #bbb;
-}
-
-.binary-pagination span, .binary-pagination a {
-  @include fast-color-trans;
-  display: block;
-  float: left;
-  width: 50%;
-  margin: 10px 0;
-  padding: 20px;
-  text-align: center;
-}
-
-.binary-pagination a:hover {
-  text-decoration: none;
-  background-color: $accentSoftColor;
-}

@@ -7,11 +7,11 @@
   {{ pagination() }}
 </div>
 <div class="row-5">
-  {% for item in items %}
+  {% for i in range(20) %}
   <div class="col-1 center">
     <a href="javascript:void();">
-      <img src="{{ item.img_url }}" class="item">
-      <span class="full">{{ item.name }}</span>
+      <img src="{{ random_item_image() }}" class="item">
+      <span class="full">Item {{ i }}</span>
       <small class="full">Count: 10</small>
     </a>
   </div>

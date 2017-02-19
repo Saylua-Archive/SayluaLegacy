@@ -1,45 +1,75 @@
 @import 'assets/variables';
 @import 'assets/transitions';
 
+h2.forum-board-header {
+  display: flex;
+  margin-bottom: 0.5em;
+  padding-top: 1em;
+  padding-bottom: 0;
+
+  align-items: flex-end;
+
+  .forum-board-header-icon {
+    overflow: hidden;
+    height: 2.8rem;
+    margin-right: 0.8rem;
+
+    flex-grow: 0;
+    flex-shrink: 0;
+    img {
+      width: 3.2rem;
+      height: 3.2rem;
+    }
+  }
+
+  .forum-board-header-content {
+    display: flex;
+
+    align-items: baseline;
+    flex-grow: 1;
+    flex-shrink: 0;
+    justify-content: space-between;
+  }
+
+  a.write-thread-link {
+    font-size: $baseFontSize;
+  }
+}
+
 .forum-board-table {
   width: 100%;
   margin-bottom: 4rem;
   border-collapse: collapse;
 
   td, th {
-    padding: .4rem;
+    padding: 0.5em 0.4rem;
   }
 
   th {
-    font-size: 1.2rem;
+    font-size: $smallFontSize;
+    font-weight: normal;
     text-align: left;
     background: none;
-    font-weight: normal;
   }
 
-  th.h3 {
-    padding-top: 2rem;
-  }
-
-  tr {
+  tr.alternating-row {
     @include fast-color-trans;
-  }
+    &:nth-child(even) {
+      background: $mainSoftestColor;
+    }
 
-  .forum-thread-row:nth-child(odd) {
-    background: $neutralColor;
-  }
+    &.highlight:nth-child(n) {
+      background-color: $highlightSoftColor;
+    }
 
-  .forum-thread-row.highlight:nth-child(n) {
-    background-color: $highlightSoftColor;
-  }
+    &.highlight:nth-child(even) {
+      background-color: $highlightColor;
+    }
 
-  .forum-thread-row.highlight:nth-child(odd) {
-    background-color: $highlightColor;
-  }
-
-  .forum-board-row:hover,
-  .forum-thread-row:nth-child(n):hover {
-    background-color: $accentSoftColor;
+    // Note: We need the nth-child(n) to overwrite nth-child(even)
+    &:nth-child(n):hover {
+      background-color: $accentSoftColor;
+    }
   }
 
   .forum-thread-info {
@@ -59,16 +89,18 @@
       text-decoration: underline;
     }
 
-    a p.small,
-    a:hover p.small {
-      margin: .5rem 0;
+    a small,
+    a:hover small {
+      display: block;
+      width: 100%;
+      margin: 0.5rem 0;
       text-decoration: none;
       color: $black;
     }
   }
 
   .forum-thread-icon {
-    width: 1.6rem;
+    width: 4.8rem;
     text-align: center;
   }
 
