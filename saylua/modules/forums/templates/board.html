@@ -20,7 +20,7 @@
   </div>
   <div class="forum-board-header-content">
     Threads in {{ board.title }}
-    <a class="write-thread-link" href="#write-forum-thread">
+    <a class="write-thread-link" href="#write-thread">
       <img src="/static/img/icons/pencil.png">
       Make a New Thread
     </a>
@@ -82,13 +82,14 @@
 {{ pagination(page_count=page_count) }}
 </div>
 
+<h2 class="forum-board-header" id="write-thread">
+  <div class="forum-board-header-icon">
+    <img src="{{ random_item_image() }}" />
+  </div>
+  Make a New Thread
+</h2>
 <form method="post" class="validated-form" data-error-id="forum-board-error">
-  <table class="form-table" id="write-forum-thread">
-    <tr>
-      <th class="h3" colspan="2">
-        Quick Thread
-      </th>
-    </tr>
+  <table class="form-table">
     <tr>
       <td colspan="2" id="forum-board-error"></td>
     </tr>
