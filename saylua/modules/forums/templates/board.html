@@ -6,7 +6,7 @@
 {% endblock %}
 {% block body %}
 <h1>Viewing Board: {{ board.title }}</h1>
-<span class="breadcrumb">
+<span class="forum-breadcrumb">
   <a href="/forums/">Forums</a> &#187; {{ board.title }}
 </span>
 <div class="center">
@@ -15,11 +15,16 @@
 
 
 <h2 class="forum-board-header">
-  Threads in {{ board.title }}
-  <a class="write-thread-link" href="#write-forum-thread">
-    <img src="/static/img/icons/pencil.png">
-    Make a New Thread
-  </a>
+  <div class="forum-board-header-icon">
+    <img src="{{ random_item_image() }}" />
+  </div>
+  <div class="forum-board-header-content">
+    Threads in {{ board.title }}
+    <a class="write-thread-link" href="#write-forum-thread">
+      <img src="/static/img/icons/pencil.png">
+      Make a New Thread
+    </a>
+  </div>
 </h2>
 <table class="forum-board-table">
   <tr>
@@ -40,7 +45,7 @@
   </tr>
 
   {% for thread in threads %}
-  <tr class="forum-thread-row{% if thread.is_pinned %} highlight{% endif %}">
+  <tr class="alternating-row {% if thread.is_pinned %} highlight{% endif %}">
     <td class="forum-thread-icon">
       {% if thread.is_pinned %}
       <img src="/static/img/icons/pin.png">

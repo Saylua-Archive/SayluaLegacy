@@ -3,11 +3,33 @@
 
 h2.forum-board-header {
   display: flex;
-  align-items: baseline;
+  margin-bottom: 0.5em;
   padding-top: 1em;
   padding-bottom: 0;
-  margin-bottom: 0.5em;
-  justify-content: space-between;
+
+  align-items: flex-end;
+
+  .forum-board-header-icon {
+    overflow: hidden;
+    height: 2.8rem;
+    margin-right: 0.8rem;
+
+    flex-grow: 0;
+    flex-shrink: 0;
+    img {
+      width: 3.2rem;
+      height: 3.2rem;
+    }
+  }
+
+  .forum-board-header-content {
+    display: flex;
+
+    align-items: baseline;
+    flex-grow: 1;
+    flex-shrink: 0;
+    justify-content: space-between;
+  }
 
   a.write-thread-link {
     font-size: $baseFontSize;
@@ -25,30 +47,29 @@ h2.forum-board-header {
 
   th {
     font-size: $smallFontSize;
+    font-weight: normal;
     text-align: left;
     background: none;
-    font-weight: normal;
   }
 
-  tr {
+  tr.alternating-row {
     @include fast-color-trans;
-  }
+    &:nth-child(even) {
+      background: $mainSoftestColor;
+    }
 
-  .forum-thread-row:nth-child(even) {
-    background: $mainSoftestColor;
-  }
+    &.highlight:nth-child(n) {
+      background-color: $highlightSoftColor;
+    }
 
-  .forum-thread-row.highlight:nth-child(n) {
-    background-color: $highlightSoftColor;
-  }
+    &.highlight:nth-child(even) {
+      background-color: $highlightColor;
+    }
 
-  .forum-thread-row.highlight:nth-child(even) {
-    background-color: $highlightColor;
-  }
-
-  .forum-board-row:hover,
-  .forum-thread-row:nth-child(n):hover {
-    background-color: $accentSoftColor;
+    // Note: We need the nth-child(n) to overwrite nth-child(even)
+    &:nth-child(n):hover {
+      background-color: $accentSoftColor;
+    }
   }
 
   .forum-thread-info {
@@ -71,15 +92,15 @@ h2.forum-board-header {
     a small,
     a:hover small {
       display: block;
-      margin: .5rem 0;
+      width: 100%;
+      margin: 0.5rem 0;
       text-decoration: none;
       color: $black;
-      width: 100%;
     }
   }
 
   .forum-thread-icon {
-    width: 3.2rem;
+    width: 4.8rem;
     text-align: center;
   }
 
