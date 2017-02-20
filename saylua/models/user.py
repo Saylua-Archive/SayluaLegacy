@@ -55,7 +55,6 @@ class User(db.Model):
     autosubscribe_posts = db.Column(db.Boolean)
 
     # Misc profile stuff
-    css = db.Column(db.Text) # FIXME: This should really have a limit.
     gender = db.Column(db.String(32))
     pronouns = db.Column(db.String(128))
     bio = db.Column(db.Text(), default="Hello, world!") # FIXME: This should really have a limit.
