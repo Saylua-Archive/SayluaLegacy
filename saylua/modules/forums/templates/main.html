@@ -31,7 +31,7 @@
   </li>
   {% for board in category.boards %}
   <li class="forum-board-row">
-    <img src="/static/img/items/160/glowfruit.png" class="forum-board-icon faded" />
+    <img src="{{ random_item_image() }}" class="forum-board-icon faded" />
     <div class="forum-board-info">
       <a href="/forums/board/{{ board.url_slug }}/" class="forum-board-text">
         <span class="forum-board-link">{{ board.title }}</span>

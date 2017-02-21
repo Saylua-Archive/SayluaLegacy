@@ -1,8 +1,7 @@
 @import '../assets/keyframes';
 
 .bounce {
-  -webkit-animation: bounce 1.5s linear infinite; /* Chrome, Safari, Opera */
-  animation: bounce 1.5s linear infinite;
+  @include bounce-up(5px, 1.5s);
 }
 
 

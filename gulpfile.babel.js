@@ -5,6 +5,7 @@ import watch from 'gulp-watch';
 import concat from 'gulp-concat';
 import cleanCSS from 'gulp-clean-css';
 import sourcemaps from 'gulp-sourcemaps';
+import autoprefixer from 'gulp-autoprefixer';
 
 import glob from 'glob';
 import stream from 'stream';
@@ -25,6 +26,7 @@ gulp.task('build-sass', () => {
     .on('error', sass.logError)
     .pipe(concat('styles.min.css'))
     .pipe(sourcemaps.init())
+    .pipe(autoprefixer())
     .pipe(cleanCSS())
     .pipe(sourcemaps.write())
     .pipe(gulp.dest(dests.sass));
@@ -49,6 +51,7 @@ gulp.task('build-sass', () => {
       .on('error', sass.logError))
       .pipe(concat(outputName))
       .pipe(sourcemaps.init())
+      .pipe(autoprefixer())
       .pipe(cleanCSS())
       .pipe(sourcemaps.write())
       .pipe(gulp.dest(outputPath));
