@@ -32,7 +32,7 @@
   {% for board in forum_block[1] %}
   <li class="forum-board-row">
     <img src="{{ random_item_image() }}" class="forum-board-icon faded" />
-    <div class="forum-board-info">
+    <div class="forum-row-content">
       <a href="/forums/board/{{ board.url_title }}/" class="forum-board-text">
         <span class="forum-board-link">{{ board.title }}</span>
         <p>
@@ -47,7 +47,7 @@
           <a href="/forums/thread/{{ last_post.thread_id }}">{{ (last_post.thread_id|thread_by_id).title }}
           </a> by <a href="/user/{{ last_post.creator_key|name_from_key_string }}">
             {{ last_post.creator_key|name_from_key_string }}</a>
-          on {{ last_post.created_time|show_datetime }}
+          <span class="line">({{ last_post.created_time|relative_time }})</span>
         </p>
         {% endif %}
       </div>

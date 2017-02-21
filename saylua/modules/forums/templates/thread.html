@@ -6,10 +6,10 @@
 {% endblock %}
 {% block body %}
 <h1>{{ thread.title }}</h1>
-<span class="breadcrumb">
+<span class="forum-breadcrumb">
   <a href="/forums/">Forums</a> &#187;
   <a href="/forums/board/{{ board.url_title }}/"> {{ board.title }}</a> &#187;
-  {{ thread.title }}
+  {{ truncate(thread.title) }}
 </span>
 
 <div class="full padded normal">
@@ -56,7 +56,14 @@
   </tr>
   <tr>
     <td class="forum-post-info">
-      <a href="/avatar/"><img src="{{ creator.ha_url }}"></a>
+      <div class="pet-avatar-view">
+        <a href="/avatar/" class="avatar-view">
+          <img src="{{ creator.ha_url }}" />
+        </a>
+        <a href="/pet/shc/" class="active-pet-view">
+          <img src="{{ random_pet_image() }}">
+        </a>
+      </div>
     </td>
     <td class="forum-post-body">
       {{ post.body|markdown }}

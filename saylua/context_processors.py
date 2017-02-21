@@ -44,6 +44,15 @@ def inject_random_image():
 
 
 @app.context_processor
+def inject_truncate():
+    def truncate(s, maxlen=50):
+        if len(s) > maxlen:
+            return (s[:maxlen] + '...')
+        return s
+    return dict(truncate=truncate)
+
+
+@app.context_processor
 def inject_user_from_key():
     def user_from_key(key):
         if type(key) is str or type(key) is unicode: # noqa
