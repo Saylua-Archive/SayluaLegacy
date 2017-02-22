@@ -32,8 +32,8 @@
   {% for board in category.boards %}
   <li class="forum-board-row">
     <img src="{{ random_item_image() }}" class="forum-board-icon faded" />
-    <div class="forum-board-info">
-      <a href="/forums/board/{{ board.url_slug }}/" class="forum-board-text">
+    <div class="forum-row-content">
+      <a href="/forums/board/{{ board.url_title }}/" class="forum-board-text">
         <span class="forum-board-link">{{ board.title }}</span>
         <p>
           {{ board.description }}
@@ -42,14 +42,13 @@
       <div class="forum-latest-post">
         {% set last_post = board.id|last_post_board %}
         {% if last_post is not none %}
-          {% set author_name = last_post.author|name_from_author_id %}
-          <img src="/static/img/pets/eydrun.png" />
-          <p>
-            <a href="/forums/thread/{{ last_post.thread_id }}">{{ (last_post.thread_id|thread_by_id).title }}</a>
-            &nbsp;by&nbsp;
-            <a href="/user/{{ author_name }}">{{ author_name }}</a>
-            on {{ last_post.date_created|show_datetime }}
-          </p>
+        <img src="/static/img/pets/eydrun.png" />
+        <p>
+          <a href="/forums/thread/{{ last_post.thread_id }}">{{ (last_post.thread_id|thread_by_id).title }}
+          </a> by <a href="/user/{{ last_post.creator_key|name_from_key_string }}">
+            {{ last_post.creator_key|name_from_key_string }}</a>
+          <span class="line">({{ last_post.created_time|relative_time }})</span>
+        </p>
         {% endif %}
       </div>
     </div>

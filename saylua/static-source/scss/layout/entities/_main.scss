@@ -100,17 +100,3 @@ button.link-button, button.link-button:hover {
 a:hover, button.link-button:hover {
   text-decoration: underline;
 }
-
-table {
-  text-align: left;
-}
-
-th {
-  font-weight: bold;
-  text-align: center;
-}
-
-table.colored th {
-  font-weight: normal;
-  background: $mainSofterColor;
-}

@@ -1,5 +1,5 @@
 <div id="sidebar" class="sidebar">
-  <div id="time-section" class="sidebar-section">
+  <div class="saylua-clock">
     <i class="fa fa-clock-o" aria-hidden="true"></i> <span id="site-time">{{saylua_time|show_time}}</span>
   </div>
   {% if g.logged_in %}
@@ -9,7 +9,7 @@
         <img src="{{g.user.ha_url}}" id="avatar-image" />
       </a>
       <a href="/pet/shc/" id="active-pet-view" class="active-pet-view">
-        <img src="{{ random_pet_image() }}" id="active-pet-image" class="left">
+        <img src="{{ random_pet_image() }}" id="active-pet-image">
       </a>
     </div>
   </div>

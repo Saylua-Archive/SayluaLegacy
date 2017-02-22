@@ -1,7 +1,32 @@
+@import 'assets/variables';
+
+// Used in board.html and thread.html
 .forum-breadcrumb {
+  font-size: 1.8rem;
   display: block;
   margin: auto;
-  text-align: center;
-  font-size: 1.8rem;
   margin-bottom: 2em;
+  text-align: center;
+}
+
+// Used in main.html and board.html
+.forum-latest-post {
+  font-size: $smallFontSize;
+  line-height: 150%;
+  display: flex;
+  flex-direction: row;
+  width: 40%;
+
+  align-items: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+
+  img {
+    width: 5rem;
+    height: 5rem;
+    margin-right: 0.8rem;
+    border: $mainSofterColor 1px dotted;
+
+    flex-shrink: 0;
+  }
 }

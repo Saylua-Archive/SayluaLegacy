@@ -50,7 +50,6 @@ class User(db.Model):
 
     # Settings
     notified_on_pings = db.Column(db.Boolean)
-    ha_disabled = db.Column(db.Boolean)
     autosubscribe_threads = db.Column(db.Boolean)
     autosubscribe_posts = db.Column(db.Boolean)
 

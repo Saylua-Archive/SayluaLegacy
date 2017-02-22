@@ -2,7 +2,7 @@ from saylua import app
 from saylua.models.user import User
 from saylua.modules.messages.models.db import UserConversation
 from saylua.modules.messages.models.db import Notification
-from saylua.utils import get_static_version_id
+from saylua.utils import make_ndb_key, get_static_version_id
 
 from flask import g, url_for
 from saylua import db
@@ -45,15 +45,22 @@ def inject_random_image():
 
 
 @app.context_processor
-def inject_user_from_id():
-    def user_from_id(id):
-        return (
-            db.session.query(User)
-            .filter(User.id == id)
-            .one_or_none()
-        )
+def inject_truncate():
+    def truncate(s, maxlen=50):
+        if len(s) > maxlen:
+            return (s[:maxlen] + '...')
+        return s
+    return dict(truncate=truncate)
 
-    return dict(user_from_id=user_from_id)
+
+@app.context_processor
+def inject_user_from_key():
+    def user_from_key(key):
+        if type(key) is str or type(key) is unicode: # noqa
+            key = make_ndb_key(key)
+        return key.get()
+
+    return dict(user_from_key=user_from_key)
 
 
 # Injected variables.
