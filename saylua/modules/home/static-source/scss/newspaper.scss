@@ -8,11 +8,12 @@ $newsBorderColor: $neutralDarkColor;
   text-align: center;
   border-top: 4px $newsBorderColor double;
   border-bottom: 4px $newsBorderColor double;
+  margin-bottom: 1em;
 }
 
 h1.news-header {
   line-height: 150%;
-  margin: 0.5em 0 0.25em 0;
+  margin: 1em 0 0.5em 0;
   padding: 0;
   word-spacing: 0.5rem;
 }
