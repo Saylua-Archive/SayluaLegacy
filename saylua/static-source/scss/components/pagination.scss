@@ -1,12 +1,16 @@
 @import '../assets/variables';
 @import '../assets/transitions';
 
+.pagination {
+  margin: 1em 0;
+}
+
 .pagination a, .pagination span {
   @include fast-color-trans;
   line-height: 3rem;
   display: inline-block;
   height: 3rem;
-  padding: 0 1rem;
+  padding: 0 0.8rem;
   text-align: center;
 }
 

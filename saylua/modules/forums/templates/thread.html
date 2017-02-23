@@ -6,21 +6,29 @@
 {% endblock %}
 {% block body %}
 <h1>{{ thread.title }}</h1>
-<span class="forum-breadcrumb">
-  <a href="/forums/">Forums</a> &#187;
-  <a href="/forums/board/{{ board.url_title }}/"> {{ board.title }}</a> &#187;
-  {{ truncate(thread.title) }}
-</span>
 
-<div class="full padded normal">
-  <div class="left">
+<form method="post" class="center">
+  <select name="destination" required>
+    <option value="" disabled selected>Move Thread To Board</option>
+    {% for other_board in other_boards %}
+      <option value="{{ other_board.key.id() }}">{{ other_board.title }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit" class="small" name="move">Move Thread</button>
+</form>
+
+<div class="forum-thread-controls">
+  <span class="forum-breadcrumb">
+    <a href="/forums/">Forums</a> &#187;
+    <a href="/forums/board/{{ board.url_title }}/"> {{ board.title }}</a> &#187;
+    {{ truncate(thread.title, 40) }}
+  </span>
+
+  <div class="forum-thread-actions">
     <a class="tiny-button" href="#write-forum-reply">
       <img src="/static/img/icons/pencil.png">
       Write a Reply
     </a>
-  </div>
-
-  <div class="right">
     <a class="tiny-button" href="#">
       <img src="/static/img/icons/bell.png">
       Subscribe
@@ -28,34 +36,16 @@
   </div>
 </div>
 
-<form method="post" class="center">
-  <select name="destination" required>
-    <option value="" disabled selected>Move Thread To Board</option>
-    {% for other_board in other_boards %}
-      <option value="{{ other_board.id }}">{{ other_board.title }}</option>
-    {% endfor %}
-  </select>
-  <button type="submit" class="small" name="move">Move Thread</button>
-</form>
-
-<div class="center">
-{{ pagination(page_count=page_count) }}
+<div class="pagination center">
+  {{ pagination(page_count=page_count) }}
 </div>
+
+<div class="forum-posts-container">
 {% for post in posts %}
-{% set creator = user_from_id(post.author) %}
-<table class="forum-post" id="forum-post-{{ loop.index }}">
-  <tr>
-    <th colspan="2">
-      <a href="#forum-post-{{ loop.index }}">Link This Post</a> |
-      {{ post.date_created|expanded_relative_time }}
-      <span class="right">
-        <a href="#">Quote</a>  |
-        <a href="#">Modify</a>
-      </span>
-    </th>
-  </tr>
-  <tr>
-    <td class="forum-post-info">
+{% set creator = user_from_key(post.creator_key) %}
+  <div class="forum-post" id="forum-post-{{ loop.index }}">
+    <div class="forum-post-info">
+      <a href="/user/{{ creator.display_name }}/">{{ creator.display_name }}</a>
       <div class="pet-avatar-view">
         <a href="/avatar/" class="avatar-view">
           <img src="{{ creator.ha_url }}" />
@@ -64,24 +54,33 @@
           <img src="{{ random_pet_image() }}">
         </a>
       </div>
-    </td>
-    <td class="forum-post-body">
+    </div>
+    <div class="forum-post-body">
+      <div class="forum-post-metadata">
+        {{ post.created_time|expanded_relative_time }}
+        <span class="forum-post-actions">
+          <a href="#forum-post-{{ loop.index }}">Link</a> |
+          <a href="#">Quote</a>  |
+          <a href="#">Modify</a>
+        </span>
+      </div>
+
       {{ post.body|markdown }}
       <div class="divider"></div>
-      {{ creator.display_name.display_name }} hasn't set a signature yet.
-    </td>
-  </tr>
-</table>
+      {{ creator.display_name }} hasn't set a signature yet.
+    </div>
+  </div>
 {% endfor %}
+</div>
 
 <div class="center">
 {{ pagination(page_count=page_count) }}
 </div>
 
 <form method="post" class="validated-form" data-error-id="forum-post-error">
-  <table class="forum-table form-table" id="write-forum-reply">
+  <table class="form-table" id="write-forum-reply">
     <tr>
-      <th class="section-header">
+      <th class="h2">
         Write a New Reply
       </th>
     </tr>
