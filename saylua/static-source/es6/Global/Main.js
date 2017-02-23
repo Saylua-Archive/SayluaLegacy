@@ -7,6 +7,7 @@ import './Notifications';
 
 
 onDomReady(function () {
+  fixNavbar();
   window.addEventListener('scroll', fixNavbar);
 
   // Get all of the right navbar links and bind click events to them
