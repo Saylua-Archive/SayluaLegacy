@@ -45,9 +45,9 @@
         <img src="/static/img/pets/eydrun.png" />
         <p>
           <a href="/forums/thread/{{ last_post.thread_id }}">{{ (last_post.thread_id|thread_by_id).title }}
-          </a> by <a href="/user/{{ last_post.creator_key|name_from_key_string }}">
-            {{ last_post.creator_key|name_from_key_string }}</a>
-          <span class="line">({{ last_post.created_time|relative_time }})</span>
+          </a> by <a href="/user/{{ last_post.author|name_from_author_id }}">
+            {{ last_post.author|name_from_author_id }}</a>
+          <span class="line">({{ last_post.date_created|relative_time }})</span>
         </p>
         {% endif %}
       </div>
