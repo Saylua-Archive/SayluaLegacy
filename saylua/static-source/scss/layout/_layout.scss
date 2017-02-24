@@ -81,9 +81,16 @@
   flex-direction: column;
   width: 20%;
   padding: 1em 1.6rem;
+  align-items: center;
 
   flex-grow: 0;
   flex-shrink: 0;
+
+  .sidebar-section {
+    flex-grow: 1;
+    flex-shrink: 1;
+    max-width: 40rem;
+  }
 
   .active-pet-view:hover {
     @include bounce-up;
@@ -153,13 +160,11 @@ footer {
   }
 
   .sidebar {
-    flex-direction: row;
     width: 100%;
     padding: 1rem 1%;
-
-    .sidebar-section {
-      width: 25%;
-    }
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
   }
 
   .sidebar-filler {

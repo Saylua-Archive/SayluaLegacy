@@ -1,7 +1,4 @@
 <div id="sidebar" class="sidebar">
-  <div class="saylua-clock">
-    <i class="fa fa-clock-o" aria-hidden="true"></i> <span id="site-time">{{saylua_time|show_time}}</span>
-  </div>
   {% if g.logged_in %}
   <div id="avatar-section" class="sidebar-section">
     <div id="pet-avatar-view" class="pet-avatar-view">
@@ -25,9 +22,9 @@
     </p>
   </div>
   {% else %}
-  <div id="sidebar-login-error"></div>
-  <form id="sidebar-login-form" class="sidebar-login-form validated-form" action="/login/"
+  <form id="sidebar-login-form" class="sidebar-section sidebar-login-form validated-form" action="/login/"
     method="post" data-error-id="sidebar-login-error">
+    <div id="sidebar-login-error"></div>
     <table class="form-table center">
       <tr>
         <th class="h3">
