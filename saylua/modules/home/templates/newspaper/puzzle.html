@@ -4,8 +4,17 @@
 <h2>
   The Daily Saydoku Puzzle
 </h2>
-<div id="puzzle-mount">
-</div>
+<table id="puzzle-container">
+  {% for i in range(9) %}
+  <tr>
+    {% for i in range(9) %}
+    <td>
+      <input class="puzzle-number" type="text" maxlength="1" />
+    </td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+</table>
 {% endblock %}
 {% block section_sidebar %}
 <div>
@@ -24,11 +33,11 @@
 </div>
 <div>
   <div class="newspaper-side-box">
-    Everyday, thouands of Sayluans complete the Sayluan Gazette's daily Saydoku
+    Everyday, thousands of Sayluans complete the Sayluan Gazette's daily Saydoku
     puzzle and send in their solutions to earn a prize.
   </div>
 </div>
-<button>
+<button id="puzzle-submit">
   Submit Solution
 </button>
 {% endblock %}
