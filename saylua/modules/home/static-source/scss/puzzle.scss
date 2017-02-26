@@ -13,8 +13,16 @@
     padding-bottom: 11.111%;
     border: 1px dotted $gray;
 
-		&.puzzle-error {
+		&.puzzle-error-1 {
       background: $errorLightColor;
+    }
+
+		&.puzzle-error-2 {
+      background: darken($errorLightColor, 10%);
+    }
+
+		&.puzzle-error-3 {
+      background: darken($errorLightColor, 20%);
     }
 
     &:nth-child(3n) {

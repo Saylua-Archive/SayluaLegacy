@@ -1,5 +1,9 @@
 {% extends "newspaper/template.html" %}
 {% set section_title = "Daily Puzzle" %}
+{% block header_scripts %}
+  <link rel="stylesheet" type="text/css" href="{{ include_static('css/home.min.css') }}">
+  <script src="{{ include_static('js/NewsPuzzle.min.js') }}"></script>
+{% endblock %}
 {% block section_body %}
 <h2>
   The Daily Saydoku Puzzle
@@ -38,6 +42,6 @@
   </div>
 </div>
 <button id="puzzle-submit">
-  Submit Solution
+  Check Solution
 </button>
 {% endblock %}
