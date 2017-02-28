@@ -12,10 +12,11 @@ def user_profile_default():
 
 def user_profile(username):
     user = None
-    if g.logged_in and username in g.user.usernames:
+    # TODO address multiple usernames
+    if g.logged_in and username.lower() is g.user.display_name:
         user = g.user
     else:
-        user = User.by_username(username)
+        user = User.from_username(username)
 
     # User not found
     if user is None:
