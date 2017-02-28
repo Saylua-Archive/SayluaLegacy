@@ -2,7 +2,6 @@ from flask import render_template, redirect, g
 from saylua.utils import is_devserver
 
 import random
-import copy
 
 
 def home():
