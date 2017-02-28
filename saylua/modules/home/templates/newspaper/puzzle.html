@@ -11,9 +11,13 @@
 <table id="puzzle-container">
   {% for i in range(9) %}
   <tr>
-    {% for i in range(9) %}
+    {% for j in range(9) %}
     <td>
+      {% if puzzle[i][j] %}
+      <span class="puzzle-number">{{ puzzle[i][j] }}</span>
+      {% else %}
       <input class="puzzle-number" type="text" maxlength="1" />
+      {% endif %}
     </td>
     {% endfor %}
   </tr>
