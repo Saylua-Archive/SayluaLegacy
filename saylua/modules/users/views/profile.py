@@ -23,7 +23,7 @@ def user_profile(username):
         return render_template('notfound.html')
 
     # Redirect the URL if this is not the main username for the user
-    if user.display_name.lower() != username:
-        return redirect('/user/' + user.display_name.lower() + '/', code=302)
+    if user.display_name != username: # TODO handle mixed cases
+        return redirect('/user/' + user.display_name + '/', code=302)
 
     return render_template('profile/main.html', viewed_user=user)
