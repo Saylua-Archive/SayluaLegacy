@@ -14,10 +14,7 @@
     {% block section_body %}{% endblock %}
   </div>
   <div class="newspaper-side">
-    <h3>Random Pet</h3>
-    <div class="newspaper-side-box">
-      <img src="{{ random_pet_image() }}" />
-    </div>
+    {% block section_sidebar %}{% endblock %}
   </div>
 </div>
 {% endblock %}

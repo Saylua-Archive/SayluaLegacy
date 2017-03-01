@@ -21,3 +21,11 @@
   {% endfor %}
 </div>
 {% endblock %}
+{% block section_sidebar %}
+<div>
+  <h3>Random Pet</h3>
+  <div class="newspaper-side-box center">
+    <img src="{{ random_pet_image() }}" class="pet" />
+  </div>
+</div>
+{% endblock %}
