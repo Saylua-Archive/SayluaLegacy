@@ -1,13 +1,14 @@
 {% extends "layout.html" %}
 {% set page_title = "Pet Profile" %}
+{% block header_scripts %}
+<script src="{{ include_static('js/PetInteractions.min.js') }}"></script>
+<link rel="stylesheet" href="{{ include_static('css/pets.min.css') }}">
+{% endblock %}
 {% block body %}
 <h1>Flowering Oranda's Profile</h1>
-<div class="center" id="pet-info-top">
+<div id="pet-room">
   <div class="pet" id="pet-image-container">
-    <img src="/static/img/pets/arko.png">
-  </div>
-  <div class="full padded" id="pet-room-link">
-    <a href="/room/shc/">Go to Flowering Oranda's Room</a>
+    <img src="/static/img/pets/arko.png" class="bounce">
   </div>
 </div>
 
@@ -58,10 +59,10 @@
     </th>
   <tr>
     <td colspan="2">
-      <img src="/static/img/items/orange.png" style="float: left;">
-      <img src="/static/img/items/peach.png" style="float: left;">
-      <img src="/static/img/items/tomato.png" style="float: left;">
-      <img src="/static/img/items/carrot.png" style="float: left;">
+      <img src="{{ random_item_image() }}" style="float: left;">
+      <img src="{{ random_item_image() }}" style="float: left;">
+      <img src="{{ random_item_image() }}" style="float: left;">
+      <img src="{{ random_item_image() }}" style="float: left;">
     </td>
   </tr>
 </table>

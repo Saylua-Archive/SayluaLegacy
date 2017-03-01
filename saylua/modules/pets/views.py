@@ -5,10 +5,6 @@ def pet_profile(name):
     return render_template("profile.html")
 
 
-def pet_room(name):
-    return render_template("room.html")
-
-
 def pet_adoption():
     return render_template("adopt.html")
 
