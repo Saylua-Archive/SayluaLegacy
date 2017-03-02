@@ -17,6 +17,10 @@
   @include square(16rem);
 }
 
+.mini-small {
+  @include square(12rem);
+}
+
 .item {
   @include square(8rem);
 }
