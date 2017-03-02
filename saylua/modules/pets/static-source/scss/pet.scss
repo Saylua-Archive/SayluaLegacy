@@ -3,32 +3,81 @@
 
 #pet-room {
   position: relative;
+  overflow: hidden;
   width: 100%;
-  height: 450px;
-  background: url('/static/img/backgrounds/1.jpg');
-  background-size: cover;
+  height: 45rem;
+
+  .room-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    background: url('/static/img/backgrounds/1.jpg');
+    background-size: cover;
+    box-shadow: 8rem 8rem 12rem #fff inset, -8rem -8rem 12rem #fff inset;
+  }
+
+  .mini-small {
+    position: absolute;
+    z-index: 9;
+    top: 25rem;
+    left: 50%;
+    margin-left: 15rem;
+  }
 
   .pet {
     position: absolute;
     z-index: 10;
-    top: 70px;
+    top: 7rem;
     left: 50%;
-    margin-left: -150px;
+    margin-left: -16rem;
   }
 
   // Pet shadow
-  .pet::after {
+  .pet::after,
+  .mini-small::after {
     content: '';
     position: absolute;
     z-index: -1;
-    top: 160px;
-    left: 25px;
+    top: 45%;
+    left: 5%;
     display: block;
-    width: 250px;
-    height: 80px;
+    width: 90%;
+    height: 30%;
     border-radius: 50%;
-    -webkit-box-shadow: 0px 110px 20px -25px rgba(0,0,0,0.5);
-    -moz-box-shadow: 0px 110px 20px -25px rgba(0,0,0,0.5);
-    box-shadow: 0px 110px 20px -25px rgba(0,0,0,0.5);
+    box-shadow: 0 11rem 2rem -2.5rem rgba(0,0,0,0.4);
   }
+
+  .mini-small::after {
+    height: 35%;
+    box-shadow: 0 3rem 1rem -1rem rgba(0,0,0,0.4);
+  }
+}
+
+.pet-profile-info {
+  display: flex;
+  flex-direction: row;
+
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.pet-profile-column {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 0 0.4rem;
+
+  align-items: stretch;
+
+  &.pet-profile-column-full {
+    width: 100%;
+  }
+}
+
+.pet-profile-box {
+  width: 100%;
+  margin-bottom: 0.5em;
+  padding: 0.5em 0.8rem;
+  border: $neutralDarkColor 1px solid;
 }
