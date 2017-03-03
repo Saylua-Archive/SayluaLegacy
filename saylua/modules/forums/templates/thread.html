@@ -42,13 +42,13 @@
 
 <div class="forum-posts-container">
 {% for post in posts %}
-{% set creator = post.author %}
+{% set author = post.author|user_from_id %}
   <div class="forum-post" id="forum-post-{{ loop.index }}">
     <div class="forum-post-info">
-      <a href="/user/{{ creator.display_name.display_name }}/">{{ creator.display_name.display_name }}</a>
+      <a href="/user/{{ author.display_name.display_name }}/">{{ author.display_name.display_name }}</a>
       <div class="pet-avatar-view">
         <a href="/avatar/" class="avatar-view">
-          <img src="{{ creator.ha_url }}" />
+          <img src="{{ author.ha_url }}" />
         </a>
         <a href="/pet/shc/" class="active-pet-view">
           <img src="{{ random_pet_image() }}">
@@ -67,7 +67,7 @@
 
       {{ post.body|markdown }}
       <div class="divider"></div>
-      {{ creator.display_name.display_name }} hasn't set a signature yet.
+      {{ author.display_name.display_name }} hasn't set a signature yet.
     </div>
   </div>
 {% endfor %}

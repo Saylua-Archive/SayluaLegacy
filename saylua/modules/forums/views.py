@@ -21,9 +21,9 @@ def forums_board(board_slug):
         if request.method == 'POST':
             title = request.form.get('title')
             body = request.form.get('body')
-            creator_key = g.user.id.urlsafe()
-            board_id = board.key.id()
-            url_title = post_new_thread(title, body, creator_key, board_id, board)
+            author = g.user.id
+            board_id = board.id
+            url_title = post_new_thread(title, body, author, board_id, board)
             return redirect("/forums/board/" + url_title + "/")
 
         page_number = request.args.get('page', 1)

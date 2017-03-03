@@ -110,6 +110,16 @@ def saylua_conversation_url(conversation):
 
 
 # Query filters. Use these only when necessary.
+@app.template_filter('user_from_id')
+def user_from_id(user_id):
+    user = (
+        db.session.query(User)
+        .filter(User.id == user_id)
+        .one_or_none()
+    )
+    
+    return user
+
 @app.template_filter('name_from_author_id')
 def display_name_from_user_id(user_id):
     user = (
