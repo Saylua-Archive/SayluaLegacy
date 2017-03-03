@@ -1,106 +1,83 @@
 {% extends "layout.html" %}
 {% set page_title = "Pet Profile" %}
+{% block header_scripts %}
+<script src="{{ include_static('js/PetInteractions.min.js') }}"></script>
+<link rel="stylesheet" href="{{ include_static('css/pets.min.css') }}">
+{% endblock %}
 {% block body %}
-<h1>Flowering Oranda's Profile</h1>
-<div class="center" id="pet-info-top">
+<h1>Kevin's Room</h1>
+<div id="pet-room">
+  <div class="room-background"></div>
   <div class="pet" id="pet-image-container">
-    <img src="/static/img/pets/arko.png">
+    <img src="{{ random_pet_image() }}">
   </div>
-  <div class="full padded" id="pet-room-link">
-    <a href="/room/shc/">Go to Flowering Oranda's Room</a>
+  <div class="mini-small">
+    <img src="{{ random_mini_image() }}">
   </div>
 </div>
 
-<table style="width: 50%; float: left;" class="pet-info-table colored">
-  <tr>
-    <th colspan="2">
-      Info
-    </th>
-  </tr>
+<div class="pet-profile-column pet-profile-column-full">
+  <div class="pet-profile-box">
+    <h2>Kevin's Description</h2>
+  </div>
+</div>
+<div class="pet-profile-info">
+  <div class="pet-profile-column">
+    <div class="pet-profile-box">
+      <h2>Kevin's Stats</h2>
+      <table>
+        <tr>
+          <td>Human Companion</td>
+          <td><a href="/user/">User</a></td>
+        </tr>
+        <tr>
+          <td>Kevin's ID</td>
+          <td>WildSwimmingBear</td>
+        </tr>
 
-  <tr>
-    <td>Companion</td>
-    <td><a href="/user/">User</a></td>
-  </tr>
-  <tr>
-    <td>Soul Name</td>
-    <td>WildSwimmingBear</td>
-  </tr>
-
-  <tr>
-    <th colspan="2">
-      Stats
-    </th>
-  </tr>
-  <tr>
-    <td>Happiness</td>
-    <td>Extremely Happy</td>
-  </tr>
-  <tr>
-    <td>Health</td>
-    <td>50/50</td>
-  </tr>
-  <tr>
-    <td>Attack</td>
-    <td>0 (+1)</td>
-  </tr>
-  <tr>
-    <td>Defense</td>
-    <td>0 (+1)</td>
-  </tr>
-  <tr>
-    <td>Height</td>
-    <td>0 (+0)</td>
-  </tr>
-  <tr>
-    <th colspan="2">
-      Favorite Foods
-    </th>
-  <tr>
-    <td colspan="2">
-      <img src="/static/img/items/orange.png" style="float: left;">
-      <img src="/static/img/items/peach.png" style="float: left;">
-      <img src="/static/img/items/tomato.png" style="float: left;">
-      <img src="/static/img/items/carrot.png" style="float: left;">
-    </td>
-  </tr>
-</table>
-<table style="width: 50%; float: left;" class="pet-info-table colored">
-  </tr>
-    <th>
-      Floranda's Mini
-    </th>
-  </tr>
-  <tr>
-    <td>
+        <tr>
+          <th colspan="2">
+            Stats
+          </th>
+        </tr>
+        <tr>
+          <td>Happiness</td>
+          <td>Extremely Happy</td>
+        </tr>
+        <tr>
+          <td>Health</td>
+          <td>50/50</td>
+        </tr>
+        <tr>
+          <td>Attack</td>
+          <td>0 (+1)</td>
+        </tr>
+        <tr>
+          <td>Defense</td>
+          <td>0 (+1)</td>
+        </tr>
+        <tr>
+          <td>Height</td>
+          <td>0 (+0)</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="pet-profile-column">
+    <div class="pet-profile-box">
+      <h2>Kevin's Favorite Things</h2>
+      <img src="{{ random_item_image() }}" style="float: left;">
+      <img src="{{ random_item_image() }}" style="float: left;">
+      <img src="{{ random_item_image() }}" style="float: left;">
+      <img src="{{ random_item_image() }}" style="float: left;">
+    </div>
+    <div class="pet-profile-box">
+      <h2>Kevin's Mini</h2>
       <div class="mini">
         <img src="{{ random_mini_image() }}">
       </div>
-    </td>
-  </tr>
-  <tr>
-    <th>
-      Parents
-    </th>
-  <tr>
-    <td>
-      <img src="/static/img/velbird.png" style="width: 50%; float: left;">
-      <img src="/static/img/pets/arko.png" style="width: 50%; float: left;">
-    </td>
-  </tr>
-  </tr>
-    <th>
-      Children
-    </th>
-  </tr>
-  <tr>
-    <td>
-      <img src="/static/img/pets/arko.png" style="width: 25%; float: left;">
-      <img src="/static/img/pets/arko.png" style="width: 25%; float: left;">
-      <img src="/static/img/pets/arko.png" style="width: 25%; float: left;">
-      <img src="/static/img/pets/arko.png" style="width: 25%; float: left;">
-    </td>
-  </tr>
-</table>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
