@@ -73,22 +73,15 @@ def forums_thread(thread_id):
             if 'move' in request.form:
                 destination = int(request.form.get('destination'))
                 thread.board_id = destination
-                thread.put()
-                post_query = ForumPost.query(ForumPost.thread_id == thread_id)
-                posts = post_query.fetch()
-                for post in posts:
-                    post.board_id = destination
-                    post.put()
+                db.session.commit()
                 flash("Thread moved successfully!")
                 return redirect("forums/thread/" + str(thread_id) + "/")
             else:
-                creator_key = g.user.id.urlsafe()
+                author = g.user.id
                 body = request.form.get('body')
-                board_id = board.key.id()
-                new_post = ForumPost(creator_key=creator_key, thread_id=thread_id,
-                        board_id=board_id, body=body)
-                new_post.put()
-                thread.put()
+                new_post = ForumPost(author=author, thread_id=thread_id, body=body)
+                db.session.add(new_post)
+                db.session.commit()
                 return redirect("forums/thread/" + str(thread_id) + "/")
 
         page_number = request.args.get('page', 1)
