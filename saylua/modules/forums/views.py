@@ -1,6 +1,7 @@
 from flask import render_template, redirect, g, flash, request
 import flask_sqlalchemy
 from saylua import db
+from saylua.utils import urlize
 
 from .models.db import Board, BoardCategory, ForumThread, ForumPost
 
@@ -23,7 +24,13 @@ def forums_board(board_slug):
             body = request.form.get('body')
             author = g.user.id
             board_id = board.id
-            url_title = post_new_thread(title, body, author, board_id, board)
+            url_title = urlize(board.title)
+            new_thread = ForumThread(title=title, author=author, board_id=board_id)
+            db.session.add(new_thread)
+            db.session.flush()
+            new_post = ForumPost(author=author, thread_id=new_thread.id, body=body)
+            db.session.add(new_post)
+            db.session.commit()
             return redirect("/forums/board/" + url_title + "/")
 
         page_number = request.args.get('page', 1)
@@ -48,18 +55,6 @@ def forums_board(board_slug):
 
     except (flask_sqlalchemy.orm.exc.MultipleResultsFound, flask_sqlalchemy.orm.exc.NoResultFound):
         return render_template('404.html'), 404
-
-
-def post_new_thread(title, body, creator_key, board_id, board=None):
-    if board is None:
-        board = Board.query(Board.url_title == board_id).fetch()[0]
-    new_thread = ForumThread(title=title, creator_key=creator_key, board_id=board_id)
-    thread_key = new_thread.put()
-    thread_id = thread_key.id()
-    url_title = board.url_title
-    new_post = ForumPost(creator_key=creator_key, thread_id=thread_id, board_id=board_id, body=body)
-    new_post.put()
-    return url_title
 
 
 def forums_thread(thread_id):
@@ -90,7 +85,7 @@ def forums_thread(thread_id):
         post_query = (
             db.session.query(ForumPost)
             .filter(ForumPost.thread_id == thread_id)
-            .order_by(ForumPost.date_created.desc())
+            .order_by(ForumPost.date_created)
         )
 
         posts = (
