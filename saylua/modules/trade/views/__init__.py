@@ -1,2 +1,2 @@
 # flake8: noqa
-from . import bank, shops
+from . import bank, market, shops
