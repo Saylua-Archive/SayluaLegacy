@@ -7,7 +7,7 @@
 {% block body %}
 <h1>Kevin's Room</h1>
 <div id="pet-room">
-  <div class="room-background"></div>
+  <div class="room-background" style="background-image: url('{{ random_background_image() }}')"></div>
   <div class="pet" id="pet-image-container">
     <img src="{{ random_pet_image() }}">
   </div>
