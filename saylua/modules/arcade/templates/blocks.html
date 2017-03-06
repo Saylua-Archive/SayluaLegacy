@@ -8,42 +8,5 @@
 {% block body %}
 <h1>Line Blocks</h1>
 <div id="blocks-mount"></div>
-<table>
-  <tr>
-    <th>
-      All-time Highscores
-    </th>
-  </tr>
-  {% for hs in highscores %}
-  <tr>
-    <td>
-      {{ hs.score }} by {{ hs.user_key }}
-    </td>
-  </tr>
-  {% endfor %}
-</table>
-
-<table>
-  <tr>
-    <th>
-      Monthly Highscores
-    </th>
-  </tr>
-  {% for hs in highscores %}
-  <tr>
-    <td>
-      {{ hs.score }} by {{ hs.user_key }}
-    </td>
-  </tr>
-  {% endfor %}
-</table>
-
-Your highscores
-
-Monthly
-{{ monthly_highscore }}
-
-All-time
-{{ all_time_highscore }}
 
 {% endblock %}
