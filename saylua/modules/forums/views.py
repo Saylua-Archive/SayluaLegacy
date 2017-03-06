@@ -1,6 +1,7 @@
 from flask import render_template, redirect, g, flash, request
 import flask_sqlalchemy
 from saylua import db
+from saylua.utils import urlize
 
 from .models.db import Board, BoardCategory, ForumThread, ForumPost
 
@@ -21,9 +22,15 @@ def forums_board(board_slug):
         if request.method == 'POST':
             title = request.form.get('title')
             body = request.form.get('body')
-            creator_key = g.user.id.urlsafe()
-            board_id = board.key.id()
-            url_title = post_new_thread(title, body, creator_key, board_id, board)
+            author = g.user.id
+            board_id = board.id
+            url_title = urlize(board.title)
+            new_thread = ForumThread(title=title, author=author, board_id=board_id)
+            db.session.add(new_thread)
+            db.session.flush()
+            new_post = ForumPost(author=author, thread_id=new_thread.id, body=body)
+            db.session.add(new_post)
+            db.session.commit()
             return redirect("/forums/board/" + url_title + "/")
 
         page_number = request.args.get('page', 1)
@@ -50,18 +57,6 @@ def forums_board(board_slug):
         return render_template('404.html'), 404
 
 
-def post_new_thread(title, body, creator_key, board_id, board=None):
-    if board is None:
-        board = Board.query(Board.url_title == board_id).fetch()[0]
-    new_thread = ForumThread(title=title, creator_key=creator_key, board_id=board_id)
-    thread_key = new_thread.put()
-    thread_id = thread_key.id()
-    url_title = board.url_title
-    new_post = ForumPost(creator_key=creator_key, thread_id=thread_id, board_id=board_id, body=body)
-    new_post.put()
-    return url_title
-
-
 def forums_thread(thread_id):
     thread_id = int(thread_id)
 
@@ -73,22 +68,15 @@ def forums_thread(thread_id):
             if 'move' in request.form:
                 destination = int(request.form.get('destination'))
                 thread.board_id = destination
-                thread.put()
-                post_query = ForumPost.query(ForumPost.thread_id == thread_id)
-                posts = post_query.fetch()
-                for post in posts:
-                    post.board_id = destination
-                    post.put()
+                db.session.commit()
                 flash("Thread moved successfully!")
                 return redirect("forums/thread/" + str(thread_id) + "/")
             else:
-                creator_key = g.user.id.urlsafe()
+                author = g.user.id
                 body = request.form.get('body')
-                board_id = board.key.id()
-                new_post = ForumPost(creator_key=creator_key, thread_id=thread_id,
-                        board_id=board_id, body=body)
-                new_post.put()
-                thread.put()
+                new_post = ForumPost(author=author, thread_id=thread_id, body=body)
+                db.session.add(new_post)
+                db.session.commit()
                 return redirect("forums/thread/" + str(thread_id) + "/")
 
         page_number = request.args.get('page', 1)
@@ -97,7 +85,7 @@ def forums_thread(thread_id):
         post_query = (
             db.session.query(ForumPost)
             .filter(ForumPost.thread_id == thread_id)
-            .order_by(ForumPost.date_created.desc())
+            .order_by(ForumPost.date_created)
         )
 
         posts = (

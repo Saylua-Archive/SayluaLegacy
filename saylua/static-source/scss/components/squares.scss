@@ -1,12 +1,12 @@
-// Standard sizes for different parts of the site
+// Standard sizes for different squares used on the site.
+
 @mixin square($size) {
-  display: inline-block;
   width: $size;
-  height: $size;
-  margin: auto;
-  text-align: center;
-  vertical-align: middle;
   max-width: 100%;
+  margin: auto;
+
+  align-items: center;
+  justify-content: center;
 }
 
 .pet {
@@ -15,6 +15,10 @@
 
 .mini {
   @include square(16rem);
+}
+
+.mini-small {
+  @include square(12rem);
 }
 
 .item {

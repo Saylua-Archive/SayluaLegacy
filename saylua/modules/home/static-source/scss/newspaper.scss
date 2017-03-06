@@ -5,6 +5,7 @@ $newsBorderColor: $neutralDarkColor;
   font-size: 2rem;
   line-height: 200%;
   width: 100%;
+  margin-bottom: 1em;
   text-align: center;
   border-top: 4px $newsBorderColor double;
   border-bottom: 4px $newsBorderColor double;
@@ -12,7 +13,7 @@ $newsBorderColor: $neutralDarkColor;
 
 h1.news-header {
   line-height: 150%;
-  margin: 0.5em 0 0.25em 0;
+  margin: 1em 0 0.5em 0;
   padding: 0;
   word-spacing: 0.5rem;
 }
@@ -24,11 +25,21 @@ h1.news-header {
 
   align-items: baseline;
 
+  @media (max-width: 500px) {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
   .newspaper-main {
     padding-right: 1.6rem;
 
     flex-grow: 1;
     flex-shrink: 1;
+
+    @media (max-width: 500px) {
+      padding-right: 0;
+    }
 
     h2 {
       margin-bottom: 0;
@@ -58,10 +69,18 @@ h1.news-header {
   }
 
   .newspaper-side {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     width: 30%;
 
     flex-grow: 0;
     flex-shrink: 0;
+
+    @media (max-width: 500px) {
+      flex-direction: column-reverse;
+      width: 100%;
+    }
 
     h3 {
       margin: 0;
@@ -69,9 +88,20 @@ h1.news-header {
       border: 0;
     }
 
+    button {
+      margin: 0.5em 0;
+    }
+
     .newspaper-side-box {
-      margin-bottom: 3em;
+      width: 100%;
+      margin-bottom: 1em;
+      padding: 0.5em 0.8rem;
       border: $newsBorderColor 4px double;
+
+      ul {
+        margin: 0.5em 0;
+        padding-left: 2.4rem;
+      }
     }
   }
 }

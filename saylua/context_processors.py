@@ -7,6 +7,8 @@ from saylua.utils import get_static_version_id
 from flask import g, url_for
 from saylua import db
 
+from functools import partial
+
 import os
 import random
 
@@ -24,26 +26,42 @@ def inject_include_static():
 
 
 @app.context_processor
-def inject_random_pet_image():
-    def random_pet_image():
-        path = os.path.join(app.static_folder, 'img/pets/')
-        name = random.choice(os.listdir(path))
-        return (url_for('static', filename='img/pets/' + name) +
+def inject_random_image():
+    def random_image(folder):
+        subpath = 'img/' + folder + '/'
+        path = os.path.join(app.static_folder, subpath)
+        name = None
+        while not name or name == '.DS_Store':
+            name = random.choice(os.listdir(path))
+        return (url_for('static', filename=subpath + name) +
             '?v=' + str(get_static_version_id()))
 
-    return dict(random_pet_image=random_pet_image)
+    return dict(random_pet_image=partial(random_image, 'pets'),
+        random_item_image=partial(random_image, 'items'),
+        random_character_image=partial(random_image, 'characters'),
+        random_mini_image=partial(random_image, 'minis'),
+        random_background_image=partial(random_image, 'backgrounds'),
+        random_icon_image=partial(random_image, 'icons'))
 
 
 @app.context_processor
-def inject_user_from_id():
-    def user_from_id(id):
+def inject_truncate():
+    def truncate(s, maxlen=50):
+        if len(s) > maxlen:
+            return (s[:maxlen] + '...')
+        return s
+    return dict(truncate=truncate)
+
+
+@app.context_processor
+def inject_get_user_from_id():
+    def get_user_from_id(id): # Renamed to avoid conflict with template filter
         return (
             db.session.query(User)
             .filter(User.id == id)
             .one_or_none()
         )
-
-    return dict(user_from_id=user_from_id)
+        return dict(get_user_from_id=get_user_from_id)
 
 
 # Injected variables.

@@ -5,88 +5,84 @@
   <link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
 {% endblock %}
 {% block body %}
-<h1>{{ board.title }}</h1>
-<span class="breadcrumb">
+<h1>Viewing Board: {{ board.title }}</h1>
+<span class="forum-breadcrumb">
   <a href="/forums/">Forums</a> &#187; {{ board.title }}
 </span>
-<div class="center">
-  {{ pagination(page_count=page_count) }}
-</div>
 
-<table class="forum-board-table">
-  <tr>
-    <th class="h3" colspan="5">
-      Threads in {{ board.title }}
-      <a class="right normal" href="#write-forum-thread">
-        <img src="/static/img/icons/pencil.png">
-        Make a New Thread
-      </a>
-    </th>
-  </tr>
-  <tr>
-    <th>
-    </th>
-    <th>
-      Thread Title
-    </th>
-    <th>
+<a class="write-thread-link" href="#write-thread">
+  <img src="/static/img/icons/pencil.png">
+  Make a New Thread
+</a>
+
+<h2 class="forum-board-header">
+  <div class="forum-thread-icon">
+    <img src="{{ random_item_image() }}" />
+  </div>
+  <div class="forum-thread-content">
+    <div class="forum-thread-info">
+      {{ board.title }}
+    </div>
+    <div class="forum-thread-replies">
       Replies
-    </th>
-    <th>
-      Started By
-    </th>
-    <th>
-      Last Post
-    </th>
-  </tr>
-
-  {% for thread in threads %}
-    {% set author_name = thread.author_id|name_from_author_id %}
-    <tr class="forum-thread-row {{ 'highlight' if thread.is_pinned else '' }}">
-      <td class="forum-thread-icon">
-        {% if thread.is_pinned %}
-        <img src="/static/img/icons/pin.png">
-        {% endif %}
-        {% if thread.is_locked %}
-        <img src="/static/img/icons/lock.png">
-        {% endif %}
-      </td>
-      <td class="forum-thread-info">
-        <a href="/forums/thread/{{ thread.id }}/">
-          <span class="forum-thread-link">{{ thread.title }}</span>
-          <p class="small">Created on {{ thread.date_created|expanded_relative_time }}</p>
-        </a>
-      </td>
-      <td>
-        {{ thread.id|count_thread_posts - 1 }}
-      </td>
-      <td>
-        <a href="/user/{{ author_name }}">{{ author_name }}</a>
-      </td>
+    </div>
+    <div class="forum-latest-post">
+      Latest Post
+    </div>
+  </div>
+</h2>
+{% for thread in threads %}
+<div class="forum-thread">
+  <div class="forum-thread-icon">
+    <img src="/static/img/icons/lock.png" />
+    {% if thread.is_pinned %}
+    <img src="/static/img/icons/pin.png">
+    {% endif %}
+    {% if thread.is_locked %}
+    <img src="/static/img/icons/lock.png">
+    {% endif %}
+  </div>
+  <div class="forum-thread-content">
+    <div class="forum-thread-info">
+      <a href="/forums/thread/{{ thread.id }}/" class="forum-thread-title">
+        {{ thread.title }}
+      </a>
+      <small>
+        Started by <a href="/user/{{ thread.author|name_from_author_id }}">
+          {{ thread.author|name_from_author_id }}</a>
+        <span class="line">({{ thread.date_created|relative_time }})</span>
+      </small>
+    </div>
+    <div class="forum-thread-replies">
+      {{ thread.id|count_thread_posts - 1 }}
+    </div>
+    <div class="forum-latest-post">
       {% set last_post = thread.id|last_post_thread %}
-      <td class="forum-latest-post">
-        {% if last_post is not none %}
-          {% set author_name = last_post.author_id|name_from_author_id %}
-          &nbsp;by&nbsp;
-          <a href="/user/{{ author_name }}">{{ author_name }}</a>
-          &nbsp;{{ last_post.date_created|relative_time }}
-        {% endif %}
-      </td>
-    </tr>
-  {% endfor %}
-</table>
+      {% if last_post is not none %}
+      <img src="{{ random_pet_image() }}" />
+      <p>
+        by <a href="/user/{{ last_post.author|name_from_author_id }}">
+          {{ last_post.author|name_from_author_id }}</a>
+        <span class="line">({{ last_post.date_created|relative_time }})</span>
+      </p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endfor %}
 
 <div class="center">
 {{ pagination(page_count=page_count) }}
 </div>
 
+<h2 class="forum-board-header" id="write-thread">
+  <div class="forum-thread-icon">
+    <img src="{{ random_item_image() }}" />
+  </div>
+  Make a New Thread
+</h2>
 <form method="post" class="validated-form" data-error-id="forum-board-error">
-  <table class="form-table" id="write-forum-thread">
-    <tr>
-      <th class="h3" colspan="2">
-        Quick Thread
-      </th>
-    </tr>
+  <table class="form-table">
     <tr>
       <td colspan="2" id="forum-board-error"></td>
     </tr>

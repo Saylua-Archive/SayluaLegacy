@@ -6,27 +6,6 @@
 {% endblock %}
 {% block body %}
 <h1>{{ thread.title }}</h1>
-<span class="breadcrumb">
-  <a href="/forums/">Forums</a> &#187;
-  <a href="/forums/board/{{ board.url_slug }}/"> {{ board.title }}</a> &#187;
-  {{ thread.title }}
-</span>
-
-<div class="full padded normal">
-  <div class="left">
-    <a class="tiny-button" href="#write-forum-reply">
-      <img src="/static/img/icons/pencil.png">
-      Write a Reply
-    </a>
-  </div>
-
-  <div class="right">
-    <a class="tiny-button" href="#">
-      <img src="/static/img/icons/bell.png">
-      Subscribe
-    </a>
-  </div>
-</div>
 
 <form method="post" class="center">
   <select name="destination" required>
@@ -38,43 +17,70 @@
   <button type="submit" class="small" name="move">Move Thread</button>
 </form>
 
-<div class="center">
-{{ pagination(page_count=page_count) }}
+<div class="forum-thread-controls">
+  <span class="forum-breadcrumb">
+    <a href="/forums/">Forums</a> &#187;
+    <a href="/forums/board/{{ board.url_slug }}/"> {{ board.title }}</a> &#187;
+    {{ truncate(thread.title, 40) }}
+  </span>
+
+  <div class="forum-thread-actions">
+    <a class="tiny-button" href="#write-forum-reply">
+      <img src="/static/img/icons/pencil.png">
+      Write a Reply
+    </a>
+    <a class="tiny-button" href="#">
+      <img src="/static/img/icons/bell.png">
+      Subscribe
+    </a>
+  </div>
 </div>
+
+<div class="pagination center">
+  {{ pagination(page_count=page_count) }}
+</div>
+
+<div class="forum-posts-container">
 {% for post in posts %}
-{% set creator = user_from_id(post.author) %}
-<table class="forum-post" id="forum-post-{{ loop.index }}">
-  <tr>
-    <th colspan="2">
-      <a href="#forum-post-{{ loop.index }}">Link This Post</a> |
-      {{ post.date_created|expanded_relative_time }}
-      <span class="right">
-        <a href="#">Quote</a>  |
-        <a href="#">Modify</a>
-      </span>
-    </th>
-  </tr>
-  <tr>
-    <td class="forum-post-info">
-      <a href="/avatar/"><img src="{{ creator.ha_url }}"></a>
-    </td>
-    <td class="forum-post-body">
+{% set author = post.author|user_from_id %}
+  <div class="forum-post" id="forum-post-{{ loop.index }}">
+    <div class="forum-post-info">
+      <a href="/user/{{ author.display_name.display_name }}/">{{ author.display_name.display_name }}</a>
+      <div class="pet-avatar-view">
+        <a href="/avatar/" class="avatar-view">
+          <img src="{{ author.ha_url }}" />
+        </a>
+        <a href="/pet/shc/" class="active-pet-view">
+          <img src="{{ random_pet_image() }}">
+        </a>
+      </div>
+    </div>
+    <div class="forum-post-body">
+      <div class="forum-post-metadata">
+        {{ post.date_created|expanded_relative_time }}
+        <span class="forum-post-actions">
+          <a href="#forum-post-{{ loop.index }}">Link</a> |
+          <a href="#">Quote</a>  |
+          <a href="#">Modify</a>
+        </span>
+      </div>
+
       {{ post.body|markdown }}
       <div class="divider"></div>
-      {{ creator.display_name.display_name }} hasn't set a signature yet.
-    </td>
-  </tr>
-</table>
+      {{ author.display_name.display_name }} hasn't set a signature yet.
+    </div>
+  </div>
 {% endfor %}
+</div>
 
 <div class="center">
 {{ pagination(page_count=page_count) }}
 </div>
 
 <form method="post" class="validated-form" data-error-id="forum-post-error">
-  <table class="forum-table form-table" id="write-forum-reply">
+  <table class="form-table" id="write-forum-reply">
     <tr>
-      <th class="section-header">
+      <th class="h2">
         Write a New Reply
       </th>
     </tr>

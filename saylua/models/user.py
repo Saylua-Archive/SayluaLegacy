@@ -50,12 +50,10 @@ class User(db.Model):
 
     # Settings
     notified_on_pings = db.Column(db.Boolean)
-    ha_disabled = db.Column(db.Boolean)
     autosubscribe_threads = db.Column(db.Boolean)
     autosubscribe_posts = db.Column(db.Boolean)
 
     # Misc profile stuff
-    css = db.Column(db.Text) # FIXME: This should really have a limit.
     gender = db.Column(db.String(32))
     pronouns = db.Column(db.String(128))
     bio = db.Column(db.Text(), default="Hello, world!") # FIXME: This should really have a limit.
