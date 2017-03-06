@@ -2,9 +2,10 @@ from saylua import app
 from saylua.models.user import User
 from saylua.modules.messages.models.db import UserConversation
 from saylua.modules.messages.models.db import Notification
-from saylua.utils import make_ndb_key, get_static_version_id
+from saylua.utils import get_static_version_id
 
 from flask import g, url_for
+from saylua import db
 
 from functools import partial
 
@@ -53,13 +54,14 @@ def inject_truncate():
 
 
 @app.context_processor
-def inject_user_from_key():
-    def user_from_key(key):
-        if type(key) is str or type(key) is unicode: # noqa
-            key = make_ndb_key(key)
-        return key.get()
-
-    return dict(user_from_key=user_from_key)
+def inject_get_user_from_id():
+    def get_user_from_id(id): # Renamed to avoid conflict with template filter
+        return (
+            db.session.query(User)
+            .filter(User.id == id)
+            .one_or_none()
+        )
+        return dict(get_user_from_id=get_user_from_id)
 
 
 # Injected variables.
@@ -73,9 +75,9 @@ def inject_version_id():
 def inject_notifications():
     if not g.logged_in:
         return {}
-    notifications_count = Notification.query(Notification.user_key == g.user.key,
+    notifications_count = Notification.query(Notification.user_id == g.user.id,
         Notification.is_read == False).count(limit=100)
-    notifications = Notification.query(Notification.user_key == g.user.key).order(
+    notifications = Notification.query(Notification.user_id == g.user.id).order(
         Notification.is_read, -Notification.time).fetch(limit=5)
     if not notifications:
         notifications = []
@@ -87,10 +89,10 @@ def inject_messages():
     if not g.logged_in:
         return {}
     messages_count = UserConversation.query(
-        UserConversation.user_key == g.user.key,
+        UserConversation.user_id == g.user.id,
         UserConversation.is_read == False,
         UserConversation.is_deleted == False).count(limit=100)
-    messages = UserConversation.query(UserConversation.user_key == g.user.key,
+    messages = UserConversation.query(UserConversation.user_id == g.user.id,
         UserConversation.is_deleted == False).order(
         UserConversation.is_read, -UserConversation.time).fetch(limit=5)
     if not messages:
@@ -107,5 +109,11 @@ def inject_time():
 def inject_users_online():
     mins_ago = datetime.datetime.now() - datetime.timedelta(
         minutes=app.config['USERS_ONLINE_RANGE'])
-    user_count = User.query(User.last_action >= mins_ago).count()
+
+    user_count = (
+        db.session.query(User)
+        .filter(User.last_action >= mins_ago)
+        .count()
+    )
+
     return dict(users_online_count=user_count)

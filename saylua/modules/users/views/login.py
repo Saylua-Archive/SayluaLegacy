@@ -1,4 +1,4 @@
-from saylua import app
+from saylua import app, db
 
 from saylua.utils.form import flash_errors
 from saylua.models.user import LoginSession, User
@@ -6,7 +6,6 @@ from saylua.wrappers import login_required
 
 from ..forms.login import LoginForm, RegisterForm, login_check
 
-from google.appengine.ext import ndb
 from flask import render_template, redirect, make_response, request, g
 
 import datetime
@@ -30,18 +29,19 @@ def login():
 
     if request.method == 'POST' and form.validate():
         found = login_check.user
-        found_key = found.key.urlsafe()
+        found_id = found.id
 
         # Add a session to the datastore
         expires = datetime.datetime.utcnow()
         expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
-        new_session = LoginSession(user_key=found_key, expires=expires)
-        session_key = new_session.put().urlsafe()
+        new_session = LoginSession(user_id=found_id, expires=expires)
 
-        # Generate a matching cookie and redirct
+        db.session.add(new_session)
+        db.session.commit()
+
+        # Generate a matching cookie and redirect
         resp = make_response(redirect('/'))
-        resp.set_cookie("user_key", found_key, expires=expires)
-        resp.set_cookie("session_key", session_key, expires=expires)
+        resp.set_cookie("session_id", new_session.id, expires=expires)
 
         return resp
 
@@ -59,42 +59,52 @@ def reset_password(user, code):
 
 @login_required
 def logout():
-    user_key = request.cookies.get('user_key')
-    session_key = request.cookies.get('session_key')
-    key = ndb.Key(urlsafe=session_key)
-    found = key.get()
-    if found is not None and found.user_key == user_key:
-        found.key.delete()
+    session_id = request.cookies.get('session_id')
+    session = (
+        db.session.query(LoginSession)
+        .filter(LoginSession.id == session_id)
+        .first()
+    )
+
+    if session:
+        session.delete()
+
     resp = make_response(redirect('/'))
-    resp.set_cookie('user_key', '', expires=0)
-    resp.set_cookie('session_key', '', expires=0)
+    resp.set_cookie('session_id', '', expires=0)
     return resp
 
 
 # Registration form shown to the user
 def register():
     form = RegisterForm(request.form)
+
     if request.method == 'POST' and form.validate():
         display_name = form.username.data
-        username = display_name.lower()
         password = form.password.data
         email = form.email.data
 
         phash = User.hash_password(password)
-        new_user = User(display_name=display_name, usernames=[username], phash=phash,
-                email=email)
-        user_key = new_user.put().urlsafe()
+        new_user = User(
+            display_name=display_name,
+            phash=phash,
+            email=email
+        )
+
+        db.session.add(new_user)
+        db.session.commit()
 
         # Add a session to the datastore
         expires = datetime.datetime.utcnow()
         expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
-        new_session = LoginSession(user_key=user_key, expires=expires)
-        session_key = new_session.put().urlsafe()
+        new_session = LoginSession(user_id=new_user.id, expires=expires)
+
+        db.session.add(new_session)
+        db.session.commit()
 
         # Generate a matching cookie and redirct
         resp = make_response(redirect('/'))
-        resp.set_cookie('user_key', user_key, expires=expires)
-        resp.set_cookie('session_key', session_key, expires=expires)
+        resp.set_cookie('session_id', new_session.id, expires=expires)
         return resp
+
     flash_errors(form)
     return render_template('login/register.html', form=form)

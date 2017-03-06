@@ -15,15 +15,15 @@
 </div>
 <div class="center full padded">
   Conversation between:
-  {% for user_key in conversation.user_keys %}
-    {% set user = user_from_key(user_key) %}
+  {% for user_id in conversation.user_ids %}
+    {% set user = user_from_id(user_id) %}
     {% if loop.index > 1 %} and {% endif %}
     {{ user_link(user) }}
   {% endfor %}
 </div>
 <div class="center full padded">
   {% set last_message = conversation.messages|last %}
-  Last message by {{ user_link(user_from_key(last_message.user_key)) }}
+  Last message by {{ user_link(user_from_id(last_message.user_id)) }}
   on {{ last_message.time|expanded_relative_time }}
 </div>
 <form method="post" class="validated-form" data-error-id="message-post-error">
@@ -49,7 +49,7 @@
   </table>
 </form>
 {% for message in conversation.messages|reverse %}
-{% set message_user = user_from_key(message.user_key) %}
+{% set message_user = user_from_id(message.user_id) %}
 <table class="conversation-message">
   <tr>
     <th rowspan="2">

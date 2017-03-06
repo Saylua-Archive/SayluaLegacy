@@ -16,7 +16,7 @@ class UserCheck:
         self.user = user
 
     def UsernameExists(self, form, field):
-        self.user = User.by_username(field.data)
+        self.user = User.from_username(field.data)
         if not self.user:
             raise validators.StopValidation(
                 "We can't find a user with the name %s." % field.data)

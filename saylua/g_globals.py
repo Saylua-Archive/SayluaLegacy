@@ -1,6 +1,6 @@
-from saylua import app
+from saylua import app, db
+from saylua.models.user import LoginSession
 from flask import request, g
-from saylua.utils import make_ndb_key
 import datetime
 
 
@@ -11,40 +11,34 @@ def load_user():
         return
 
     # Load user
-    user_key = request.cookies.get('user_key')
-    session_key = request.cookies.get('session_key')
-    found = None
-    if user_key and session_key:
-        s_key = make_ndb_key(session_key)
-        u_key = make_ndb_key(user_key)
+    session_id = request.cookies.get('session_id')
 
-        g.user_key = u_key
+    if session_id:
+        session = (
+            db.session.query(LoginSession)
+            .filter(LoginSession.id == session_id)
+            .first()
+        )
 
-        if not s_key or not u_key:
-            g.logged_in = False
-            g.user = None
-            return None
+        if session:
+            user = session.get_user()
 
-        found = s_key.get()
-        if not found or found.user_key != user_key:
-            found = None
+            if user and session.active:
+                g.logged_in = True
+                g.user = user
 
-    if not found:
-        g.logged_in = False
-        g.user = None
-        g.user_key = None
-        return None
+                # Update user's last_action timestamp if it's been at least
+                # LAST_ACTION_OFFSET minutes
+                current = datetime.datetime.now()
+                mins_ago = current - datetime.timedelta(
+                    minutes=app.config['LAST_ACTION_OFFSET'])
 
-    founduser = u_key.get()
-    g.logged_in = True
-    g.user = founduser
+                if g.user and g.user.last_action < mins_ago:
+                    g.user.last_action = current
+                    db.session.commit()
 
-    # Update user's last_action timestamp if it's been at least
-    # LAST_ACTION_OFFSET minutes
-    current = datetime.datetime.now()
-    mins_ago = current - datetime.timedelta(
-        minutes=app.config['LAST_ACTION_OFFSET'])
+                return
 
-    if g.user and g.user.last_action < mins_ago:
-        g.user.last_action = current
-        g.user.put()
+    g.logged_in = False
+    g.user = None
+    return None

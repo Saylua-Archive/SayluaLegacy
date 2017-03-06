@@ -9,7 +9,7 @@ class Game(messages.Enum):
 
 
 class Highscore(ndb.Model):
-    user_key = ndb.KeyProperty()
+    user_id = ndb.KeyProperty()
     game_log_key = ndb.KeyProperty()
     game_id = msgprop.EnumProperty(Game, required=True)
     score = ndb.IntegerProperty()
@@ -22,7 +22,7 @@ class Highscore(ndb.Model):
 
 # Stores a log of a player's gameplay including score.
 class GameLog(ndb.Model):
-    user_key = ndb.KeyProperty()
+    user_id = ndb.KeyProperty()
     game_id = msgprop.EnumProperty(Game, required=True)
     score = ndb.IntegerProperty()
     time = ndb.DateTimeProperty(auto_now_add=True)
@@ -31,13 +31,13 @@ class GameLog(ndb.Model):
     game_log = ndb.JsonProperty(indexed=False)
 
     @classmethod
-    def record_score(cls, user_key, game_id, score):
-        score = cls(user_key=user_key, game_id=game_id, score=score)
+    def record_score(cls, user_id, game_id, score):
+        score = cls(user_id=user_id, game_id=game_id, score=score)
         return score.put()
 
     @classmethod
-    def get_user_highscore(cls, user_key, game_id, score):
-        return cls.query(cls.game_id == game_id, cls.user_key == user_key).order(
+    def get_user_highscore(cls, user_id, game_id, score):
+        return cls.query(cls.game_id == game_id, cls.user_id == user_id).order(
             -cls.score).fetch(limit=1)
 
     @classmethod

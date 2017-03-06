@@ -16,7 +16,7 @@ def notifications_main():
     offset = per_page * (page - 1)
 
     # TODO: Find a way to use cursors instead of offsets
-    notifications, cursor, more = Notification.query(Notification.user_key == g.user.key).order(
+    notifications, cursor, more = Notification.query(Notification.user_id == g.user.id).order(
         Notification.is_read, -Notification.time).fetch_page(per_page, offset=offset)
     return render_template("notifications/all.html",
         viewed_notifications=notifications, page=page, more_pages=more)
@@ -38,7 +38,7 @@ def notifications_main_post():
         if not n:
             flash('You are attempting to edit a notification which does not exist!', 'error')
             return redirect('/notifications/', code=302)
-        if n.user_key != g.user.key:
+        if n.user_id != g.user.id:
             flash('You do not have permission to edit these notifications!', 'error')
             return redirect('/notifications/', code=302)
         n.is_read = True
@@ -58,7 +58,7 @@ def notification_follow(key):
     if key:
         notification = Notification.get_by_id(key.id())
 
-    if notification and notification.user_key == g.user.key:
+    if notification and notification.user_id == g.user.id:
         notification.is_read = True
         notification.put()
         return redirect(notification.link, code=302)

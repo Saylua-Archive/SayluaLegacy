@@ -5,7 +5,7 @@ import datetime
 
 # StructuredProperty for Conversation
 class ConversationMessage(ndb.Model):
-    user_key = ndb.KeyProperty()
+    user_id = ndb.IntegerProperty()
     text = ndb.StringProperty()
     time = ndb.DateTimeProperty(auto_now_add=True)
 
@@ -13,39 +13,39 @@ class ConversationMessage(ndb.Model):
 class Conversation(ndb.Model):
     title = ndb.StringProperty()
     messages = ndb.StructuredProperty(ConversationMessage, repeated=True)
-    user_keys = ndb.KeyProperty(repeated=True)
+    user_ids = ndb.IntegerProperty(repeated=True)
 
     @classmethod
     def start(cls, sender_key, recipient_key, title, text):
         # Set the first message of the conversation
-        conversation_messages = [ConversationMessage(user_key=sender_key, text=text)]
+        conversation_messages = [ConversationMessage(user_id=sender_key, text=text)]
 
         conversation = cls(title=title, messages=conversation_messages,
-            user_keys=[sender_key, recipient_key])
+            user_ids=[sender_key, recipient_key])
 
         conversation_key = conversation.put()
 
         # Add all people in the conversation (UserConversation)
         if recipient_key != sender_key:
             sender = UserConversation(conversation_key=conversation_key,
-                user_key=sender_key, recipient_keys=[recipient_key], title=title,
+                user_id=sender_key, recipient_keys=[recipient_key], title=title,
                 is_read=True, is_first=True)
             sender.put()
 
         recipient = UserConversation(conversation_key=conversation_key,
-            user_key=recipient_key, title=title, recipient_keys=[sender_key])
+            user_id=recipient_key, title=title, recipient_keys=[sender_key])
         recipient.put()
 
         return conversation_key
 
     @classmethod
-    def reply(cls, conversation_key, user_key, text):
+    def reply(cls, conversation_key, user_id, text):
         time = datetime.datetime.now()
 
         # Update the user statuses
         sender = UserConversation.query(
             UserConversation.conversation_key == conversation_key,
-            UserConversation.user_key == user_key).get()
+            UserConversation.user_id == user_id).get()
 
         # Check that the user has permission to reply to this conversation
         if not sender:
@@ -60,7 +60,7 @@ class Conversation(ndb.Model):
         for recipient_key in sender.recipient_keys:
             recipient = UserConversation.query(
                 UserConversation.conversation_key == conversation_key,
-                UserConversation.user_key == recipient_key).get()
+                UserConversation.user_id == recipient_key).get()
             # This should always exist, but if not something is wrong with the data.
             if recipient:
                 recipient.time = time
@@ -72,7 +72,7 @@ class Conversation(ndb.Model):
 
         # Add the new message
         conversation = Conversation.get_by_id(conversation_key.id())
-        conversation_message = ConversationMessage(user_key=user_key, text=text)
+        conversation_message = ConversationMessage(user_id=user_id, text=text)
         conversation.messages.append(conversation_message)
 
         result = conversation.put()
@@ -83,7 +83,7 @@ class Conversation(ndb.Model):
 
 # Child
 class UserConversation(ndb.Model):
-    user_key = ndb.KeyProperty()
+    user_id = ndb.IntegerProperty()
     recipient_keys = ndb.KeyProperty(repeated=True)
     conversation_key = ndb.KeyProperty()
     title = ndb.StringProperty()
@@ -98,7 +98,7 @@ class UserConversation(ndb.Model):
 
 
 class Notification(ndb.Model):
-    user_key = ndb.KeyProperty()
+    user_id = ndb.IntegerProperty()
     time = ndb.DateTimeProperty(auto_now_add=True)
     text = ndb.StringProperty()
     link = ndb.StringProperty()
@@ -106,11 +106,11 @@ class Notification(ndb.Model):
     count = ndb.IntegerProperty(default=1)
 
     @classmethod
-    def send(cls, user_key, text, link):
-        notification = cls.query(cls.user_key == user_key,
+    def send(cls, user_id, text, link):
+        notification = cls.query(cls.user_id == user_id,
             cls.text == text, cls.link == link, cls.is_read == False).get()
         if not notification:
-            notification = cls(user_key=user_key, text=text, link=link)
+            notification = cls(user_id=user_id, text=text, link=link)
         else:
             notification.count += 1
         return notification.put()

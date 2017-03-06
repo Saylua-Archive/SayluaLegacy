@@ -6,7 +6,7 @@
 </style>
 {% endblock %}
 {% block body %}
-<h1 id="profile-header">{{viewed_user.display_name}}</h1>
+<h1 id="profile-header">{{viewed_user.display_name.display_name}}</h1>
 <div id="profile-container">
   <div id="profile-column">
     <img src="{{viewed_user.ha_url}}" id="profile-human-avatar">
@@ -15,7 +15,7 @@
       <table id="profile-details-table">
         <tr>
           <th>Username</th>
-          <td>{{ viewed_user.display_name }}</td>
+          <td>{{ viewed_user.display_name.display_name }}</td>
         </tr>
         {% if viewed_user.status %}
         <tr>
@@ -48,23 +48,23 @@
   </div>
   <div id="profile-body">
     <div id="profile-navigation">
-      <a class="tiny-button" href="/user/{{viewed_user.display_name}}/threads/">Threads</a>
-      <a class="tiny-button" href="/user/{{viewed_user.display_name}}/posts/">Posts</a>
-      <a class="tiny-button" href="/den/{{viewed_user.display_name}}/">Den</a>
-      <a class="tiny-button" href="/shop/{{viewed_user.display_name}}/">Shop</a>
+      <a class="tiny-button" href="/user/{{viewed_user.display_name.display_name}}/threads/">Threads</a>
+      <a class="tiny-button" href="/user/{{viewed_user.display_name.display_name}}/posts/">Posts</a>
+      <a class="tiny-button" href="/den/{{viewed_user.display_name.display_name}}/">Den</a>
+      <a class="tiny-button" href="/shop/{{viewed_user.display_name.display_name}}/">Shop</a>
 
       <span class="right">
-        <a class="normal" href="/messages/write/?to={{viewed_user.display_name|urlencode}}">
+        <a class="normal" href="/messages/write/?to={{viewed_user.display_name.display_name|urlencode}}">
           <img src="/static/img/icons/pencil.png">
           Message
         </a>
-        <a class="normal" href="/bank/transfer/?to={{viewed_user.display_name|urlencode}}">
+        <a class="normal" href="/bank/transfer/?to={{viewed_user.display_name.display_name|urlencode}}">
           <img src="/static/img/icons/weather_clouds.png">
           Send Money
         </a>
       </span>
     </div>
-    <h3>About {{ viewed_user.display_name }}</h3>
+    <h3>About {{ viewed_user.display_name.display_name }}</h3>
     <div id="profile-about-me">
       {{ viewed_user.bio }}
     </div>

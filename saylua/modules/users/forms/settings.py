@@ -8,8 +8,6 @@ from saylua.utils.form.fields import SlField, SlTextAreaField, SlPasswordField
 class GeneralSettingsForm(Form):
     notified_on_pings = RadioField('Receive notifications for pings?',
         choices=[('True', 'Yes'), ('False', 'No')])
-    ha_disabled = RadioField('Disable Human Avatars?',
-        choices=[('True', 'Yes'), ('False', 'No')])
     autosubscribe_threads = RadioField('Autosubscribe to your own threads?',
         choices=[('True', 'Yes'), ('False', 'No')])
     autosubscribe_posts = RadioField('Autosubscribe to threads you post on?',
@@ -17,7 +15,6 @@ class GeneralSettingsForm(Form):
 
     def populate_obj(self, obj):
         obj.notified_on_pings = self.notified_on_pings.data == 'True'
-        obj.ha_disabled = self.ha_disabled == 'True'
         obj.autosubscribe_threads = self.autosubscribe_threads.data == 'True'
         obj.autosubscribe_posts = self.autosubscribe_posts.data == 'True'
 

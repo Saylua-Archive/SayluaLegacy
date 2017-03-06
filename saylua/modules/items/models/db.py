@@ -44,10 +44,10 @@ class Item(ndb.Model):
         # TODO: Update the denormalized versions of this data in everyone's inventory
 
     @classmethod
-    def give_item(cls, user_key, item, count):
-        inventory_entry = InventoryItem.by_user_item(user_key, item.key)
+    def give_item(cls, user_id, item, count):
+        inventory_entry = InventoryItem.by_user_item(user_id, item.key)
         if not inventory_entry:
-            inventory_entry = InventoryItem.construct(user_key, item)
+            inventory_entry = InventoryItem.construct(user_id, item)
         inventory_entry.count += count
         inventory_entry.put()
 
@@ -62,16 +62,16 @@ class InventoryItem(ndb.Model):
     avatar_data = ndb.KeyProperty()
 
     # These two keys define the inventory item entry.
-    user_key = ndb.KeyProperty()
+    user_id = ndb.KeyProperty()
     item_key = ndb.KeyProperty()
 
     count = ndb.IntegerProperty()
 
     @classmethod
-    def construct(cls, user_key, item):
+    def construct(cls, user_id, item):
         return cls(name=item.name, image_url=item.image_url, description=item.description,
-            category=item.category, user_key=user_key, item_key=item.key)
+            category=item.category, user_id=user_id, item_key=item.key)
 
     @classmethod
-    def by_user_item(cls, user_key, item_key):
-        return cls.query(cls.user_key == user_key, cls.item_key == item_key).get()
+    def by_user_item(cls, user_id, item_key):
+        return cls.query(cls.user_id == user_id, cls.item_key == item_key).get()
