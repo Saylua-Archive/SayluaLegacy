@@ -7,7 +7,7 @@
 {% block body %}
 <h1>Kevin's Room</h1>
 <div id="pet-room">
-  <div class="room-background"></div>
+  <div class="room-background" style="background-image: url('{{ random_background_image() }}')"></div>
   <div class="pet" id="pet-image-container">
     <img src="{{ random_pet_image() }}">
   </div>
@@ -19,6 +19,12 @@
 <div class="pet-profile-column pet-profile-column-full">
   <div class="pet-profile-box">
     <h2>Kevin's Description</h2>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
   </div>
 </div>
 <div class="pet-profile-info">
@@ -34,31 +40,13 @@
           <td>Kevin's ID</td>
           <td>WildSwimmingBear</td>
         </tr>
-
         <tr>
-          <th colspan="2">
-            Stats
-          </th>
+          <td>Birthday</td>
+          <td>March 20, 1994</td>
         </tr>
         <tr>
-          <td>Happiness</td>
-          <td>Extremely Happy</td>
-        </tr>
-        <tr>
-          <td>Health</td>
-          <td>50/50</td>
-        </tr>
-        <tr>
-          <td>Attack</td>
-          <td>0 (+1)</td>
-        </tr>
-        <tr>
-          <td>Defense</td>
-          <td>0 (+1)</td>
-        </tr>
-        <tr>
-          <td>Height</td>
-          <td>0 (+0)</td>
+          <td>Pronouns</td>
+          <td>She / her</td>
         </tr>
       </table>
     </div>

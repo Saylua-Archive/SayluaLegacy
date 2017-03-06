@@ -5,8 +5,8 @@ def pet_profile(name):
     return render_template("profile.html")
 
 
-def pet_adoption():
-    return render_template("adopt.html")
+def pet_reserve():
+    return render_template("reserve.html")
 
 
 def pet_collection_default():
