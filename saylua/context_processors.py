@@ -55,13 +55,13 @@ def inject_truncate():
 
 @app.context_processor
 def inject_get_user_from_id():
-    def get_user_from_id(id): # Renamed to avoid conflict with template filter
+    def user_from_id(id):
         return (
             db.session.query(User)
             .filter(User.id == id)
             .one_or_none()
         )
-        return dict(get_user_from_id=get_user_from_id)
+    return dict(user_from_id=user_from_id)
 
 
 # Injected variables.
