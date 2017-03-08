@@ -63,7 +63,11 @@ class User(db.Model):
 
     def get_role(self):
         from saylua.models.role import Role
-        return Role.get_by_name(self.role)
+        return (
+            db.session.query(Role)
+            .filter(Role.name == self.role_name)
+            .one_or_none()
+        )
 
     @classmethod
     def from_username(cls, username):
