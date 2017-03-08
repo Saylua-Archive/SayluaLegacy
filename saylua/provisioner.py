@@ -119,6 +119,8 @@ def purge(absolutely_sure_about_this=False):
 
 
 def setup():
+    db.create_all()
+
     # Create the role "admin" with all privileges
     admin_role = Role(name="admin")
     role_columns = [column.key for column in admin_role.__table__.columns]
