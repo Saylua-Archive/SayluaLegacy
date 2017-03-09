@@ -3,7 +3,7 @@ import onDomReady from "ondomready";
 import {hasClass, removeClass, addClass, swapClass} from 'Utils';
 import CheckAll from 'Plugins/CheckAll';
 import FormValidation from 'Plugins/FormValidation/Main';
-import './Notifications';
+import {initializeNotifications} from './Notifications';
 
 
 onDomReady(function () {
@@ -25,6 +25,8 @@ onDomReady(function () {
   let checkAll = new CheckAll('.check-all');
 
   bindTabTyping('.tabs-allowed');
+
+  initializeNotifications();
 });
 
 // Allow tabs to be allowed in text fields. This is useful for allowing users

@@ -1,6 +1,6 @@
 import {addClass} from 'Utils';
 
-window.addEventListener('load', function () {
+function initializeNotifications() {
   var notificationCloseButtons = document.querySelectorAll('.notification a.close-button');
 
   for (var i = 0; i < notificationCloseButtons.length; i++) {
@@ -17,4 +17,4 @@ window.addEventListener('load', function () {
       }.bind(this), 1000);
     });
   }
-});
+}
