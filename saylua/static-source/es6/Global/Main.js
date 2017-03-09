@@ -1,33 +1,29 @@
-import onDomReady from "ondomready";
-
 import {hasClass, removeClass, addClass, swapClass} from 'Utils';
 import CheckAll from 'Plugins/CheckAll';
 import FormValidation from 'Plugins/FormValidation/Main';
 import {initializeNotifications} from './Notifications';
 
 
-onDomReady(function () {
-  fixNavbar();
-  window.addEventListener('scroll', fixNavbar);
+fixNavbar();
+window.addEventListener('scroll', fixNavbar);
 
-  // Get all of the right navbar links and bind click events to them
-  initializeDropMenus(document.getElementById('navbar-user-links'),
-    document.getElementById('dropdown-user-menu'));
+// Get all of the right navbar links and bind click events to them
+initializeDropMenus(document.getElementById('navbar-user-links'),
+  document.getElementById('dropdown-user-menu'));
 
-  let links = document.getElementsByClassName('navbar-main-links');
-  for (let l of links) {
-    initializeDropMenus(l);
-  }
+let links = document.getElementsByClassName('navbar-main-links');
+for (let l of links) {
+  initializeDropMenus(l);
+}
 
-  // Bind dom behavior libraries to specific classes. Perhaps one day this
-  // could be replace with webcomponents.
-  let formValidation = new FormValidation('.validated-form');
-  let checkAll = new CheckAll('.check-all');
+// Bind dom behavior libraries to specific classes. Perhaps one day this
+// could be replace with webcomponents.
+let formValidation = new FormValidation('.validated-form');
+let checkAll = new CheckAll('.check-all');
 
-  bindTabTyping('.tabs-allowed');
+bindTabTyping('.tabs-allowed');
 
-  initializeNotifications();
-});
+initializeNotifications();
 
 // Allow tabs to be allowed in text fields. This is useful for allowing users
 // to edit code such as CSS.
