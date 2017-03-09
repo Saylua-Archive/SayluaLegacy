@@ -97,7 +97,7 @@
       </a>
       <div id="dropdown-user-menu" class="dropdown-menu">
         <div id="user-menu" class="menu">
-          <h3>Logged in as {{g.user.display_name}}</h3>
+          <h3>Logged in as {{g.user.display_name.display_name}}</h3>
           <a href="{{ g.user|user_url }}"><img src="/static/img/icons/user.png"> My Profile</a>
           <a href="/settings/"><img src="/static/img/icons/cog.png"> Account Settings</a>
           <span class="dropdown-separator"></span>
