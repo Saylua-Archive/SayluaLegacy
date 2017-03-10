@@ -3,10 +3,6 @@
 {% set page_title = "Exploring" %}
 {% block header_scripts %}
   <link rel="stylesheet" type="text/css" href="{{ include_static('css/explore.min.css') }}">
-  <!--<script src="{{ include_static('js/lib/pixi.min.js') }}"></script>-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.3.0/pixi.min.js"></script>
-
-  <script src="{{ include_static('js/Dungeon.min.js') }}"></script>
 {% endblock %}
 
 {% block container %}
@@ -35,4 +31,10 @@
     <div class="main-body-content">
     </div>
   </div>
+{% endblock %}
+{% block footer_scripts %}
+<!--<script src="{{ include_static('js/lib/pixi.min.js') }}"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.3.0/pixi.min.js"></script>
+
+<script src="{{ include_static('js/Dungeon.min.js') }}"></script>
 {% endblock %}
