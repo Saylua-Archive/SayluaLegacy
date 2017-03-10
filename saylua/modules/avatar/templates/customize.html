@@ -1,8 +1,5 @@
 {% extends "layout.html" %}
 {% set page_title = "Human Avatar" %}
-{% block header_scripts %}
-<script src="{{ include_static('js/Avatar.min.js') }}"></script>
-{% endblock %}
 {% block body %}
 <h1>Customize Your Avatar</h1>
 <div class="left center" style="width:30%;">
@@ -13,4 +10,7 @@
 	</form>
 </div>
 <div id="clothing" class="left" style="width:70%;"></div>
+{% endblock %}
+{% block footer_scripts %}
+<script src="{{ include_static('js/Avatar.min.js') }}"></script>
 {% endblock %}

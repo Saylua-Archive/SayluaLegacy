@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% set page_title = "Pet Profile" %}
 {% block header_scripts %}
-<script src="{{ include_static('js/PetInteractions.min.js') }}"></script>
 <link rel="stylesheet" href="{{ include_static('css/pets.min.css') }}">
 {% endblock %}
 {% block body %}
@@ -68,4 +67,7 @@
   </div>
 </div>
 
+{% endblock %}
+{% block footer_scripts %}
+<script src="{{ include_static('js/PetInteractions.min.js') }}"></script>
 {% endblock %}

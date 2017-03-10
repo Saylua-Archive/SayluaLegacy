@@ -1,11 +1,13 @@
 {% extends "layout.html" %}
 {% set page_title = "Line Blocks" %}
 {% block header_scripts %}
-  <script src="{{ include_static('js/LineBlocks.min.js') }}"></script>
   <link href="https://fonts.googleapis.com/css?family=Bitter" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="{{ include_static('css/arcade.min.css') }}">
 {% endblock %}
 {% block body %}
 <h1>Line Blocks</h1>
 <div id="blocks-mount"></div>
+{% endblock %}
+{% block footer_scripts %}
+  <script src="{{ include_static('js/LineBlocks.min.js') }}"></script>
 {% endblock %}
