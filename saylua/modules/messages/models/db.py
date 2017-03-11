@@ -1,6 +1,14 @@
 from google.appengine.ext import ndb
 
 import datetime
+from saylua import db
+
+
+class _Conversation(db.Model):
+    __tablename__ = "conversations"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(256))
 
 
 # StructuredProperty for Conversation
