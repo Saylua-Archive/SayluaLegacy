@@ -70,15 +70,15 @@ a.navbar-link {
     padding-top: 0.3rem;
     cursor: pointer;
   }
-}
 
-a.navbar-link:hover {
-  text-decoration: none;
-  background: $mainDarkColor;
-}
+  &:hover {
+    text-decoration: none;
+    background: $mainDarkColor;
+  }
 
-a.navbar-link.active {
-  background: $mainDarkerColor;
+  &.active {
+    background: $mainDarkerColor;
+  }
 }
 
 .alert-number {
