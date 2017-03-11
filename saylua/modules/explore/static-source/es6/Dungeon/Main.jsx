@@ -1,5 +1,3 @@
-import onDomReady from "ondomready";
-
 import Inferno from "inferno";
 import { createStore, applyMiddleware, compose } from 'redux';
 
@@ -46,6 +44,4 @@ export default function Main() {
   });
 }
 
-onDomReady(() => {
-  Main();
-});
+Main();
