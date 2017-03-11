@@ -11,6 +11,12 @@ class _Conversation(db.Model):
     title = db.Column(db.String(256))
 
 
+class _ConversationMember(db.Model):
+    __tablename__ = "conversationMembers"
+
+    id = db.Column(db.Integer, primary_key=True)
+    conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'))
+
 # StructuredProperty for Conversation
 class ConversationMessage(ndb.Model):
     user_id = ndb.IntegerProperty()
