@@ -9,6 +9,7 @@ class _Conversation(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(256))
+    author = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
 class _ConversationMember(db.Model):
@@ -16,6 +17,30 @@ class _ConversationMember(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    unread = db.Column(db.Boolean, default=False)
+
+
+class Message(db.Model):
+    __tablename__ = "messages"
+
+    id = db.Column(db.Integer, primary_key=True)
+    conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'))
+    author = db.Column(db.Integer, db.ForeignKey('users.id'))
+    text = db.Column(db.Text())
+
+
+class _Notification(db.Model):
+    __tablename__ = "notifications"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    time = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    text = db.Column(db.Text())
+    unread = db.Column(db.Boolean, default=True)
+    link = db.Column(db.String(512))
+    count = db.Column(db.Integer)
+
 
 # StructuredProperty for Conversation
 class ConversationMessage(ndb.Model):
