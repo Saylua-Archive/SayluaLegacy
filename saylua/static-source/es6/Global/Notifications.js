@@ -1,6 +1,6 @@
 import {addClass} from 'Utils';
 
-function initializeNotifications() {
+export function initializeNotifications() {
   var notificationCloseButtons = document.querySelectorAll('.notification a.close-button');
 
   for (var i = 0; i < notificationCloseButtons.length; i++) {
