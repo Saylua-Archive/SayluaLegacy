@@ -41,6 +41,7 @@ $navHeight: 4.5rem;
 }
 
 .navbar-block {
+  position: relative;
   display: flex;
   flex-direction: row;
   background-color: $mainSoftColor;
@@ -148,6 +149,7 @@ a.navbar-link {
   position: absolute;
   z-index: 999;
   top: -0.25em;
+  left: -70px;
   display: none;
   flex-direction: column;
   width: 220px;
@@ -228,7 +230,7 @@ a.navbar-link {
 }
 
 .navbar-user-links .dropdown-menu {
-  margin-left: -25px;
+  margin-left: 10px;
 }
 
 // Prevent the navbar from being sticky on mobile because that's annoying.
@@ -288,6 +290,10 @@ a.navbar-link {
     }
   }
 
+  .navbar-block {
+    position: static;
+  }
+
   .navbar-main-links a.navbar-link {
     display: flex;
     flex-direction: column;
@@ -307,6 +313,7 @@ a.navbar-link {
   .navbar-user-links .dropdown-menu,
   .navbar-main-links .dropdown-menu {
     left: 0;
+    right: 0;
     width: 100%;
     margin-right: 0;
     margin-left: 0;
