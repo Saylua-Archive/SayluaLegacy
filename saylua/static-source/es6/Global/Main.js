@@ -12,12 +12,12 @@ initializeDropMenus(document.getElementById('navbar-user-links'),
   document.getElementById('dropdown-user-menu'));
 
 let links = document.getElementsByClassName('navbar-main-links');
-for (let l of links) {
-  initializeDropMenus(l);
+for (let i = 0; i < links.length; i++) {
+  initializeDropMenus(links[i]);
 }
 
 // Bind dom behavior libraries to specific classes. Perhaps one day this
-// could be replace with webcomponents.
+// could be replaces with webcomponents.
 let formValidation = new FormValidation('.validated-form');
 let checkAll = new CheckAll('.check-all');
 

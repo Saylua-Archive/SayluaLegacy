@@ -41,6 +41,7 @@ $navHeight: 4.5rem;
 }
 
 .navbar-block {
+  position: relative;
   display: flex;
   flex-direction: row;
   background-color: $mainSoftColor;
@@ -70,15 +71,15 @@ a.navbar-link {
     padding-top: 0.3rem;
     cursor: pointer;
   }
-}
 
-a.navbar-link:hover {
-  text-decoration: none;
-  background: $mainDarkColor;
-}
+  &:hover {
+    text-decoration: none;
+    background: $mainDarkColor;
+  }
 
-a.navbar-link.active {
-  background: $mainDarkerColor;
+  &.active {
+    background: $mainDarkerColor;
+  }
 }
 
 .alert-number {
@@ -148,6 +149,7 @@ a.navbar-link.active {
   position: absolute;
   z-index: 999;
   top: -0.25em;
+  left: -70px;
   display: none;
   flex-direction: column;
   width: 220px;
@@ -157,8 +159,6 @@ a.navbar-link.active {
   text-align: left;
   border: 1px solid $neutralColor;
   background: $white;
-  -webkit-box-shadow: 3px 8px 32px -13px $black;
-  -moz-box-shadow: 3px 8px 32px -13px $black;
   box-shadow: 3px 8px 32px -13px $black;
 
   align-items: stretch;
@@ -230,7 +230,7 @@ a.navbar-link.active {
 }
 
 .navbar-user-links .dropdown-menu {
-  margin-left: -25px;
+  margin-left: 10px;
 }
 
 // Prevent the navbar from being sticky on mobile because that's annoying.
@@ -290,6 +290,10 @@ a.navbar-link.active {
     }
   }
 
+  .navbar-block {
+    position: static;
+  }
+
   .navbar-main-links a.navbar-link {
     display: flex;
     flex-direction: column;
@@ -309,6 +313,7 @@ a.navbar-link.active {
   .navbar-user-links .dropdown-menu,
   .navbar-main-links .dropdown-menu {
     left: 0;
+    right: 0;
     width: 100%;
     margin-right: 0;
     margin-left: 0;
