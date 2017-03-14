@@ -3,10 +3,12 @@ from google.appengine.ext import ndb
 
 from saylua.wrappers import login_required
 from saylua.utils import make_ndb_key, pluralize, get_from_request
-from .models.db import UserConversation, Conversation
+from .models.db import Conversation, ConversationMember, Message
 
 from forms import ConversationForm, ConversationReplyForm, recipient_check
 from saylua.utils.form import flash_errors
+
+from saylua import db
 
 
 # The main page where the user views all of their messages.
@@ -118,3 +120,20 @@ def get_conversation_if_valid(key):
             if g.user.id in conversation.user_ids:
                 return conversation
     return None
+
+
+def start_conversation(sender_id, recipient_ids, title, text):
+    new_conversation = Conversation(title=title, author=sender_id)
+    db.session.flush()
+    first_message = Message(conversation_id=new_conversation.id, author=sender_id, text=text)
+    db.session.add(first_message)
+    send_member = ConversationMember(conversation_id=new_conversation.id,
+            user_id=sender_id, unread=False)
+    db.session.add(send_member)
+    if type(recipient_ids) is int:
+        recipient_ids = [recipient_ids]
+    for recip_id in recipient_ids:
+        db.session.add(ConversationMember(conversation_id=new_conversation.id,
+                user_id=recip_id))
+    db.session.commit()
+    return new_conversation.id

@@ -4,7 +4,7 @@ import datetime
 from saylua import db
 
 
-class _Conversation(db.Model):
+class Conversation(db.Model):
     __tablename__ = "conversations"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -12,12 +12,11 @@ class _Conversation(db.Model):
     author = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
-class _ConversationMember(db.Model):
-    __tablename__ = "conversationMembers"
+class ConversationMember(db.Model):
+    __tablename__ = "conversation_members"
 
-    id = db.Column(db.Integer, primary_key=True)
-    conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     unread = db.Column(db.Boolean, default=False)
 
 
@@ -28,6 +27,7 @@ class Message(db.Model):
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'))
     author = db.Column(db.Integer, db.ForeignKey('users.id'))
     text = db.Column(db.Text())
+    date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
 
 class _Notification(db.Model):
@@ -49,7 +49,7 @@ class ConversationMessage(ndb.Model):
     time = ndb.DateTimeProperty(auto_now_add=True)
 
 
-class Conversation(ndb.Model):
+class _Conversation(ndb.Model):
     title = ndb.StringProperty()
     messages = ndb.StructuredProperty(ConversationMessage, repeated=True)
     user_ids = ndb.IntegerProperty(repeated=True)
