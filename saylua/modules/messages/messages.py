@@ -17,6 +17,19 @@ def messages_main():
     messages = UserConversation.query(UserConversation.user_id == g.user.id,
         UserConversation.is_deleted == False).order(
         UserConversation.is_read, -UserConversation.time).fetch()
+
+    conversation_query = (
+        db.session.query(ConversationMember)
+        .filter(Conversation.board_id == board.id)
+        .order_by(ForumThread.is_pinned.desc(), ForumThread.date_modified.desc())
+    )
+
+    threads = (
+        threads_query
+        .limit(THREADS_PER_PAGE)
+        .offset((page_number - 1) * THREADS_PER_PAGE)
+        .all()
+    )
     if not messages:
         messages = []
     return render_template('messages/all.html', viewed_messages=messages)
@@ -64,9 +77,9 @@ def messages_write_new():
     form.text.data = get_from_request(request, 'text')
 
     if request.method == 'POST' and form.validate():
-        to = recipient_check.user.key
-        key = Conversation.start(g.user.id, to, form.title.data, form.text.data)
-        return redirect('/conversation/' + key.urlsafe() + '/', code=302)
+        to = recipient_check.user.id
+        new_id = start_conversation(g.user.id, to, form.title.data, form.text.data)
+        return redirect('/conversation/' + str(new_id) + '/', code=302)
 
     flash_errors(form)
     return render_template('messages/write.html', form=form)
@@ -124,16 +137,17 @@ def get_conversation_if_valid(key):
 
 def start_conversation(sender_id, recipient_ids, title, text):
     new_conversation = Conversation(title=title, author=sender_id)
+    db.session.add(new_conversation)
     db.session.flush()
     first_message = Message(conversation_id=new_conversation.id, author=sender_id, text=text)
     db.session.add(first_message)
     send_member = ConversationMember(conversation_id=new_conversation.id,
             user_id=sender_id, unread=False)
     db.session.add(send_member)
-    if type(recipient_ids) is int:
+    if isinstance(recipient_ids, (int, long)):
         recipient_ids = [recipient_ids]
     for recip_id in recipient_ids:
         db.session.add(ConversationMember(conversation_id=new_conversation.id,
-                user_id=recip_id))
+                user_id=recip_id, unread=True))
     db.session.commit()
     return new_conversation.id
