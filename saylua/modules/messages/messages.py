@@ -17,19 +17,6 @@ def messages_main():
     messages = UserConversation.query(UserConversation.user_id == g.user.id,
         UserConversation.is_deleted == False).order(
         UserConversation.is_read, -UserConversation.time).fetch()
-
-    conversation_query = (
-        db.session.query(ConversationMember)
-        .filter(Conversation.board_id == board.id)
-        .order_by(ForumThread.is_pinned.desc(), ForumThread.date_modified.desc())
-    )
-
-    threads = (
-        threads_query
-        .limit(THREADS_PER_PAGE)
-        .offset((page_number - 1) * THREADS_PER_PAGE)
-        .all()
-    )
     if not messages:
         messages = []
     return render_template('messages/all.html', viewed_messages=messages)
