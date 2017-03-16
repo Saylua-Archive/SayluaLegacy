@@ -61,6 +61,9 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.display_name
 
+    def name(self):
+        return self.display_name.display_name
+
     def get_role(self):
         from saylua.models.role import Role
         return (

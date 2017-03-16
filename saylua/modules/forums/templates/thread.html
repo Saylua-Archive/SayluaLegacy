@@ -45,7 +45,7 @@
 {% set author = post.author|user_from_id %}
   <div class="forum-post" id="forum-post-{{ loop.index }}">
     <div class="forum-post-info">
-      <a href="/user/{{ author.display_name.display_name }}/">{{ author.display_name.display_name }}</a>
+      <a href="/user/{{ author.name() }}/">{{ author.name() }}</a>
       <div class="pet-avatar-view">
         <a href="/avatar/" class="avatar-view">
           <img src="{{ author.ha_url }}" />
@@ -67,7 +67,7 @@
 
       {{ post.body|markdown }}
       <div class="divider"></div>
-      {{ author.display_name.display_name }} hasn't set a signature yet.
+      {{ author.name() }} hasn't set a signature yet.
     </div>
   </div>
 {% endfor %}

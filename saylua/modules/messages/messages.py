@@ -3,7 +3,7 @@ from google.appengine.ext import ndb
 
 from saylua.wrappers import login_required
 from saylua.utils import make_ndb_key, pluralize, get_from_request
-from .models.db import Conversation, ConversationMember, Message
+from .models.db import Conversation, ConversationUser, Message
 
 from forms import ConversationForm, ConversationReplyForm, recipient_check
 from saylua.utils.form import flash_errors
@@ -123,18 +123,18 @@ def get_conversation_if_valid(key):
 
 
 def start_conversation(sender_id, recipient_ids, title, text):
-    new_conversation = Conversation(title=title, author=sender_id)
+    new_conversation = Conversation()
     db.session.add(new_conversation)
     db.session.flush()
-    first_message = Message(conversation_id=new_conversation.id, author=sender_id, text=text)
+    first_message = Message(conversation_id=new_conversation.id, author_id=sender_id, text=text)
     db.session.add(first_message)
-    send_member = ConversationMember(conversation_id=new_conversation.id,
-            user_id=sender_id, unread=False)
+    send_member = ConversationUser(conversation_id=new_conversation.id,
+            user_id=sender_id, title=title, unread=False)
     db.session.add(send_member)
     if isinstance(recipient_ids, (int, long)):
         recipient_ids = [recipient_ids]
     for recip_id in recipient_ids:
-        db.session.add(ConversationMember(conversation_id=new_conversation.id,
-                user_id=recip_id, unread=True))
+        db.session.add(ConversationUser(conversation_id=new_conversation.id,
+                user_id=recip_id, title=title, unread=True))
     db.session.commit()
     return new_conversation.id

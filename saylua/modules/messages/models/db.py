@@ -8,16 +8,17 @@ class Conversation(db.Model):
     __tablename__ = "conversations"
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(256))
-    author = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
-class ConversationMember(db.Model):
-    __tablename__ = "conversation_members"
+class ConversationUser(db.Model):
+    __tablename__ = "conversation_users"
 
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+
+    title = db.Column(db.String(256))
     unread = db.Column(db.Boolean, default=False)
+    last_updated = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
 
 class Message(db.Model):
@@ -25,7 +26,7 @@ class Message(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'))
-    author = db.Column(db.Integer, db.ForeignKey('users.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     text = db.Column(db.Text())
     date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
