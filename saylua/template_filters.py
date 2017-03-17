@@ -91,7 +91,7 @@ def saylua_message_status(user_conversation):
 
 @app.template_filter('user_url')
 def saylua_user_url(user):
-    return '/user/' + user.display_name.display_name.lower() + '/'
+    return '/user/' + user.name().lower() + '/'
 
 
 # Conversation can be either a UserConversation or Conversation model.
@@ -125,7 +125,7 @@ def user_from_id(user_id):
 def display_name_from_user_id(user_id):
     user = user_from_id(user_id)
     if user:
-        return user.display_name.display_name
+        return user.name()
 
     return "Unknown User"
 

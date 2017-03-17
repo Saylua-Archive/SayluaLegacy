@@ -66,8 +66,12 @@ def logout():
         .first()
     )
 
+    if session.user_id != g.user.id: # Make sure people can't log each other out
+        return render_template("403.html"), 403
+
     if session:
-        session.delete()
+        db.session.delete(session)
+        db.session.commit()
 
     resp = make_response(redirect('/'))
     resp.set_cookie('session_id', '', expires=0)
