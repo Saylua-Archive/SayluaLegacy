@@ -54,7 +54,7 @@ def inject_truncate():
 
 
 @app.context_processor
-def inject_get_user_from_id():
+def inject_user_from_id():
     def user_from_id(id):
         return (
             db.session.query(User)

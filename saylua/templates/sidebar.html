@@ -11,7 +11,7 @@
     </div>
   </div>
   <div id="user-info-section" class="sidebar-section">
-    <p>You are <a href="{{g.user|user_url}}">{{ g.user.display_name.display_name }}</a></p>
+    <p>You are <a href="{{g.user|user_url}}">{{ g.user.name() }}</a></p>
     <p>
       <img src="/static/img/icons/weather_clouds.png">
       <a href="/bank/">{{ g.user.cloud_coins|pluralize('Cloud Coin') }}</a>

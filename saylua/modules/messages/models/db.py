@@ -1,6 +1,46 @@
 from google.appengine.ext import ndb
 
 import datetime
+from saylua import db
+
+
+class Conversation(db.Model):
+    __tablename__ = "conversations"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+
+class ConversationUser(db.Model):
+    __tablename__ = "conversation_users"
+
+    conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+
+    title = db.Column(db.String(256))
+    unread = db.Column(db.Boolean, default=False)
+    last_updated = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+
+
+class Message(db.Model):
+    __tablename__ = "messages"
+
+    id = db.Column(db.Integer, primary_key=True)
+    conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    text = db.Column(db.Text())
+    date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+
+
+class _Notification(db.Model):
+    __tablename__ = "notifications"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    time = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    text = db.Column(db.Text())
+    unread = db.Column(db.Boolean, default=True)
+    link = db.Column(db.String(512))
+    count = db.Column(db.Integer)
 
 
 # StructuredProperty for Conversation
@@ -10,7 +50,7 @@ class ConversationMessage(ndb.Model):
     time = ndb.DateTimeProperty(auto_now_add=True)
 
 
-class Conversation(ndb.Model):
+class _Conversation(ndb.Model):
     title = ndb.StringProperty()
     messages = ndb.StructuredProperty(ConversationMessage, repeated=True)
     user_ids = ndb.IntegerProperty(repeated=True)
