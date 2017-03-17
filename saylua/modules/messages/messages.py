@@ -1,5 +1,7 @@
 from flask import render_template, redirect, flash, request, g
 from google.appengine.ext import ndb
+import flask_sqlalchemy
+from saylua import db
 
 from saylua.wrappers import login_required
 from saylua.utils import make_ndb_key, pluralize, get_from_request
@@ -8,10 +10,9 @@ from .models.db import Conversation, ConversationUser, Message
 from forms import ConversationForm, ConversationReplyForm, recipient_check
 from saylua.utils.form import flash_errors
 
-from saylua import db
-
 
 # The main page where the user views all of their messages.
+"""
 @login_required
 def messages_main():
     messages = UserConversation.query(UserConversation.user_id == g.user.id,
@@ -19,7 +20,7 @@ def messages_main():
         UserConversation.is_read, -UserConversation.time).fetch()
     if not messages:
         messages = []
-    return render_template('messages/all.html', viewed_messages=messages)
+    return render_template('messages/all.html', viewed_messages=messages)"""
 
 
 # The submit action for the user to update their messages.
@@ -72,21 +73,18 @@ def messages_write_new():
     return render_template('messages/write.html', form=form)
 
 
-# This route just marks a message as read and then redirects the user to the
-# message they were looking to read. We make it a separate route so that the
+# This route just marks a conversationuser as read and then redirects the user to the
+# conversation they were looking to read. We make it a separate route so that the
 # main "looking at a message" route doesn't have to bother with looking up
 # the user's message metadata.
 @login_required
-def messages_read(key):
-    conversation_key = make_ndb_key(key)
-    if conversation_key:
-        conversation = UserConversation.query(UserConversation.user_id == g.user.id,
-            UserConversation.conversation_key == conversation_key).get()
-        if conversation:
-            conversation.is_read = True
-            conversation.put()
-            return redirect('/conversation/' + conversation_key.urlsafe() + '/', code=302)
-    return render_template('messages/invalid.html')
+def messages_read(id):
+    try:
+        # found_message = db.session.query(Message).get(id)
+        # more to go here
+        return redirect('/conversation/' + str(id) + '/', code=302)
+    except(flask_sqlalchemy.orm.exc.NoResultFound):
+        return render_template('messages/invalid.html')
 
 
 # The page to view a specific conversation.
