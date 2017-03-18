@@ -4,11 +4,10 @@
   td.label, th.label {
     min-width: 20%;
     text-align: right;
-  }
-
-  td.label.break, th.label.break {
-    width: 30%;
-    max-width: 30%;
+    &.break {
+      width: 30%;
+      max-width: 30%;
+    }
   }
 
   td, th {
