@@ -44,13 +44,13 @@
         Status
       </th>
     </tr>
-    {% for message in viewed_messages %}
-    <tr class="forum-board-row{% if not message.is_read %} highlight{% endif %}">
+    {% for conversation in conversations %}
+    <tr class="forum-board-row{% if not conversation.unread %} highlight{% endif %}">
       <td>
-        <input type="checkbox" name="user_conversation_id" value="{{ message.key.urlsafe() }}">
+        <input type="checkbox" name="user_conversation_id" value="{{ conversation.id }}">
       </td>
       <td>
-        <a href="{{ message|conversation_url }}">{{ message.title }}</a>
+        <a href="{{ message|conversation_url }}">{{ conversation.title }}</a>
       </td>
       <td>
         With

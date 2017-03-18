@@ -1,5 +1,5 @@
 from saylua.routing import url
-from . import views
+import views
 
 
 urlpatterns = [

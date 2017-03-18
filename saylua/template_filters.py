@@ -94,19 +94,19 @@ def saylua_user_url(user):
     return '/user/' + user.name().lower() + '/'
 
 
-# Conversation can be either a UserConversation or Conversation model.
+# Conversation can be either a ConversationUser or Conversation model.
 @app.template_filter('conversation_url')
 def saylua_conversation_url(conversation):
-    key = conversation.conversation_key
-    if not key:
-        # This is the case if this is acting on a Conversation object instead
-        # of a UserConversation object.
-        key = conversation.key
+    c_id = conversation.id
+    if hasattr(conversation, 'conversation_id'):
+        # This is the case if this is acting on a ConversationUser object instead
+        # of a Conversation object.
+        c_id = conversation.conversation_id
     elif not conversation.is_read:
         # This case can only happen on a UserConversation object
-        return '/conversation_read/' + key.urlsafe() + '/'
+        return '/conversation_read/' + str(c_id) + '/'
 
-    return '/conversation/' + key.urlsafe() + '/'
+    return '/conversation/' + str(c_id) + '/'
 
 
 # Query filters. Use these only when necessary.

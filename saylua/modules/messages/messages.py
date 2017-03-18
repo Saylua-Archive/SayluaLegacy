@@ -12,15 +12,19 @@ from saylua.utils.form import flash_errors
 
 
 # The main page where the user views all of their messages.
-"""
 @login_required
 def messages_main():
-    messages = UserConversation.query(UserConversation.user_id == g.user.id,
+    """messages = UserConversation.query(UserConversation.user_id == g.user.id,
         UserConversation.is_deleted == False).order(
-        UserConversation.is_read, -UserConversation.time).fetch()
+        UserConversation.is_read, -UserConversation.time).fetch()"""
+    messages = (
+        db.session.query(Message)
+        .join(ConversationUser, Message.conversation_id == ConversationUser.conversation_id)
+        .filter(ConversationUser.user_id == g.user.id).all()
+    )
     if not messages:
         messages = []
-    return render_template('messages/all.html', viewed_messages=messages)"""
+    return render_template('messages/all.html', viewed_messages=messages)
 
 
 # The submit action for the user to update their messages.
@@ -80,8 +84,9 @@ def messages_write_new():
 @login_required
 def messages_read(id):
     try:
-        # found_message = db.session.query(Message).get(id)
-        # more to go here
+        found_conversation = db.session.query(ConversationUser).get((id, g.user.id))
+        found_conversation.unread = False
+        db.session.commit()
         return redirect('/conversation/' + str(id) + '/', code=302)
     except(flask_sqlalchemy.orm.exc.NoResultFound):
         return render_template('messages/invalid.html')
@@ -89,8 +94,7 @@ def messages_read(id):
 
 # The page to view a specific conversation.
 @login_required
-def messages_view_conversation(key):
-    key = make_ndb_key(key)
+def messages_view_conversation(id):
     conversation = get_conversation_if_valid(key)
     if not conversation:
         return render_template('messages/invalid.html')
@@ -101,23 +105,12 @@ def messages_view_conversation(key):
         result = Conversation.reply(key, g.user.id, form.text.data)
         if result:
             flash('You have replied to the message!')
-            return redirect('/conversation/' + key.urlsafe() + '/', code=302)
+            return redirect('/conversation/' + str(conversation_id) + '/', code=302)
         else:
             flash('Message reply failed for an unexpected reason.', 'error')
     flash_errors(form)
     return render_template('messages/view.html', conversation=conversation,
         form=form)
-
-
-# Non-route functions.
-def get_conversation_if_valid(key):
-    if key:
-        conversation = Conversation.get_by_id(key.id())
-        if conversation:
-            # Check that the user has permission to view the message
-            if g.user.id in conversation.user_ids:
-                return conversation
-    return None
 
 
 def start_conversation(sender_id, recipient_ids, title, text):
@@ -131,6 +124,9 @@ def start_conversation(sender_id, recipient_ids, title, text):
     db.session.add(send_member)
     if isinstance(recipient_ids, (int, long)):
         recipient_ids = [recipient_ids]
+    recipient_ids = set(recipient_ids) # Remove duplicates
+    if sender_id in recipient_ids:
+        recipient_ids.remove(sender_id)
     for recip_id in recipient_ids:
         db.session.add(ConversationUser(conversation_id=new_conversation.id,
                 user_id=recip_id, title=title, unread=True))
