@@ -4,7 +4,7 @@ import flask_sqlalchemy
 from saylua import db
 
 from saylua.wrappers import login_required
-from saylua.utils import make_ndb_key, pluralize, get_from_request
+from saylua.utils import pluralize, get_from_request
 from .models.db import Conversation, ConversationUser, Message
 
 from forms import ConversationForm, ConversationReplyForm, recipient_check
@@ -33,7 +33,6 @@ def messages_main_post():
     user_message_ids = request.form.getlist('user_conversation_id')
     keys = []
     for m_id in user_message_ids:
-        m_id = make_ndb_key(m_id)
         if not m_id:
             flash('You are attempting to edit an invalid message!', 'error')
             return redirect('/messages/', code=302)
@@ -95,7 +94,7 @@ def messages_read(id):
 # The page to view a specific conversation.
 @login_required
 def messages_view_conversation(id):
-    conversation = get_conversation_if_valid(key)
+    # TODO make sure the user has access
     if not conversation:
         return render_template('messages/invalid.html')
 
