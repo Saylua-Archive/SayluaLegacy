@@ -34,6 +34,9 @@ class RegisterForm(Form):
         sl_validators.EqualTo('confirm_password', message='Passwords must match.')
     ])
     confirm_password = SlPasswordField('Confirm Password')
+    at_least_13 = SlBooleanField(
+        'I certify that I am at least 13 years old.',
+        [sl_validators.Required(message='You must be at least 13 to join Saylua.')])
     accept_tos = SlBooleanField(
         'I agree to the <a href="/terms/" target="_blank">Terms of Service</a>',
         [sl_validators.Required(message='You must agree to the Terms of Service!')])

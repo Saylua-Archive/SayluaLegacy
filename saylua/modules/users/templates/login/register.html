@@ -13,7 +13,7 @@
       </th>
       <td>
         {{ form.username() }}
-        <small class="form-tip">Valid characters: letters, numbers, and +~._-</small>
+        <small class="form-error" data-field-name="{{ form.username.name }}"></small>
       </td>
     </tr>
     <tr>
@@ -22,7 +22,7 @@
       </th>
       <td>
         {{ form.password() }}
-        <small class="form-tip">Passwords must be at least {{config['MIN_PASSWORD_LENGTH']}} characters. </small>
+        <small class="form-error" data-field-name="{{ form.password.name }}"></small>
       </td>
     </tr>
     <tr>
@@ -31,6 +31,7 @@
       </th>
       <td>
         {{ form.confirm_password() }}
+        <small class="form-error" data-field-name="{{ form.confirm_password.name }}"></small>
       </td>
     </tr>
     <tr>
@@ -39,6 +40,14 @@
       </th>
       <td>
         {{ form.email() }}
+        <small class="form-error" data-field-name="{{ form.email.name }}"></small>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        {{ form.at_least_13() }}
+        {{ form.at_least_13.label }}
       </td>
     </tr>
     <tr>

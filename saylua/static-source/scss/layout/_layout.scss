@@ -67,9 +67,18 @@
   flex-shrink: 0;
 }
 
-.sidebar-login-form th.h3 {
-  text-align: center;
-  border-bottom: 1px $neutralDarkColor dotted;
+.sidebar-login-form {
+  table.form-table {
+    width: 100%;
+    td {
+      text-align: center;
+    }
+  }
+
+  th.h3 {
+    text-align: center;
+    border-bottom: 1px $neutralDarkColor dotted;
+  }
 }
 
 
