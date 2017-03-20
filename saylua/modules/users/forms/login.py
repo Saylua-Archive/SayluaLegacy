@@ -30,10 +30,12 @@ class RegisterForm(Form):
     password = SlPasswordField('Password', [
         sl_validators.Required(),
         sl_validators.Min(app.config['MIN_PASSWORD_LENGTH']),
-        sl_validators.Max(app.config['MAX_PASSWORD_LENGTH']),
-        sl_validators.EqualTo('confirm_password', message='Passwords must match.')
+        sl_validators.Max(app.config['MAX_PASSWORD_LENGTH'])
     ])
-    confirm_password = SlPasswordField('Confirm Password')
+    confirm_password = SlPasswordField('Confirm Password', [
+        sl_validators.Required(),
+        sl_validators.EqualTo('password', message='Passwords must match.')
+    ])
     at_least_13 = SlBooleanField(
         'I certify that I am at least 13 years old.',
         [sl_validators.Required(message='You must be at least 13 to join Saylua.')])

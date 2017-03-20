@@ -25,6 +25,7 @@ class _ValidatedForm {
   constructor(form) {
     this.form = form;
     this.errorElementMap = {};
+    this.checkedFields = {};
 
     let errorElements = form.getElementsByClassName('form-error');
     for (let i = 0; i < errorElements.length; i++) {
@@ -34,6 +35,7 @@ class _ValidatedForm {
   }
 
   attachListeners() {
+    let self = this;
     let fields = this.form.querySelectorAll('input, textarea');
     for (let i = 0; i < fields.length; i++) {
       // Add event listeners for validating users' input when they unfocus.
@@ -41,12 +43,17 @@ class _ValidatedForm {
       if (fields[i].type == 'checkbox') {
         listenTo = 'change';
       }
-      fields[i].addEventListener(listenTo, this._validateField.bind(this, fields[i]));
+      fields[i].addEventListener(listenTo, function (e) {
+        self.checkedFields[fields[i].name] = true;
+
+        // We validate all fields we've already checked before. This is mostly
+        // for cases like the "password matches" validator.
+        self._validateAllFields();
+      });
     }
 
-    let self = this;
     this.form.addEventListener('submit', function (e) {
-      if (!self._validateAllFields()) {
+      if (!self._validateAllFields(true)) {
         e.preventDefault();
         return false;
       }
@@ -56,6 +63,7 @@ class _ValidatedForm {
 
   // Returns false if validation failed.
   _validateField(field) {
+    this.checkedFields[field.name] = true;
     let validators = field.getAttribute('data-slform-validators');
     if (!validators) {
       // Can't fail validation that doesn't exist...
@@ -101,16 +109,23 @@ class _ValidatedForm {
     // Render the error message.
     if (this.errorElementMap[field.name]) {
       this.errorElementMap[field.name].innerHTML = err || '';
+      if (err) {
+        addClass(field, 'error');
+      } else {
+        removeClass(field, 'error');
+      }
     }
     return !err;
   }
 
-  _validateAllFields(e) {
+  _validateAllFields(checkAll) {
     let hasError = false;
     let fields = this.form.querySelectorAll('input, textarea');
 
     for (let j = 0; j < fields.length; j++) {
-      hasError = !this._validateField(fields[j]) || hasError;
+      if (checkAll || this.checkedFields[fields[j].name]) {
+        hasError = !this._validateField(fields[j]) || hasError;
+      }
     }
 
     return !hasError;
