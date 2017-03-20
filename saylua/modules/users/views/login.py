@@ -45,7 +45,6 @@ def login():
 
         return resp
 
-    flash_errors(form)
     return render_template('login/login.html', form=form)
 
 
@@ -110,5 +109,4 @@ def register():
         resp.set_cookie('session_id', new_session.id, expires=expires)
         return resp
 
-    flash_errors(form)
     return render_template('login/register.html', form=form)
