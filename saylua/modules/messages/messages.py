@@ -93,7 +93,7 @@ def messages_read(id):
 
 # The page to view a specific conversation.
 @login_required
-def messages_view_conversation(id):
+def messages_view_conversation(key):
     # TODO make sure the user has access
     if not conversation:
         return render_template('messages/invalid.html')
