@@ -95,7 +95,7 @@ def messages_read(id):
 @login_required
 def messages_view_conversation(key):
     # TODO make sure the user has access
-    if not conversation:
+    if not key:
         return render_template('messages/invalid.html')
 
     form = ConversationReplyForm()
@@ -104,11 +104,11 @@ def messages_view_conversation(key):
         result = Conversation.reply(key, g.user.id, form.text.data)
         if result:
             flash('You have replied to the message!')
-            return redirect('/conversation/' + str(conversation_id) + '/', code=302)
+            return redirect('/conversation/' + str(key) + '/', code=302)
         else:
             flash('Message reply failed for an unexpected reason.', 'error')
     flash_errors(form)
-    return render_template('messages/view.html', conversation=conversation,
+    return render_template('messages/view.html', key=key,
         form=form)
 
 
