@@ -59,13 +59,14 @@ class User(db.Model):
     bio = db.Column(db.Text(), default="Hello, world!") # FIXME: This should really have a limit.
 
     def __repr__(self):
-        return '<User %r>' % self.name()
+        return '<User %r>' % self.name
 
+    @property
     def name(self):
         return self.display_name.display_name
 
     def url(self):
-        return "/user/" + self.name().lower() + "/"
+        return "/user/" + self.name.lower() + "/"
 
     def get_role(self):
         from saylua.models.role import Role
