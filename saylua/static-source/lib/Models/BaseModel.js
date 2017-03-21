@@ -21,7 +21,7 @@ export default class BaseModel {
   triggerUpdate() {
     if (this.__components !== undefined) {
       for (let component of this.__components) {
-        let triggerUpdate = (component.triggerUpdate == undefined) ? true : !component.triggerUpdate;
+        let triggerUpdate = (component.state.triggerUpdate == undefined) ? true : !component.state.triggerUpdate;
 
         component.setState({
           "triggerUpdate": triggerUpdate
