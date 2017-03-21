@@ -1,6 +1,5 @@
 from saylua import app, db
 
-from saylua.utils.form import flash_errors
 from saylua.models.user import LoginSession, User
 from saylua.wrappers import login_required
 
