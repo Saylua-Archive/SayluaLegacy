@@ -106,7 +106,7 @@ def user_from_id(user_id):
 def display_name_from_user_id(user_id):
     user = user_from_id(user_id)
     if user:
-        return user.name()
+        return user.name
 
     return "Unknown User"
 
