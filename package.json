@@ -5,7 +5,7 @@
   "main": "gulpfile.babel.js",
   "scripts": {
     "lint": "eslint saylua/**/static-source/**/*.js* && flake8 saylua/ --statistics --count",
-    "js-test": "mocha --compilers js:babel-register saylua/**/static-source/**/tests/*.js*",
+    "js-test": "node ./node_modules/mocha-webpack/bin/mocha-webpack --webpack-config webpack.config.js \"saylua/**/static-source/**/tests/*.js*\"",
     "py-test": "python -m pytest",
     "test": "npm run lint && npm run py-test && npm run js-test",
     "deploy": "appcfg.py update ."
@@ -47,6 +47,7 @@
     "inferno-component": "^1.4.1",
     "inferno-test-utils": "^1.4.1",
     "mocha": "^3.2.0",
+    "mocha-webpack": "^0.7.0",
     "redux": "^3.6.0",
     "webpack": "^2.2.1",
     "whatwg-fetch": "^2.0.2"
