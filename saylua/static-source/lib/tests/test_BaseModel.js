@@ -58,6 +58,7 @@ describe('Models', function() {
       done();
     });
 
+
     it('should trigger updates in pre-initialized bound components', (done) => {
       let model = new BaseModel();
       let component = new MockComponent({ model }, { "triggerUpdate": true });
