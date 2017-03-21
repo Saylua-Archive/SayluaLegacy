@@ -1,4 +1,5 @@
-from saylua import app
+from saylua import app, db
+
 from flask import render_template
 from saylua.models.user import User
 import datetime
@@ -8,5 +9,5 @@ import datetime
 def users_online():
     mins_ago = datetime.datetime.now() - datetime.timedelta(
         minutes=app.config['USERS_ONLINE_RANGE'])
-    users = User.query(User.last_action >= mins_ago).fetch()
+    users = db.session.query(User).filter(User.last_action >= mins_ago)
     return render_template('online.html', users_online=users)

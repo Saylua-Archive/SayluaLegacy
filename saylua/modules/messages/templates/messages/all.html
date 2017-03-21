@@ -50,7 +50,7 @@
         <input type="checkbox" name="user_conversation_id" value="{{ message.key.urlsafe() }}">
       </td>
       <td>
-        <a href="{{ message|conversation_url }}">{{ message.title }}</a>
+        <a href="{{ message.url() }}">{{ message.title }}</a>
       </td>
       <td>
         With
