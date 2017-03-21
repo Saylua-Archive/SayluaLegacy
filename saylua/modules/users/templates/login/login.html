@@ -1,27 +1,14 @@
+{% from "_macros/forms.html" import form_row %}
+
 {% extends "layout.html" %}
 {% set page_title = "Login" %}
 {% block body %}
 <h1>Login to Saylua</h1>
 
-<div id="login-error"></div>
-<form class="validated-form" method="post" id="login-form" data-error-id="login-error">
+<form class="validated-form" method="post" id="login-form">
   <table class="form-table center">
-    <tr>
-      <th class="label">
-        {{ form.username.label }}
-      </th>
-      <td>
-        {{ form.username() }}
-      </td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.password.label }}
-      </th>
-      <td>
-        {{ form.password() }}
-      </td>
-    </tr>
+    {{ form_row(form.username) }}
+    {{ form_row(form.password) }}
     <tr>
       <td></td>
       <td>

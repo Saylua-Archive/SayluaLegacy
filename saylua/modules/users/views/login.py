@@ -1,6 +1,5 @@
 from saylua import app, db
 
-from saylua.utils.form import flash_errors
 from saylua.models.user import LoginSession, User
 from saylua.wrappers import login_required
 
@@ -45,7 +44,6 @@ def login():
 
         return resp
 
-    flash_errors(form)
     return render_template('login/login.html', form=form)
 
 
@@ -110,5 +108,4 @@ def register():
         resp.set_cookie('session_id', new_session.id, expires=expires)
         return resp
 
-    flash_errors(form)
     return render_template('login/register.html', form=form)

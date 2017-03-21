@@ -1,60 +1,34 @@
+{% from "_macros/forms.html" import form_errors, form_row, form_checkbox %}
+
 {% extends "layout.html" %}
 {% set page_title = "Registration" %}
 {% block body %}
 <h1>Register a New Account on Saylua</h1>
 
-<div id="register-error"></div>
-<form class="validated-form" method="post" id="register-form" data-error-id="register-error">
+<form class="validated-form" method="post" id="register-form">
   {{ form.csrf_token }}
   <table class="form-table center">
+    {{ form_row(form.username) }}
+    {{ form_row(form.password) }}
+    {{ form_row(form.confirm_password) }}
+    {{ form_row(form.email) }}
     <tr>
-      <th class="label">
-        {{ form.username.label }}
-      </th>
+      <td></td>
       <td>
-        {{ form.username() }}
-        <small class="form-tip">Valid characters: letters, numbers, and +~._-</small>
-      </td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.password.label }}
-      </th>
-      <td>
-        {{ form.password() }}
-        <small class="form-tip">Passwords must be at least {{config['MIN_PASSWORD_LENGTH']}} characters. </small>
-      </td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.confirm_password.label }}
-      </th>
-      <td>
-        {{ form.confirm_password() }}
-      </td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.email.label }}
-      </th>
-      <td>
-        {{ form.email() }}
+        {{ form_checkbox(form.at_least_13) }}
       </td>
     </tr>
     <tr>
       <td></td>
       <td>
-        {{ form.accept_tos() }}
-        {{ form.accept_tos.label }}
+        {{ form_checkbox(form.accept_tos) }}
       </td>
     </tr>
     <tr>
       <td></td>
       <td>
-        {% for error in form.recaptcha.errors %}
-          {{ error }}
-        {% endfor %}
-        {{ form.recaptcha }}
+        {{ form.recaptcha() }}
+        {{ form_errors(form.recaptcha) }}
       </td>
     </tr>
     <tr>

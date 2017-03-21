@@ -7,7 +7,7 @@ import {initializeNotifications} from './Notifications';
 fixNavbar();
 window.addEventListener('scroll', fixNavbar);
 
-// Get all of the right navbar links and bind click events to them
+// Get all of the right navbar links and bind click events to them.
 initializeDropMenus(document.getElementById('navbar-user-links'),
   document.getElementById('dropdown-user-menu'));
 
@@ -17,7 +17,7 @@ for (let i = 0; i < links.length; i++) {
 }
 
 // Bind dom behavior libraries to specific classes. Perhaps one day this
-// could be replaces with webcomponents.
+// could be replaced with web components.
 let formValidation = new FormValidation('.validated-form');
 let checkAll = new CheckAll('.check-all');
 

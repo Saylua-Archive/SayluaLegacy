@@ -97,5 +97,7 @@ Making the following change reduces startup time exponentially, and gets rid of 
 ## Authors
 
 Mike Bradley
+
 Noi Sek
+
 Tiffany Zhang
