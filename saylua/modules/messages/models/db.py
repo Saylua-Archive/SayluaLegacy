@@ -9,6 +9,9 @@ class Conversation(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
+    def url(self):
+        return '/conversation/' + self.id + '/'
+
 
 class ConversationUser(db.Model):
     __tablename__ = "conversation_users"
@@ -19,6 +22,11 @@ class ConversationUser(db.Model):
     title = db.Column(db.String(256))
     unread = db.Column(db.Boolean, default=False)
     last_updated = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+
+    def url(self):
+        if not self.is_read:
+            return '/conversation_read/' + self.conversation_id + '/'
+        return '/conversation/' + self.conversation_id + '/'
 
 
 class Message(db.Model):

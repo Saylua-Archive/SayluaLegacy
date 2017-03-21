@@ -43,10 +43,10 @@ class User(db.Model):
     bank_account = db.relationship("BankAccount", uselist=False, back_populates="user")
 
     # Misc profile stuff
-    gender = db.Column(db.String(100))
-    pronouns = db.Column(db.String(200))
-    bio = db.Column(db.String(1000))
-    status = db.Column(db.String(15))
+    gender = db.Column(db.String(100), default="")
+    pronouns = db.Column(db.String(200), default="")
+    bio = db.Column(db.String(1000), default="")
+    status = db.Column(db.String(15), default="")
 
     # Settings
     notified_on_pings = db.Column(db.Boolean)
@@ -59,10 +59,13 @@ class User(db.Model):
     bio = db.Column(db.Text(), default="Hello, world!") # FIXME: This should really have a limit.
 
     def __repr__(self):
-        return '<User %r>' % self.display_name
+        return '<User %r>' % self.name()
 
     def name(self):
         return self.display_name.display_name
+
+    def url(self):
+        return "/user/" + self.name().lower() + "/"
 
     def get_role(self):
         from saylua.models.role import Role
