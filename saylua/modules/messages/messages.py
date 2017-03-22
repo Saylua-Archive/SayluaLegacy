@@ -124,7 +124,7 @@ def start_conversation(sender_id, recipient_ids, title, text):
     send_member = ConversationUser(conversation_id=new_conversation.id,
             user_id=sender_id, title=title, unread=False)
     db.session.add(send_member)
-    if isinstance(recipient_ids, (int, long)):
+    if isinstance(recipient_ids, (int, long)): # noqa
         recipient_ids = [recipient_ids]
     for recip_id in recipient_ids:
         db.session.add(ConversationUser(conversation_id=new_conversation.id,

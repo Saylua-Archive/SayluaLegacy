@@ -21,6 +21,7 @@ export function revealMap(tileLayer, entityLayer) {
   return [tileLayer, entityLayer];
 }
 
+
 export function updateItemSets(summon, entitySet, tileSet) {
   let isTile = summon.id.startsWith("tile");
 
