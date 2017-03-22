@@ -12,6 +12,7 @@ def home():
     except AttributeError:
         return landing()
 
+
 def landing():
     return render_template("landing.html")
 
