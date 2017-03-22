@@ -17,6 +17,7 @@ import tempConfig from './temporary.config.js';
 const paths = tempConfig.paths;
 const dests = tempConfig.dests;
 
+gulp.task('build-css', ['build-sass']);
 gulp.task('build-sass', () => {
   // Compile our initial, root level styles
   let rootGlob = "saylua/static-source/scss/**/*.scss";
@@ -61,7 +62,7 @@ gulp.task('build-sass', () => {
 
 gulp.task('build-js', ['build-es']);
 gulp.task('build-es6', ['build-es']);
-gulp.task('build-es', [], function() {
+gulp.task('build-es', (callback) => {
   // Create a local copy of the config.
   let config = webpackConfig;
 
@@ -116,6 +117,7 @@ gulp.task('build-es', [], function() {
         _stream.emit('end');
       } else {
         gutil.log(stats.toString(statsConfig));
+        callback();
       }
     });
 
@@ -129,7 +131,9 @@ gulp.task('build', ['build-es', 'build-sass']);
 
 
 // Rerun the task when a file changes
-gulp.task('watch', () => {
+gulp.task('watch', ['build-sass', 'build-es'], () => {
+  // Our Build Tasks are context sensitive. Switch to dev environment
+  // so that they use different plugin sets.
   process.env.NODE_ENV = "development";
 
   // Special treatment for sass files.
