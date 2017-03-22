@@ -57,6 +57,14 @@ export function panDragMove(context) {
 
 export function tileHover(mouseSprites, context) {
   let handler = (mouseSprites, context) => (event) => {
+    // Do not process while the viewport is panning.
+    if (context.state.currentlyDragging === true) {
+      mouseSprites[0].visible = false;
+      mouseSprites[1].visible = false;
+
+      return;
+    }
+
     let sprite = event.currentTarget;
     let tileSeen = (sprite.meta.tile !== 'fog');
     let isPathable = (sprite.meta.tile_is_obstruction === false);
