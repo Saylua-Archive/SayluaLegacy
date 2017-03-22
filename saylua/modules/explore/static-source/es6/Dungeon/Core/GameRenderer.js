@@ -128,51 +128,73 @@ export default class GameRenderer {
 
     // -- Final setup
 
-    // Bind mouse scroll to zoom function
-    this.wheelIndicator = new WheelIndicator({
-      "elem": document.querySelector('.dungeon-wrapper'),
-      "callback": this.handleMouseScroll.bind(this)
-    });
-
-    // Mouse events
+    // Mouse Handler: Tile highlights, Master Hand cursor and debugger previews.
     let tileHoverHandler = MouseInteractions.tileHover(sprites.HUD.mouse, this);
     let tileClickHandler = MouseInteractions.tileClick(this);
 
+    // Mouse Handler: Viewport panning
+    let panDragStart = MouseInteractions.panDragStart(this);
+    let panDragEnd = MouseInteractions.panDragEnd(this);
+    let panDragMove = MouseInteractions.panDragMove(this);
+
+    // Mouse Handler: Viewport Zooming
+    new WheelIndicator({
+      "elem": document.querySelector('.dungeon-wrapper'),
+      "callback": MouseInteractions.viewportZoom(this)
+    });
+
+
+    // Bind our viewport panning handlers to the world container.
+    stages.world.primary.interactive = true;
+    stages.world.primary
+      .on('pointerdown', panDragStart)
+      .on('pointermove', panDragMove)
+      .on('pointerup', panDragEnd)
+      .on('pointerupoutside', panDragEnd);
+
+    // Bind tile events, append tile sprites to tile stage
     sprites.tiles.map((sprite) => {
       // Bind mouse events
       sprite.interactive = true;
       sprite.buttonMode = true;
 
-      sprite.on('mousedown', tileClickHandler);
-      sprite.on('mouseover', tileHoverHandler);
+      sprite.on('pointerdown', tileClickHandler);
+      sprite.on('pointerover', tileHoverHandler);
 
       // Append to the stage
       stages.world.tiles.addChild(sprite);
     });
 
+    // Append entity sprites to the world.entities stage.
     sprites.entities.map((sprite) => {
       stages.world.entities.addChild(sprite);
     });
 
+    // Append minimap sprites to the HUD.miniMap stage.
     sprites.HUD.miniMap.map((sprite) => {
       stages.HUD.miniMap.addChild(sprite);
     });
 
+    // Append health sprites to the HUD.playerStatus stage.
     sprites.HUD.playerStatus.map((sprite) => {
       stages.HUD.playerStatus.addChild(sprite);
     });
 
+    // Append mouse sprites to the HUD.mouse stage.
     sprites.HUD.mouse.map((sprite) => {
       stages.HUD.mouse.addChild(sprite);
     });
 
+
+    // Finally, we define a default state to hold all of this.
     this.state = {
       "dimensions": [renderHeight, renderWidth],
       "gameStateChanged": true,
       stages,
       sprites,
       "zoomLevel": 1,
-      "panOffset": { "x": 0, "y": 0 }
+      "panOffset": { "x": 0, "y": 0 },
+      "currentlyDragging": false
     };
   }
 
@@ -190,24 +212,6 @@ export default class GameRenderer {
     this.state.sprites.entities.map((sprite) => {
       this.state.stages.world.entities.addChild(sprite);
     });
-  }
-
-
-  handleMouseScroll(event) {
-    if (event.direction === "up") {
-      this.state.zoomLevel = Math.min(1.4, this.state.zoomLevel + 0.1);
-    } else if (event.direction === "down") {
-      this.state.zoomLevel = Math.max(0.6, this.state.zoomLevel - 0.1);
-    }
-
-    this.state.stages.world.primary.scale.set(this.state.zoomLevel);
-
-    for (let mouseSprite of this.state.sprites.HUD.mouse) {
-      mouseSprite.height = (TILE_SIZE * this.state.zoomLevel);
-      mouseSprite.width = (TILE_SIZE * this.state.zoomLevel);
-    }
-
-    this.updateScreenPosition();
   }
 
 

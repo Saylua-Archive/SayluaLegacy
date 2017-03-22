@@ -4,6 +4,56 @@
 
 import * as Graphics from "./graphics";
 
+import { TILE_SIZE } from "./GameRenderer";
+
+
+export function panDragStart(context) {
+  let handler = (context) => (event) => {
+    context._dragOrigin = {
+      "x": event.data.global.x,
+      "y": event.data.global.y
+    };
+
+    context._dragReference = {
+      "x": context.state.stages.world.primary.position.x,
+      "y": context.state.stages.world.primary.position.y
+    };
+
+    context.state.currentlyDragging = true;
+  };
+
+  return handler(context);
+}
+
+
+export function panDragEnd(context) {
+  let handler = (context) => (event) => {
+    context._dragOrigin = null;
+    context._dragReference = null;
+
+    context.state.currentlyDragging = false;
+  };
+
+  return handler(context);
+}
+
+
+export function panDragMove(context) {
+  let handler = (context) => (event) => {
+    if (context.state.currentlyDragging === true) {
+      let difference_x = context._dragOrigin.x - event.data.global.x;
+      let difference_y = context._dragOrigin.y - event.data.global.y;
+
+      let adjusted_x = context._dragReference.x - difference_x;
+      let adjusted_y = context._dragReference.y - difference_y;
+
+      context.state.stages.world.primary.position.set(adjusted_x, adjusted_y);
+    }
+  };
+
+  return handler(context);
+}
+
 
 export function tileHover(mouseSprites, context) {
   let handler = (mouseSprites, context) => (event) => {
@@ -81,6 +131,28 @@ export function tileClick(context) {
         }
       });
     }
+  };
+
+  return handler(context);
+}
+
+
+export function viewportZoom(context) {
+  let handler = (context) => (event) => {
+    if (event.direction === "up") {
+      context.state.zoomLevel = Math.min(1.4, context.state.zoomLevel + 0.1);
+    } else if (event.direction === "down") {
+      context.state.zoomLevel = Math.max(0.6, context.state.zoomLevel - 0.1);
+    }
+
+    context.state.stages.world.primary.scale.set(context.state.zoomLevel);
+
+    for (let mouseSprite of context.state.sprites.HUD.mouse) {
+      mouseSprite.height = (TILE_SIZE * context.state.zoomLevel);
+      mouseSprite.width = (TILE_SIZE * context.state.zoomLevel);
+    }
+
+    context.updateScreenPosition();
   };
 
   return handler(context);
