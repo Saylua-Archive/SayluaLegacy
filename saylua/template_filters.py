@@ -89,26 +89,7 @@ def saylua_message_status(user_conversation):
     return 'read'
 
 
-@app.template_filter('user_url')
-def saylua_user_url(user):
-    return '/user/' + user.name().lower() + '/'
-
-
-# Conversation can be either a UserConversation or Conversation model.
-@app.template_filter('conversation_url')
-def saylua_conversation_url(conversation):
-    key = conversation.conversation_key
-    if not key:
-        # This is the case if this is acting on a Conversation object instead
-        # of a UserConversation object.
-        key = conversation.key
-    elif not conversation.is_read:
-        # This case can only happen on a UserConversation object
-        return '/conversation_read/' + key.urlsafe() + '/'
-
-    return '/conversation/' + key.urlsafe() + '/'
-
-
+# TODO: Remove all database template filters.
 # Query filters. Use these only when necessary.
 @app.template_filter('user_from_id')
 def user_from_id(user_id):
@@ -125,7 +106,7 @@ def user_from_id(user_id):
 def display_name_from_user_id(user_id):
     user = user_from_id(user_id)
     if user:
-        return user.name()
+        return user.name
 
     return "Unknown User"
 
@@ -165,24 +146,5 @@ def count_thread_posts(thread_id):
     return (
         db.session.query(ForumPost)
         .filter(ForumPost.thread_id == thread_id)
-        .count()
-    )
-
-
-@app.template_filter('count_board_posts')
-def count_board_posts(board_id):
-    return (
-        db.session.query(ForumPost)
-        .join(ForumThread, ForumPost.thread)
-        .filter(ForumThread.board_id == board_id)
-        .count()
-    )
-
-
-@app.template_filter('count_board_threads')
-def count_board_threads(board_id):
-    return (
-        db.session.query(ForumThread)
-        .filter(ForumThread.board_id == board_id)
         .count()
     )
