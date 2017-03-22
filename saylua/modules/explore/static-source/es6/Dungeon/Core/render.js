@@ -6,16 +6,13 @@
 import * as Graphics from "./graphics";
 
 import { TILE_SIZE } from "./GameRenderer";
-import { calculateFOV, getBounds, OBSTRUCTIONS } from "./logic";
+import { calculateFOV, OBSTRUCTIONS } from "./logic";
 
 
 // This provides the common data layer necessary for other rendering functions to operate.
-export function getBaseData(player, tileSet, tileLayer, dimensions, mapHeight, mapWidth, zoomScale, panOffset) {
+export function getBaseData(player, tileSet, tileLayer, dimensions, mapHeight, mapWidth) {
   // Calculate valid tiles.
   let validTiles = calculateFOV(player.location, tileSet, tileLayer, mapWidth);
-
-  // Helper function to tell us when a cell is in view.
-  let tileVisible = getBounds(player.location, mapHeight, mapWidth, zoomScale, panOffset);
 
   return {
     dimensions,
@@ -23,9 +20,7 @@ export function getBaseData(player, tileSet, tileLayer, dimensions, mapHeight, m
     validTiles,
 
     mapHeight,
-    mapWidth,
-
-    tileVisible
+    mapWidth
   };
 }
 
@@ -53,55 +48,50 @@ export function renderTiles(baseData, tileSet, tileLayer, tileSprites) {
     let x = tile.location.x;
     let y = tile.location.y;
 
-    // Is this tile in our viewport?
-    if (baseData.tileVisible(x, y)) {
+    // Set cell visibility, if necessary.
+    let FOVEnabled = window.getStoreState().debug.FOVEnabled;
+    let tileVisible = false;
 
-      // Set cell visibility, if necessary.
-      let FOVEnabled = window.getStoreState().debug.FOVEnabled;
-      let tileVisible;
+    if (baseData.validTiles[y] !== undefined) {
+      tileVisible = baseData.validTiles[y][x];
+    }
 
-      if (FOVEnabled === true) {
-        // Why would you write this? Masochists and code hygienists. For opposite reasons, of course.
-        tileVisible = (baseData.validTiles[y] === undefined) ? false : ( (baseData.validTiles[y][x] === true) ? true : false );
-      } else {
-        tileVisible = true;
-      }
+    tileVisible = tileVisible || (FOVEnabled === false);
 
-      let tileSeen = (tile.meta.seen === true);
+    let tileSeen = (tile.meta.seen === true);
 
-      // We must 'reveal' tiles, initially. We never unset this.
-      if (tileVisible === true) {
-        tile.meta.seen = true;
-      }
+    // We must 'reveal' tiles, initially. We never unset this.
+    if (tileVisible === true) {
+      tile.meta.seen = true;
+    }
 
-      tile.meta.visible = tileVisible;
+    tile.meta.visible = tileVisible;
 
-      let parentTile = tileSet[tile.tile];
+    let parentTile = tileSet[tile.tile];
 
-      let linearPosition = x + (baseData.mapWidth * y);
-      let sprite = tileSprites[linearPosition];
+    let linearPosition = x + (baseData.mapWidth * y);
+    let sprite = tileSprites[linearPosition];
 
-      // Store this data for later use.
-      sprite.meta.tile = tile.id;
-      sprite.meta.tile_is_obstruction = (OBSTRUCTIONS.indexOf(parentTile.type) !== -1);
-      sprite.meta.grid_x = x;
-      sprite.meta.grid_y = y;
+    // Store this data for later use.
+    sprite.meta.tile = tile.id;
+    sprite.meta.tile_is_obstruction = (OBSTRUCTIONS.indexOf(parentTile.type) !== -1);
+    sprite.meta.grid_x = x;
+    sprite.meta.grid_y = y;
 
-      // Now, we change the tile state depending on whether or not we can see it, and whether or not we /have/ seen it.
-      if (tileVisible) {
-        sprite.alpha = 1;
+    // Now, we change the tile state depending on whether or not we can see it, and whether or not we /have/ seen it.
+    if (tileVisible) {
+      sprite.alpha = 1;
+      sprite.texture = Graphics.getTexture(parentTile.id);
+    } else {
+      if (tileSeen) {
+        sprite.alpha = 0.5;
         sprite.texture = Graphics.getTexture(parentTile.id);
       } else {
-        if (tileSeen) {
-          sprite.alpha = 0.5;
-          sprite.texture = Graphics.getTexture(parentTile.id);
-        } else {
-          // Reasons
-          sprite.meta.tile = 'fog';
+        // Reasons
+        sprite.meta.tile = 'fog';
 
-          sprite.alpha = 1;
-          sprite.texture = Graphics.getTexture('tile_fog');
-        }
+        sprite.alpha = 1;
+        sprite.texture = Graphics.getTexture('tile_fog');
       }
     }
   }
@@ -121,58 +111,48 @@ export function renderEntities(baseData, entityLayer, entitySprites, generateEnt
     let verticalOffSet = tileHeight * 0.1;
     let horizontalOffset = tileWidth * 0.1;
 
-    // Is the sprite alive?
+    // Make sure that we don't render dead entities.
     if (entity.meta.dead === true) {
       sprite.visible = false;
       return;
     }
 
-    // We've got a winner!
-    if (baseData.tileVisible(x, y)) {
-      // Set entity visibility, if necessary
-      let FOVEnabled = window.getStoreState().debug.FOVEnabled;
-      let entityVisible;
+    // Check whether or not the current entity falls within the player's FOV.
+    let FOVEnabled = window.getStoreState().debug.FOVEnabled;
+    let entitySeen = (entity.meta.seen === true);
+    let entityVisible = false;
 
-      if (FOVEnabled === true) {
-        entityVisible = (baseData.validTiles[y] === undefined) ? false : ( (baseData.validTiles[y][x] === true) ? true : false );
-      } else {
-        entityVisible = true;
-      }
+    if (baseData.validTiles[y] !== undefined) {
+      entityVisible = baseData.validTiles[y][x];
+    }
 
-      let entitySeen = (entity.meta.seen === true);
+    entityVisible = entityVisible || (FOVEnabled === false);
 
-      if (entityVisible === true) {
-        entity.meta.seen = true;
-        entity.location.lastSeen = {x, y};
-      }
+    // Prevent non-visible entities from rendering,
+    // render ghosts for those seen but not currently visible.
+    if (entityVisible === true) {
+      entity.meta.seen = true;
+      entity.location.lastSeen = {x, y};
 
-      if (entityVisible === true) {
-        sprite.alpha = 1;
-        sprite.x = Math.round((x * tileWidth) + horizontalOffset);
-        sprite.y = Math.round((y * tileHeight) + verticalOffSet);
-        sprite.visible = true;
-      } else {
-        if (entitySeen === true) {
-          // One last check. Is the last known location currently visible?
-          // We don't want to render ghosts if they're looking at exactly where it was.
-          let lastX = entity.location.lastSeen.x;
-          let lastY = entity.location.lastSeen.y;
-          let lastLocationVisible = (baseData.validTiles[lastY] === undefined) ? false : ( (baseData.validTiles[lastY][lastX] === true) ? true : false );
+      sprite.alpha = 1;
+      sprite.x = Math.round((x * tileWidth) + horizontalOffset);
+      sprite.y = Math.round((y * tileHeight) + verticalOffSet);
+      sprite.visible = true;
+    } else {
+      if (entitySeen === true) {
+        // One last check. Is the last known location currently visible?
+        // We don't want to render ghosts if they're looking at exactly where it was.
+        let lastX = entity.location.lastSeen.x;
+        let lastY = entity.location.lastSeen.y;
+        let lastLocationVisible = (baseData.validTiles[lastY] === undefined) ? false : ( (baseData.validTiles[lastY][lastX] === true) ? true : false );
 
-          if (lastLocationVisible === true) {
-            sprite.visible = false;
-          } else {
-            sprite.alpha = 0.4;
-            sprite.x = Math.round((x * tileWidth) + horizontalOffset);
-            sprite.y = Math.round((y * tileHeight) + verticalOffSet);
-            sprite.visible = true;
-          }
+        if (lastLocationVisible === true) {
+          sprite.visible = false;
+        } else {
+          sprite.alpha = 0.4;
+          sprite.visible = true;
         }
       }
-    } else {
-      // AHUEAHUEHAUEHEHEUHAHEUEAHUEHEHEHEHEAHEAHEHE
-      // YOU'LL NEVER SEE YOUR FAMILY EVER AGAIN
-      sprite.visible = false;
     }
   });
 }

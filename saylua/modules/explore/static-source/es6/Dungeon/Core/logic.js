@@ -38,14 +38,6 @@ export function calculateFOV(location, tileSet, tileLayer, mapWidth) {
 }
 
 
-export function getBounds(player_location, mapHeight, mapWidth, zoomScale, panOffset) {
-  let p_x = player_location.x;
-  let p_y = player_location.y;
-
-  return (x, y) => true;
-}
-
-
 export function getScreenOffset(playerLocation, mapHeight, mapWidth, renderHeight, renderWidth, zoomLevel) {
   const TILE_SIZE_SCALED = TILE_SIZE * zoomLevel;
 
