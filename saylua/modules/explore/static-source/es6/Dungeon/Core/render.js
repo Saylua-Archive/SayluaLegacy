@@ -5,17 +5,17 @@
 
 import * as Graphics from "./graphics";
 
-import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from "./GameRenderer";
+import { TILE_SIZE } from "./GameRenderer";
 import { calculateFOV, getBounds, OBSTRUCTIONS } from "./logic";
 
 
 // This provides the common data layer necessary for other rendering functions to operate.
-export function getBaseData(player, tileSet, tileLayer, dimensions, mapHeight, mapWidth) {
+export function getBaseData(player, tileSet, tileLayer, dimensions, mapHeight, mapWidth, zoomScale, panOffset) {
   // Calculate valid tiles.
   let validTiles = calculateFOV(player.location, tileSet, tileLayer, mapWidth);
 
-  // Use map dimensions and player location to generate helper functions that tell us when a cell is in view.
-  let [topLeft, bottomRight, within_x_bounds, within_y_bounds] = getBounds(player.location, mapHeight, mapWidth);
+  // Helper function to tell us when a cell is in view.
+  let tileVisible = getBounds(player.location, mapHeight, mapWidth, zoomScale, panOffset);
 
   return {
     dimensions,
@@ -25,18 +25,14 @@ export function getBaseData(player, tileSet, tileLayer, dimensions, mapHeight, m
     mapHeight,
     mapWidth,
 
-    topLeft,
-    bottomRight,
-    within_x_bounds,
-    within_y_bounds
+    tileVisible
   };
 }
 
 
 export function generateEntitySprite(dimensions, entityParentID) {
-  let [stageWidth, stageHeight] = dimensions;
-  let spriteHeight = (stageHeight / VIEWPORT_HEIGHT) * 0.8;
-  let spriteWidth = (stageWidth / VIEWPORT_WIDTH) * 0.8;
+  let spriteHeight = (TILE_SIZE * 0.8);
+  let spriteWidth = (TILE_SIZE * 0.8);
 
   let spriteTexture = Graphics.getTexture(entityParentID);
   let sprite = new PIXI.Sprite(spriteTexture);
@@ -58,7 +54,7 @@ export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
     let y = tile.location.y;
 
     // Is this tile in our viewport?
-    if (baseData.within_x_bounds(x) && baseData.within_y_bounds(y)) {
+    if (baseData.tileVisible(x, y)) {
 
       // Set cell visibility, if necessary.
       let FOVEnabled = window.getStoreState().debug.FOVEnabled;
@@ -80,14 +76,9 @@ export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
 
       tile.meta.visible = tileVisible;
 
-      // Normalize, then translate our (x, y) coords into a linear integer.
-      let normal_x = x - baseData.topLeft.x;
-      let normal_y = y - baseData.topLeft.y;
-
       let parentTile = tileSet[tile.tile];
 
-      // All we have to do is change the texture of the sprite map, as the number of sprites never changes.
-      let linearPosition = normal_x + (VIEWPORT_WIDTH * normal_y);
+      let linearPosition = x + (baseData.mapWidth * y);
       let sprite = tileSprites[linearPosition];
 
       // Store this data for later use.
@@ -124,10 +115,8 @@ export function renderEntities(baseData, entityLayer, entitySprites, generateEnt
 
     let sprite = entitySprites[i] || generateEntitySprite(entity.parent);
 
-    let [stageWidth, stageHeight] = baseData.dimensions;
-
-    let tileHeight = (stageHeight / VIEWPORT_HEIGHT);
-    let tileWidth = (stageWidth / VIEWPORT_WIDTH);
+    let tileHeight = TILE_SIZE;
+    let tileWidth = TILE_SIZE;
 
     let verticalOffSet = tileHeight * 0.1;
     let horizontalOffset = tileWidth * 0.1;
@@ -139,7 +128,7 @@ export function renderEntities(baseData, entityLayer, entitySprites, generateEnt
     }
 
     // We've got a winner!
-    if (baseData.within_x_bounds(x) && baseData.within_y_bounds(y)) {
+    if (baseData.tileVisible(x, y)) {
       // Set entity visibility, if necessary
       let FOVEnabled = window.getStoreState().debug.FOVEnabled;
       let entityVisible;
@@ -158,13 +147,9 @@ export function renderEntities(baseData, entityLayer, entitySprites, generateEnt
       }
 
       if (entityVisible === true) {
-        // Normalize our (x, y) coords
-        let normal_x = x - baseData.topLeft.x;
-        let normal_y = y - baseData.topLeft.y;
-
         sprite.alpha = 1;
-        sprite.x = Math.round((normal_x * tileWidth) + horizontalOffset);
-        sprite.y = Math.round((normal_y * tileHeight) + verticalOffSet);
+        sprite.x = Math.round((x * tileWidth) + horizontalOffset);
+        sprite.y = Math.round((y * tileHeight) + verticalOffSet);
         sprite.visible = true;
       } else {
         if (entitySeen === true) {
@@ -177,13 +162,9 @@ export function renderEntities(baseData, entityLayer, entitySprites, generateEnt
           if (lastLocationVisible === true) {
             sprite.visible = false;
           } else {
-              // Normalize our (x, y) coords
-            let normal_x = entity.location.lastSeen.x - baseData.topLeft.x;
-            let normal_y = entity.location.lastSeen.y - baseData.topLeft.y;
-
             sprite.alpha = 0.4;
-            sprite.x = Math.round((normal_x * tileWidth) + horizontalOffset);
-            sprite.y = Math.round((normal_y * tileHeight) + verticalOffSet);
+            sprite.x = Math.round((x * tileWidth) + horizontalOffset);
+            sprite.y = Math.round((y * tileHeight) + verticalOffSet);
             sprite.visible = true;
           }
         }

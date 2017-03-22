@@ -12,8 +12,7 @@ import * as GameInit from "./init";
 
 import Engine from "./Engine";
 
-export const VIEWPORT_HEIGHT = 18;
-export const VIEWPORT_WIDTH = 32;
+export const TILE_SIZE = 45;
 export const VISION_RADIUS = 8;
 
 
@@ -93,8 +92,8 @@ export default class GameRenderer {
 
     // Generate the various sprite layers necessary.
     let tileSprites = GameInit.generateTileSprites(
-      renderWidth,
-      renderHeight
+      this.gameState.mapWidth,
+      this.gameState.mapHeight
     );
 
     let entitySprites = GameInit.generateEntitySprites(
@@ -118,6 +117,15 @@ export default class GameRenderer {
     };
 
     // -- Final setup
+    // Pan to the player so that the viewport is centered.
+    let initialOffset = GameInit.getInitialScreenOffset(
+      this.gameState.entityLayer[0].location,
+      this.gameState.mapHeight,
+      this.gameState.mapWidth,
+      renderHeight,
+      renderWidth
+    );
+
     // Mouse events
     let tileHoverHandler = MouseInteractions.tileHover(sprites.HUD.mouse, this);
     let tileClickHandler = MouseInteractions.tileClick(this);
@@ -154,7 +162,9 @@ export default class GameRenderer {
       "dimensions": [renderWidth, renderHeight],
       "gameStateChanged": true,
       stages,
-      sprites
+      sprites,
+      "zoomLevel": 1,
+      "panOffset": initialOffset
     };
 
     //this.test();
