@@ -46,15 +46,17 @@ export function getBounds(player_location, mapHeight, mapWidth, zoomScale, panOf
 }
 
 
-export function getScreenOffset(playerLocation, mapHeight, mapWidth, renderHeight, renderWidth) {
-  let p_x = (playerLocation.x * TILE_SIZE);
-  let p_y = (playerLocation.y * TILE_SIZE);
+export function getScreenOffset(playerLocation, mapHeight, mapWidth, renderHeight, renderWidth, zoomLevel) {
+  const TILE_SIZE_SCALED = TILE_SIZE * zoomLevel;
+
+  let p_x = (playerLocation.x * TILE_SIZE_SCALED);
+  let p_y = (playerLocation.y * TILE_SIZE_SCALED);
 
   let centered_x = p_x - (renderWidth / 2);
   let centered_y = p_y - (renderHeight / 2);
 
-  let constrained_x = MathUtils.snap(centered_x, TILE_SIZE, ((mapWidth * TILE_SIZE) - renderWidth));
-  let constrained_y = MathUtils.snap(centered_y, TILE_SIZE, ((mapHeight * TILE_SIZE) - renderHeight));
+  let constrained_x = MathUtils.snap(centered_x, TILE_SIZE_SCALED, ((mapWidth * TILE_SIZE_SCALED) - renderWidth));
+  let constrained_y = MathUtils.snap(centered_y, TILE_SIZE_SCALED, ((mapHeight * TILE_SIZE_SCALED) - renderHeight));
 
   return { "x": constrained_x, "y": constrained_y };
 }

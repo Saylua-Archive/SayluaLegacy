@@ -5,6 +5,8 @@
 // but delegates the actual logic and mutation necessary
 // to do so elsewhere.
 
+import WheelIndicator from "mousewheel";
+
 import * as MouseInteractions from "./mouse";
 import * as GameRender from "./render";
 import * as GameInit from "./init";
@@ -126,6 +128,12 @@ export default class GameRenderer {
 
     // -- Final setup
 
+    // Bind mouse scroll to zoom function
+    this.wheelIndicator = new WheelIndicator({
+      "elem": document.querySelector('.dungeon-wrapper'),
+      "callback": this.handleMouseScroll.bind(this)
+    });
+
     // Mouse events
     let tileHoverHandler = MouseInteractions.tileHover(sprites.HUD.mouse, this);
     let tileClickHandler = MouseInteractions.tileClick(this);
@@ -166,10 +174,9 @@ export default class GameRenderer {
       "zoomLevel": 1,
       "panOffset": { "x": 0, "y": 0 }
     };
-
-    //this.test();
   }
 
+  /******************************** META FUNCTIONS ***********************************/
 
   cleanup() {
     this.state.stages.world.entities.removeChildren();
@@ -185,6 +192,19 @@ export default class GameRenderer {
     });
   }
 
+
+  handleMouseScroll(event) {
+    if (event.direction === "up") {
+      this.state.zoomLevel = Math.min(1.4, this.state.zoomLevel + 0.1);
+    } else if (event.direction === "down") {
+      this.state.zoomLevel = Math.max(0.6, this.state.zoomLevel - 0.1);
+    }
+
+    this.state.stages.world.primary.scale.set(this.state.zoomLevel);
+    this.updateScreenPosition();
+  }
+
+
   generateEntitySprite(entityID) {
     // Sprite creator. This should be replaced with a real sprite management system at some point.
     let sprite = GameRender.generateEntitySprite(this.state.dimensions, entityID);
@@ -198,109 +218,125 @@ export default class GameRenderer {
   }
 
 
+  regenerateDungeon() {
+    // Is there a generated dungeon queued to replace this one?
+    if (window.nextGameState !== undefined) {
+      this.store.dispatch({
+        'type': "SET_GAME_STATE",
+        'state': window.nextGameState
+      });
+
+      window.nextGameState = undefined;
+
+      this.cleanup();
+    }
+  }
+
+
   getRenderer() {
     return this.renderer.view;
   }
 
 
   test() {
-    /*let sprite = new PIXI.Sprite.fromImage("/static/img/loxi.png");
-    let [width, height] = this.state.dimensions;
 
-    sprite.x = MathUtils.randomRange(0, width);
-    sprite.y = MathUtils.randomRange(0, height);
+  }
 
-    sprite.height = 150;
-    sprite.width = 150;
 
-    this.state.stages.testing.addChild(sprite);*/
+  /******************************** RENDERER SPECIFIC FUNCTIONS ***********************************/
+
+  renderHUD() {
+    let player = this.gameState.entityLayer[0];
+
+    GameRender.renderHUD(
+      player,
+      this.state.sprites.HUD
+    );
+  }
+
+
+  renderWorld() {
+    let player = this.gameState.entityLayer[0];
+
+    // Create a blob of commonly used data
+    // to save ourselves some effort.
+    let baseData = GameRender.getBaseData(
+      player,
+      this.gameState.tileSet,
+      this.gameState.tileLayer,
+      this.state.dimensions,
+      this.gameState.mapHeight,
+      this.gameState.mapWidth
+    );
+
+    // Send our to various stages and sprite
+    // layers off to be mutated.
+
+    // Render Tiles
+    GameRender.renderTiles(
+      baseData,
+      this.gameState.tileSet,
+      this.gameState.tileLayer,
+      this.state.sprites.tiles
+    );
+
+    // Render Player, enemies, items, objects.
+    GameRender.renderEntities(
+      baseData,
+      this.gameState.entityLayer,
+      this.state.sprites.entities,
+      this.generateEntitySprite.bind(this)
+    );
+
+    // Render the minimap.
+    GameRender.renderMinimap(
+      baseData,
+      this.gameState.tileSet,
+      this.gameState.tileLayer,
+      this.state.sprites.HUD.miniMap
+    );
+  }
+
+
+  updateScreenPosition() {
+    let player = this.gameState.entityLayer[0];
+
+    this.state.panOffset = getScreenOffset(
+      player.location,
+      this.gameState.mapHeight,
+      this.gameState.mapWidth,
+      this.state.dimensions[0],
+      this.state.dimensions[1],
+      this.state.zoomLevel
+    );
+
+    // We achieve panning by setting world position to the inverse of our offset.
+    this.state.stages.world.primary.x = -(this.state.panOffset.x);
+    this.state.stages.world.primary.y = -(this.state.panOffset.y);
   }
 
 
   loop() {
     // Check to see if we must cleanup prior to rendering a new dungeon.
     if (this.gameState.UI.waitingOnDungeonRequest === true) {
-
-      // Is there a generated dungeon queued to replace this one?
-      if (window.nextGameState !== undefined) {
-        this.store.dispatch({
-          'type': "SET_GAME_STATE",
-          'state': window.nextGameState
-        });
-
-        window.nextGameState = undefined;
-
-        this.cleanup();
-      }
+      this.regenerateDungeon();
     }
 
-    let player = this.gameState.entityLayer[0];
-
+    // Re-render the world if necessary.
     if (this.state.gameStateChanged === true) {
-
-      // Create a blob of commonly used data
-      // to save ourselves some effort.
-      let baseData = GameRender.getBaseData(
-        player,
-        this.gameState.tileSet,
-        this.gameState.tileLayer,
-        this.state.dimensions,
-        this.gameState.mapHeight,
-        this.gameState.mapWidth
-      );
-
-      // Send our to various stages and sprite
-      // layers off to be mutated.
-
-      // Render Tiles
-      GameRender.renderTiles(
-        baseData,
-        this.gameState.tileSet,
-        this.gameState.tileLayer,
-        this.state.sprites.tiles
-      );
-
-      // Render Player, enemies, items, objects.
-      GameRender.renderEntities(
-        baseData,
-        this.gameState.entityLayer,
-        this.state.sprites.entities,
-        this.generateEntitySprite.bind(this)
-      );
-
-      // Render the minimap.
-      GameRender.renderMinimap(
-        baseData,
-        this.gameState.tileSet,
-        this.gameState.tileLayer,
-        this.state.sprites.HUD.miniMap
-      );
-
-      // Update our screen position.
-      this.state.panOffset = getScreenOffset(
-        player.location,
-        this.gameState.mapHeight,
-        this.gameState.mapWidth,
-        this.state.dimensions[0],
-        this.state.dimensions[1]
-      );
-
-      // We achieve panning by setting world position to the inverse of our offset.
-      this.state.stages.world.primary.x = -(this.state.panOffset.x);
-      this.state.stages.world.primary.y = -(this.state.panOffset.y);
+      this.renderWorld();
+      this.updateScreenPosition();
 
       this.state.gameStateChanged = false;
     }
 
-    // Render our player HUD
-    GameRender.renderHUD(
-      player,
-      this.state.sprites.HUD
-    );
+    // Re-render the HUD every frame.
+    this.renderHUD();
 
     // Pass state along to the Engine for handling animations.
     this.engine.loop(this.state);
 
+    // Paint our current game state with Pixi.
     this.renderer.render(this.state.stages.primary);
   }
 }
