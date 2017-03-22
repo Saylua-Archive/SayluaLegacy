@@ -5,10 +5,12 @@ import random
 
 
 def home():
-    if g.user or is_devserver():
-        return redirect('/news/', code=302)
-    return landing()
-
+    try:
+        if g.user or is_devserver():
+            return redirect('/news/', code=302)
+        return landing()
+    except AttributeError:
+        return landing()
 
 def landing():
     return render_template("landing.html")

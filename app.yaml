@@ -23,6 +23,11 @@ handlers:
 #- url: /client
 #  static_dir: client
 
+# For the interactive console
+- url: /google_admin/.*
+  script: google.appengine.ext.admin.application
+  login: admin
+
 # This handler is for Lets Encrypt challenges
 - url: /\.well\-known\/acme\-challenge\/.*
   script: letsencrypt.app
