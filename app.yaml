@@ -12,6 +12,9 @@ runtime: python27
 api_version: 1
 threadsafe: yes
 
+builtins:
+- remote_api: on
+
 # Handlers define how to route requests to your application.
 handlers:
 
@@ -20,7 +23,12 @@ handlers:
 #- url: /client
 #  static_dir: client
 
-#This handler is for Lets Encrypt challenges
+# For the interactive console
+- url: /google_admin/.*
+  script: google.appengine.ext.admin.application
+  login: admin
+
+# This handler is for Lets Encrypt challenges
 - url: /\.well\-known\/acme\-challenge\/.*
   script: letsencrypt.app
 
