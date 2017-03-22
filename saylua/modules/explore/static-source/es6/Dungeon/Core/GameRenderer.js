@@ -201,6 +201,12 @@ export default class GameRenderer {
     }
 
     this.state.stages.world.primary.scale.set(this.state.zoomLevel);
+
+    for (let mouseSprite of this.state.sprites.HUD.mouse) {
+      mouseSprite.height = (TILE_SIZE * this.state.zoomLevel);
+      mouseSprite.width = (TILE_SIZE * this.state.zoomLevel);
+    }
+
     this.updateScreenPosition();
   }
 
