@@ -46,6 +46,20 @@ export function getBounds(player_location, mapHeight, mapWidth, zoomScale, panOf
 }
 
 
+export function getScreenOffset(playerLocation, mapHeight, mapWidth, renderHeight, renderWidth) {
+  let p_x = (playerLocation.x * TILE_SIZE);
+  let p_y = (playerLocation.y * TILE_SIZE);
+
+  let centered_x = p_x - (renderWidth / 2);
+  let centered_y = p_y - (renderHeight / 2);
+
+  let constrained_x = MathUtils.snap(centered_x, TILE_SIZE, ((mapWidth * TILE_SIZE) - renderWidth));
+  let constrained_y = MathUtils.snap(centered_y, TILE_SIZE, ((mapHeight * TILE_SIZE) - renderHeight));
+
+  return { "x": constrained_x, "y": constrained_y };
+}
+
+
 export function translatePlayerLocation(player, tileLayer, tileSet, entityLayer, direction, mapWidth) {
   let p_x, p_y, g_x, g_y, goalCell, goalTile, tileType;
 

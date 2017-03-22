@@ -4,7 +4,6 @@
 // Only run once.
 
 import * as Graphics from "./graphics";
-import * as MathUtils from "../Utils/math";
 
 import { OBSTRUCTIONS } from "./logic";
 import { TILE_SIZE } from "./GameRenderer";
@@ -17,21 +16,7 @@ window.textures['null'] = PIXI.Texture.fromImage("/static/img/dungeons/tiles/tes
 
 /******************************** RENDERER INIT ***********************************/
 
-export function getInitialScreenOffset(playerLocation, mapHeight, mapWidth, renderHeight, renderWidth) {
-  let p_x = (playerLocation.x * TILE_SIZE);
-  let p_y = (playerLocation.y * TILE_SIZE);
-
-  let centered_x = p_x - (renderWidth / 2);
-  let centered_y = p_y - (renderHeight / 2);
-
-  let constrained_x = MathUtils.snap(centered_x, TILE_SIZE, renderWidth);
-  let constrained_y = MathUtils.snap(centered_y, TILE_SIZE, renderHeight);
-
-  return [constrained_x, constrained_y];
-}
-
-
-export function generateEntitySprites(stageWidth, stageHeight, entityLayer, entitySet) {
+export function generateEntitySprites(entityLayer, entitySet) {
   let spriteLayer = [];
   let spriteHeight = (TILE_SIZE * 0.8);
   let spriteWidth = (TILE_SIZE * 0.8);
@@ -52,7 +37,7 @@ export function generateEntitySprites(stageWidth, stageHeight, entityLayer, enti
 }
 
 
-export function generateTileSprites(mapWidth, mapHeight) {
+export function generateTileSprites(mapHeight, mapWidth) {
   let spriteLayer = [];
   let nullTexture = window.textures['null'];
 

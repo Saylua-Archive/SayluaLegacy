@@ -6,10 +6,10 @@
 // to do so elsewhere.
 
 import * as MouseInteractions from "./mouse";
-import * as MathUtils from "../Utils/math";
 import * as GameRender from "./render";
 import * as GameInit from "./init";
 
+import { getScreenOffset } from "./logic";
 import Engine from "./Engine";
 
 export const TILE_SIZE = 45;
@@ -55,8 +55,12 @@ export default class GameRenderer {
     // Create a stage for us to draw to.
     let stages = {
       "primary": new PIXI.Container(),
-      "tiles": new PIXI.Container(),
-      "entities": new PIXI.Container(),
+      "world": {
+        "primary": new PIXI.Container(),
+
+        "tiles": new PIXI.Container(),
+        "entities": new PIXI.Container()
+      },
       "HUD": {
         "primary": new PIXI.Container(),
 
@@ -70,10 +74,13 @@ export default class GameRenderer {
     };
 
     // Store all of our child containers inside of our primary container.
-    stages.primary.addChild(stages.tiles);
-    stages.primary.addChild(stages.entities);
+    stages.primary.addChild(stages.world.primary);
     stages.primary.addChild(stages.HUD.primary);
     stages.primary.addChild(stages.testing);
+
+    // Store world children inside of world primary container.
+    stages.world.primary.addChild(stages.world.tiles);
+    stages.world.primary.addChild(stages.world.entities);
 
     // Store HUD children inside of HUD primary container.
     stages.HUD.primary.addChild(stages.HUD.mouse);
@@ -92,13 +99,11 @@ export default class GameRenderer {
 
     // Generate the various sprite layers necessary.
     let tileSprites = GameInit.generateTileSprites(
-      this.gameState.mapWidth,
-      this.gameState.mapHeight
+      this.gameState.mapHeight,
+      this.gameState.mapWidth
     );
 
     let entitySprites = GameInit.generateEntitySprites(
-      renderWidth,
-      renderHeight,
       this.gameState.entityLayer,
       this.gameState.entitySet
     );
@@ -106,8 +111,8 @@ export default class GameRenderer {
     let HUDSprites = GameInit.generateHUDSprites({
       renderWidth,
       renderHeight,
-      'mapWidth': this.gameState.mapWidth, // Total map width
-      'mapHeight': this.gameState.mapHeight // Total map height
+      'mapHeight': this.gameState.mapHeight, // Total map height
+      'mapWidth': this.gameState.mapWidth // Total map width
     });
 
     let sprites = {
@@ -117,14 +122,6 @@ export default class GameRenderer {
     };
 
     // -- Final setup
-    // Pan to the player so that the viewport is centered.
-    let initialOffset = GameInit.getInitialScreenOffset(
-      this.gameState.entityLayer[0].location,
-      this.gameState.mapHeight,
-      this.gameState.mapWidth,
-      renderHeight,
-      renderWidth
-    );
 
     // Mouse events
     let tileHoverHandler = MouseInteractions.tileHover(sprites.HUD.mouse, this);
@@ -139,11 +136,11 @@ export default class GameRenderer {
       sprite.on('mouseover', tileHoverHandler);
 
       // Append to the stage
-      stages.tiles.addChild(sprite);
+      stages.world.tiles.addChild(sprite);
     });
 
     sprites.entities.map((sprite) => {
-      stages.entities.addChild(sprite);
+      stages.world.entities.addChild(sprite);
     });
 
     sprites.HUD.miniMap.map((sprite) => {
@@ -159,12 +156,12 @@ export default class GameRenderer {
     });
 
     this.state = {
-      "dimensions": [renderWidth, renderHeight],
+      "dimensions": [renderHeight, renderWidth],
       "gameStateChanged": true,
       stages,
       sprites,
       "zoomLevel": 1,
-      "panOffset": initialOffset
+      "panOffset": { "x": 0, "y": 0 }
     };
 
     //this.test();
@@ -172,7 +169,7 @@ export default class GameRenderer {
 
 
   cleanup() {
-    this.state.stages.entities.removeChildren();
+    this.state.stages.world.entities.removeChildren();
     this.state.sprites.entities = GameInit.generateEntitySprites(
       this.state.dimensions[0],
       this.state.dimensions[1],
@@ -181,7 +178,7 @@ export default class GameRenderer {
     );
 
     this.state.sprites.entities.map((sprite) => {
-      this.state.stages.entities.addChild(sprite);
+      this.state.stages.world.entities.addChild(sprite);
     });
   }
 
@@ -189,7 +186,7 @@ export default class GameRenderer {
     // Sprite creator. This should be replaced with a real sprite management system at some point.
     let sprite = GameRender.generateEntitySprite(this.state.dimensions, entityID);
     let entitySprites = this.state.sprites.entities;
-    let entityStage = this.state.stages.entities;
+    let entityStage = this.state.stages.world.entities;
 
     entitySprites.push(sprite);
     entityStage.addChild(sprite);
@@ -220,6 +217,8 @@ export default class GameRenderer {
   loop() {
     // Check to see if we must cleanup prior to rendering a new dungeon.
     if (this.gameState.UI.waitingOnDungeonRequest === true) {
+
+      // Is there a generated dungeon queued to replace this one?
       if (window.nextGameState !== undefined) {
         this.store.dispatch({
           'type': "SET_GAME_STATE",
@@ -235,6 +234,9 @@ export default class GameRenderer {
     let player = this.gameState.entityLayer[0];
 
     if (this.state.gameStateChanged === true) {
+
+      // Create a blob of commonly used data
+      // to save ourselves some effort.
       let baseData = GameRender.getBaseData(
         player,
         this.gameState.tileSet,
@@ -247,13 +249,15 @@ export default class GameRenderer {
       // Send our to various stages and sprite
       // layers off to be mutated.
 
-      GameRender.renderViewport(
+      // Render Tiles
+      GameRender.renderTiles(
         baseData,
         this.gameState.tileSet,
         this.gameState.tileLayer,
         this.state.sprites.tiles
       );
 
+      // Render Player, enemies, items, objects.
       GameRender.renderEntities(
         baseData,
         this.gameState.entityLayer,
@@ -261,12 +265,26 @@ export default class GameRenderer {
         this.generateEntitySprite.bind(this)
       );
 
+      // Render the minimap.
       GameRender.renderMinimap(
         baseData,
         this.gameState.tileSet,
         this.gameState.tileLayer,
         this.state.sprites.HUD.miniMap
       );
+
+      // Update our screen position.
+      this.state.panOffset = getScreenOffset(
+        player.location,
+        this.gameState.mapHeight,
+        this.gameState.mapWidth,
+        this.state.dimensions[0],
+        this.state.dimensions[1]
+      );
+
+      // We achieve panning by setting world position to the inverse of our offset.
+      this.state.stages.world.primary.x = -(this.state.panOffset.x);
+      this.state.stages.world.primary.y = -(this.state.panOffset.y);
 
       this.state.gameStateChanged = false;
     }

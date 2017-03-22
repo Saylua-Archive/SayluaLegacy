@@ -45,7 +45,7 @@ export function generateEntitySprite(dimensions, entityParentID) {
 }
 
 
-export function renderViewport(baseData, tileSet, tileLayer, tileSprites) {
+export function renderTiles(baseData, tileSet, tileLayer, tileSprites) {
   // There are MUCH prettier ways to do this.
   // This, however, is the fastest. Blame Javascript's expensive array operations.
   for (let tile of tileLayer) {
