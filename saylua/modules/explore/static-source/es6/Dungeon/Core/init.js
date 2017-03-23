@@ -1,3 +1,4 @@
+/* eslint { no-unused-vars: 0 } */
 // init -> Required by Core/GameRenderer
 // --------------------------------------
 // Primal functions that generate initial game data.
