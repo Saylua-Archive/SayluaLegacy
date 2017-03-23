@@ -14,16 +14,8 @@ from saylua.utils.form import flash_errors
 # The main page where the user views all of their messages.
 @login_required
 def messages_main():
-    """messages = UserConversation.query(UserConversation.user_id == g.user.id,
-        UserConversation.is_deleted == False).order(
-        UserConversation.is_read, -UserConversation.time).fetch()"""
-    messages = (
-        db.session.query(Message)
-        .join(ConversationUser, Message.conversation_id == ConversationUser.conversation_id)
-        .filter(ConversationUser.user_id == g.user.id).all()
-    )
-    if not messages:
-        messages = []
+
+    messages = []
     return render_template('messages/all.html', viewed_messages=messages)
 
 
@@ -121,7 +113,7 @@ def start_conversation(sender_id, recipient_ids, title, text):
     send_member = ConversationUser(conversation_id=new_conversation.id,
             user_id=sender_id, title=title, unread=False)
     db.session.add(send_member)
-    if isinstance(recipient_ids, (int, long)):
+    if isinstance(recipient_ids, (int, long)): # noqa
         recipient_ids = [recipient_ids]
     recipient_ids = set(recipient_ids) # Remove duplicates
     if sender_id in recipient_ids:

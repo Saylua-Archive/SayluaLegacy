@@ -11,7 +11,7 @@
     </div>
   </div>
   <div id="user-info-section" class="sidebar-section">
-    <p>You are <a href="{{g.user|user_url}}">{{ g.user.name() }}</a></p>
+    <p>You are <a href="{{ g.user.url() }}">{{ g.user.name }}</a></p>
     <p>
       <img src="/static/img/icons/weather_clouds.png">
       <a href="/bank/">{{ g.user.cloud_coins|pluralize('Cloud Coin') }}</a>
@@ -23,24 +23,21 @@
   </div>
   {% else %}
   <form id="sidebar-login-form" class="sidebar-section sidebar-login-form validated-form" action="/login/"
-    method="post" data-error-id="sidebar-login-error">
-    <div id="sidebar-login-error"></div>
+    method="post">
+    <h3>Login to Saylua</h3>
     <table class="form-table center">
-      <tr>
-        <th class="h3">
-          Login to Saylua
-        </th>
-      </tr>
       <tr>
         <td>
           {{ sidebar_form.username.label }}
           {{ sidebar_form.username() }}
+          <small class="form-error" data-field-name="{{ sidebar_form.username.name }}"></small>
         </td>
       </tr>
       <tr>
         <td>
           {{ sidebar_form.password.label }}
           {{ sidebar_form.password() }}
+          <small class="form-error" data-field-name="{{ sidebar_form.password.name }}"></small>
         </td>
       </tr>
       <tr>

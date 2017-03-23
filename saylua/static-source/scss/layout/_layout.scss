@@ -67,9 +67,20 @@
   flex-shrink: 0;
 }
 
-.sidebar-login-form th.h3 {
-  text-align: center;
-  border-bottom: 1px $neutralDarkColor dotted;
+.sidebar-login-form {
+  table.form-table {
+    width: 100%;
+    td {
+      text-align: center;
+      padding: 0.1em 0.8rem;
+    }
+  }
+
+  h3 {
+    text-align: center;
+    border-bottom: 1px $neutralDarkColor dotted;
+    margin-bottom: 0;
+  }
 }
 
 
