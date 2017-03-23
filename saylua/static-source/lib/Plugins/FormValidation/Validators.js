@@ -45,7 +45,7 @@ export const validatorList = {
   'equalto': {
     'error': '<field> must match <1>.',
     'validator': function (input, match_name) {
-      return document.getElementsByName(match_name)[0].value === input;
+      return this.form.elements.namedItem(match_name).value === input;
     }
   },
   'isnot': {
