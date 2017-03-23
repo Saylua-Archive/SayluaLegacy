@@ -1,4 +1,5 @@
 {% from "_macros/pagination.html" import pagination %}
+{% from "_macros/forms.html" import form_errors %}
 {% extends "layout.html" %}
 {% set page_title = thread.title %}
 {% block header_scripts %}
@@ -7,7 +8,7 @@
 {% block body %}
 <h1>{{ thread.title }}</h1>
 
-<form method="post" class="center">
+<form method="post" class="center" action="move/">
   <select name="destination" required>
     <option value="" disabled selected>Move Thread To Board</option>
     {% for other_board in other_boards %}
@@ -20,7 +21,7 @@
 <div class="forum-thread-controls">
   <span class="forum-breadcrumb">
     <a href="/forums/">Forums</a> &#187;
-    <a href="/forums/board/{{ board.url_slug }}/"> {{ board.title }}</a> &#187;
+    <a href="{{ board.url() }}"> {{ board.title }}</a> &#187;
     {{ truncate(thread.title, 40) }}
   </span>
 
@@ -77,20 +78,15 @@
 {{ pagination(page_count=page_count) }}
 </div>
 
-<form method="post" class="validated-form" data-error-id="forum-post-error">
-  <table class="form-table" id="write-forum-reply">
-    <tr>
-      <th class="h2">
-        Write a New Reply
-      </th>
-    </tr>
-    <tr>
-      <td id="forum-post-error"></td>
-    </tr>
+<form method="post" class="validated-form" id="write-forum-reply">
+<h2>
+  <label for="{{ form.body.id }}">Write a New Reply</label>
+</h2>
+  <table class="form-table">
     <tr>
       <td class="center">
-        <textarea placeholder="Type your post content here" id="forum-post-body"
-          data-validators="required min:2" name="body"></textarea>
+        {{ form.body(placeholder='Type your post content here') }}
+        {{ form_errors(form.body) }}
       </td>
     </tr>
     <tr>

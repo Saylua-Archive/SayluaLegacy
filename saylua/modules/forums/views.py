@@ -4,6 +4,7 @@ from saylua import db
 from saylua.utils import urlize
 
 from .models.db import Board, BoardCategory, ForumThread, ForumPost
+from .forms import ForumThreadForm, ForumPostForm
 
 
 THREADS_PER_PAGE = 10
@@ -16,22 +17,22 @@ def forums_home():
 
 
 def forums_board(board_slug):
+    form = ForumThreadForm(request.form)
     try:
         board = db.session.query(Board).filter(Board.url_slug == board_slug).one()
 
-        if request.method == 'POST':
+        if request.method == 'POST' and form.validate():
             title = request.form.get('title')
             body = request.form.get('body')
             author = g.user.id
             board_id = board.id
-            url_title = urlize(board.title)
             new_thread = ForumThread(title=title, author=author, board_id=board_id)
             db.session.add(new_thread)
             db.session.flush()
             new_post = ForumPost(author=author, thread_id=new_thread.id, body=body)
             db.session.add(new_post)
             db.session.commit()
-            return redirect("/forums/board/" + url_title + "/")
+            return redirect(board.url())
 
         page_number = request.args.get('page', 1)
         page_number = int(page_number)
@@ -51,7 +52,8 @@ def forums_board(board_slug):
 
         page_count = threads_query.count() // THREADS_PER_PAGE
 
-        return render_template("board.html", board=board, threads=threads, page_count=page_count)
+        return render_template("board.html", form=form,
+            board=board, threads=threads, page_count=page_count)
 
     except (flask_sqlalchemy.orm.exc.MultipleResultsFound, flask_sqlalchemy.orm.exc.NoResultFound):
         return render_template('404.html'), 404
@@ -59,25 +61,19 @@ def forums_board(board_slug):
 
 def forums_thread(thread_id):
     thread_id = int(thread_id)
+    form = ForumPostForm(request.form)
 
     try:
         thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one()
         board = thread.board
 
-        if request.method == 'POST':
-            if 'move' in request.form:
-                destination = int(request.form.get('destination'))
-                thread.board_id = destination
-                db.session.commit()
-                flash("Thread moved successfully!")
-                return redirect("forums/thread/" + str(thread_id) + "/")
-            else:
-                author = g.user.id
-                body = request.form.get('body')
-                new_post = ForumPost(author=author, thread_id=thread_id, body=body)
-                db.session.add(new_post)
-                db.session.commit()
-                return redirect("forums/thread/" + str(thread_id) + "/")
+        if request.method == 'POST' and form.validate():
+            author = g.user.id
+            body = request.form.get('body')
+            new_post = ForumPost(author=author, thread_id=thread_id, body=body)
+            db.session.add(new_post)
+            db.session.commit()
+            return redirect("forums/thread/" + str(thread_id) + "/")
 
         page_number = request.args.get('page', 1)
         page_number = int(page_number)
@@ -97,8 +93,22 @@ def forums_thread(thread_id):
         page_count = post_query.count() // POSTS_PER_PAGE
         other_boards = db.session.query(Board).all()
 
-        return render_template("thread.html", board=board, thread=thread, posts=posts,
-                page_count=page_count, other_boards=other_boards)
+        return render_template("thread.html", form=form, board=board, thread=thread,
+                posts=posts, page_count=page_count, other_boards=other_boards)
 
+    except (flask_sqlalchemy.orm.exc.MultipleResultsFound, flask_sqlalchemy.orm.exc.NoResultFound):
+        return render_template('404.html'), 404
+
+
+def forums_thread_move(thread_id):
+    thread_id = int(thread_id)
+    try:
+        thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one()
+        if 'move' in request.form:
+            destination = int(request.form.get('destination'))
+            thread.board_id = destination
+            db.session.commit()
+            flash("Thread moved successfully!")
+            return redirect(thread.url())
     except (flask_sqlalchemy.orm.exc.MultipleResultsFound, flask_sqlalchemy.orm.exc.NoResultFound):
         return render_template('404.html'), 404

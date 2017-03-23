@@ -7,7 +7,6 @@
 {%- endmacro %}
 
 {% macro form_row(field) -%}
-
 <tr>
   <th class="label">
     {{ field.label }}
@@ -17,13 +16,10 @@
     {{ form_errors(field) }}
   </td>
 </tr>
-
 {%- endmacro %}
 
 {% macro form_checkbox(field) -%}
-
 {{ field() }}
 {{ field.label }}
 {{ form_errors(field) }}
-
 {%- endmacro %}
