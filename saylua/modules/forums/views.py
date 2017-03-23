@@ -1,7 +1,6 @@
 from flask import render_template, redirect, g, flash, request
 import flask_sqlalchemy
 from saylua import db
-from saylua.utils import urlize
 
 from .models.db import Board, BoardCategory, ForumThread, ForumPost
 from .forms import ForumThreadForm, ForumPostForm

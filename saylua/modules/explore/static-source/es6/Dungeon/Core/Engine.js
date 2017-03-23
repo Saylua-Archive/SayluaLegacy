@@ -72,7 +72,7 @@ export default class Engine {
         // Process attack animations, apply attack damage.
         for (let i = 0; i < window.queue.attack.length; i++) {
           let attack = window.queue.attack.pop();
-          let [attackerID, damage] = attack;
+          let [attackerID, damage] = attack; // eslint-disable-line no-unused-vars
 
           this.store.dispatch({
             'type': "DAMAGE_PLAYER",

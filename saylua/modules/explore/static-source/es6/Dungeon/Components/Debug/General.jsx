@@ -38,6 +38,14 @@ function mapOptionsToInputs(props, state) {
         "boundFunction": props.debugToggleOption.bind(this, 'keyboardInputEnabled')
       },
       "value": state.debug.keyboardInputEnabled
+    },
+    {
+      "name": "Enable Update Timers",
+      "type": "toggle",
+      "options": {
+        "boundFunction": props.debugToggleOption.bind(this, 'enableUpdateTimers')
+      },
+      "value": state.debug.enableUpdateTimers
     }
   ];
 
