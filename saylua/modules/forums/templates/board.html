@@ -1,4 +1,5 @@
 {% from "_macros/pagination.html" import pagination %}
+{% from "_macros/forms.html" import form_row %}
 {% extends "layout.html" %}
 {% set page_title = board.title %}
 {% block header_scripts %}
@@ -6,7 +7,7 @@
 {% endblock %}
 {% block body %}
 <h1>Viewing Board: {{ board.title }}</h1>
-<span class="forum-breadcrumb">
+<span class="forum-breadcrumb center">
   <a href="/forums/">Forums</a> &#187; {{ board.title }}
 </span>
 
@@ -81,25 +82,10 @@
   </div>
   Make a New Thread
 </h2>
-<form method="post" class="validated-form" data-error-id="forum-board-error">
+<form method="post" class="validated-form">
   <table class="form-table">
-    <tr>
-      <td colspan="2" id="forum-board-error"></td>
-    </tr>
-    <tr>
-      <td class="label"><label for="forum-thread-title">Thread Title</label></td>
-      <td>
-        <input type="text" placeholder="Thread Title" id="forum-thread-title" name="title"
-          data-validators="required not_empty min:3">
-      </td>
-    </tr>
-    <tr>
-      <td class="label"><label for="forum-thread-body">Thread Body</label></td>
-      <td>
-        <textarea placeholder="Thread Content" id="forum-thread-body" name="body"
-          data-validators="required not_empty min:2"></textarea>
-      </td>
-    </tr>
+    {{ form_row(form.title) }}
+    {{ form_row(form.body) }}
     <tr>
       <td></td>
       <td>
