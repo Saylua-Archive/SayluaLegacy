@@ -38,19 +38,51 @@ export function calculateFOV(location, tileSet, tileLayer, mapWidth) {
 }
 
 
-export function getScreenOffset(playerLocation, mapHeight, mapWidth, renderHeight, renderWidth, zoomLevel) {
+export function getScreenOffset(options, mapHeight, mapWidth, renderHeight, renderWidth, panOffset, zoomLevel) {
   const TILE_SIZE_SCALED = TILE_SIZE * zoomLevel;
+  const max_x = (mapWidth * TILE_SIZE_SCALED) - renderWidth;
+  const max_y = (mapHeight * TILE_SIZE_SCALED) - renderHeight;
 
-  let p_x = (playerLocation.x * TILE_SIZE_SCALED);
-  let p_y = (playerLocation.y * TILE_SIZE_SCALED);
+  let origin = options.location;
+  let world_x, world_y;
 
-  let centered_x = p_x - (renderWidth / 2);
-  let centered_y = p_y - (renderHeight / 2);
+  // First, we determine our top left coordinate.
+  // -- Translate from grid values, if necessary.
+  if (options.format === "grid") {
+    world_x = origin.x * TILE_SIZE_SCALED;
+    world_y = origin.y * TILE_SIZE_SCALED;
+  } else {
+    world_x = origin.x;
+    world_y = origin.y;
+  }
 
-  let constrained_x = MathUtils.snap(centered_x, TILE_SIZE_SCALED, ((mapWidth * TILE_SIZE_SCALED) - renderWidth));
-  let constrained_y = MathUtils.snap(centered_y, TILE_SIZE_SCALED, ((mapHeight * TILE_SIZE_SCALED) - renderHeight));
+  // -- Translate from mouse location, if necessary.
+  if (options.type === "mouse") {
+    // I GIVE UP
+  }
 
-  return { "x": constrained_x, "y": constrained_y };
+  // We treat mouse coordinates separately, as there is no need for centering.
+  // Zoom on the hovered point, keeping the underlying tile in-place on screen.
+  if (options.type === "mouse") {
+    return { "x": world_x, "y": world_y };
+  }
+
+  // Finally, we return our coordinate, centered or uncentered.
+  if (options.center === true) {
+    // Center relative to the screen viewport.
+    let centered_x = world_x - (renderWidth / 2);
+    let centered_y = world_y - (renderHeight / 2);
+
+    // Snap to the grid.
+    //let constrained_x = MathUtils.snap(centered_x, TILE_SIZE_SCALED, max_x);
+    //let constrained_y = MathUtils.snap(centered_y, TILE_SIZE_SCALED, max_y);
+    let constrained_x = Math.max(0, Math.min(max_x, centered_x));
+    let constrained_y = Math.max(0, Math.min(max_y, centered_y));
+
+    return { "x": constrained_x, "y": constrained_y };
+  } else {
+    return { "x": world_x, "y": world_y };
+  }
 }
 
 

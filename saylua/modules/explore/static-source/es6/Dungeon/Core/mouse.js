@@ -2,6 +2,8 @@
 // --------------------------------------
 // Mouse related game interactions.
 
+import cloneDeep from "lodash.clonedeep";
+
 import * as Graphics from "./graphics";
 
 import { TILE_SIZE } from "./GameRenderer";
@@ -48,6 +50,12 @@ export function panDragMove(context) {
       let adjusted_y = context._dragReference.y - difference_y;
 
       context.state.stages.world.primary.position.set(adjusted_x, adjusted_y);
+
+      // Make sure this value is actively updated for viewport zooming.
+      context.state.panOffset = {
+        "x": -(adjusted_x),
+        "y": -(adjusted_y)
+      };
     }
   };
 
@@ -130,6 +138,12 @@ export function tileClick(context) {
     let debugSummonerActive = (queuedSummon !== false);
     let sprite = event.currentTarget;
 
+    // Debugging
+    let TILE_SIZE_SCALED = TILE_SIZE * context.state.zoomLevel;
+    let x = Math.round(sprite.meta.grid_x * TILE_SIZE_SCALED);
+    let y = Math.round(sprite.meta.grid_y * TILE_SIZE_SCALED);
+    console.log(`Tile Position: ${ x } : ${ y }`);
+
     if (debugSummonerActive === true) {
       context.store.dispatch({
         'type': 'DEBUG_PLACE_SUMMON',
@@ -145,23 +159,44 @@ export function tileClick(context) {
 }
 
 
-export function viewportZoom(context) {
-  let handler = (context) => (event) => {
-    if (event.direction === "up") {
-      context.state.zoomLevel = Math.min(1.4, context.state.zoomLevel + 0.1);
-    } else if (event.direction === "down") {
-      context.state.zoomLevel = Math.max(0.6, context.state.zoomLevel - 0.1);
+export function viewportZoom(className, context) {
+  const getDeltaY = (event) => {
+    return (event.wheelDelta && !event.deltaY) ? event.wheelDelta * -1 : event.deltaY;
+  };
+
+  // Grab element, determine which event we need to use to capture mouse scroll.
+  let scrollEvent = 'onwheel' in document ? 'wheel' : 'mousewheel';
+  let viewportEl = document.querySelector(className);
+
+  // Bind a map zoom to our viewport element.
+  viewportEl.addEventListener(scrollEvent, (event) => {
+    event.preventDefault();
+
+    // Grab our adjusted Delta value to determine scroll direction.
+    let delta = getDeltaY(event);
+
+    let priorZoom = cloneDeep(context.state.zoomLevel);
+
+    // Set our new Zoom level based on scroll direction
+    if (delta == -100) {
+      context.state.zoomLevel = Math.min(1.4, context.state.zoomLevel + 0.02);
+    } else if (delta == 100) {
+      context.state.zoomLevel = Math.max(0.6, context.state.zoomLevel - 0.02);
     }
 
+    // Update 'World' scale ratio.
     context.state.stages.world.primary.scale.set(context.state.zoomLevel);
 
+    // Update Stages.HUD.mouse scale ratio.
     for (let mouseSprite of context.state.sprites.HUD.mouse) {
       mouseSprite.height = (TILE_SIZE * context.state.zoomLevel);
       mouseSprite.width = (TILE_SIZE * context.state.zoomLevel);
     }
 
-    context.updateScreenPosition();
-  };
-
-  return handler(context);
+    // Track to the mouse's position as we scroll.
+    let zoomChanged = (priorZoom !== context.state.zoomLevel);
+    if (zoomChanged === true) {
+      context.updateScreenPosition();
+    }
+  });
 }
