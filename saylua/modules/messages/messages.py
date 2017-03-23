@@ -73,9 +73,9 @@ def messages_write_new():
 # main "looking at a message" route doesn't have to bother with looking up
 # the user's message metadata.
 @login_required
-def messages_read(id):
+def messages_read(key):
     try:
-        found_conversation = db.session.query(ConversationUser).get((id, g.user.id))
+        found_conversation = db.session.query(ConversationUser).get((key, g.user.id))
         found_conversation.unread = False
         db.session.commit()
         return redirect('/conversation/' + str(id) + '/', code=302)
@@ -86,8 +86,8 @@ def messages_read(id):
 # The page to view a specific conversation.
 @login_required
 def messages_view_conversation(key):
-    # TODO make sure the user has access
-    if not key:
+    found_conversation = db.session.query(ConversationUser).get((key, g.user.id))
+    if not found_conversation:
         return render_template('messages/invalid.html')
 
     form = ConversationReplyForm()
@@ -123,3 +123,19 @@ def start_conversation(sender_id, recipient_ids, title, text):
                 user_id=recip_id, title=title, unread=True))
     db.session.commit()
     return new_conversation.id
+
+
+def reply_conversation(conversation_id, author_id, text):
+    new_message = Message(conversation_id=conversation_id, author_id=author_id, text=text)
+    db.session.add(new_message)
+    conversation_users = (
+        db.session.query(ConversationUser)
+        .filter(ConversationUser.conversation_id == conversation_id)
+        .all()
+    )
+    for conversation_user in conversation_users:
+        conversation_user.last_updated = db.func.now()
+        if conversation_user.user_id is not author_id:
+            conversation_user.unread = True
+        db.session.add(conversation_user)
+    db.session.commit()
