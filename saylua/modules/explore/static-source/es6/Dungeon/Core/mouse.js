@@ -139,10 +139,10 @@ export function tileClick(context) {
     let sprite = event.currentTarget;
 
     // Debugging
-    let TILE_SIZE_SCALED = TILE_SIZE * context.state.zoomLevel;
-    let x = Math.round(sprite.meta.grid_x * TILE_SIZE_SCALED);
-    let y = Math.round(sprite.meta.grid_y * TILE_SIZE_SCALED);
-    console.log(`Tile Position: ${ x } : ${ y }`);
+    // let TILE_SIZE_SCALED = TILE_SIZE * context.state.zoomLevel;
+    // let x = Math.round(sprite.meta.grid_x * TILE_SIZE_SCALED);
+    // let y = Math.round(sprite.meta.grid_y * TILE_SIZE_SCALED);
+    // console.log(`Tile Position: ${ x } : ${ y }`);
 
     if (debugSummonerActive === true) {
       context.store.dispatch({
