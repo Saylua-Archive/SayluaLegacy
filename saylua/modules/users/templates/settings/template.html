@@ -1,17 +1,17 @@
 {% extends "layout.html" %}
 {% set page_title = "User Settings: " + section_title %}
+{% block header_scripts %}
+<link rel="stylesheet" type="text/css" href="{{ include_static('css/users.min.css') }}">
+{% endblock %}
 {% block body %}
 <h1>User Settings: {{ section_title }} </h1>
-<div class="row-4">
-  <div class="col-1 section-menu">
+<div class="settings-row">
+  <div class="settings-menu">
     <a href="/settings/"{%- if request.url_rule.endpoint == 'user_settings' %} class="active"{% endif %}>
       General Settings
     </a>
     <a href="/settings/details/"{%- if request.url_rule.endpoint == 'user_settings_details' %} class="active"{% endif %}>
       User Details
-    </a>
-    <a href="/settings/css/"{%- if request.url_rule.endpoint == 'user_settings_css' %} class="active"{% endif %}>
-      Profile CSS
     </a>
     <a href="/settings/username/"{%- if request.url_rule.endpoint == 'user_settings_username' %} class="active"{% endif %}>
       Change Username
@@ -23,7 +23,7 @@
       Change Password
     </a>
   </div>
-  <div class="col-3">
+  <div>
     {% block section_body %}{% endblock %}
   </div>
 </div>

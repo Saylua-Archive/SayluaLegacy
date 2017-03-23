@@ -1,4 +1,5 @@
 @mixin bounce-up($height: 5%, $time: 1.5s) {
+  animation: bounce-up $time linear infinite;
   @keyframes bounce-up {
     0%, 100% {
       transform: translateY(0px);
@@ -8,16 +9,13 @@
       transform: translateY(-$height);
     }
   }
-
-  -webkit-animation: bounce-up $time linear infinite; /* Chrome, Safari, Opera */
-  animation: bounce-up $time linear infinite;
 }
 
 
 @keyframes notification-fadeup {
   0% {
-    opacity: 1;
     transform: translateY(0px);
+    opacity: 1;
   }
 
   70% {
@@ -25,7 +23,7 @@
   }
 
   100% {
-    opacity: 0;
     transform: translateY(-20px);
+    opacity: 0;
   }
 }

@@ -1,5 +1,6 @@
 @import 'assets/variables';
 @import 'assets/transitions';
+@import 'assets/keyframes';
 @import 'assets/utils';
 
 a.write-thread-link {
@@ -10,20 +11,12 @@ a.write-thread-link {
 }
 
 .forum-thread-icon {
-  width: 3.2rem;
-  margin: 0 0.8rem;
+  width: 4rem;
+  margin: 0 0.4rem;
   text-align: center;
 
   flex-grow: 0;
   flex-shrink: 0;
-
-  transition: transform 1s;
-  transition-delay: 0.1s;
-  transform-origin: 50% 100%;
-
-  &:hover {
-    transform: scale(1.3, 1.3);
-  }
 }
 
 .forum-thread-content {
@@ -40,10 +33,11 @@ h2.forum-board-header {
   align-items: flex-end;
   margin: 0.5em 0;
   padding: 0;
+  padding-top: 2em;
 
   .forum-thread-icon {
     overflow-y: hidden;
-    height: 2.8rem;
+    height: 3.6rem;
   }
 
   .forum-thread-content {

@@ -26,6 +26,9 @@ class Board(db.Model):
 
     threads = db.relationship("ForumThread", back_populates="board")
 
+    def url(self):
+        return "/forums/board/" + self.url_slug + "/"
+
 
 class BoardCategory(db.Model):
     """Forum Board Categories.
@@ -64,6 +67,9 @@ class ForumThread(db.Model):
     board = db.relationship("Board", back_populates="threads")
 
     posts = db.relationship("ForumPost", back_populates="thread")
+
+    def url(self):
+        return "/forums/thread/" + str(self.id) + "/"
 
 
 class ForumPost(db.Model):
