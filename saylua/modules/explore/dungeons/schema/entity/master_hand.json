@@ -1,0 +1,12 @@
+{
+    "name":        "Master Hand",
+    "description": "It's gloves look very warm.",
+    "type":        "enemy",
+    "events":      {
+        "$onIdle": "script_default_enemy_idle"
+    },
+    "meta":        {
+        "maxHP": 100
+    },
+    "$animations":   "animation_master_hand"
+}
