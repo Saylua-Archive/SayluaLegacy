@@ -1,3 +1,5 @@
+{% from "_macros/forms.html" import form_row %}
+
 {% extends "settings/template.html" %}
 {% set section_title = "Change Username" %}
 {% block section_body %}
@@ -5,20 +7,9 @@
   You can only change your username once every 24 hours. After you change your username,
   your old username will redirect to your new username unless you release it.
 </p>
-<form method="post" class="validated-form" data-error-id="user-settings-username-error">
-  <table class="form-table full">
-    <tr>
-      <td colspan="2" id="user-settings-username-error"></td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.username.label }}
-      </th>
-      <td>
-        {{ form.username() }}
-        <small class="form-tip">Valid characters: letters, numbers, and +~._-</small>
-      </td>
-    </tr>
+<form method="post" class="validated-form">
+  <table class="form-table">
+    {{ form_row(form.username, tip="Valid characters: letters, numbers, and +~._-") }}
     <tr>
       <th class="label">
         <label>Last Changed</label>
@@ -36,9 +27,9 @@
   </table>
 </form>
 
-<table class="form-table full">
+<table class="form-table">
   <tr>
-    <th class="section-header" colspan="2">
+    <th class="h2" colspan="2">
       Your Past Usernames
     </th>
   </tr>
