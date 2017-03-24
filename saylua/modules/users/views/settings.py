@@ -1,4 +1,4 @@
-from saylua import app
+from saylua import app, db
 from saylua.models.user import User
 from saylua.wrappers import login_required
 from saylua.utils.form import flash_errors
@@ -15,10 +15,13 @@ import datetime
 @login_required
 def user_settings():
     form = GeneralSettingsForm(request.form, obj=g.user)
-    if request.method == "POST" and form.validate():
-        form.populate_obj(g.user)
-        g.user.put()
-        flash("Your settings have been saved.")
+    if request.method == "POST":
+        if form.validate():
+            form.populate_obj(g.user)
+            db.session.commit()
+            flash("Your settings have been saved.")
+        else:
+            flash("You have tried to save invalid settings.", "error")
 
     # Allows user to change general on/off settings
     return render_template("settings/main.html", form=form)
@@ -29,19 +32,10 @@ def user_settings_details():
     form = DetailsForm(request.form, obj=g.user)
     if request.method == "POST" and form.validate():
         form.populate_obj(g.user)
-        g.user.put()
+        db.session.commit()
         flash("Your user details have been saved.")
     flash_errors(form)
     return render_template("settings/details.html", form=form)
-
-
-@login_required
-def user_settings_css():
-    if request.method == 'POST':
-        g.user.css = request.form.get('css')
-        g.user.put()
-        flash("Your CSS has been updated.")
-    return render_template("settings/css.html")
 
 
 @login_required
@@ -107,7 +101,7 @@ def user_settings_email():
     if request.method == "POST" and form.validate():
         g.user.email = form.email.data
         g.user.email_verified = False
-        g.user.put()
+        db.session.commit()
         flash("Your email has successfully been changed!")
 
         # TODO Send new validation email here.
@@ -124,7 +118,7 @@ def user_settings_password():
         password = form.new_password.data
 
         g.user.phash = User.hash_password(password)
-        g.user.put()
+        db.session.commit()
         flash("Your password has been changed.")
 
         return redirect(url_for("user_settings_password"))

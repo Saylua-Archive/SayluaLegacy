@@ -8,7 +8,7 @@
 <form class="validated-form" method="post" id="register-form">
   {{ form.csrf_token }}
   <table class="form-table center">
-    {{ form_row(form.username) }}
+    {{ form_row(form.username, tip="Valid characters: letters, numbers, and +~._-") }}
     {{ form_row(form.password) }}
     {{ form_row(form.confirm_password) }}
     {{ form_row(form.email) }}

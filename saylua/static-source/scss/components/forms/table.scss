@@ -34,7 +34,7 @@
     }
   }
 
-  .form-error {
+  .form-tip {
     font-size: 0.8em;
     line-height: 1.6em;
     display: block;
@@ -42,7 +42,10 @@
     min-height: 1.6em;
     margin: 0;
     text-align: left;
-    color: $errorColor;
+
+    &.error {
+      color: $errorColor;
+    }
   }
 
   @media (max-width: 500px) {
