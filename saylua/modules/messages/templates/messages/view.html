@@ -15,10 +15,9 @@
 </div>
 <div class="center full padded">
   Conversation between:
-  {% for user_id in conversation.user_ids %}
-    {% set user = user_from_id(user_id) %}
+  {% for member in members %}
     {% if loop.index > 1 %} and {% endif %}
-    {{ user_link(user) }}
+    {{ user_link(member) }}
   {% endfor %}
 </div>
 <div class="center full padded">

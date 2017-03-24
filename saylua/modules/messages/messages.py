@@ -6,6 +6,7 @@ from saylua import db
 from saylua.wrappers import login_required
 from saylua.utils import pluralize, get_from_request
 from .models.db import Conversation, ConversationUser, Message
+from saylua.models.user import User
 
 from forms import ConversationForm, ConversationReplyForm, recipient_check
 from saylua.utils.form import flash_errors
@@ -100,8 +101,19 @@ def messages_view_conversation(key):
         else:
             flash('Message reply failed for an unexpected reason.', 'error')
     flash_errors(form)
-    return render_template('messages/view.html', key=key,
-        form=form)
+    members = (
+        db.session.query(User)
+        .join(ConversationUser)
+        .filter(ConversationUser.conversation_id == key)
+        .all()
+    )
+    messages = (
+        db.session.query(Message)
+        .filter(Message.conversation_id == key)
+        .all()
+    )
+    return render_template('messages/view.html', conversation=found_conversation,
+        members=members, form=form)
 
 
 def start_conversation(sender_id, recipient_ids, title, text):
