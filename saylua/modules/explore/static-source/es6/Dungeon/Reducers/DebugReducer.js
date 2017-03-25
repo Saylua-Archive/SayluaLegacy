@@ -13,7 +13,8 @@ export function addAdditionalDebugParameters(state) {
   let debug = {
     "FOVEnabled": true,
     "keyboardInputEnabled": true,
-    "queuedSummon": false
+    "queuedSummon": false,
+    "enableUpdateTimers": false
   };
 
   return { ...state, debug };

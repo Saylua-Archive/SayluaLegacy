@@ -1,22 +1,14 @@
+{% from "_macros/forms.html" import form_row %}
+
 {% extends "settings/template.html" %}
 {% set section_title = "Change Email" %}
 {% block section_body %}
 <p>
   If you change your email address, you will have to validate your new email.
 </p>
-<form method="post" class="validated-form" data-error-id="user-settings-email-error">
+<form method="post" class="validated-form">
   <table class="form-table">
-    <tr>
-      <td colspan="2" id="user-settings-email-error"></td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.email.label }}
-      </th>
-      <td>
-        {{ form.email() }}
-      </td>
-    </tr>
+    {{ form_row(form.email) }}
     <tr>
       <td></td>
       <td>

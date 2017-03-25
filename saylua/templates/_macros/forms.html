@@ -1,29 +1,28 @@
-{% macro form_errors(field) -%}
-    <small class="form-error" data-field-name="{{ field.name }}">
+{% macro form_errors(field, tip=None) -%}
+    <small class="form-tip" data-field-name="{{ field.name }}">
+      {% if tip %}
+      {{ tip }}
+      {% endif %}
       {% for error in field.errors %}
       {{ error }}
       {% endfor %}
     </small>
 {%- endmacro %}
 
-{% macro form_row(field) -%}
-
+{% macro form_row(field, tip=None, placeholder=None) -%}
 <tr>
   <th class="label">
     {{ field.label }}
   </th>
   <td>
-    {{ field() }}
-    {{ form_errors(field) }}
+    {{ field(placeholder=placeholder) }}
+    {{ form_errors(field, tip) }}
   </td>
 </tr>
-
 {%- endmacro %}
 
 {% macro form_checkbox(field) -%}
-
 {{ field() }}
 {{ field.label }}
 {{ form_errors(field) }}
-
 {%- endmacro %}

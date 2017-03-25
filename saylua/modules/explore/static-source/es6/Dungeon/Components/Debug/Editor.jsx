@@ -10,9 +10,11 @@ import Component from "inferno-component";
 import { compileScript } from "../../Core/scripting";
 import { injectScript } from "Utils";
 
-function isTrueObject(o) {
-  return Object.prototype.toString.call(o) === "[object Object]";
-}
+
+// function isTrueObject(o) {
+//   return Object.prototype.toString.call(o) === "[object Object]";
+// }
+
 
 export default class DebugEditor extends Component {
   constructor(props) {

@@ -1,0 +1,43 @@
+@import 'assets/variables';
+@import 'assets/transitions';
+
+.settings-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: stretch;
+}
+
+.settings-menu {
+  width: 20%;
+  padding: 1em 0;
+  flex-shrink: 0;
+  margin-right: 1.6rem;
+  border-right: 1px solid $neutralColor;
+
+  a {
+    @include fast-color-trans;
+    line-height: 150%;
+    display: block;
+    width: 100%;
+    padding: 0.8rem;
+
+    &:hover {
+      background: $neutralColor;
+    }
+  }
+}
+
+.settings-body {
+  flex-grow: 1;
+}
+
+.settings-toggle-form {
+  th.label {
+    width: 30%;
+
+    @media (max-width: 500px) {
+      width: 100%;
+    }
+  }
+}

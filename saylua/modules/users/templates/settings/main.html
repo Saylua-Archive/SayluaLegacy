@@ -2,9 +2,9 @@
 {% set section_title = "General" %}
 {% block section_body %}
 <form method="post">
-  <table class="form-table">
+  <table class="form-table settings-toggle-form">
     <tr>
-      <th class="label break">
+      <th class="label">
         {{ form.notified_on_pings.label }}
       </th>
       <td>
@@ -16,7 +16,7 @@
       </td>
     </tr>
     <tr>
-      <th class="label break">
+      <th class="label">
         {{ form.autosubscribe_threads.label }}
       </th>
       <td>
@@ -28,7 +28,7 @@
       </td>
     </tr>
     <tr>
-      <th class="label break">
+      <th class="label">
         {{ form.autosubscribe_posts.label }}
       </th>
       <td>

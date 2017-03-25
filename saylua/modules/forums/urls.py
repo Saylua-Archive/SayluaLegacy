@@ -15,5 +15,7 @@ urlpatterns = [
     url('/forums/board/<board_slug>/', view_func=views.forums_board,
         name='forum_board', methods=['GET', 'POST']),
     url('/forums/thread/<thread_id>/', view_func=views.forums_thread,
-        name='forum_thread', methods=['GET', 'POST'])
+        name='forum_thread', methods=['GET', 'POST']),
+    url('/forums/thread/<thread_id>/move/', view_func=views.forums_thread_move,
+        name='forum_thread_move', methods=['POST'])
 ]

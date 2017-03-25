@@ -45,18 +45,13 @@ class User(db.Model):
     # Misc profile stuff
     gender = db.Column(db.String(100), default="")
     pronouns = db.Column(db.String(200), default="")
-    bio = db.Column(db.String(1000), default="")
+    bio = db.Column(db.String(1000), default="Hello, world")
     status = db.Column(db.String(15), default="")
 
     # Settings
-    notified_on_pings = db.Column(db.Boolean)
-    autosubscribe_threads = db.Column(db.Boolean)
-    autosubscribe_posts = db.Column(db.Boolean)
-
-    # Misc profile stuff
-    gender = db.Column(db.String(32))
-    pronouns = db.Column(db.String(128))
-    bio = db.Column(db.Text(), default="Hello, world!") # FIXME: This should really have a limit.
+    notified_on_pings = db.Column(db.Boolean, default=True)
+    autosubscribe_threads = db.Column(db.Boolean, default=True)
+    autosubscribe_posts = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<User %r>' % self.name
@@ -95,37 +90,40 @@ class User(db.Model):
     def check_password(cls, user, password):
         return cls.hash_password(password, user.phash) == user.phash
 
-    # @classmethod
-    # @ndb.transactional(xg=True)
-    # def transfer_currency(cls, from_key, to_key, cc=0, ss=0):
-    #     from_user, to_user = ndb.get_multi([from_key, to_key])
-    #     from_user.star_shards -= ss
-    #     from_user.cloud_coins -= cc
+    @classmethod
+    def update_currency(cls, user_id, cc=0, ss=0):
+        return
 
-    #     to_user.star_shards += ss
-    #     to_user.cloud_coins += cc
+    @classmethod
+    def transfer_currency(cls, from_id, to_id, cc=0, ss=0):
+        #     from_user, to_user = ndb.get_multi([from_key, to_key])
+        #     from_user.star_shards -= ss
+        #     from_user.cloud_coins -= cc
+        #     to_user.star_shards += ss
+        #     to_user.cloud_coins += cc
 
-    #     # Throw exceptions if the currency amount is invalid
-    #     cls.except_if_currency_invalid(from_user)
-    #     cls.except_if_currency_invalid(to_user)
+        #     # Throw exceptions if the currency amount is invalid
+        #     cls.except_if_currency_invalid(from_user)
+        #     cls.except_if_currency_invalid(to_user)
 
-    #     ndb.put_multi([from_user, to_user])
-
-    # @classmethod
-    # def update_currency(cls, user_id, cc=0, ss=0):
-    #     user = user_id.get()
-    #     user.star_shards += ss
-    #     user.cloud_coins += cc
-
-    #     # Throw exceptions if the currency amount is invalid
-    #     cls.except_if_currency_invalid(user)
-    #     user.put()
-    #     return [user.cloud_coins, user.star_shards]
+        #     ndb.put_multi([from_user, to_user])
+        return
 
     # @classmethod
-    # def except_if_currency_invalid(cls, user):
-    #     if user.star_shards < 0 or user.cloud_coins < 0:
-    #         raise InvalidCurrencyException('Currency cannot be negative!')
+     # def update_currency(cls, user_id, cc=0, ss=0):
+     #     user = user_id.get()
+     #     user.star_shards += ss
+     #     user.cloud_coins += cc
+
+     #     # Throw exceptions if the currency amount is invalid
+     #     cls.except_if_currency_invalid(user)
+     #     user.put()
+     #     return [user.cloud_coins, user.star_shards]
+
+     # @classmethod
+     # def except_if_currency_invalid(cls, user):
+     #     if user.star_shards < 0 or user.cloud_coins < 0:
+     #         raise InvalidCurrencyException('Currency cannot be negative!')
 
     def __init__(self, display_name, email, phash, role_name=None, star_shards=None, cloud_coins=None):
         self.display_name = DisplayName(display_name=display_name)

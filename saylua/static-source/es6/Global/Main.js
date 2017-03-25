@@ -18,8 +18,8 @@ for (let i = 0; i < links.length; i++) {
 
 // Bind dom behavior libraries to specific classes. Perhaps one day this
 // could be replaced with web components.
-let formValidation = new FormValidation('.validated-form');
-let checkAll = new CheckAll('.check-all');
+new FormValidation('.validated-form');
+new CheckAll('.check-all');
 
 bindTabTyping('.tabs-allowed');
 

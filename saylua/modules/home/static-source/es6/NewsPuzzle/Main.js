@@ -31,9 +31,9 @@ submit.addEventListener("click", function () {
       } else {
         // Note that we only do this for the first check.
         if (rNum == "") {
-          emptyCount++;
+          emptyCount = emptyCount + 1;
         } else {
-          invalidCount++;
+          invalidCount = invalidCount + 1;
         }
       }
 

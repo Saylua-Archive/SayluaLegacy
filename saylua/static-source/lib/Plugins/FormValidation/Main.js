@@ -27,7 +27,7 @@ class _ValidatedForm {
     this.errorElementMap = {};
     this.checkedFields = {};
 
-    let errorElements = form.getElementsByClassName('form-error');
+    let errorElements = this.form.getElementsByClassName('form-tip');
     for (let i = 0; i < errorElements.length; i++) {
       let e = errorElements[i];
       this.errorElementMap[e.getAttribute('data-field-name')] = e;
@@ -107,13 +107,18 @@ class _ValidatedForm {
     }
 
     // Render the error message.
-    if (this.errorElementMap[field.name]) {
-      this.errorElementMap[field.name].innerHTML = err || '';
-      if (err) {
-        addClass(field, 'error');
-      } else {
-        removeClass(field, 'error');
+    let errorElement = this.errorElementMap[field.name];
+    if (errorElement) {
+      errorElement.innerHTML = err || '';
+    }
+    if (err) {
+      addClass(field, 'error');
+      if (errorElement) {
+        errorElement.innerHTML = err || '';
+        addClass(errorElement, 'error');
       }
+    } else {
+      removeClass(field, 'error');
     }
     return !err;
   }

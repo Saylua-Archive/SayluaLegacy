@@ -1,3 +1,4 @@
+/* eslint { no-unused-vars: 0 } */
 // init -> Required by Core/GameRenderer
 // --------------------------------------
 // Primal functions that generate initial game data.
@@ -6,7 +7,7 @@
 import * as Graphics from "./graphics";
 
 import { OBSTRUCTIONS } from "./logic";
-import { VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from "./GameRenderer";
+import { TILE_SIZE } from "./GameRenderer";
 
 
 // Initialize window textures if necessary.
@@ -16,10 +17,10 @@ window.textures['null'] = PIXI.Texture.fromImage("/static/img/dungeons/tiles/tes
 
 /******************************** RENDERER INIT ***********************************/
 
-export function generateEntitySprites(stageWidth, stageHeight, entityLayer, entitySet) {
+export function generateEntitySprites(entityLayer, entitySet) {
   let spriteLayer = [];
-  let spriteHeight = (stageHeight / VIEWPORT_HEIGHT) * 0.8;
-  let spriteWidth = (stageWidth / VIEWPORT_WIDTH) * 0.8;
+  let spriteHeight = (TILE_SIZE * 0.8);
+  let spriteWidth = (TILE_SIZE * 0.8);
 
   for (let entity of entityLayer) {
     let entityParent = entitySet[entity.parent];
@@ -37,15 +38,15 @@ export function generateEntitySprites(stageWidth, stageHeight, entityLayer, enti
 }
 
 
-export function generateTileSprites(stageWidth, stageHeight) {
+export function generateTileSprites(mapHeight, mapWidth) {
   let spriteLayer = [];
   let nullTexture = window.textures['null'];
 
-  let spriteHeight = stageHeight / VIEWPORT_HEIGHT;
-  let spriteWidth = stageWidth / VIEWPORT_WIDTH;
+  let spriteHeight = TILE_SIZE;
+  let spriteWidth = TILE_SIZE;
 
-  for (let row = 0; row < VIEWPORT_HEIGHT; row++) {
-    for (let col = 0; col < VIEWPORT_WIDTH; col++) {
+  for (let row = 0; row < mapHeight; row++) {
+    for (let col = 0; col < mapWidth; col++) {
       let sprite = new PIXI.Sprite(nullTexture);
 
       sprite.height = spriteHeight;
@@ -122,8 +123,8 @@ function generateMouseSprites(data) {
   let redTexture = Graphics.getTexture("interface_tile_hover_red"); // Preload texture
   let nullTexture = window.textures['null'];
 
-  let spriteHeight = data.renderHeight / VIEWPORT_HEIGHT;
-  let spriteWidth = data.renderWidth / VIEWPORT_WIDTH;
+  let spriteHeight = TILE_SIZE;
+  let spriteWidth = TILE_SIZE;
 
   let tileHoverSprite = new PIXI.Sprite(greenTexture);
 

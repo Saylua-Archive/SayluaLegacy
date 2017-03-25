@@ -8,7 +8,7 @@ def generateCustomKwargs(field, error_class, kwargs):
         c = kwargs.pop('class', '') or kwargs.pop('class_', '')
         kwargs['class'] = '%s %s' % (error_class, c)
 
-    if 'placeholder' not in kwargs:
+    if not kwargs.get('placeholder'):
         kwargs['placeholder'] = field.label.text
 
     # Integrate with clientside validation.
