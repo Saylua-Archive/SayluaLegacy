@@ -21,8 +21,8 @@
   {% endfor %}
 </div>
 <div class="center full padded">
-  {% set last_message = conversation.messages|last %}
-  Last message by {{ user_link(user_from_id(last_message.user_id)) }}
+  {% set last_message = messages|last %}
+  Last message by {{ user_link(user_from_id(last_message.author_id)) }}
   on {{ last_message.time|expanded_relative_time }}
 </div>
 <form method="post" class="validated-form" data-error-id="message-post-error">
@@ -47,8 +47,8 @@
     </tr>
   </table>
 </form>
-{% for message in conversation.messages|reverse %}
-{% set message_user = user_from_id(message.user_id) %}
+{% for message in messages|reverse %}
+{% set message_user = user_from_id(message.author_id) %}
 <table class="conversation-message">
   <tr>
     <th rowspan="2">

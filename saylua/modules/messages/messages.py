@@ -113,7 +113,7 @@ def messages_view_conversation(key):
         .all()
     )
     return render_template('messages/view.html', conversation=found_conversation,
-        members=members, form=form)
+        members=members, messages=messages, form=form)
 
 
 def start_conversation(sender_id, recipient_ids, title, text):
