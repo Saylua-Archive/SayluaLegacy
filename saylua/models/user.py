@@ -2,6 +2,8 @@ from bcryptmaster import bcrypt
 from uuid import uuid4
 import datetime
 
+from sqlalchemy.exc import IntegrityError
+
 from saylua import db
 
 
@@ -16,9 +18,27 @@ class User(db.Model):
 
     __tablename__ = "users"
 
+    __table_args__ = (
+        db.ForeignKeyConstraint(
+            ["id", "active_username"],
+            ["usernames.user_id", "usernames.name"],
+            use_alter=True,
+            name="fk_user_usernames"
+        ),
+        db.ForeignKeyConstraint(
+            ["active_username"],
+            ["usernames.name"],
+            use_alter=True,
+            name="fk_user_active_username"
+        )
+    )
+
     id = db.Column(db.Integer, primary_key=True)
-    display_name = db.relationship("DisplayName", uselist=False, back_populates="user")
+
+    active_username = db.Column(db.String(80), db.ForeignKey("usernames.name"))
+    usernames = db.relationship("Username", foreign_keys="Username.user_id", back_populates="user")
     last_username_change = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+
     last_action = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
     date_joined = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
@@ -58,7 +78,7 @@ class User(db.Model):
 
     @property
     def name(self):
-        return self.display_name.display_name
+        return self.active_username
 
     def url(self):
         return "/user/" + self.name.lower() + "/"
@@ -75,8 +95,8 @@ class User(db.Model):
     def from_username(cls, username):
         return (
             db.session.query(cls)
-            .join(DisplayName, cls.display_name)
-            .filter(db.func.lower(DisplayName.display_name) == username.lower())
+            .join(Username, cls.username)
+            .filter(db.func.lower(Username.username) == username.lower())
             .one_or_none()
         )
 
@@ -125,8 +145,8 @@ class User(db.Model):
      #     if user.star_shards < 0 or user.cloud_coins < 0:
      #         raise InvalidCurrencyException('Currency cannot be negative!')
 
-    def __init__(self, display_name, email, phash, role_name=None, star_shards=None, cloud_coins=None):
-        self.display_name = DisplayName(display_name=display_name)
+    def __init__(self, username, email, phash, role_name=None, star_shards=None, cloud_coins=None):
+        self.active_username = Username(username)
         self.email = email
         self.phash = phash
 
@@ -157,26 +177,38 @@ class BankAccount(db.Model):
     bank_cc = db.Column(db.Integer, default=0)
 
 
-class DisplayName(db.Model):
-    """Represents the actual displayed name of a user.
+class Username(db.Model):
+    """Represents the username of a user.
 
     Multiple names can be tied to one user, but only one of
     them can be active and nested within the user class.
 
-    One to one relationship with `User`.
+    Many to one relationship with `User`.
     """
 
-    __tablename__ = "display_names"
+    __tablename__ = "usernames"
 
-    id = db.Column(db.Integer, primary_key=True)
-    active = db.Column(db.Boolean, default=True)
+    # The unique username
+    name = db.Column(db.String(80), primary_key=True)
 
     # The linked user
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    user = db.relationship("User", back_populates="display_name")
+    user = db.relationship("User", foreign_keys=[user_id], back_populates="usernames")
 
-    # The actual display name
-    display_name = db.Column(db.String(80), unique=True)
+    # Account for case sensitivity in username uniqueness.
+    def __init__(self, name):
+        if Username.exists(name):
+            raise IntegrityError("Attempted to create username which already exists.")
+        self.name = name
+
+    # Check to see if a given username is already taken or not.
+    @classmethod
+    def exists(cls, name):
+        return (
+            db.session.query(cls)
+            .filter(db.func.lower(cls.name) == name.lower())
+            .one_or_none()
+        )
 
 
 class LoginSession(db.Model):

@@ -40,7 +40,7 @@ def user_settings_details():
 
 @login_required
 def user_settings_username():
-    form = UsernameForm(request.form, obj={"username": g.user.display_name})
+    form = UsernameForm(request.form, obj={"username": g.user.name})
     form.setUser(g.user)
 
     cutoff_time = datetime.datetime.now() - datetime.timedelta(days=1)
@@ -75,7 +75,6 @@ def user_settings_username():
             g.user.put()
             flash("Your username has been changed to " + username)
             return redirect(url_for("user_settings_username"))
-    flash_errors(form)
 
     return render_template("settings/username.html", form=form)
 
