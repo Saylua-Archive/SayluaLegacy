@@ -20,8 +20,8 @@ class User(db.Model):
 
     __table_args__ = (
         db.ForeignKeyConstraint(
-            ["id", "active_username"],
-            ["usernames.user_id", "usernames.name"],
+            ["id"],
+            ["usernames.user_id"],
             use_alter=True,
             name="fk_user_usernames"
         ),
