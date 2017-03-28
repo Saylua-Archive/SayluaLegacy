@@ -15,9 +15,14 @@ from saylua.utils.form import flash_errors
 # The main page where the user views all of their messages.
 @login_required
 def messages_main():
-
-    messages = []
-    return render_template('messages/all.html', viewed_messages=messages)
+    conversations = (
+        db.session.query(ConversationUser)
+        .filter(ConversationUser.user_id == g.user.id)
+        .all()
+    )
+    viewed_messages = []
+    return render_template('messages/all.html', viewed_messages=viewed_messages,
+        conversations=conversations)
 
 
 # The submit action for the user to update their messages.
