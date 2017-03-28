@@ -20,12 +20,6 @@ class User(db.Model):
 
     __table_args__ = (
         db.ForeignKeyConstraint(
-            ["id"],
-            ["usernames.user_id"],
-            use_alter=True,
-            name="fk_user_usernames"
-        ),
-        db.ForeignKeyConstraint(
             ["active_username"],
             ["usernames.name"],
             use_alter=True,
@@ -188,12 +182,21 @@ class Username(db.Model):
 
     __tablename__ = "usernames"
 
+    __table_args__ = (
+        db.ForeignKeyConstraint(
+            ["user_id"],
+            ["users.id"],
+            use_alter=True,
+            name="fk_username_user"
+        )
+    )
+
     # The unique username
     name = db.Column(db.String(80), primary_key=True)
 
     # The linked user
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    user = db.relationship("User", foreign_keys=[user_id], back_populates="usernames")
+    user = db.relationship("User", foreign_keys="user_id", back_populates="usernames")
 
     # Account for case sensitivity in username uniqueness.
     def __init__(self, name):
