@@ -24,7 +24,7 @@ class ConversationUser(db.Model):
     last_updated = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
     def url(self):
-        if not self.is_read:
+        if self.unread:
             return '/conversation_read/' + self.conversation_id + '/'
         return '/conversation/' + self.conversation_id + '/'
 

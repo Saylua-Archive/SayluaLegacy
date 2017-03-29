@@ -21,8 +21,7 @@ def messages_main():
         .all()
     )
     viewed_messages = []
-    return render_template('messages/all.html', viewed_messages=viewed_messages,
-        conversations=conversations)
+    return render_template('messages/all.html', messages=conversations)
 
 
 # The submit action for the user to update their messages.
@@ -46,7 +45,7 @@ def messages_main_post():
             return redirect('/messages/', code=302)
 
         m.is_deleted = 'delete' in request.form
-        m.is_read = 'read' in request.form
+        m.unread = 'read' not in request.form
 
     if 'delete' in request.form:
         ndb.put_multi(user_messages)

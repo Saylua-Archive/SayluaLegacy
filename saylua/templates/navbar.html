@@ -109,7 +109,7 @@
           <h3>Latest Notifications</h3>
           <ul>
             {% for notification in notifications %}
-              <a href="/notification/{{notification.key.urlsafe()}}/"{% if not notification.is_read %} class="highlight"{% endif %}>
+              <a href="/notification/{{notification.key.urlsafe()}}/"{% if notification.unread %} class="highlight"{% endif %}>
                 <li>{{ notification.text }}{% if notification.count > 1 %} ({{ notification.count }}){% endif %}</li>
               </a>
             {% else %}
@@ -125,7 +125,7 @@
           <h3>Latest Messages</h3>
           <ul>
             {% for message in messages %}
-              <a href="{{ message.url() }}"{% if not message.is_read %} class="highlight"{% endif %}>
+              <a href="{{ message.url() }}"{% if message.unread %} class="highlight"{% endif %}>
                 <li>{{ message.title }}</li>
               </a>
             {% else %}

@@ -28,7 +28,7 @@
       </th>
     </tr>
     {% for notification in viewed_notifications %}
-    <tr class="forum-thread-row{% if not notification.is_read%} highlight{% endif %}">
+    <tr class="forum-thread-row{% if notification.unread%} highlight{% endif %}">
       <td>
         <input type="checkbox" name="notification_id" value="{{notification.key.urlsafe()}}">
       </td>
@@ -41,10 +41,10 @@
         {{notification.time|relative_time}}
       </td>
       <td>
-        {% if notification.is_read %}
-          Read
-        {% else %}
+        {% if notification.unread %}
           Unread
+        {% else %}
+          Read
         {% endif %}
       </td>
     </tr>
