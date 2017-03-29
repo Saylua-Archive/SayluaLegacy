@@ -50,10 +50,10 @@ def user_settings_username():
             flash("You've already changed your username once within the past 24 hours.", "error")
             return redirect(url_for("user_settings_username"))
 
-        username = form.display_name.data
+        username = form.username.data
         if username.lower() in g.user.usernames:
             # If the user is changing to a name they already own, change case
-            g.user.display_name = username
+            g.user.name = username
             g.user.usernames.remove(username.lower())
             g.user.usernames.append(username.lower())
             g.user.last_username_change = datetime.datetime.now()
@@ -69,7 +69,7 @@ def user_settings_username():
                     Release some old usernames to change your name.""" % max_usernames,
                     "error")
                 return render_template('user/settings/username.html')
-            g.user.display_name = username
+            g.user.name = username
             g.user.usernames.append(username.lower())
             g.user.last_username_change = datetime.datetime.now()
             g.user.put()
@@ -84,7 +84,7 @@ def user_settings_username_release():
     username = request.form.get("username")
     if not username or username not in g.user.usernames:
         flash("You are trying to release an invalid username.", "error")
-    elif username == g.user.display_name.lower():
+    elif username == g.user.name.lower():
         flash("You can't release the username you are currently using.", "error")
     else:
         g.user.usernames.remove(username)

@@ -24,13 +24,14 @@ class User(db.Model):
             ["usernames.name"],
             use_alter=True,
             name="fk_user_active_username"
-        )
+        ),
+        {}
     )
 
     id = db.Column(db.Integer, primary_key=True)
 
     active_username = db.Column(db.String(80), db.ForeignKey("usernames.name"))
-    usernames = db.relationship("Username", foreign_keys="Username.user_id", back_populates="user")
+    usernames = db.relationship("Username", foreign_keys="usernames.user_id", back_populates="user")
     last_username_change = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
     last_action = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
@@ -188,7 +189,8 @@ class Username(db.Model):
             ["users.id"],
             use_alter=True,
             name="fk_username_user"
-        )
+        ),
+        {}
     )
 
     # The unique username

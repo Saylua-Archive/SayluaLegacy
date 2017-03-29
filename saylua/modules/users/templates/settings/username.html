@@ -39,7 +39,7 @@
       {{ username }}
     </td>
     <td>
-      {% if username == g.user.display_name.lower() %}
+      {% if username.lower() == g.user.name.lower() %}
         <em>Current Username</em>
       {% else %}
         <form method="post" action="/settings/username/release/">

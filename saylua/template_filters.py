@@ -102,15 +102,6 @@ def user_from_id(user_id):
     return user
 
 
-@app.template_filter('name_from_author_id')
-def display_name_from_user_id(user_id):
-    user = user_from_id(user_id)
-    if user:
-        return user.name
-
-    return "Unknown User"
-
-
 @app.template_filter('last_post_thread')
 def last_post_thread(thread_id):
     return (
