@@ -10,7 +10,7 @@ class Conversation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     def url(self):
-        return '/conversation/' + self.id + '/'
+        return '/conversation/' + str(self.id) + '/'
 
 
 class ConversationUser(db.Model):
@@ -25,8 +25,8 @@ class ConversationUser(db.Model):
 
     def url(self):
         if self.unread:
-            return '/conversation_read/' + self.conversation_id + '/'
-        return '/conversation/' + self.conversation_id + '/'
+            return '/conversation_read/' + str(self.conversation_id) + '/'
+        return '/conversation/' + str(self.conversation_id) + '/'
 
 
 class Message(db.Model):

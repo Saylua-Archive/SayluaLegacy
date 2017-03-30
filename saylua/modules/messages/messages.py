@@ -20,7 +20,6 @@ def messages_main():
         .filter(ConversationUser.user_id == g.user.id)
         .all()
     )
-    viewed_messages = []
     return render_template('messages/all.html', messages=conversations)
 
 

@@ -45,9 +45,9 @@
       </th>
     </tr>
     {% for message in messages %}
-    <tr class="forum-board-row{% if not conversation.unread %} highlight{% endif %}">
+    <tr class="forum-board-row{% if not message.unread %} highlight{% endif %}">
       <td>
-        <input type="checkbox" name="user_conversation_id" value="{{ conversation.id }}">
+        <input type="checkbox" name="user_conversation_id" value="{{ message.id }}">
       </td>
       <td>
         <a href="{{ message.url() }}">{{ message.title }}</a>
@@ -60,7 +60,7 @@
         {% endfor %}
       </td>
       <td>
-        {{ message.time|relative_time }}
+        {{ message.last_updated|relative_time }}
       </td>
       <td>
         {{ message|message_status }}
