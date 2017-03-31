@@ -18,6 +18,8 @@ def messages_main():
     conversations = (
         db.session.query(ConversationUser)
         .filter(ConversationUser.user_id == g.user.id)
+        .order_by(ConversationUser.last_updated.desc())
+        .order_by(ConversationUser.unread)
         .all()
     )
     return render_template('messages/all.html', messages=conversations)
