@@ -30,7 +30,7 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    active_username = db.Column(db.String(80), db.ForeignKey("usernames.name"))
+    active_username = db.Column(db.String(80), db.ForeignKey("usernames.name", ondelete='CASCADE'))
     last_username_change = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
     usernames = db.relationship("Username", foreign_keys="Username.user_id", back_populates="user")
 
@@ -197,8 +197,8 @@ class Username(db.Model):
     name = db.Column(db.String(80), primary_key=True)
 
     # The linked user
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    user = db.relationship("User", foreign_keys="user_id", back_populates="usernames")
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete='CASCADE'))
+    user = db.relationship("User", foreign_keys=user_id, back_populates="usernames")
 
     # Account for case sensitivity in username uniqueness.
     def __init__(self, name):
