@@ -99,7 +99,7 @@ def messages_view_conversation(key):
     form = ConversationReplyForm()
     form.text.data = get_from_request(request, 'text')
     if request.method == 'POST' and form.validate():
-        result = Conversation.reply(key, g.user.id, form.text.data)
+        result = reply_conversation(key, g.user.id, form.text.data)
         if result:
             flash('You have replied to the message!')
             return redirect('/conversation/' + str(key) + '/', code=302)
@@ -156,3 +156,4 @@ def reply_conversation(conversation_id, author_id, text):
             conversation_user.unread = True
         db.session.add(conversation_user)
     db.session.commit()
+    return True
