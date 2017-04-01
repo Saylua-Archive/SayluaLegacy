@@ -98,7 +98,6 @@ def user_from_id(user_id):
         .filter(User.id == user_id)
         .one_or_none()
     )
-
     return user
 
 

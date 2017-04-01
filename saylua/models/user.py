@@ -90,8 +90,8 @@ class User(db.Model):
     def from_username(cls, username):
         return (
             db.session.query(cls)
-            .join(Username, cls.username)
-            .filter(db.func.lower(Username.username) == username.lower())
+            .join(Username, cls.active_username)
+            .filter(db.func.lower(Username.name) == username.lower())
             .one_or_none()
         )
 
