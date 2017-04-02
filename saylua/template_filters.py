@@ -51,6 +51,7 @@ def saylua_expanded_relative_time(d):
     return result
 
 
+# TODO Fix problem with database time not matching datetime.datetime
 @app.template_filter('relative_time')
 def saylua_relative_time(d):
     diff = datetime.datetime.now() - d
