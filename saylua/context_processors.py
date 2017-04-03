@@ -1,6 +1,6 @@
 from saylua import app
 from saylua.models.user import User
-from saylua.modules.messages.models.db import UserConversation
+from saylua.modules.messages.models.db import UserConversation, ConversationUser
 from saylua.modules.messages.models.db import Notification
 from saylua.utils import get_static_version_id
 
@@ -88,13 +88,18 @@ def inject_notifications():
 def inject_messages():
     if not g.logged_in:
         return {}
-    messages_count = UserConversation.query(
-        UserConversation.user_id == g.user.id,
-        UserConversation.is_read == False,
-        UserConversation.is_deleted == False).count(limit=100)
-    messages = UserConversation.query(UserConversation.user_id == g.user.id,
-        UserConversation.is_deleted == False).order(
-        UserConversation.is_read, -UserConversation.time).fetch(limit=5)
+    messages_count = (
+        db.session.query(ConversationUser.id)
+        .filter(ConversationUser.user_id == g.user.id)
+        .count()
+    )
+    messages = (
+        db.session.query(ConversationUser.id)
+        .filter(ConversationUser.user_id == g.user.id)
+        .order_by(ConversationUser.last_updated.desc())
+        .order_by(ConversationUser.unread)
+        .all()
+    )
     if not messages:
         messages = []
     return dict(messages_count=messages_count, messages=messages)
