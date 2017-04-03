@@ -22,7 +22,6 @@ class User(db.Model):
         db.ForeignKeyConstraint(
             ["active_username"],
             ["usernames.name"],
-            use_alter=True,
             name="fk_user_active_username"
         ),
         {}
@@ -30,7 +29,9 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    active_username = db.Column(db.String(80), db.ForeignKey("usernames.name", ondelete='CASCADE'))
+    active_username = db.Column(db.String(80), db.ForeignKey("usernames.name", ondelete='CASCADE'), unique=True)
+    username = db.relationship("Username", primaryjoin="User.active_username==Username.name")
+
     last_username_change = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
     usernames = db.relationship("Username", foreign_keys="Username.user_id", back_populates="user")
 
@@ -141,7 +142,7 @@ class User(db.Model):
      #         raise InvalidCurrencyException('Currency cannot be negative!')
 
     def __init__(self, username, email, phash, role_name=None, star_shards=None, cloud_coins=None):
-        self.active_username = Username(username)
+        self.username = Username(username)
         self.email = email
         self.phash = phash
 
@@ -187,7 +188,6 @@ class Username(db.Model):
         db.ForeignKeyConstraint(
             ["user_id"],
             ["users.id"],
-            use_alter=True,
             name="fk_username_user"
         ),
         {}
@@ -202,13 +202,13 @@ class Username(db.Model):
 
     # Account for case sensitivity in username uniqueness.
     def __init__(self, name):
-        if Username.exists(name):
+        if Username.get(name):
             raise IntegrityError("Attempted to create username which already exists.")
         self.name = name
 
-    # Check to see if a given username is already taken or not.
+    # Get username object from username.
     @classmethod
-    def exists(cls, name):
+    def get(cls, name):
         return (
             db.session.query(cls)
             .filter(db.func.lower(cls.name) == name.lower())

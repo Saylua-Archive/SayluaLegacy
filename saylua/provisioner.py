@@ -17,7 +17,7 @@ from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
 def generate_admin_user():
     username = "admin"
     role_name = "admin"
-    phash = User.hash_password("password")  # Yes, the default password is password
+    phash = User.hash_password("password")  # Yes, the default password is password.
     email = "admin@saylua.wizards"
 
     yield User(
@@ -56,7 +56,7 @@ def generate_threads():
             title = "I really, really like {}!".format(soulname(24))
             author = 1
 
-            yield ForumThread(title=title, author=author, board=board)
+            yield ForumThread(title=title, author_id=author, board=board)
 
 
 def generate_posts():
@@ -87,7 +87,7 @@ def generate_posts():
             body = choice(content_phrases).format(soulname(24))
             author = choice(users).id
 
-            yield ForumPost(body=body, author=author, thread=thread)
+            yield ForumPost(body=body, author_id=author, thread=thread)
 
 
 def generate_users():
