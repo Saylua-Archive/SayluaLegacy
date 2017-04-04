@@ -22,6 +22,7 @@ class User(db.Model):
         db.ForeignKeyConstraint(
             ["active_username"],
             ["usernames.name"],
+            use_alter=True,
             name="fk_user_active_username"
         ),
         {}
@@ -188,6 +189,7 @@ class Username(db.Model):
         db.ForeignKeyConstraint(
             ["user_id"],
             ["users.id"],
+            use_alter=True,
             name="fk_username_user"
         ),
         {}
