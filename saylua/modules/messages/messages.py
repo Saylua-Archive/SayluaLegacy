@@ -84,7 +84,7 @@ def messages_read(key):
         found_conversation = db.session.query(ConversationUser).get((key, g.user.id))
         found_conversation.unread = False
         db.session.commit()
-        return redirect('/conversation/' + str(id) + '/', code=302)
+        return redirect('/conversation/' + str(key) + '/', code=302)
     except(flask_sqlalchemy.orm.exc.NoResultFound):
         return render_template('messages/invalid.html')
 
@@ -152,7 +152,7 @@ def reply_conversation(conversation_id, author_id, text):
     )
     for conversation_user in conversation_users:
         conversation_user.last_updated = db.func.now()
-        if conversation_user.user_id is not author_id:
+        if conversation_user.user_id != author_id:
             conversation_user.unread = True
         db.session.add(conversation_user)
     db.session.commit()

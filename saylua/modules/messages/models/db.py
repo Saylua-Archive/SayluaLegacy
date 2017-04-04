@@ -21,6 +21,7 @@ class ConversationUser(db.Model):
 
     title = db.Column(db.String(256))
     unread = db.Column(db.Boolean, default=False)
+    deleted = db.Column(db.Boolean, default=False)
     last_updated = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
     def url(self):

@@ -89,10 +89,10 @@
       </a>
       <a href="/messages/" class="navbar-link" data-section="messages-menu">
         <i class="fa fa-fw fa-envelope" aria-hidden="true"></i>
-        {% if messages_count > 99 %}
+        {% if nav_messages_count > 99 %}
           <span class="alert-number">99+</span>
-        {% elif messages_count > 0 %}
-          <span class="alert-number">{{messages_count}}</span>
+        {% elif nav_messages_count > 0 %}
+          <span class="alert-number">{{nav_messages_count}}</span>
         {% endif %}
       </a>
       <div id="dropdown-user-menu" class="dropdown-menu">
@@ -124,13 +124,13 @@
         <div id="messages-menu" class="menu">
           <h3>Latest Messages</h3>
           <ul>
-            {% for message in messages %}
-              <a href="{{ message.url() }}"{% if message.unread %} class="highlight"{% endif %}>
-                <li>{{ message.title }}</li>
+            {% for nav_message in nav_messages %}
+              <a href="{{ nav_message.url() }}"{% if nav_message.unread %} class="highlight"{% endif %}>
+                <li>{{ nav_message.title }}</li>
               </a>
             {% else %}
               <a href="/messages/">
-                <li>You have no messages. </li>
+                <li>You're all caught up! </li>
               </a>
             {% endfor %}
           </ul>
