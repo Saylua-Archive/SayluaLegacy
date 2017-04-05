@@ -18,23 +18,12 @@ class User(db.Model):
 
     __tablename__ = "users"
 
-    __table_args__ = (
-        db.ForeignKeyConstraint(
-            ["active_username"],
-            ["usernames.name"],
-            use_alter=True,
-            name="fk_user_active_username"
-        ),
-        {}
-    )
-
     id = db.Column(db.Integer, primary_key=True)
 
-    active_username = db.Column(db.String(80), db.ForeignKey("usernames.name", ondelete='CASCADE'), unique=True)
-    username = db.relationship("Username", primaryjoin="User.active_username==Username.name")
+    active_username = db.Column(db.String(80), unique=True)
 
     last_username_change = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
-    usernames = db.relationship("Username", foreign_keys="Username.user_id", back_populates="user")
+    usernames = db.relationship("Username", back_populates="user")
 
     last_action = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
     date_joined = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
@@ -92,7 +81,7 @@ class User(db.Model):
     def from_username(cls, username):
         return (
             db.session.query(cls)
-            .join(Username, cls.active_username)
+            .join(Username, cls.id == Username.user_id)
             .filter(db.func.lower(Username.name) == username.lower())
             .one_or_none()
         )
@@ -143,7 +132,9 @@ class User(db.Model):
      #         raise InvalidCurrencyException('Currency cannot be negative!')
 
     def __init__(self, username, email, phash, role_name=None, star_shards=None, cloud_coins=None):
-        self.username = Username(username)
+        self.active_username = username
+        Username(username, self)
+
         self.email = email
         self.phash = phash
 
@@ -185,28 +176,19 @@ class Username(db.Model):
 
     __tablename__ = "usernames"
 
-    __table_args__ = (
-        db.ForeignKeyConstraint(
-            ["user_id"],
-            ["users.id"],
-            use_alter=True,
-            name="fk_username_user"
-        ),
-        {}
-    )
-
     # The unique username
     name = db.Column(db.String(80), primary_key=True)
 
     # The linked user
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete='CASCADE'))
-    user = db.relationship("User", foreign_keys=user_id, back_populates="usernames")
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    user = db.relationship("User", back_populates="usernames")
 
     # Account for case sensitivity in username uniqueness.
-    def __init__(self, name):
+    def __init__(self, name, user):
         if Username.get(name):
             raise IntegrityError("Attempted to create username which already exists.")
         self.name = name
+        self.user = user
 
     # Get username object from username.
     @classmethod
