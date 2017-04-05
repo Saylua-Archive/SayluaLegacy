@@ -88,6 +88,17 @@ def messages_read(key):
     except(flask_sqlalchemy.orm.exc.NoResultFound):
         return render_template('messages/invalid.html')
 
+# This marks a user conversation as deleted, note that it will be undeleted if a new reply is made.
+@login_required
+def delete_conversation(key):
+    try:
+        found_conversation = db.session.query(ConversationUser).get((key, g.user.id))
+        found_conversation.deleted = True
+        db.session.commit()
+        return redirect('/conversation/' + str(key) + '/', code=302)
+    except(flask_sqlalchemy.orm.exc.NoResultFound):
+        return render_template('messages/invalid.html')
+
 
 # The page to view a specific conversation.
 @login_required
