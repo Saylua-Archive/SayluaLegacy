@@ -79,6 +79,8 @@ def saylua_relative_time(d):
 # Filters that act on models
 @app.template_filter('message_status')
 def saylua_message_status(user_conversation):
+    if user_conversation.deleted:
+        return 'deleted'
     if user_conversation.unread:
         return 'unread'
     return 'read'

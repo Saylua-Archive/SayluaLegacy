@@ -1,5 +1,4 @@
 from flask import render_template, redirect, flash, request, g
-from google.appengine.ext import ndb
 import flask_sqlalchemy
 from saylua import db
 
@@ -18,6 +17,7 @@ def messages_main():
     conversations = (
         db.session.query(ConversationUser)
         .filter(ConversationUser.user_id == g.user.id)
+        .filter(ConversationUser.deleted == False)
         .order_by(ConversationUser.last_updated.desc())
         .order_by(ConversationUser.unread)
         .all()
@@ -36,23 +36,14 @@ def messages_main_post():
             return redirect('/messages/', code=302)
         keys.append(m_id)
 
-    user_messages = ndb.get_multi(keys)
-    for m in user_messages:
-        if not m:
-            flash('You are attempting to edit a message which does not exist!', 'error')
-            return redirect('/messages/', code=302)
-        if m.user_id != g.user.id:
-            flash('You do not have permission to edit these messages!', 'error')
-            return redirect('/messages/', code=302)
+    if ('delete' in request.form):
+        result = delete_conversations(keys)
+    elif ('read' in request.form):
+        result = read_conversations(keys)
 
-        m.is_deleted = 'delete' in request.form
-        m.unread = 'read' not in request.form
-
-    if 'delete' in request.form:
-        ndb.put_multi(user_messages)
+    if 'delete' in request.form and result:
         flash(pluralize(len(keys), 'message') + ' deleted. ')
-    elif 'read' in request.form:
-        ndb.put_multi(user_messages)
+    elif 'read' in request.form and result:
         flash(pluralize(len(keys), 'message') + ' marked as read. ')
     return redirect('/messages/', code=302)
 
@@ -88,16 +79,38 @@ def messages_read(key):
     except(flask_sqlalchemy.orm.exc.NoResultFound):
         return render_template('messages/invalid.html')
 
+
 # This marks a user conversation as deleted, note that it will be undeleted if a new reply is made.
 @login_required
-def delete_conversation(key):
-    try:
-        found_conversation = db.session.query(ConversationUser).get((key, g.user.id))
-        found_conversation.deleted = True
-        db.session.commit()
-        return redirect('/conversation/' + str(key) + '/', code=302)
-    except(flask_sqlalchemy.orm.exc.NoResultFound):
-        return render_template('messages/invalid.html')
+def delete_conversations(keys):
+    if isinstance(keys, (int, long)): # noqa
+        keys = [keys]
+    for key in keys:
+        try:
+            found_conversation = db.session.query(ConversationUser).get((key, g.user.id))
+            found_conversation.deleted = True
+            db.session.add(found_conversation)
+        except(flask_sqlalchemy.orm.exc.NoResultFound):
+            flash('Message delete failed for an unexpected reason.', 'error')
+            return False
+    db.session.commit()
+    return True
+
+
+@login_required
+def read_conversations(keys):
+    if isinstance(keys, (int, long)): # noqa
+        keys = [keys]
+    for key in keys:
+        try:
+            found_conversation = db.session.query(ConversationUser).get((key, g.user.id))
+            found_conversation.unread = False
+            db.session.add(found_conversation)
+        except(flask_sqlalchemy.orm.exc.NoResultFound):
+            flash('Message read failed for an unexpected reason.', 'error')
+            return False
+    db.session.commit()
+    return True
 
 
 # The page to view a specific conversation.
@@ -163,6 +176,7 @@ def reply_conversation(conversation_id, author_id, text):
     )
     for conversation_user in conversation_users:
         conversation_user.last_updated = db.func.now()
+        conversation_user.deleted = False
         if conversation_user.user_id != author_id:
             conversation_user.unread = True
         db.session.add(conversation_user)

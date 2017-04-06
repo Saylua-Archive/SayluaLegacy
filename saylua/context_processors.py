@@ -91,6 +91,7 @@ def inject_messages():
     nav_messages_count = (
         db.session.query(ConversationUser.conversation_id)
         .filter(ConversationUser.user_id == g.user.id)
+        .filter(ConversationUser.deleted == False)
         .filter(ConversationUser.unread == True)
         .count()
     )
@@ -98,6 +99,7 @@ def inject_messages():
         db.session.query(ConversationUser)
         .filter(ConversationUser.user_id == g.user.id)
         .filter(ConversationUser.unread)
+        .filter(ConversationUser.deleted == False)
         .order_by(ConversationUser.last_updated.desc())
         .order_by(ConversationUser.unread)
         .limit(5)
@@ -119,7 +121,7 @@ def inject_users_online():
         minutes=app.config['USERS_ONLINE_RANGE'])
 
     user_count = (
-        db.session.query(User)
+        db.session.query(User.id)
         .filter(User.last_action >= mins_ago)
         .count()
     )

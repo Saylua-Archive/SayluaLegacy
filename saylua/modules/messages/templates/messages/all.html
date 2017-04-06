@@ -47,7 +47,7 @@
     {% for message in messages %}
     <tr class="forum-board-row{% if not message.unread %} highlight{% endif %}">
       <td>
-        <input type="checkbox" name="user_conversation_id" value="{{ message.id }}">
+        <input type="checkbox" name="user_conversation_id" value="{{ message.conversation_id }}">
       </td>
       <td>
         <a href="{{ message.url() }}">{{ message.title }}</a>
