@@ -20,7 +20,7 @@
 {% if messages|length > 0 %}
 <form method="post">
   <div class="padded full center">
-    {{ pagination() }}
+    {{ pagination(page_count=page_count) }}
   </div>
   <div class="full padded center">
     <input type="submit" class="small" name="delete" value="Delete Selected Conversations" />
@@ -73,7 +73,7 @@
     <input type="submit" class="small" name="read" value="Mark Selected as Read" />
   </div>
   <div class="padded full center">
-    {{ pagination() }}
+    {{ pagination(page_count=page_count) }}
   </div>
 </form>
 {% else %}

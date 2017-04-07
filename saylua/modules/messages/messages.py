@@ -10,19 +10,33 @@ from saylua.models.user import User
 from forms import ConversationForm, ConversationReplyForm, recipient_check
 from saylua.utils.form import flash_errors
 
+CONVERSATIONS_PER_PAGE = 25
+
 
 # The main page where the user views all of their messages.
 @login_required
 def messages_main():
+    page_number = request.args.get('page', 1)
+    page_number = int(page_number)
+
     conversations = (
         db.session.query(ConversationUser)
         .filter(ConversationUser.user_id == g.user.id)
         .filter(ConversationUser.deleted == False)
         .order_by(ConversationUser.last_updated.desc())
         .order_by(ConversationUser.unread)
+        .limit(CONVERSATIONS_PER_PAGE)
+        .offset((page_number - 1) * CONVERSATIONS_PER_PAGE)
         .all()
     )
-    return render_template('messages/all.html', messages=conversations)
+    conversation_count = (
+        db.session.query(ConversationUser.user_id)
+        .filter(ConversationUser.user_id == g.user.id)
+        .filter(ConversationUser.deleted == False)
+        .count()
+    )
+    page_count = (CONVERSATIONS_PER_PAGE + conversation_count - 1) // CONVERSATIONS_PER_PAGE
+    return render_template('messages/all.html', messages=conversations, page_count=page_count)
 
 
 # The submit action for the user to update their messages.
