@@ -23,7 +23,7 @@ class User(db.Model):
     active_username = db.Column(db.String(80), unique=True)
 
     last_username_change = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
-    usernames = db.relationship("Username", back_populates="user")
+    username_objects = db.relationship("Username", back_populates="user")
 
     last_action = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
     date_joined = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
@@ -65,6 +65,10 @@ class User(db.Model):
     @property
     def name(self):
         return self.active_username
+
+    @property
+    def usernames(self):
+        return [u.name for u in self.username_objects]
 
     def url(self):
         return "/user/" + self.name.lower() + "/"
@@ -181,7 +185,7 @@ class Username(db.Model):
 
     # The linked user
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    user = db.relationship("User", back_populates="usernames")
+    user = db.relationship("User", back_populates="username_objects")
 
     # Account for case sensitivity in username uniqueness.
     def __init__(self, name, user):

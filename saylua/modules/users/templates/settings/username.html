@@ -36,14 +36,14 @@
   {% for username in g.user.usernames|reverse %}
   <tr>
     <td>
-      {{ username.name }}
+      {{ username }}
     </td>
     <td>
-      {% if username.name.lower() == g.user.name.lower() %}
+      {% if username.lower() == g.user.name.lower() %}
         <em>Current Username</em>
       {% else %}
         <form method="post" action="/settings/username/release/">
-          <input type="hidden" name="username" value="{{ username.name }}">
+          <input type="hidden" name="username" value="{{ username }}">
           <button type="submit" class="link-button" name="submit">
             Release username
           </button>
