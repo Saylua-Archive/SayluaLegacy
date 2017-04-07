@@ -2,9 +2,8 @@ from bcryptmaster import bcrypt
 from uuid import uuid4
 import datetime
 
-from sqlalchemy.exc import IntegrityError
-
 from saylua import db
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 # An exception thrown if an operation would make a user's currency negative
@@ -62,9 +61,17 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.name
 
-    @property
+    @hybrid_property
     def name(self):
         return self.active_username
+
+    @name.setter
+    def setName(self, name):
+        self.active_username = name
+
+    @property
+    def usernamesLower(self):
+        return [u.name.lower() for u in self.username_objects]
 
     @property
     def usernames(self):
@@ -137,7 +144,7 @@ class User(db.Model):
 
     def __init__(self, username, email, phash, role_name=None, star_shards=None, cloud_coins=None):
         self.active_username = username
-        Username(username, self)
+        Username.create(username, self)
 
         self.email = email
         self.phash = phash
@@ -188,11 +195,11 @@ class Username(db.Model):
     user = db.relationship("User", back_populates="username_objects")
 
     # Account for case sensitivity in username uniqueness.
-    def __init__(self, name, user):
-        if Username.get(name):
-            raise IntegrityError("Attempted to create username which already exists.")
-        self.name = name
-        self.user = user
+    @classmethod
+    def create(cls, name, user):
+        if cls.get(name):
+            return False
+        return cls(name=name, user=user)
 
     # Get username object from username.
     @classmethod

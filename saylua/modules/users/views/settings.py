@@ -1,5 +1,5 @@
 from saylua import app, db
-from saylua.models.user import User
+from saylua.models.user import User, Username
 from saylua.wrappers import login_required
 from saylua.utils.form import flash_errors
 
@@ -48,18 +48,16 @@ def user_settings_username():
     if request.method == "POST" and form.validate():
         if not can_change:
             flash("You've already changed your username once within the past 24 hours.", "error")
-            return redirect(url_for("user_settings_username"))
+            return redirect(url_for("users.settings_username"))
 
         username = form.username.data
-        if username.lower() in g.user.usernames:
+        if username.lower() in g.user.usernamesLower:
             # If the user is changing to a name they already own, change case
             g.user.name = username
-            g.user.usernames.remove(username.lower())
-            g.user.usernames.append(username.lower())
             g.user.last_username_change = datetime.datetime.now()
             g.user.put()
             flash("Your username has been changed to " + username)
-            return redirect(url_for("user_settings_username"))
+            return redirect(url_for("users.settings_username"))
         else:
             # If the username does not exist things are fine as well.
             max_usernames = app.config['MAX_USERNAMES']
@@ -70,11 +68,11 @@ def user_settings_username():
                     "error")
                 return render_template('user/settings/username.html')
             g.user.name = username
-            g.user.usernames.append(username.lower())
             g.user.last_username_change = datetime.datetime.now()
-            g.user.put()
-            flash("Your username has been changed to " + username)
-            return redirect(url_for("user_settings_username"))
+            new_username = Username.create(username, g.user)
+            db.session.commit()
+            flash("Your username has been changed to " + new_username.name)
+            return redirect(url_for("users.settings_username"))
 
     return render_template("settings/username.html", form=form)
 
@@ -87,10 +85,10 @@ def user_settings_username_release():
     elif username == g.user.name.lower():
         flash("You can't release the username you are currently using.", "error")
     else:
-        g.user.usernames.remove(username)
-        g.user.put()
+        Username.query.filter_by(name=username).delete()
+        db.session.commit()
         flash("You've successfully released the username " + username)
-    return redirect(url_for("user_settings_username"))
+    return redirect(url_for("users.settings_username"))
 
 
 @login_required
@@ -115,12 +113,9 @@ def user_settings_password():
     form.setUser(g.user)
     if request.method == "POST" and form.validate():
         password = form.new_password.data
-
         g.user.phash = User.hash_password(password)
         db.session.commit()
         flash("Your password has been changed.")
-
-        return redirect(url_for("user_settings_password"))
-    flash_errors(form)
+        return redirect(url_for("users.settings_password"))
 
     return render_template("settings/password.html", form=form)

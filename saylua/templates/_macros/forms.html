@@ -1,10 +1,11 @@
 {% macro form_errors(field, tip=None) -%}
-    <small class="form-tip" data-field-name="{{ field.name }}">
-      {% if tip %}
-      {{ tip }}
-      {% endif %}
+    <small class="form-tip{% if field.errors %} error{% endif %}" data-field-name="{{ field.name }}">
       {% for error in field.errors %}
       {{ error }}
+      {% else %}
+        {% if tip %}
+        {{ tip }}
+        {% endif %}
       {% endfor %}
     </small>
 {%- endmacro %}
