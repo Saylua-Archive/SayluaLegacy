@@ -15,13 +15,13 @@ from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
 # setup()
 
 def generate_admin_user():
-    display_name = "admin"
+    username = "admin"
     role_name = "admin"
-    phash = User.hash_password("password")  # Yes, the default password is password
+    phash = User.hash_password("password")  # Yes, the default password is password.
     email = "admin@saylua.wizards"
 
     yield User(
-        display_name=display_name,
+        username=username,
         phash=phash,
         email=email,
         role_name=role_name,
@@ -56,7 +56,7 @@ def generate_threads():
             title = "I really, really like {}!".format(soulname(24))
             author = 1
 
-            yield ForumThread(title=title, author=author, board=board)
+            yield ForumThread(title=title, author_id=author, board=board)
 
 
 def generate_posts():
@@ -87,17 +87,17 @@ def generate_posts():
             body = choice(content_phrases).format(soulname(24))
             author = choice(users).id
 
-            yield ForumPost(body=body, author=author, thread=thread)
+            yield ForumPost(body=body, author_id=author, thread=thread)
 
 
 def generate_users():
     for i in range(4):
-        display_name = soulname(7)
+        username = soulname(7)
         phash = User.hash_password("password")  # Yes, the default password is password
-        email = "{0}@dongs.{0}.biz".format(display_name)
+        email = "{0}@dongs.{0}.biz".format(username)
 
         yield User(
-            display_name=display_name,
+            username=username,
             phash=phash,
             email=email,
             star_shards=15,

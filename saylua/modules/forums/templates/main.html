@@ -45,8 +45,8 @@
         <img src="/static/img/pets/eydrun.png" />
         <p>
           <a href="/forums/thread/{{ last_post.thread_id }}">{{ (last_post.thread_id|thread_by_id).title }}
-          </a> by <a href="/user/{{ last_post.author|name_from_author_id }}">
-            {{ last_post.author|name_from_author_id }}</a>
+          </a> by <a href="/user/{{ last_post.author.name }}">
+            {{ last_post.author.name }}</a>
           <span class="line">({{ last_post.date_created|relative_time }})</span>
         </p>
         {% endif %}

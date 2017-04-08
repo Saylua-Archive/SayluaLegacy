@@ -81,13 +81,13 @@ def register():
     form = RegisterForm(request.form)
 
     if request.method == 'POST' and form.validate():
-        display_name = form.username.data
+        username = form.username.data
         password = form.password.data
         email = form.email.data
 
         phash = User.hash_password(password)
         new_user = User(
-            display_name=display_name,
+            username=username,
             phash=phash,
             email=email
         )

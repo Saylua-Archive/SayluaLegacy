@@ -49,8 +49,8 @@
         {{ thread.title }}
       </a>
       <small>
-        Started by <a href="/user/{{ thread.author|name_from_author_id }}">
-          {{ thread.author|name_from_author_id }}</a>
+        Started by <a href="{{ thread.author.url() }}">
+          {{ thread.author.name }}</a>
         <span class="line">({{ thread.date_created|relative_time }})</span>
       </small>
     </div>
@@ -62,8 +62,8 @@
       {% if last_post is not none %}
       <img src="{{ random_pet_image() }}" />
       <p>
-        by <a href="/user/{{ last_post.author|name_from_author_id }}">
-          {{ last_post.author|name_from_author_id }}</a>
+        by <a href="/user/{{ last_post.author.name }}">
+          {{ last_post.author.name }}</a>
         <span class="line">({{ last_post.date_created|relative_time }})</span>
       </p>
       {% endif %}
