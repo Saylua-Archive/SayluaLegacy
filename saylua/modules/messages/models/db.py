@@ -12,15 +12,15 @@ class Conversation(db.Model):
         return '/conversation/' + str(self.id) + '/'
 
 
-class ConversationUser(db.Model):
-    __tablename__ = "conversation_users"
+class ConversationHandle(db.Model):
+    __tablename__ = "conversation_handles"
 
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
 
     title = db.Column(db.String(256))
     unread = db.Column(db.Boolean, default=False)
-    deleted = db.Column(db.Boolean, default=False)
+    hidden = db.Column(db.Boolean, default=False)
     last_updated = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
     def url(self):

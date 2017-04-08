@@ -1,6 +1,6 @@
 from saylua import app
 from saylua.models.user import User
-from saylua.modules.messages.models.db import ConversationUser
+from saylua.modules.messages.models.db import ConversationHandle
 from saylua.modules.messages.models.db import Notification
 from saylua.utils import get_static_version_id
 
@@ -89,19 +89,19 @@ def inject_messages():
     if not g.logged_in:
         return {}
     nav_messages_count = (
-        db.session.query(ConversationUser.conversation_id)
-        .filter(ConversationUser.user_id == g.user.id)
-        .filter(ConversationUser.deleted == False)
-        .filter(ConversationUser.unread == True)
+        db.session.query(ConversationHandle.conversation_id)
+        .filter(ConversationHandle.user_id == g.user.id)
+        .filter(ConversationHandle.hidden == False)
+        .filter(ConversationHandle.unread == True)
         .count()
     )
     nav_messages = (
-        db.session.query(ConversationUser)
-        .filter(ConversationUser.user_id == g.user.id)
-        .filter(ConversationUser.unread)
-        .filter(ConversationUser.deleted == False)
-        .order_by(ConversationUser.last_updated.desc())
-        .order_by(ConversationUser.unread)
+        db.session.query(ConversationHandle)
+        .filter(ConversationHandle.user_id == g.user.id)
+        .filter(ConversationHandle.unread)
+        .filter(ConversationHandle.hidden == False)
+        .order_by(ConversationHandle.last_updated.desc())
+        .order_by(ConversationHandle.unread)
         .limit(5)
         .all()
     )

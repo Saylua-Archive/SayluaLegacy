@@ -4,7 +4,7 @@ from saylua import db
 
 from saylua.wrappers import login_required
 from saylua.utils import pluralize, get_from_request
-from .models.db import Conversation, ConversationUser, Message
+from .models.db import Conversation, ConversationHandle, Message
 from saylua.models.user import User
 
 from forms import ConversationForm, ConversationReplyForm, recipient_check
@@ -20,19 +20,19 @@ def messages_main():
     page_number = int(page_number)
 
     conversations = (
-        db.session.query(ConversationUser)
-        .filter(ConversationUser.user_id == g.user.id)
-        .filter(ConversationUser.deleted == False)
-        .order_by(ConversationUser.last_updated.desc())
-        .order_by(ConversationUser.unread)
+        db.session.query(ConversationHandle)
+        .filter(ConversationHandle.user_id == g.user.id)
+        .filter(ConversationHandle.hidden == False)
+        .order_by(ConversationHandle.last_updated.desc())
+        .order_by(ConversationHandle.unread)
         .limit(CONVERSATIONS_PER_PAGE)
         .offset((page_number - 1) * CONVERSATIONS_PER_PAGE)
         .all()
     )
     conversation_count = (
-        db.session.query(ConversationUser.user_id)
-        .filter(ConversationUser.user_id == g.user.id)
-        .filter(ConversationUser.deleted == False)
+        db.session.query(ConversationHandle.user_id)
+        .filter(ConversationHandle.user_id == g.user.id)
+        .filter(ConversationHandle.hidden == False)
         .count()
     )
     page_count = (CONVERSATIONS_PER_PAGE + conversation_count - 1) // CONVERSATIONS_PER_PAGE
@@ -51,7 +51,7 @@ def messages_main_post():
         keys.append(m_id)
 
     if ('delete' in request.form):
-        result = delete_conversations(keys)
+        result = hide_conversations(keys)
     elif ('read' in request.form):
         result = read_conversations(keys)
 
@@ -79,14 +79,14 @@ def messages_write_new():
     return render_template('messages/write.html', form=form)
 
 
-# This route just marks a conversationuser as read and then redirects the user to the
+# This route just marks a ConversationHandle as read and then redirects the user to the
 # conversation they were looking to read. We make it a separate route so that the
 # main "looking at a message" route doesn't have to bother with looking up
 # the user's message metadata.
 @login_required
 def messages_read(key):
     try:
-        found_conversation = db.session.query(ConversationUser).get((key, g.user.id))
+        found_conversation = db.session.query(ConversationHandle).get((key, g.user.id))
         found_conversation.unread = False
         db.session.commit()
         return redirect('/conversation/' + str(key) + '/', code=302)
@@ -94,15 +94,15 @@ def messages_read(key):
         return render_template('messages/invalid.html')
 
 
-# This marks a user conversation as deleted, note that it will be undeleted if a new reply is made.
+# This marks a user conversation as hidden, note that it will be unhidden if a new reply is made.
 @login_required
-def delete_conversations(keys):
+def hide_conversations(keys, user_id):
     if isinstance(keys, (int, long)): # noqa
         keys = [keys]
     for key in keys:
         try:
-            found_conversation = db.session.query(ConversationUser).get((key, g.user.id))
-            found_conversation.deleted = True
+            found_conversation = db.session.query(ConversationHandle).get((key, g.user.id))
+            found_conversation.hidden = True
             db.session.add(found_conversation)
         except(flask_sqlalchemy.orm.exc.NoResultFound):
             flash('Message delete failed for an unexpected reason.', 'error')
@@ -117,7 +117,7 @@ def read_conversations(keys):
         keys = [keys]
     for key in keys:
         try:
-            found_conversation = db.session.query(ConversationUser).get((key, g.user.id))
+            found_conversation = db.session.query(ConversationHandle).get((key, g.user.id))
             found_conversation.unread = False
             db.session.add(found_conversation)
         except(flask_sqlalchemy.orm.exc.NoResultFound):
@@ -130,7 +130,7 @@ def read_conversations(keys):
 # The page to view a specific conversation.
 @login_required
 def messages_view_conversation(key):
-    found_conversation = db.session.query(ConversationUser).get((key, g.user.id))
+    found_conversation = db.session.query(ConversationHandle).get((key, g.user.id))
     if not found_conversation:
         return render_template('messages/invalid.html')
 
@@ -146,8 +146,8 @@ def messages_view_conversation(key):
     flash_errors(form)
     members = (
         db.session.query(User)
-        .join(ConversationUser)
-        .filter(ConversationUser.conversation_id == key)
+        .join(ConversationHandle)
+        .filter(ConversationHandle.conversation_id == key)
         .all()
     )
     messages = (
@@ -165,7 +165,7 @@ def start_conversation(sender_id, recipient_ids, title, text):
     db.session.flush()
     first_message = Message(conversation_id=new_conversation.id, author_id=sender_id, text=text)
     db.session.add(first_message)
-    send_member = ConversationUser(conversation_id=new_conversation.id,
+    send_member = ConversationHandle(conversation_id=new_conversation.id,
             user_id=sender_id, title=title, unread=False)
     db.session.add(send_member)
     if isinstance(recipient_ids, (int, long)): # noqa
@@ -174,7 +174,7 @@ def start_conversation(sender_id, recipient_ids, title, text):
     if sender_id in recipient_ids:
         recipient_ids.remove(sender_id)
     for recip_id in recipient_ids:
-        db.session.add(ConversationUser(conversation_id=new_conversation.id,
+        db.session.add(ConversationHandle(conversation_id=new_conversation.id,
                 user_id=recip_id, title=title, unread=True))
     db.session.commit()
     return new_conversation.id
@@ -184,13 +184,13 @@ def reply_conversation(conversation_id, author_id, text):
     new_message = Message(conversation_id=conversation_id, author_id=author_id, text=text)
     db.session.add(new_message)
     conversation_users = (
-        db.session.query(ConversationUser)
-        .filter(ConversationUser.conversation_id == conversation_id)
+        db.session.query(ConversationHandle)
+        .filter(ConversationHandle.conversation_id == conversation_id)
         .all()
     )
     for conversation_user in conversation_users:
         conversation_user.last_updated = db.func.now()
-        conversation_user.deleted = False
+        conversation_user.hidden = False
         if conversation_user.user_id != author_id:
             conversation_user.unread = True
         db.session.add(conversation_user)
