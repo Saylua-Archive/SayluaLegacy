@@ -1,5 +1,4 @@
 from saylua import db
-from saylua.models.user import User
 
 
 r_board_categories = db.Table('r_board_categories',
