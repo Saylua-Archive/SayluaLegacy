@@ -95,7 +95,6 @@ def messages_read(key):
 
 
 # This marks a user conversation as hidden, note that it will be unhidden if a new reply is made.
-@login_required
 def hide_conversations(keys, user_id):
     if isinstance(keys, (int, long)): # noqa
         keys = [keys]
@@ -111,7 +110,6 @@ def hide_conversations(keys, user_id):
     return True
 
 
-@login_required
 def read_conversations(keys):
     if isinstance(keys, (int, long)): # noqa
         keys = [keys]
