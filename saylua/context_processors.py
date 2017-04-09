@@ -1,6 +1,6 @@
 from saylua import app
 from saylua.models.user import User
-from saylua.modules.messages.models.db import UserConversation
+from saylua.modules.messages.models.db import ConversationHandle
 from saylua.modules.messages.models.db import Notification
 from saylua.utils import get_static_version_id
 
@@ -88,16 +88,26 @@ def inject_notifications():
 def inject_messages():
     if not g.logged_in:
         return {}
-    messages_count = UserConversation.query(
-        UserConversation.user_id == g.user.id,
-        UserConversation.is_read == False,
-        UserConversation.is_deleted == False).count(limit=100)
-    messages = UserConversation.query(UserConversation.user_id == g.user.id,
-        UserConversation.is_deleted == False).order(
-        UserConversation.is_read, -UserConversation.time).fetch(limit=5)
-    if not messages:
-        messages = []
-    return dict(messages_count=messages_count, messages=messages)
+    nav_messages_count = (
+        db.session.query(ConversationHandle.conversation_id)
+        .filter(ConversationHandle.user_id == g.user.id)
+        .filter(ConversationHandle.hidden == False)
+        .filter(ConversationHandle.unread == True)
+        .count()
+    )
+    nav_messages = (
+        db.session.query(ConversationHandle)
+        .filter(ConversationHandle.user_id == g.user.id)
+        .filter(ConversationHandle.unread)
+        .filter(ConversationHandle.hidden == False)
+        .order_by(ConversationHandle.last_updated.desc())
+        .order_by(ConversationHandle.unread)
+        .limit(5)
+        .all()
+    )
+    if not nav_messages:
+        nav_messages = []
+    return dict(nav_messages_count=nav_messages_count, nav_messages=nav_messages)
 
 
 @app.context_processor
@@ -111,7 +121,7 @@ def inject_users_online():
         minutes=app.config['USERS_ONLINE_RANGE'])
 
     user_count = (
-        db.session.query(User)
+        db.session.query(User.id)
         .filter(User.last_action >= mins_ago)
         .count()
     )

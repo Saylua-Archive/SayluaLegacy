@@ -51,6 +51,7 @@ def saylua_expanded_relative_time(d):
     return result
 
 
+# TODO Fix problem with database time not matching datetime.datetime
 @app.template_filter('relative_time')
 def saylua_relative_time(d):
     diff = datetime.datetime.now() - d
@@ -78,14 +79,10 @@ def saylua_relative_time(d):
 # Filters that act on models
 @app.template_filter('message_status')
 def saylua_message_status(user_conversation):
-    if user_conversation.is_deleted:
+    if user_conversation.hidden:
         return 'deleted'
-    if not user_conversation.is_read:
+    if user_conversation.unread:
         return 'unread'
-    if user_conversation.is_first:
-        return 'sent'
-    if user_conversation.is_replied:
-        return 'replied'
     return 'read'
 
 

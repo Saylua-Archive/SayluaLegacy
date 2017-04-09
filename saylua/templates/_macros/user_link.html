@@ -1,3 +1,6 @@
 {% macro user_link(user) -%}
-<a href="{{ user.url() }}">{{ user.name }}</a> <small>{{ user.status }}</small>
+<a href="{{ user.url() }}">{{ user.name }}</a>
+{% if user.status is not none %}
+  <small>{{ user.status }}</small>
+{% endif %}
 {%- endmacro %}

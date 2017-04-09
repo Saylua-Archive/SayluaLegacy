@@ -1,21 +1,42 @@
 from flask import render_template, redirect, flash, request, g
-from google.appengine.ext import ndb
 import flask_sqlalchemy
 from saylua import db
 
 from saylua.wrappers import login_required
-from saylua.utils import make_ndb_key, pluralize, get_from_request
-from .models.db import Conversation, ConversationUser, Message
+from saylua.utils import pluralize, get_from_request
+from .models.db import Conversation, ConversationHandle, Message
+from saylua.models.user import User
 
 from forms import ConversationForm, ConversationReplyForm, recipient_check
 from saylua.utils.form import flash_errors
+
+CONVERSATIONS_PER_PAGE = 25
 
 
 # The main page where the user views all of their messages.
 @login_required
 def messages_main():
-    messages = []
-    return render_template('messages/all.html', viewed_messages=messages)
+    page_number = request.args.get('page', 1)
+    page_number = int(page_number)
+
+    conversations = (
+        db.session.query(ConversationHandle)
+        .filter(ConversationHandle.user_id == g.user.id)
+        .filter(ConversationHandle.hidden == False)
+        .order_by(ConversationHandle.last_updated.desc())
+        .order_by(ConversationHandle.unread)
+        .limit(CONVERSATIONS_PER_PAGE)
+        .offset((page_number - 1) * CONVERSATIONS_PER_PAGE)
+        .all()
+    )
+    conversation_count = (
+        db.session.query(ConversationHandle.user_id)
+        .filter(ConversationHandle.user_id == g.user.id)
+        .filter(ConversationHandle.hidden == False)
+        .count()
+    )
+    page_count = (CONVERSATIONS_PER_PAGE + conversation_count - 1) // CONVERSATIONS_PER_PAGE
+    return render_template('messages/all.html', messages=conversations, page_count=page_count)
 
 
 # The submit action for the user to update their messages.
@@ -24,29 +45,19 @@ def messages_main_post():
     user_message_ids = request.form.getlist('user_conversation_id')
     keys = []
     for m_id in user_message_ids:
-        m_id = make_ndb_key(m_id)
         if not m_id:
             flash('You are attempting to edit an invalid message!', 'error')
             return redirect('/messages/', code=302)
         keys.append(m_id)
 
-    user_messages = ndb.get_multi(keys)
-    for m in user_messages:
-        if not m:
-            flash('You are attempting to edit a message which does not exist!', 'error')
-            return redirect('/messages/', code=302)
-        if m.user_id != g.user.id:
-            flash('You do not have permission to edit these messages!', 'error')
-            return redirect('/messages/', code=302)
+    if ('hide' in request.form):
+        result = ConversationHandle.hide_conversations(keys, g.user.id)
+    elif ('read' in request.form):
+        result = ConversationHandle.read_conversations(keys, g.user.id)
 
-        m.is_deleted = 'delete' in request.form
-        m.is_read = 'read' in request.form
-
-    if 'delete' in request.form:
-        ndb.put_multi(user_messages)
-        flash(pluralize(len(keys), 'message') + ' deleted. ')
-    elif 'read' in request.form:
-        ndb.put_multi(user_messages)
+    if 'hide' in request.form and result:
+        flash(pluralize(len(keys), 'message') + ' hidden. ')
+    elif 'read' in request.form and result:
         flash(pluralize(len(keys), 'message') + ' marked as read. ')
     return redirect('/messages/', code=302)
 
@@ -68,16 +79,17 @@ def messages_write_new():
     return render_template('messages/write.html', form=form)
 
 
-# This route just marks a conversationuser as read and then redirects the user to the
+# This route just marks a ConversationHandle as read and then redirects the user to the
 # conversation they were looking to read. We make it a separate route so that the
 # main "looking at a message" route doesn't have to bother with looking up
 # the user's message metadata.
 @login_required
-def messages_read(id):
+def messages_read(key):
     try:
-        # found_message = db.session.query(Message).get(id)
-        # more to go here
-        return redirect('/conversation/' + str(id) + '/', code=302)
+        found_conversation = db.session.query(ConversationHandle).get((key, g.user.id))
+        found_conversation.unread = False
+        db.session.commit()
+        return redirect('/conversation/' + str(key) + '/', code=302)
     except(flask_sqlalchemy.orm.exc.NoResultFound):
         return render_template('messages/invalid.html')
 
@@ -85,34 +97,33 @@ def messages_read(id):
 # The page to view a specific conversation.
 @login_required
 def messages_view_conversation(key):
-    key = make_ndb_key(key)
-    conversation = get_conversation_if_valid(key)
-    if not conversation:
+    found_conversation = db.session.query(ConversationHandle).get((key, g.user.id))
+    if not found_conversation:
         return render_template('messages/invalid.html')
 
     form = ConversationReplyForm()
     form.text.data = get_from_request(request, 'text')
     if request.method == 'POST' and form.validate():
-        result = Conversation.reply(key, g.user.id, form.text.data)
+        result = reply_conversation(key, g.user.id, form.text.data)
         if result:
             flash('You have replied to the message!')
-            return redirect('/conversation/' + key.urlsafe() + '/', code=302)
+            return redirect('/conversation/' + str(key) + '/', code=302)
         else:
             flash('Message reply failed for an unexpected reason.', 'error')
     flash_errors(form)
-    return render_template('messages/view.html', conversation=conversation,
-        form=form)
-
-
-# Non-route functions.
-def get_conversation_if_valid(key):
-    if key:
-        conversation = Conversation.get_by_id(key.id())
-        if conversation:
-            # Check that the user has permission to view the message
-            if g.user.id in conversation.user_ids:
-                return conversation
-    return None
+    members = (
+        db.session.query(User)
+        .join(ConversationHandle)
+        .filter(ConversationHandle.conversation_id == key)
+        .all()
+    )
+    messages = (
+        db.session.query(Message)
+        .filter(Message.conversation_id == key)
+        .all()
+    )
+    return render_template('messages/view.html', conversation=found_conversation,
+        members=members, conversation_messages=messages, form=form)
 
 
 def start_conversation(sender_id, recipient_ids, title, text):
@@ -121,13 +132,34 @@ def start_conversation(sender_id, recipient_ids, title, text):
     db.session.flush()
     first_message = Message(conversation_id=new_conversation.id, author_id=sender_id, text=text)
     db.session.add(first_message)
-    send_member = ConversationUser(conversation_id=new_conversation.id,
+    send_member = ConversationHandle(conversation_id=new_conversation.id,
             user_id=sender_id, title=title, unread=False)
     db.session.add(send_member)
     if isinstance(recipient_ids, (int, long)): # noqa
         recipient_ids = [recipient_ids]
+    recipient_ids = set(recipient_ids) # Remove duplicates
+    if sender_id in recipient_ids:
+        recipient_ids.remove(sender_id)
     for recip_id in recipient_ids:
-        db.session.add(ConversationUser(conversation_id=new_conversation.id,
+        db.session.add(ConversationHandle(conversation_id=new_conversation.id,
                 user_id=recip_id, title=title, unread=True))
     db.session.commit()
     return new_conversation.id
+
+
+def reply_conversation(conversation_id, author_id, text):
+    new_message = Message(conversation_id=conversation_id, author_id=author_id, text=text)
+    db.session.add(new_message)
+    conversation_users = (
+        db.session.query(ConversationHandle)
+        .filter(ConversationHandle.conversation_id == conversation_id)
+        .all()
+    )
+    for conversation_user in conversation_users:
+        conversation_user.last_updated = db.func.now()
+        conversation_user.hidden = False
+        if conversation_user.user_id != author_id:
+            conversation_user.unread = True
+        db.session.add(conversation_user)
+    db.session.commit()
+    return True

@@ -17,13 +17,13 @@
     Send a New Message
   </a>
 </h3>
-{% if viewed_messages|length > 0 %}
+{% if messages|length > 0 %}
 <form method="post">
   <div class="padded full center">
-    {{ pagination() }}
+    {{ pagination(page_count=page_count) }}
   </div>
   <div class="full padded center">
-    <input type="submit" class="small" name="delete" value="Delete Selected Conversations" />
+    <input type="submit" class="small" name="hide" value="Hide Selected Conversations" />
     <input type="submit" class="small" name="read" value="Mark Selected as Read" />
   </div>
   <table class="forum-table">
@@ -44,10 +44,10 @@
         Status
       </th>
     </tr>
-    {% for message in viewed_messages %}
-    <tr class="forum-board-row{% if not message.is_read %} highlight{% endif %}">
+    {% for message in messages %}
+    <tr class="forum-board-row{% if not message.unread %} highlight{% endif %}">
       <td>
-        <input type="checkbox" name="user_conversation_id" value="{{ message.key.urlsafe() }}">
+        <input type="checkbox" name="user_conversation_id" value="{{ message.conversation_id }}">
       </td>
       <td>
         <a href="{{ message.url() }}">{{ message.title }}</a>
@@ -60,7 +60,7 @@
         {% endfor %}
       </td>
       <td>
-        {{ message.time|relative_time }}
+        {{ message.last_updated|relative_time }}
       </td>
       <td>
         {{ message|message_status }}
@@ -69,11 +69,11 @@
     {% endfor %}
   </table>
   <div class="full padded center">
-    <input type="submit" class="small" name="delete" value="Delete Selected Conversations" />
+    <input type="submit" class="small" name="hide" value="Hide Selected Conversations" />
     <input type="submit" class="small" name="read" value="Mark Selected as Read" />
   </div>
   <div class="padded full center">
-    {{ pagination() }}
+    {{ pagination(page_count=page_count) }}
   </div>
 </form>
 {% else %}

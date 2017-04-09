@@ -49,7 +49,13 @@ def forums_board(board_slug):
             .all()
         )
 
-        page_count = threads_query.count() // THREADS_PER_PAGE
+        threads_count = (
+            db.session.query(ForumThread)
+            .filter(ForumThread.board_id == board.id)
+            .count()
+        )
+
+        page_count = (THREADS_PER_PAGE + threads_count - 1) // THREADS_PER_PAGE
 
         return render_template("board.html", form=form,
             board=board, threads=threads, page_count=page_count)
@@ -89,7 +95,13 @@ def forums_thread(thread_id):
             .offset((page_number - 1) * POSTS_PER_PAGE)
         )
 
-        page_count = post_query.count() // POSTS_PER_PAGE
+        posts_count = (
+            db.session.query(ForumPost)
+            .filter(ForumPost.thread_id == thread_id)
+            .count()
+        )
+
+        page_count = (POSTS_PER_PAGE + posts_count - 1) // POSTS_PER_PAGE
         other_boards = db.session.query(Board).all()
 
         return render_template("thread.html", form=form, board=board, thread=thread,

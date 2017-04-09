@@ -6,7 +6,7 @@ import random
 
 def home():
     try:
-        if g.user or is_devserver():
+        if is_devserver() or g.user:
             return redirect('/news/', code=302)
         return landing()
     except AttributeError:
