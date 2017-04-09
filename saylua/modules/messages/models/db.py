@@ -1,6 +1,8 @@
 from google.appengine.ext import ndb
-
+from flask import flash
 from saylua import db
+
+import flask_sqlalchemy
 
 
 class Conversation(db.Model):
@@ -27,6 +29,37 @@ class ConversationHandle(db.Model):
         if self.unread:
             return '/conversation_read/' + str(self.conversation_id) + '/'
         return '/conversation/' + str(self.conversation_id) + '/'
+
+    @classmethod
+    def read_conversations(cls, keys, user_id):
+        if isinstance(keys, (int, long)): # noqa
+            keys = [keys]
+        for key in keys:
+            try:
+                found_conversation = db.session.query(cls).get((key, user_id))
+                found_conversation.unread = False
+                db.session.add(found_conversation)
+            except(flask_sqlalchemy.orm.exc.NoResultFound):
+                flash('Message read failed for an unexpected reason.', 'error')
+                return False
+        db.session.commit()
+        return True
+
+    # This marks a user conversation as hidden, it will be unhidden if a new reply is made.
+    @classmethod
+    def hide_conversations(cls, keys, user_id):
+        if isinstance(keys, (int, long)): # noqa
+            keys = [keys]
+        for key in keys:
+            try:
+                found_conversation = db.session.query(cls).get((key, user_id))
+                found_conversation.hidden = True
+                db.session.add(found_conversation)
+            except(flask_sqlalchemy.orm.exc.NoResultFound):
+                flash('Message hide failed for an unexpected reason.', 'error')
+                return False
+        db.session.commit()
+        return True
 
 
 class Message(db.Model):

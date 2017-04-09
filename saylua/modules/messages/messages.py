@@ -50,13 +50,13 @@ def messages_main_post():
             return redirect('/messages/', code=302)
         keys.append(m_id)
 
-    if ('delete' in request.form):
-        result = hide_conversations(keys)
+    if ('hide' in request.form):
+        result = ConversationHandle.hide_conversations(keys, g.user.id)
     elif ('read' in request.form):
-        result = read_conversations(keys)
+        result = ConversationHandle.read_conversations(keys, g.user.id)
 
-    if 'delete' in request.form and result:
-        flash(pluralize(len(keys), 'message') + ' deleted. ')
+    if 'hide' in request.form and result:
+        flash(pluralize(len(keys), 'message') + ' hidden. ')
     elif 'read' in request.form and result:
         flash(pluralize(len(keys), 'message') + ' marked as read. ')
     return redirect('/messages/', code=302)
@@ -92,37 +92,6 @@ def messages_read(key):
         return redirect('/conversation/' + str(key) + '/', code=302)
     except(flask_sqlalchemy.orm.exc.NoResultFound):
         return render_template('messages/invalid.html')
-
-
-# This marks a user conversation as hidden, note that it will be unhidden if a new reply is made.
-def hide_conversations(keys, user_id):
-    if isinstance(keys, (int, long)): # noqa
-        keys = [keys]
-    for key in keys:
-        try:
-            found_conversation = db.session.query(ConversationHandle).get((key, g.user.id))
-            found_conversation.hidden = True
-            db.session.add(found_conversation)
-        except(flask_sqlalchemy.orm.exc.NoResultFound):
-            flash('Message delete failed for an unexpected reason.', 'error')
-            return False
-    db.session.commit()
-    return True
-
-
-def read_conversations(keys):
-    if isinstance(keys, (int, long)): # noqa
-        keys = [keys]
-    for key in keys:
-        try:
-            found_conversation = db.session.query(ConversationHandle).get((key, g.user.id))
-            found_conversation.unread = False
-            db.session.add(found_conversation)
-        except(flask_sqlalchemy.orm.exc.NoResultFound):
-            flash('Message read failed for an unexpected reason.', 'error')
-            return False
-    db.session.commit()
-    return True
 
 
 # The page to view a specific conversation.
