@@ -13,6 +13,7 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), unique=True)
 
+    # TODO: Restructure these booleans to make more sense.
     can_post_threads = db.Column(db.Boolean, default=False)
     can_comment = db.Column(db.Boolean, default=False)
     can_move_threads = db.Column(db.Boolean, default=False)

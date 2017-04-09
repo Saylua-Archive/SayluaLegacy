@@ -10,25 +10,23 @@ urlpatterns = [
     url('/register/', view_func=views.login.register, name='register', methods=['GET', 'POST']),
 
     # Online users
-    url('/online/', view_func=views.online.users_online, name='users_online'),
+    url('/online/', view_func=views.online.users_online, name='online'),
 
     # User Profile URls
-    url('/user/', view_func=views.profile.user_profile_default, name='user_profile_default'),
-    url('/user/<username>/', view_func=views.profile.user_profile, name='user_profile'),
+    url('/user/', view_func=views.profile.user_profile_default, name='profile_default'),
+    url('/user/<username>/', view_func=views.profile.user_profile, name='profile'),
 
     # User Settings URls
-    url('/settings/', view_func=views.settings.user_settings, name='user_settings',
+    url('/settings/', view_func=views.settings.user_settings, name='settings',
         methods=['GET', 'POST']),
     url('/settings/details/', view_func=views.settings.user_settings_details,
-        name='user_settings_details', methods=['GET', 'POST']),
-    url('/settings/css/', view_func=views.settings.user_settings_details,
-        name='user_settings_details', methods=['GET', 'POST']),
+        name='settings_details', methods=['GET', 'POST']),
     url('/settings/username/', view_func=views.settings.user_settings_username,
-        name='user_settings_username', methods=['GET', 'POST']),
+        name='settings_username', methods=['GET', 'POST']),
     url('/settings/username/release/', view_func=views.settings.user_settings_username_release,
-        name='user_settings_username_release', methods=['POST']),
+        name='settings_username_release', methods=['POST']),
     url('/settings/email/', view_func=views.settings.user_settings_email,
-        name='user_settings_email', methods=['GET', 'POST']),
+        name='settings_email', methods=['GET', 'POST']),
     url('/settings/password/', view_func=views.settings.user_settings_password,
-        name='user_settings_password', methods=['GET', 'POST'])
+        name='settings_password', methods=['GET', 'POST'])
 ]

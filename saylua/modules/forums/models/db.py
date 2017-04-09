@@ -55,7 +55,8 @@ class ForumThread(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(256))
-    author = db.Column(db.Integer)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    author = db.relationship("User")
 
     date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
     date_modified = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
@@ -80,7 +81,9 @@ class ForumPost(db.Model):
     __tablename__ = "forum_thread_posts"
 
     id = db.Column(db.Integer, primary_key=True)
-    author = db.Column(db.Integer)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    author = db.relationship("User")
+
     body = db.Column(db.Text())
 
     date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())

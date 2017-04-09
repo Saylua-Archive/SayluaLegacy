@@ -35,11 +35,11 @@ def bank_transfer():
                     'error')
             else:
                 flash('You have successfully sent %d SS and %d CC to %s'
-                    % (ss, cc, recipient.display_name))
+                    % (ss, cc, recipient.name))
 
                 # Send a notification to the user who received the currency
                 Notification.send(recipient.id, '%s sent you %d SS and %d CC'
-                    % (g.user.display_name, ss, cc), '/bank/')
+                    % (g.user.name, ss, cc), '/bank/')
                 return redirect('/bank/transfer/')
     flash_errors(form)
     return render_template('bank/transfer.html', form=form)

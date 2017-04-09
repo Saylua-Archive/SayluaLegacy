@@ -40,7 +40,7 @@ class UsernameForm(Form):
         UsernameUnique])
 
     def setUser(self, user):
-        self.IsNot.pattern = user.display_name
+        self.IsNot.pattern = user.name
         self.UsernameUnique.whitelist = user.usernames
 
 
