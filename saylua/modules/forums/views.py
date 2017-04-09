@@ -25,7 +25,7 @@ def forums_board(board_slug):
             body = request.form.get('body')
             author = g.user.id
             board_id = board.id
-            new_thread = ForumThread(title=title, author=author, board_id=board_id)
+            new_thread = ForumThread(title=title, author_id=author, board_id=board_id)
             db.session.add(new_thread)
             db.session.flush()
             new_post = ForumPost(author=author, thread_id=new_thread.id, body=body)
@@ -69,7 +69,7 @@ def forums_thread(thread_id):
         if request.method == 'POST' and form.validate():
             author = g.user.id
             body = request.form.get('body')
-            new_post = ForumPost(author=author, thread_id=thread_id, body=body)
+            new_post = ForumPost(author_id=author, thread_id=thread_id, body=body)
             db.session.add(new_post)
             db.session.commit()
             return redirect("forums/thread/" + str(thread_id) + "/")
