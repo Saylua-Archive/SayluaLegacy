@@ -72,7 +72,7 @@ class Message(db.Model):
     date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
 
-class _Notification(db.Model):
+class Notification(db.Model):
     __tablename__ = "notifications"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -83,8 +83,18 @@ class _Notification(db.Model):
     link = db.Column(db.String(512))
     count = db.Column(db.Integer)
 
+    @classmethod
+    def send(cls, user_id, text, link):
+        notification = cls.query(cls.user_id == user_id,
+            cls.text == text, cls.link == link, cls.is_read == False).get()
+        if not notification:
+            notification = cls(user_id=user_id, text=text, link=link)
+        else:
+            notification.count += 1
+        return notification.put()
 
-class Notification(ndb.Model):
+
+class _Notification(ndb.Model):
     user_id = ndb.IntegerProperty()
     time = ndb.DateTimeProperty(auto_now_add=True)
     text = ndb.StringProperty()

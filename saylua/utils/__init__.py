@@ -1,4 +1,3 @@
-from google.appengine.ext import ndb
 from dateutil import tz
 
 import time
@@ -19,14 +18,6 @@ def get_static_version_id():
     if not is_devserver():
         version = get_gae_version()
     return version
-
-
-def make_ndb_key(key_string):
-    try:
-        key = ndb.Key(urlsafe=key_string)
-    except Exception:
-        return None
-    return key
 
 
 def pluralize(count, singular_noun, plural_noun=None):

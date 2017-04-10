@@ -1,5 +1,5 @@
 from saylua.wrappers import login_required
-from saylua.utils import make_ndb_key, pluralize
+from saylua.utils import pluralize
 from flask import render_template, redirect, flash, request, g
 from google.appengine.ext import ndb
 from .models.db import Notification
@@ -53,7 +53,7 @@ def notifications_main_post():
 
 
 @login_required
-def notification_follow(key):
+def notification_read(key):
     key = make_ndb_key(key)
     if key:
         notification = Notification.get_by_id(key.id())
