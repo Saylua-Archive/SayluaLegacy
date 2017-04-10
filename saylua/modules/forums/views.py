@@ -28,7 +28,7 @@ def forums_board(board_slug):
             new_thread = ForumThread(title=title, author_id=author, board_id=board_id)
             db.session.add(new_thread)
             db.session.flush()
-            new_post = ForumPost(author=author, thread_id=new_thread.id, body=body)
+            new_post = ForumPost(author_id=author, thread_id=new_thread.id, body=body)
             db.session.add(new_post)
             db.session.commit()
             return redirect(board.url())
