@@ -41,14 +41,12 @@ def notifications_main_post():
     notification_ids = request.form.getlist('notification_id')
     keys = []
     for n_id in notification_ids:
-        n_id = make_ndb_key(n_id)
         if not n_id:
             flash('You are attempting to edit an invalid notification!', 'error')
             return redirect('/notifications/', code=302)
         keys.append(n_id)
 
-    notifications = ndb.get_multi(keys)
-    for n in notifications:
+    for key in keys:
         if not n:
             flash('You are attempting to edit a notification which does not exist!', 'error')
             return redirect('/notifications/', code=302)
