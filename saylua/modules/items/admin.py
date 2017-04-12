@@ -22,10 +22,10 @@ def admin_panel_items_add():
         flash('You have successfully created a new item! ')
         return redirect(url_for('admin_panel_items_add'))
     flash_errors(form)
-    return render_template('admin/items/add.html', form=form)
+    return render_template('admin/add.html', form=form)
 
 
 @app.route('/admin/items/edit/', methods=['GET'])
 @admin_access_required
 def admin_panel_items_edit():
-    return render_template('admin/items/edit.html')
+    return render_template('admin/edit.html')

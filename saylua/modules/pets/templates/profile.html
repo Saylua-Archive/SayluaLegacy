@@ -60,9 +60,11 @@
     </div>
     <div class="pet-profile-box">
       <h2>Kevin's Mini</h2>
+      {% for i in range(10) %}
       <div class="mini">
         <img src="{{ random_mini_image() }}">
       </div>
+      {% endfor %}
     </div>
   </div>
 </div>

@@ -10,7 +10,6 @@ class Item(db.Model):
 
     name = db.Column(db.String(256), unique=True)
     url_name = db.Column(db.String(256), unique=True)
-    image_url = db.Column(db.String(256))
     description = db.Column(db.String(1024))
 
     @classmethod
