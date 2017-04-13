@@ -19,7 +19,7 @@ def admin_panel_items_add():
         item = Item.create(name=form.name.data, image_url=form.image_url.data,
             description=form.description.data)
         item.put()
-        flash('You have successfully created a new item! ')
+        flash('You have successfully created a new item!')
         return redirect(url_for('admin_panel_items_add'))
     flash_errors(form)
     return render_template('admin/add.html', form=form)

@@ -6,7 +6,7 @@ from flask import render_template, redirect, flash, request
 
 @admin_access_required
 def admin_panel():
-    return render_template('admin/main.html')
+    return render_template('main.html')
 
 
 @admin_access_required
