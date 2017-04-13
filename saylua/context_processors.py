@@ -76,7 +76,7 @@ def inject_notifications():
     if not g.logged_in:
         return {}
     notifications_count = (
-        db.session.query(Notification.conversation_id)
+        db.session.query(Notification.id)
         .filter(Notification.user_id == g.user.id)
         .filter(Notification.unread == True)
         .limit(100)
@@ -86,7 +86,7 @@ def inject_notifications():
         db.session.query(Notification)
         .filter(Notification.user_id == g.user.id)
         .filter(Notification.unread)
-        .order_by(Notification.last_updated.desc())
+        .order_by(Notification.time.desc())
         .limit(5)
         .all()
     )

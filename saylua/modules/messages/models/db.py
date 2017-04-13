@@ -1,4 +1,3 @@
-from google.appengine.ext import ndb
 from flask import flash
 from saylua import db
 
@@ -81,33 +80,22 @@ class Notification(db.Model):
     text = db.Column(db.Text())
     unread = db.Column(db.Boolean, default=True)
     link = db.Column(db.String(512))
-    count = db.Column(db.Integer)
+    count = db.Column(db.Integer, default=1)
 
     @classmethod
     def send(cls, user_id, text, link):
-        notification = cls.query(cls.user_id == user_id,
-            cls.text == text, cls.link == link, cls.is_read == False).get()
+        notification = (
+            db.session.query(cls)
+            .filter(cls.user_id == user_id)
+            .filter(cls.text == text)
+            .filter(cls.link == link)
+            .filter(cls.unread == True)
+            .one_or_none()
+        )
+
         if not notification:
             notification = cls(user_id=user_id, text=text, link=link)
         else:
             notification.count += 1
-        return notification.put()
-
-
-class _Notification(ndb.Model):
-    user_id = ndb.IntegerProperty()
-    time = ndb.DateTimeProperty(auto_now_add=True)
-    text = ndb.StringProperty()
-    link = ndb.StringProperty()
-    is_read = ndb.BooleanProperty(default=False)
-    count = ndb.IntegerProperty(default=1)
-
-    @classmethod
-    def send(cls, user_id, text, link):
-        notification = cls.query(cls.user_id == user_id,
-            cls.text == text, cls.link == link, cls.is_read == False).get()
-        if not notification:
-            notification = cls(user_id=user_id, text=text, link=link)
-        else:
-            notification.count += 1
-        return notification.put()
+        db.session.add(notification)
+        db.session.commit()

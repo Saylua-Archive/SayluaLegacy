@@ -1,4 +1,4 @@
-from saylua.models.user import User
+from saylua.models.user import User, InvalidCurrencyException
 from saylua.utils import get_from_request
 from saylua.utils.form import flash_errors
 from saylua.wrappers import login_required
@@ -28,7 +28,7 @@ def bank_transfer():
             recipient = recipient_check.user
             try:
                 User.transfer_currency(g.user.id, recipient.id, cc, ss)
-            except User.InvalidCurrencyException:
+            except InvalidCurrencyException:
                 flash('You do not have enough funds to send the amount entered.', 'error')
             except:
                 flash('Currency transfer failed for an unexpected reason. Try again later.',

@@ -47,20 +47,24 @@ def notifications_main_post():
         keys.append(n_id)
 
     for key in keys:
-        if not n:
+        try:
+            found_notification = db.session.query(Notification).get(key)
+            if found_notification.user_id != g.user.id:
+                flash('You do not have permission to edit these notifications!', 'error')
+                return redirect('/notifications/', code=302)
+            if 'delete' in request.form:
+                db.session.delete(found_notification)
+            elif 'read' in request.form:
+                found_notification.unread = False
+                db.session.add(found_notification)
+        except(flask_sqlalchemy.orm.exc.NoResultFound):
             flash('You are attempting to edit a notification which does not exist!', 'error')
             return redirect('/notifications/', code=302)
-        if n.user_id != g.user.id:
-            flash('You do not have permission to edit these notifications!', 'error')
-            return redirect('/notifications/', code=302)
-        n.is_read = True
-
-    if 'delete' in request.form:
-        ndb.delete_multi(keys)
-        flash(pluralize(len(keys), 'notification') + ' deleted. ')
-    elif 'read' in request.form:
-        ndb.put_multi(notifications)
-        flash(pluralize(len(keys), 'notification') + ' marked as read. ')
+        if 'delete' in request.form:
+            flash(pluralize(len(keys), 'notification') + ' deleted. ')
+        elif 'read' in request.form:
+            flash(pluralize(len(keys), 'notification') + ' marked as read. ')
+    db.session.commit()
     return redirect('/notifications/', code=302)
 
 
