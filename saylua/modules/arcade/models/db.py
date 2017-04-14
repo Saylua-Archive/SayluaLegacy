@@ -1,4 +1,4 @@
-from google.appengine.ext import ndb
+from saylua import db
 from google.appengine.ext.ndb import msgprop
 
 from protorpc import messages
@@ -8,7 +8,7 @@ class Game(messages.Enum):
     LINE_BLOCKS = 1
 
 
-class Highscore(ndb.Model):
+class _Highscore(ndb.Model):
     user_id = ndb.KeyProperty()
     game_log_key = ndb.KeyProperty()
     game_id = msgprop.EnumProperty(Game, required=True)
@@ -19,6 +19,20 @@ class Highscore(ndb.Model):
     year = ndb.IntegerProperty()
     month = ndb.IntegerProperty()
 
+
+class Highscore(db.Model):
+    __tablename__ = "highscores"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    game_log_key = ndb.KeyProperty()
+    game_id = msgprop.EnumProperty(Game, required=True)
+    score = ndb.IntegerProperty()
+
+    # Highscores are monthly. For an all-time highscore, year and month are set
+    # to zero.
+    year = ndb.IntegerProperty()
+    month = ndb.IntegerProperty()
 
 # Stores a log of a player's gameplay including score.
 class GameLog(ndb.Model):
