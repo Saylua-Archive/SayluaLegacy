@@ -25,14 +25,15 @@ class Highscore(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    game_log_key = ndb.KeyProperty()
-    game_id = msgprop.EnumProperty(Game, required=True)
+    game_log_id = db.Column(db.Integer, db.ForeignKey('gamelogs.id'))
+    game_id = db.Column(db.Integer, nullable=False)
     score = ndb.IntegerProperty()
 
     # Highscores are monthly. For an all-time highscore, year and month are set
     # to zero.
     year = ndb.IntegerProperty()
     month = ndb.IntegerProperty()
+
 
 # Stores a log of a player's gameplay including score.
 class GameLog(ndb.Model):
