@@ -14,5 +14,5 @@ def items_view_all():
 def items_view_single(url_name):
     item = Item.by_url_name(url_name)
     if not item:
-        return render_template('items/database/invalid.html')
+        return render_template('database/invalid.html')
     return render_template('database/view.html', item=item)
