@@ -8,18 +8,6 @@ class Game(messages.Enum):
     LINE_BLOCKS = 1
 
 
-class _Highscore(ndb.Model):
-    user_id = ndb.KeyProperty()
-    game_log_key = ndb.KeyProperty()
-    game_id = msgprop.EnumProperty(Game, required=True)
-    score = ndb.IntegerProperty()
-
-    # Highscores are monthly. For an all-time highscore, year and month are set
-    # to zero.
-    year = ndb.IntegerProperty()
-    month = ndb.IntegerProperty()
-
-
 class Highscore(db.Model):
     __tablename__ = "highscores"
 
@@ -27,20 +15,23 @@ class Highscore(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     game_log_id = db.Column(db.Integer, db.ForeignKey('gamelogs.id'))
     game_id = db.Column(db.Integer, nullable=False)
-    score = ndb.IntegerProperty()
+    score = db.Column(db.Integer)
 
     # Highscores are monthly. For an all-time highscore, year and month are set
     # to zero.
-    year = ndb.IntegerProperty()
-    month = ndb.IntegerProperty()
+    year = db.Column(db.Integer)
+    month = db.Column(db.Integer)
 
 
 # Stores a log of a player's gameplay including score.
-class GameLog(ndb.Model):
-    user_id = ndb.KeyProperty()
-    game_id = msgprop.EnumProperty(Game, required=True)
-    score = ndb.IntegerProperty()
-    time = ndb.DateTimeProperty(auto_now_add=True)
+class GameLog(db.Model):
+    __tablename__ = "gamelogs"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    game_id = db.Column(db.Integer, nullable=False)
+    score = db.Column(db.Integer)
+    time = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
     # Note: Game logs are differently formatted per type of game.
     game_log = ndb.JsonProperty(indexed=False)
