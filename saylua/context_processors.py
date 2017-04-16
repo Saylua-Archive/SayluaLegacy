@@ -75,10 +75,21 @@ def inject_version_id():
 def inject_notifications():
     if not g.logged_in:
         return {}
-    notifications_count = Notification.query(Notification.user_id == g.user.id,
-        Notification.is_read == False).count(limit=100)
-    notifications = Notification.query(Notification.user_id == g.user.id).order(
-        Notification.is_read, -Notification.time).fetch(limit=5)
+    notifications_count = (
+        db.session.query(Notification.id)
+        .filter(Notification.user_id == g.user.id)
+        .filter(Notification.unread == True)
+        .limit(100)
+        .count()
+    )
+    notifications = (
+        db.session.query(Notification)
+        .filter(Notification.user_id == g.user.id)
+        .filter(Notification.unread)
+        .order_by(Notification.time.desc())
+        .limit(5)
+        .all()
+    )
     if not notifications:
         notifications = []
     return dict(notifications_count=notifications_count, notifications=notifications)
