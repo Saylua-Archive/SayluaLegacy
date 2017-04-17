@@ -3,9 +3,9 @@ from . import views
 
 urlpatterns = [
     # Admin URLs
-    url('/items/add/', view_func=views.admin.admin_panel_items_add,
+    url('/admin/items/add/', view_func=views.admin.admin_panel_items_add,
         name='items_admin_add', methods=['GET', 'POST']),
-    url('/items/edit/', view_func=views.admin.admin_panel_items_edit,
+    url('/admin/items/edit/', view_func=views.admin.admin_panel_items_edit,
         name='items_admin_edit'),
 
     # Primary URLs

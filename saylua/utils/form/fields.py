@@ -1,12 +1,16 @@
 from wtforms import (BooleanField, StringField, PasswordField,
-    TextAreaField, IntegerField)
+    TextAreaField, IntegerField, FileField)
 
 from widgets import (SlInput, SlPasswordInput, SlCheckboxInput, SlTextArea,
-    SlNumberInput)
+    SlNumberInput, SlFileInput)
 
 
 class SlField(StringField):
     widget = SlInput()
+
+
+class SlFileField(FileField):
+    widget = SlFileInput()
 
 
 class SlPasswordField(PasswordField):

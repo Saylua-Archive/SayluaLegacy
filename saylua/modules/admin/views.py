@@ -23,7 +23,7 @@ def admin_panel_roles_add():
 
     privs = Role().to_dict().keys()
     privs.sort()
-    return render_template('admin/roles/add.html', privs=privs)
+    return render_template('roles/add.html', privs=privs)
 
 
 @admin_access_required
@@ -37,4 +37,4 @@ def admin_panel_roles_edit():
             role.put()
         flash("Roles successfully updated!")
     privs.sort()
-    return render_template('admin/roles/edit.html', roles=roles, privs=privs)
+    return render_template('roles/edit.html', roles=roles, privs=privs)

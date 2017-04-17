@@ -1,4 +1,3 @@
-from saylua import app
 from saylua.utils import get_from_request
 from saylua.utils.form import flash_errors
 from saylua.wrappers import admin_access_required
@@ -9,7 +8,6 @@ from flask import render_template, redirect, url_for, flash, request
 from forms import ItemUploadForm
 
 
-@app.route('/admin/items/add/', methods=['GET', 'POST'])
 @admin_access_required
 def admin_panel_items_add():
     form = ItemUploadForm(request.form)
@@ -25,7 +23,6 @@ def admin_panel_items_add():
     return render_template('admin/add.html', form=form)
 
 
-@app.route('/admin/items/edit/', methods=['GET'])
 @admin_access_required
 def admin_panel_items_edit():
     return render_template('admin/edit.html')
