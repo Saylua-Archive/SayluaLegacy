@@ -1,11 +1,4 @@
 from saylua import db
-from google.appengine.ext.ndb import msgprop
-
-from protorpc import messages
-
-
-class Game(messages.Enum):
-    LINE_BLOCKS = 1
 
 
 class Highscore(db.Model):
@@ -34,7 +27,7 @@ class GameLog(db.Model):
     time = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
     # Note: Game logs are differently formatted per type of game.
-    game_log = ndb.JsonProperty(indexed=False)
+    game_log = db.Column(db.Text())
 
     @classmethod
     def record_score(cls, user_id, game_id, score):
