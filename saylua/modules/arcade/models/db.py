@@ -1,6 +1,12 @@
 from saylua import db
 
 
+def enum(**enums):
+    return type('Enum', (), enums)
+
+def Game(game):
+
+
 class Highscore(db.Model):
     __tablename__ = "highscores"
 
@@ -31,15 +37,27 @@ class GameLog(db.Model):
 
     @classmethod
     def record_score(cls, user_id, game_id, score):
-        score = cls(user_id=user_id, game_id=game_id, score=score)
-        return score.put()
+        new_record = cls(user_id=user_id, game_id=game_id, score=score)
+        db.session.add(new_record)
+        db.session.commit()
 
     @classmethod
-    def get_user_highscore(cls, user_id, game_id, score):
-        return cls.query(cls.game_id == game_id, cls.user_id == user_id).order(
-            -cls.score).fetch(limit=1)
+    def get_user_highscore(cls, user_id, game_id):
+        return (
+            db.session.query(cls)
+            .filter(cls.user_id == user_id)
+            .filter(cls.game_id == game_id)
+            .order_by(cls.score.desc())
+            .limit(1)
+            .all()
+        )
 
     @classmethod
     def get_highscores(cls, game_id, count=10):
-        return cls.query(cls.game_id == game_id).order(-cls.score).fetch(
-            limit=count)
+        return (
+            db.session.query(cls)
+            .filter(cls.game_id == game_id)
+            .order_by(cls.score.desc())
+            .limit(count)
+            .all()
+        )
