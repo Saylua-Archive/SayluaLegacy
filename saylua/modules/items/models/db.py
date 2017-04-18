@@ -22,16 +22,7 @@ class Item(db.Model):
     def by_url_name(cls, name):
         return cls.query(cls.url_name == name.lower()).get()
 
-    @classmethod
-    def update_item(cls, item, name, image_url, description):
-        item.name = name
-        item.image_url = image_url
-        item.description = description
-
-        # TODO: Update the denormalized versions of this data in everyone's inventory
-
-    @classmethod
-    def give_item(cls, user_id, item, count):
+    def grant(cls, user_id, count):
         inventory_entry = InventoryItem.by_user_item(user_id, item.key)
         if not inventory_entry:
             inventory_entry = InventoryItem.construct(user_id, item)
@@ -44,10 +35,9 @@ class InventoryItem(db.Model):
 
     # These two keys define the inventory item entry.
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    item = db.relationship("User")
+
     item_id = db.Column(db.Integer, db.ForeignKey('items.id'), primary_key=True)
+    item = db.relationship("Item")
 
     count = db.Column(db.Integer)
-
-    @classmethod
-    def by_user_item(cls, user_id, item_key):
-        return cls.query(cls.user_id == user_id, cls.item_key == item_key).get()

@@ -8,8 +8,7 @@ class ItemUploadForm(Form):
         sl_validators.Required(),
         sl_validators.NotBlank()])
     image = SlFileField('Image File', [
-        sl_validators.MatchesRegex(u'^[^/\\]\.png$',
-            message='File type must be a PNG.')
+        sl_validators.EndsWith('.png', message='File type must be a PNG.')
     ])
     description = SlTextAreaField('Description', [
         sl_validators.Required(),
