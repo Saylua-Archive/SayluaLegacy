@@ -9,24 +9,24 @@ class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     name = db.Column(db.String(256), unique=True)
-    url_name = db.Column(db.String(256), unique=True)
+    text_id = db.Column(db.String(256), unique=True)
     description = db.Column(db.String(1024))
 
     @classmethod
-    def make_url_name(cls, name):
+    def make_text_id(cls, name):
         name = re.sub(r'\s', '_', name)
         name = re.sub(r'\W', '-', name)
         return name.lower()
 
     @classmethod
-    def by_url_name(cls, name):
-        return cls.query(cls.url_name == name.lower()).get()
+    def by_text_id(cls, name):
+        return cls.query(cls.text_id == name.lower()).get()
 
     def url(self):
-        return '/item/' + self.url_name
+        return '/item/' + self.text_id
 
     def image_url(self):
-        return '/static/img/items/' + self.url_name + '.png'
+        return '/static/img/items/' + self.text_id + '.png'
 
     def grant(self, user_id, count):
         inventory_entry = InventoryItem.by_user_item(user_id, self.id)
