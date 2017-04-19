@@ -10,11 +10,11 @@ import json
 @api_login_required
 def api_send_score(game):
     try:
-        game = Game(game)
-    except TypeError:
+        gameName = Game(game)
+    except IndexError:
         return json.dumps(dict(error='Invalid game!')), 400
     finally:
-        if game == Game.LINE_BLOCKS:
+        if gameName == "LINE_BLOCKS":
             # TODO sanity check the game log and other variables sent to catch
             # low hanging fruit attempts at cheating.
             data = request.get_json()

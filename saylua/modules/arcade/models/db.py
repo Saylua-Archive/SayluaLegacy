@@ -1,10 +1,13 @@
 from saylua import db
 
 
-def enum(**enums):
-    return type('Enum', (), enums)
-
+# Enum type thing, raises a ValueError if not found
 def Game(game):
+    games = ["LINE_BLOCKS"]
+    try:
+        return games[game]
+    except TypeError:
+        return games.index(game)
 
 
 class Highscore(db.Model):

@@ -8,7 +8,7 @@ def games_main():
 
 
 def games_blocks():
-    highscores = GameLog.get_highscores(Game.LINE_BLOCKS, 10)
+    highscores = GameLog.get_highscores(Game("LINE_BLOCKS"), 10)
     return render_template("blocks.html", highscores=highscores)
 
 

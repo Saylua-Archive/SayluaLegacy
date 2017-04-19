@@ -5,7 +5,7 @@ import Matrix from "./Matrix";
 import cloneDeep from "lodash.clonedeep";
 import "whatwg-fetch";
 
-const GAME_ID = 1;
+const GAME_ID = 0;
 const LB_FPS = 60;
 const LB_MIN_TIMEOUT = 10;
 const LB_PIECES = [[0, 1, 0, 0, // i
