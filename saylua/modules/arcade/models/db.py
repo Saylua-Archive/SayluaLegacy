@@ -1,46 +1,66 @@
-from google.appengine.ext import ndb
-from google.appengine.ext.ndb import msgprop
-
-from protorpc import messages
+from saylua import db
 
 
-class Game(messages.Enum):
-    LINE_BLOCKS = 1
+# Enum type thing, raises a ValueError if not found
+def Game(game):
+    games = ["LINE_BLOCKS"]
+    try:
+        return games[game]
+    except TypeError:
+        return games.index(game)
 
 
-class Highscore(ndb.Model):
-    user_id = ndb.KeyProperty()
-    game_log_key = ndb.KeyProperty()
-    game_id = msgprop.EnumProperty(Game, required=True)
-    score = ndb.IntegerProperty()
+class Highscore(db.Model):
+    __tablename__ = "highscores"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    game_log_id = db.Column(db.Integer, db.ForeignKey('gamelogs.id'))
+    game_id = db.Column(db.Integer, nullable=False)
+    score = db.Column(db.Integer)
 
     # Highscores are monthly. For an all-time highscore, year and month are set
     # to zero.
-    year = ndb.IntegerProperty()
-    month = ndb.IntegerProperty()
+    year = db.Column(db.Integer)
+    month = db.Column(db.Integer)
 
 
 # Stores a log of a player's gameplay including score.
-class GameLog(ndb.Model):
-    user_id = ndb.KeyProperty()
-    game_id = msgprop.EnumProperty(Game, required=True)
-    score = ndb.IntegerProperty()
-    time = ndb.DateTimeProperty(auto_now_add=True)
+class GameLog(db.Model):
+    __tablename__ = "gamelogs"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    game_id = db.Column(db.Integer, nullable=False)
+    score = db.Column(db.Integer)
+    time = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
     # Note: Game logs are differently formatted per type of game.
-    game_log = ndb.JsonProperty(indexed=False)
+    game_log = db.Column(db.Text())
 
     @classmethod
     def record_score(cls, user_id, game_id, score):
-        score = cls(user_id=user_id, game_id=game_id, score=score)
-        return score.put()
+        new_record = cls(user_id=user_id, game_id=game_id, score=score)
+        db.session.add(new_record)
+        db.session.commit()
 
     @classmethod
-    def get_user_highscore(cls, user_id, game_id, score):
-        return cls.query(cls.game_id == game_id, cls.user_id == user_id).order(
-            -cls.score).fetch(limit=1)
+    def get_user_highscore(cls, user_id, game_id):
+        return (
+            db.session.query(cls)
+            .filter(cls.user_id == user_id)
+            .filter(cls.game_id == game_id)
+            .order_by(cls.score.desc())
+            .limit(1)
+            .all()
+        )
 
     @classmethod
     def get_highscores(cls, game_id, count=10):
-        return cls.query(cls.game_id == game_id).order(-cls.score).fetch(
-            limit=count)
+        return (
+            db.session.query(cls)
+            .filter(cls.game_id == game_id)
+            .order_by(cls.score.desc())
+            .limit(count)
+            .all()
+        )
