@@ -22,10 +22,16 @@ class Item(db.Model):
     def by_url_name(cls, name):
         return cls.query(cls.url_name == name.lower()).get()
 
-    def grant(cls, user_id, count):
-        inventory_entry = InventoryItem.by_user_item(user_id, item.key)
+    def url(self):
+        return '/item/' + self.url_name
+
+    def image_url(self):
+        return '/static/img/items/' + self.url_name + '.png'
+
+    def grant(self, user_id, count):
+        inventory_entry = InventoryItem.by_user_item(user_id, self.id)
         if not inventory_entry:
-            inventory_entry = InventoryItem.construct(user_id, item)
+            inventory_entry = InventoryItem(user_id=user_id, item_id=self.id)
         inventory_entry.count += count
         inventory_entry.put()
 
@@ -35,7 +41,7 @@ class InventoryItem(db.Model):
 
     # These two keys define the inventory item entry.
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    item = db.relationship("User")
+    user = db.relationship("User")
 
     item_id = db.Column(db.Integer, db.ForeignKey('items.id'), primary_key=True)
     item = db.relationship("Item")

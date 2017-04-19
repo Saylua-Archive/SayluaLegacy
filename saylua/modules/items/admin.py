@@ -1,3 +1,5 @@
+from saylua import db
+
 from saylua.utils import get_from_request
 from saylua.utils.form import flash_errors
 from saylua.wrappers import admin_access_required
@@ -14,12 +16,12 @@ def admin_panel_items_add():
     form.name.data = get_from_request(request, 'name')
     form.description.data = get_from_request(request, 'description')
     if request.method == 'POST' and form.validate():
-        item = Item.create(name=form.name.data, image_url=form.image_url.data,
+        item = Item(name=form.name.data, url_name=Item.make_url_name(form.name.data),
             description=form.description.data)
-        item.put()
+        db.session.add(item)
+        db.session.commit()
         flash('You have successfully created a new item!')
-        return redirect(url_for('admin_panel_items_add'))
-    flash_errors(form)
+        return redirect(url_for('items.items_admin_add'))
     return render_template('admin/add.html', form=form)
 
 
