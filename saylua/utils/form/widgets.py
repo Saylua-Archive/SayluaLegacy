@@ -73,5 +73,9 @@ class SlCheckboxInput(SlInput):
         return super(SlCheckboxInput, self).__call__(field, **kwargs)
 
 
+class SlFileInput(SlInput):
+    input_type = 'file'
+
+
 class SlNumberInput(SlInput):
     input_type = 'number'

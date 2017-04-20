@@ -13,13 +13,6 @@
     <a href="/admin/items/edit/"{%- if request.url_rule.endpoint == 'admin_panel_items_edit' %} class="active"{% endif %}>
       Edit Items
     </a>
-    <h4>Roles</h4>
-    <a href="/admin/roles/add/"{%- if request.url_rule.endpoint == 'admin_panel_roles_add' %} class="active"{% endif %}>
-      Add New Roles
-    </a>
-    <a href="/admin/roles/edit/"{%- if request.url_rule.endpoint == 'admin_panel_roles_edit' %} class="active"{% endif %}>
-      Edit Existing Roles
-    </a>
     <h4>Forums</h4>
     <a href="/admin/forums/newboard/"{%- if request.url_rule.endpoint == 'new_board' %} class="active"{% endif %}>
       Add New Boards
@@ -28,7 +21,7 @@
       Add New Board Category
     </a>
   </div>
-  <div>
+  <div class="admin-panel-content">
     {% block section_body %}{% endblock %}
   </div>
 </div>

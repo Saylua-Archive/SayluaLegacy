@@ -159,6 +159,22 @@ class IsNot(SayluaValidator):
         return self.pattern
 
 
+class EndsWith(SayluaValidator):
+    def __init__(self, suffix, message=None):
+        self.message = message
+        self.defaultMessage = '<field> must end with %s.' % suffix
+        self.suffix = suffix
+
+    def validate(self, form, field):
+        return field.data.lower().endswith(self.suffix.lower())
+
+    def clientValidatorName(self):
+        return 'endswith'
+
+    def clientValidatorValue(self):
+        return self.suffix
+
+
 class MatchesRegex(SayluaValidator):
     def __init__(self, regex, message=None):
         self.message = message
