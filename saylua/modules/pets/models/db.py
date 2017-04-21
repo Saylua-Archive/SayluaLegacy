@@ -2,7 +2,7 @@ from saylua import db
 
 
 # This is to store alternate linart versions of the same pets
-class SpeciesVersion(ndb.Model):
+class SpeciesVersion(db.Model):
     name = ndb.StringProperty()
     base_image = ndb.StringProperty()
     base_psd = ndb.StringProperty()
@@ -10,13 +10,20 @@ class SpeciesVersion(ndb.Model):
 
 
 # Pets are divided into species and species are divided into variations
-class Species(ndb.Model):
-    name = ndb.StringProperty()
+class Species(db.Model):
+
+    __tablename__ = "species"
+
+    name = db.Column(db.String, primary_key=True)
     versions = ndb.StructuredProperty(SpeciesVersion)
     description = ndb.TextProperty()
 
 
-class SpeciesVariation(ndb.Model):
+class SpeciesVariation(db.Model):
+
+    __tablename__ = "species_variations"
+
+    id = db.Column(db.Integer, primary_key=True)
     species_id = ndb.IntegerProperty()
     name = ndb.StringProperty()
     description = ndb.TextProperty()
@@ -40,5 +47,5 @@ class Pet(db.Model):
     description = db.Column(db.Text)
 
     # If either of these is set to a number other than 0, the pet is for sale
-    ss_price = ndb.IntegerProperty(default=0)
-    cc_price = ndb.IntegerProperty(default=0)
+    ss_price = db.Column(db.Integer, default=0)
+    cc_price = db.Column(db.Integer, default=0)
