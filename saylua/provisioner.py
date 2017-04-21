@@ -3,7 +3,7 @@ from saylua.models.role import Role
 from saylua.utils import is_devserver
 from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, ForumPost
 from saylua.models.user import User
-from saylua.modules.items.models.db import Item
+from saylua.modules.items.models.db import Item, InventoryItem
 
 from saylua.modules.pets.soulnames import soulname
 from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
@@ -37,13 +37,23 @@ def generate_admin_user():
 def generate_items():
     subpath = 'img/items/'
     path = os.path.join(app.static_folder, subpath)
+    admin = db.session.query(User).filter(User.active_username == 'admin').one()
     for img in os.listdir(path):
         item_name, ext = os.path.splitext(img)
         if ext.lower() == '.png':
-            yield Item(
+            item = Item(
                 name=item_name,
                 text_id=item_name,
                 description='A lovely little ' + item_name + ' for you to much on,'
+            )
+
+            yield item
+
+            # Give admin lots of items.
+            yield InventoryItem(
+                user=admin,
+                item=item,
+                count=99
             )
 
 

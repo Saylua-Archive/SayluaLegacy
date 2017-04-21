@@ -46,4 +46,4 @@ class InventoryItem(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('items.id'), primary_key=True)
     item = db.relationship("Item")
 
-    count = db.Column(db.Integer)
+    count = db.Column(db.Integer, default=0)
