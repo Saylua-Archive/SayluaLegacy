@@ -1,6 +1,9 @@
 {% from "_macros/pagination.html" import pagination %}
 {% extends "layout.html" %}
 {% set page_title = "My Inventory" %}
+{% block header_scripts %}
+  <link rel="stylesheet" type="text/css" href="{{ include_static('css/items.min.css') }}">
+{% endblock %}
 {% block body %}
 <h1>My Inventory</h1>
 <div class="full">
@@ -11,7 +14,7 @@
     <div class="inventory-item">
       <img src="{{ entry.item.image_url() }}" class="item">
       <span class="full">{{ entry.item.name }}</span>
-      <small class="full">Count: {{ entry.item.count }}</small>
+      <small class="full">Count: {{ entry.count }}</small>
     </div>
   {% endfor %}
 </div>
