@@ -16,7 +16,7 @@ class Species(db.Model):
 
     name = db.Column(db.String, primary_key=True)
     versions = ndb.StructuredProperty(SpeciesVersion)
-    description = ndb.TextProperty()
+    description = db.Column(db.Text)
 
 
 class SpeciesVariation(db.Model):
