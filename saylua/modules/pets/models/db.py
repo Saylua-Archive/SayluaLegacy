@@ -4,12 +4,15 @@ from saylua import db
 # This is to store alternate linart versions of the same pets
 class SpeciesVersion(db.Model):
 
-    __tablename__ = "species_version"
+    __tablename__ = "species_versions"
 
-    name = ndb.StringProperty()
-    base_image = ndb.StringProperty()
-    base_psd = ndb.StringProperty()
-    default_image = ndb.StringProperty()
+    id = db.Column(db.Integer, primary_key=True)
+    species_name = db.Column(db.String, db.ForeignKey("species.name"))
+    name = db.Column(db.String(80), unique=True)
+    base_image = db.Column(db.String(200))
+    base_psd = db.Column(db.String(200))
+    default_image = db.Column(db.String(200))
+    species = db.relationship("Species", back_populates="species_versions")
 
 
 # Pets are divided into species and species are divided into variations
@@ -18,8 +21,8 @@ class Species(db.Model):
     __tablename__ = "species"
 
     name = db.Column(db.String, primary_key=True)
-    versions = ndb.StructuredProperty(SpeciesVersion)
     description = db.Column(db.Text)
+    versions = db.relationship("SpeciesVersion", back_populates="species")
 
 
 class SpeciesVariation(db.Model):
