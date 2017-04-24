@@ -1,6 +1,10 @@
 {% from "_macros/pagination.html" import pagination %}
 {% extends "layout.html" %}
 {% set page_title = "Item Database" %}
+
+{% block header_scripts %}
+  <link rel="stylesheet" type="text/css" href="{{ include_static('css/items.min.css') }}">
+{% endblock %}
 {% block body %}
 <h1>Item Database</h1>
 <div class="center">

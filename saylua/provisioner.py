@@ -1,10 +1,14 @@
-from saylua import db
+from saylua import app, db
 from saylua.models.role import Role
 from saylua.utils import is_devserver
 from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, ForumPost
 from saylua.models.user import User
+from saylua.modules.items.models.db import Item, InventoryItem
+
 from saylua.modules.pets.soulnames import soulname
 from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
+
+import os
 
 
 # To run this import setup in the interactive console and run it as such
@@ -28,6 +32,29 @@ def generate_admin_user():
         star_shards=15,
         cloud_coins=50000
     )
+
+
+def generate_items():
+    subpath = 'img/items/'
+    path = os.path.join(app.static_folder, subpath)
+    admin = db.session.query(User).filter(User.active_username == 'admin').one()
+    for img in os.listdir(path):
+        item_name, ext = os.path.splitext(img)
+        if ext.lower() == '.png':
+            item = Item(
+                name=item_name,
+                text_id=item_name,
+                description='A lovely little ' + item_name + ' for you to much on,'
+            )
+
+            yield item
+
+            # Give admin lots of items.
+            yield InventoryItem(
+                user=admin,
+                item=item,
+                count=99
+            )
 
 
 def generate_boards():
@@ -173,6 +200,10 @@ def setup():
 
         print("Adding Placeholder Posts")
         for item in generate_posts():
+            db.session.add(item)
+
+        print("Adding Placeholder Items")
+        for item in generate_items():
             db.session.add(item)
 
         db.session.commit()
