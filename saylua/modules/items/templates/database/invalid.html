@@ -1,5 +1,9 @@
 {% extends "layout.html" %}
 {% set page_title = "Invalid Item" %}
+
+{% block header_scripts %}
+  <link rel="stylesheet" type="text/css" href="{{ include_static('css/items.min.css') }}">
+{% endblock %}
 {% block body %}
 <h1>Invalid Item</h1>
 <p>

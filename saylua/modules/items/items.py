@@ -1,11 +1,14 @@
 from saylua import db
+from saylua.wrappers import login_required
 
-from .models.db import Item
-from flask import render_template
+from .models.db import Item, InventoryItem
+from flask import render_template, g
 
 
+@login_required
 def items_inventory(category=None):
-    return render_template('inventory.html', category=category)
+    items = db.session.query(InventoryItem).filter(InventoryItem.user_id == g.user.id)
+    return render_template('inventory.html', items=items, category=category)
 
 
 def items_view_all():
