@@ -25,7 +25,10 @@ export default function Main() {
     initialState = addAdditionalDebugParameters(initialState);
 
     // We do this for the Redux chrome extension.
-    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ "shouldRecordChanges": false }) || compose;
+    let composeEnhancers =  compose;
+    if (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
+      composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ "shouldRecordChanges": false });
+    }
     let store = createStore(CoreReducer, initialState, composeEnhancers(
       applyMiddleware(logState)
     ));
