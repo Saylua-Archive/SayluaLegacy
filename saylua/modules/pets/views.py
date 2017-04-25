@@ -1,4 +1,7 @@
 from flask import render_template, redirect
+from saylua import db
+from .models.db import Pet
+from saylua.models.user import User
 
 
 def pet_profile(name):
@@ -15,4 +18,14 @@ def pet_collection_default():
 
 
 def pet_collection(username):
-    return render_template("den.html")
+    user = User.from_username(username)
+    # User not found
+    if user is None:
+        return render_template('notfound.html')
+
+    pets = (
+        db.session.query(Pet)
+        .filter(Pet.user_id == user.id)
+        .all()
+    )
+    return render_template("den.html", pets=pets)
