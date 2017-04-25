@@ -7,6 +7,28 @@ r_board_categories = db.Table('r_board_categories',
 )
 
 
+class BoardCategory(db.Model):
+    """Forum Board Categories.
+    Many to Many relationship with `Board`.
+    """
+
+    __tablename__ = "forum_board_categories"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(128))
+
+    order = db.Column(db.Integer)
+
+    boards = db.relationship("Board",
+        secondary=r_board_categories,
+        back_populates="categories",
+        lazy='dynamic'
+    )
+
+    def get_boards(self):
+        return self.boards.order_by(Board.order.asc())
+
+
 class Board(db.Model):
     """Forum Boards. Container for threads.
     Many to Many relationship with `BoardCategory`.
@@ -31,24 +53,6 @@ class Board(db.Model):
 
     def url(self):
         return "/forums/board/" + self.text_id + "/"
-
-
-class BoardCategory(db.Model):
-    """Forum Board Categories.
-    Many to Many relationship with `Board`.
-    """
-
-    __tablename__ = "forum_board_categories"
-
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(128))
-    
-    order = db.Column(db.Integer)
-
-    boards = db.relationship("Board",
-        secondary=r_board_categories,
-        back_populates="categories"
-    )
 
 
 class ForumThread(db.Model):

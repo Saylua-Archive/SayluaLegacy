@@ -20,15 +20,17 @@ def new_board_category():
 
 @admin_access_required
 def new_board():
-    categories = BoardCategory.query().fetch()
+    categories = db.session.query(BoardCategory).all()
     if request.method == 'POST':
         title = request.form.get('title')
         category = request.form.get('category')
         description = request.form.get('description')
 
+        category = db.session.query(BoardCategory).get(category)
+
         url_title = urlize(title)
         new_board = Board(title=title, text_id=url_title,
-                category_key=category, description=description)
+                categories=[category], description=description)
         db.session.add(new_board)
         db.session.commit()
 
