@@ -16,8 +16,11 @@ class Board(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(256))
-    url_slug = db.Column(db.String(256))
+    text_id = db.Column(db.String(256), unique=True)
     description = db.Column(db.Text())
+
+    is_news = db.Column(db.Boolean(), default=False)
+    order = db.Column(db.Integer)
 
     categories = db.relationship("BoardCategory",
         secondary=r_board_categories,
@@ -27,7 +30,7 @@ class Board(db.Model):
     threads = db.relationship("ForumThread", back_populates="board")
 
     def url(self):
-        return "/forums/board/" + self.url_slug + "/"
+        return "/forums/board/" + self.text_id + "/"
 
 
 class BoardCategory(db.Model):
@@ -39,6 +42,8 @@ class BoardCategory(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(128))
+    
+    order = db.Column(db.Integer)
 
     boards = db.relationship("Board",
         secondary=r_board_categories,
