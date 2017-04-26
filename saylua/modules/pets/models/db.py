@@ -6,7 +6,7 @@ class Species(db.Model):
 
     __tablename__ = "species"
 
-    name = db.Column(db.String, primary_key=True)
+    name = db.Column(db.String(80), primary_key=True)
     description = db.Column(db.Text)
 
 
@@ -15,7 +15,7 @@ class SpeciesCoat(db.Model):
     __tablename__ = "species_coats"
 
     id = db.Column(db.Integer, primary_key=True)
-    species_name = db.Column(db.String, db.ForeignKey("species.name"))
+    species_name = db.Column(db.String(80), db.ForeignKey("species.name"))
     name = db.Column(db.Text)
     description = db.Column(db.Text)
 
@@ -31,7 +31,7 @@ class Pet(db.Model):
     # Only set if the pet is a variation
     coat_id = db.Column(db.Integer, db.ForeignKey("species_coats.id"))
     coat = db.relationship("SpeciesCoat")
-    species_name = db.Column(db.String, db.ForeignKey("species.name"))
+    species_name = db.Column(db.String(80), db.ForeignKey("species.name"))
     species = db.relationship("Species")
 
     # Personal profile information for the pet
