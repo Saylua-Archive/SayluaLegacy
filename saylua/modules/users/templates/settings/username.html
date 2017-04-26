@@ -33,17 +33,17 @@
       Your Past Usernames
     </th>
   </tr>
-  {% for username in g.user.usernames|reverse %}
+  {% for username in g.user.username_objects|reverse %}
   <tr>
     <td>
-      {{ username }}
+      {{ username.case_name }}
     </td>
     <td>
-      {% if username.lower() == g.user.name.lower() %}
+      {% if username.name == g.user.name.lower() %}
         <em>Current Username</em>
       {% else %}
         <form method="post" action="/settings/username/release/">
-          <input type="hidden" name="username" value="{{ username }}">
+          <input type="hidden" name="username" value="{{ username.name }}">
           <button type="submit" class="link-button" name="submit">
             Release username
           </button>
