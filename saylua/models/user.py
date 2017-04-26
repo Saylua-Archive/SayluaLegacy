@@ -203,7 +203,7 @@ class Username(db.Model):
     # Get username object from username.
     @classmethod
     def get(cls, name):
-        return db.session.query(cls).get(name)
+        return db.session.query(cls).get(name.lower())
 
 
 class LoginSession(db.Model):

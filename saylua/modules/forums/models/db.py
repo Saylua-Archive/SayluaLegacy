@@ -38,7 +38,7 @@ class Board(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(256))
-    url_name = db.Column(db.String(256), unique=True)
+    text_id = db.Column(db.String(256), unique=True)
     description = db.Column(db.Text())
 
     is_news = db.Column(db.Boolean(), default=False)
@@ -52,7 +52,7 @@ class Board(db.Model):
     threads = db.relationship("ForumThread", back_populates="board")
 
     def url(self):
-        return "/forums/board/" + self.url_name + "/"
+        return "/forums/board/" + self.text_id + "/"
 
 
 class ForumThread(db.Model):
