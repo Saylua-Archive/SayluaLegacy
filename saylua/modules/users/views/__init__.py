@@ -1,2 +1,2 @@
 # flake8: noqa
-from . import login, online, profile, settings
+from . import admin, login, online, profile, settings
