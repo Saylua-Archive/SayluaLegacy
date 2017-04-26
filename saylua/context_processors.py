@@ -109,7 +109,6 @@ def inject_messages():
     nav_messages = (
         db.session.query(ConversationHandle)
         .filter(ConversationHandle.user_id == g.user.id)
-        .filter(ConversationHandle.unread)
         .filter(ConversationHandle.hidden == False)
         .order_by(ConversationHandle.last_updated.desc())
         .order_by(ConversationHandle.unread)

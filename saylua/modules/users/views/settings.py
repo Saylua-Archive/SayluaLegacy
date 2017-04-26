@@ -46,20 +46,19 @@ def user_settings_username():
     cutoff_time = datetime.datetime.now() - datetime.timedelta(days=1)
     can_change = g.user.last_username_change < cutoff_time
     if request.method == "POST" and form.validate():
-        if not can_change:
-            flash("You've already changed your username once within the past 24 hours.", "error")
-            return redirect(url_for("users.settings_username"))
-
         username = form.username.data
         if username.lower() in g.user.usernames:
             # If the user is changing to a name they already own, change case
             g.user.name = username
             g.user.last_username_change = datetime.datetime.now()
-            g.user.put()
+            db.session.commit()
             flash("Your username has been changed to " + username)
             return redirect(url_for("users.settings_username"))
         else:
             # If the username does not exist things are fine as well.
+            if not can_change:
+                flash("You've already changed your username within the past 24 hours.", "error")
+                return redirect(url_for("users.settings_username"))
             max_usernames = app.config['MAX_USERNAMES']
             if len(g.user.usernames) >= max_usernames:
                 # User cannot exceed maximum number of usernames.
