@@ -29,3 +29,8 @@ def pet_collection(username):
         .all()
     )
     return render_template("den.html", pets=pets)
+
+
+def create_pet():
+    newPet = Pet()
+    return newPet
