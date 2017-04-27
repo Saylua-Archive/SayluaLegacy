@@ -29,7 +29,7 @@ def new_board():
         category = db.session.query(BoardCategory).get(category)
 
         url_title = urlize(title)
-        new_board = Board(title=title, text_id=url_title,
+        new_board = Board(title=title, canon_name=url_title,
                 categories=[category], description=description)
         db.session.add(new_board)
         db.session.commit()

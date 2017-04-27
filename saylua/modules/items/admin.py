@@ -15,7 +15,7 @@ def admin_panel_items_add():
     form.name.data = get_from_request(request, 'name')
     form.description.data = get_from_request(request, 'description')
     if request.method == 'POST' and form.validate():
-        item = Item(name=form.name.data, text_id=Item.make_text_id(form.name.data),
+        item = Item(name=form.name.data, canon_name=Item.make_canon_name(form.name.data),
             description=form.description.data)
         db.session.add(item)
         db.session.commit()
