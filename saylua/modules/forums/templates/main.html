@@ -29,11 +29,11 @@
       </span>
     </div>
   </li>
-  {% for board in category.boards %}
+  {% for board in category.get_boards() %}
   <li class="forum-board-row">
     <img src="{{ random_item_image() }}" class="forum-board-icon faded" />
     <div class="forum-row-content">
-      <a href="/forums/board/{{ board.url_slug }}/" class="forum-board-text">
+      <a href="{{ board.url() }}" class="forum-board-text">
         <span class="forum-board-link">{{ board.title }}</span>
         <p>
           {{ board.description }}

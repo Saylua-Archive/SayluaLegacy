@@ -4,14 +4,9 @@
 {% set page_title = "Users Online" %}
 {% block body %}
 <h1>Users Online</h1>
-<div class="full center">
-  {{ pagination(page_count=(users_online_count/50)|int) }}
-</div>
-<div class="row-5">
+<div class="users-online-container">
   {% for user in users_online %}
-    <div class="col-1">
-      {{ user_link(user) }}
-    </div>
+    {{ user_link(user) }}
   {% else %}
     <p class="center full padded">
       No one is online!
@@ -20,8 +15,5 @@
       <a href="/">Go back home?</a>
     </p>
   {% endfor %}
-</div>
-<div class="full center">
-  {{ pagination(page_count=(users_online_count/50)|int) }}
 </div>
 {% endblock %}

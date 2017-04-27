@@ -28,5 +28,9 @@ urlpatterns = [
     url('/settings/email/', view_func=views.settings.user_settings_email,
         name='settings_email', methods=['GET', 'POST']),
     url('/settings/password/', view_func=views.settings.user_settings_password,
-        name='settings_password', methods=['GET', 'POST'])
+        name='settings_password', methods=['GET', 'POST']),
+
+    # Admin views
+    url('/admin/user/', view_func=views.admin.user_manage,
+        name='user_manage', methods=['GET', 'POST']),
 ]

@@ -36,6 +36,8 @@ class RegisterForm(Form):
         sl_validators.Required(),
         sl_validators.EqualTo('password', message='Passwords must match.')
     ])
+    invite_code = SlField('Invite Code', [
+        sl_validators.Required()])
     at_least_13 = SlBooleanField(
         'I certify that I am at least 13 years old.',
         [sl_validators.Required(message='You must be at least 13 to join Saylua.')])

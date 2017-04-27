@@ -7,29 +7,6 @@ r_board_categories = db.Table('r_board_categories',
 )
 
 
-class Board(db.Model):
-    """Forum Boards. Container for threads.
-    Many to Many relationship with `BoardCategory`.
-    """
-
-    __tablename__ = 'forum_boards'
-
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(256))
-    url_slug = db.Column(db.String(256))
-    description = db.Column(db.Text())
-
-    categories = db.relationship("BoardCategory",
-        secondary=r_board_categories,
-        back_populates="boards"
-    )
-
-    threads = db.relationship("ForumThread", back_populates="board")
-
-    def url(self):
-        return "/forums/board/" + self.url_slug + "/"
-
-
 class BoardCategory(db.Model):
     """Forum Board Categories.
     Many to Many relationship with `Board`.
@@ -40,10 +17,42 @@ class BoardCategory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(128))
 
+    order = db.Column(db.Integer)
+
     boards = db.relationship("Board",
         secondary=r_board_categories,
-        back_populates="categories"
+        back_populates="categories",
+        lazy='dynamic'
     )
+
+    def get_boards(self):
+        return self.boards.order_by(Board.order.asc())
+
+
+class Board(db.Model):
+    """Forum Boards. Container for threads.
+    Many to Many relationship with `BoardCategory`.
+    """
+
+    __tablename__ = 'forum_boards'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(256))
+    canon_name = db.Column(db.String(256), unique=True)
+    description = db.Column(db.Text())
+
+    is_news = db.Column(db.Boolean(), default=False)
+    order = db.Column(db.Integer)
+
+    categories = db.relationship("BoardCategory",
+        secondary=r_board_categories,
+        back_populates="boards"
+    )
+
+    threads = db.relationship("ForumThread", back_populates="board")
+
+    def url(self):
+        return "/forums/board/" + self.canon_name + "/"
 
 
 class ForumThread(db.Model):

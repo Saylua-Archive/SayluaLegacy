@@ -43,7 +43,7 @@ def generate_items():
         if ext.lower() == '.png':
             item = Item(
                 name=item_name,
-                text_id=item_name,
+                canon_name=item_name,
                 description='A lovely little ' + item_name + ' for you to much on,'
             )
 
@@ -64,16 +64,26 @@ def generate_boards():
         category = BoardCategory(title=category)
         yield category
 
+        title = soulname(7)
+        yield Board(
+            title=title + " announcements",
+            canon_name=title,
+            categories=[category],
+            description="Announcements for " + title,
+            is_news=True,
+            order=0
+        )
+
         for n in range(4):
             title = soulname(7)
-            url_slug = title
             description = "A board for talking about " + title
 
             yield Board(
                 title=title,
-                url_slug=url_slug,
+                canon_name=title,
                 categories=[category],
-                description=description
+                description=description,
+                order=(n + 1)
             )
 
 

@@ -1,0 +1,11 @@
+{% from "_macros/user_link.html" import user_link %}
+
+{% extends "admin/template.html" %}
+{% set section_title = "Manage Users" %}
+{% block section_body %}
+
+{% for user in users %}
+  {{ user_link(user) }}
+{% endfor %}
+
+{% endblock %}

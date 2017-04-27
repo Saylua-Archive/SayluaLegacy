@@ -70,10 +70,6 @@ class User(db.Model):
         self.active_username = name
 
     @property
-    def usernamesLower(self):
-        return [u.name.lower() for u in self.username_objects]
-
-    @property
     def usernames(self):
         return [u.name for u in self.username_objects]
 
@@ -189,8 +185,11 @@ class Username(db.Model):
 
     __tablename__ = "usernames"
 
-    # The unique username
+    # The unique username stored in lowercase.
     name = db.Column(db.String(80), primary_key=True)
+
+    # A record of the name as the user typed it.
+    case_name = db.Column(db.String(80))
 
     # The linked user
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
@@ -199,18 +198,12 @@ class Username(db.Model):
     # Account for case sensitivity in username uniqueness.
     @classmethod
     def create(cls, name, user):
-        if cls.get(name):
-            return False
-        return cls(name=name, user=user)
+        return cls(name=name.lower(), case_name=name, user=user)
 
     # Get username object from username.
     @classmethod
     def get(cls, name):
-        return (
-            db.session.query(cls)
-            .filter(db.func.lower(cls.name) == name.lower())
-            .one_or_none()
-        )
+        return db.session.query(cls).get(name.lower())
 
 
 class LoginSession(db.Model):
