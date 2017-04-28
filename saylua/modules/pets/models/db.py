@@ -25,7 +25,7 @@ class Pet(db.Model):
     __tablename__ = "pets"
 
     id = db.Column(db.Integer, primary_key=True)
-    soulname = db.Column(db.String(80), unique=True)
+    soul_name = db.Column(db.String(80), unique=True)
 
     owner_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     # Only set if the pet is a variation

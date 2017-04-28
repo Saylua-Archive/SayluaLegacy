@@ -5,7 +5,7 @@ from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, F
 from saylua.models.user import User
 from saylua.modules.items.models.db import Item, InventoryItem
 
-from saylua.modules.pets.soulnames import soulname
+from saylua.modules.pets.soul_names import soul_name
 from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
 
 import os
@@ -64,7 +64,7 @@ def generate_boards():
         category = BoardCategory(title=category)
         yield category
 
-        title = soulname(7)
+        title = soul_name(7)
         yield Board(
             title=title + " announcements",
             canon_name=title,
@@ -75,7 +75,7 @@ def generate_boards():
         )
 
         for n in range(4):
-            title = soulname(7)
+            title = soul_name(7)
             description = "A board for talking about " + title
 
             yield Board(
@@ -90,7 +90,7 @@ def generate_boards():
 def generate_threads():
     for board in db.session.query(Board).all():
         for i in range(3):
-            title = "I really, really like {}!".format(soulname(24))
+            title = "I really, really like {}!".format(soul_name(24))
             author = 1
 
             yield ForumThread(title=title, author_id=author, board=board)
@@ -121,7 +121,7 @@ def generate_posts():
 
     for thread in db.session.query(ForumThread).all():
         for i in range(randrange(1, 15)):
-            body = choice(content_phrases).format(soulname(24))
+            body = choice(content_phrases).format(soul_name(24))
             author = choice(users).id
 
             yield ForumPost(body=body, author_id=author, thread=thread)
@@ -129,7 +129,7 @@ def generate_posts():
 
 def generate_users():
     for i in range(4):
-        username = soulname(7)
+        username = soul_name(7)
         phash = User.hash_password("password")  # Yes, the default password is password
         email = "{0}@dongs.{0}.biz".format(username)
 
