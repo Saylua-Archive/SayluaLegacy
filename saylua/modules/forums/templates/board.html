@@ -55,10 +55,10 @@
       </small>
     </div>
     <div class="forum-thread-replies">
-      {{ thread.id|count_thread_posts - 1 }}
+      {{ thread.reply_count() }}
     </div>
     <div class="forum-latest-post">
-      {% set last_post = thread.id|last_post_thread %}
+      {% set last_post = thread.latest_post() %}
       {% if last_post is not none %}
       <img src="{{ random_pet_image() }}" />
       <p>

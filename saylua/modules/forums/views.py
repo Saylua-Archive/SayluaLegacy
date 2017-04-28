@@ -28,9 +28,8 @@ def forums_board(canon_name):
             author = g.user.id
             board_id = board.id
             new_thread = ForumThread(title=title, author_id=author, board_id=board_id)
+            new_post = ForumPost(author_id=author, thread=new_thread, body=body)
             db.session.add(new_thread)
-            db.session.flush()
-            new_post = ForumPost(author_id=author, thread_id=new_thread.id, body=body)
             db.session.add(new_post)
             db.session.commit()
             return redirect(board.url())

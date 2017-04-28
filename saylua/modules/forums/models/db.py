@@ -54,6 +54,15 @@ class Board(db.Model):
     def url(self):
         return "/forums/board/" + self.canon_name + "/"
 
+    def latest_post(self):
+        return (
+            db.session.query(ForumPost)
+            .join(ForumThread, ForumPost.thread)
+            .filter(ForumThread.board_id == self.id)
+            .order_by(ForumPost.date_modified.desc())
+            .first()
+        )
+
 
 class ForumThread(db.Model):
     """Forum Threads.
@@ -76,10 +85,28 @@ class ForumThread(db.Model):
     board_id = db.Column(db.Integer, db.ForeignKey('forum_boards.id'))
     board = db.relationship("Board", back_populates="threads")
 
-    posts = db.relationship("ForumPost", back_populates="thread")
+    posts = db.relationship("ForumPost", back_populates="thread", lazy='dynamic')
 
     def url(self):
         return "/forums/thread/" + str(self.id) + "/"
+
+    def first_post(self):
+        return self.posts.order_by(ForumPost.date_created.asc()).first()
+
+    def reply_count(self):
+        return (
+            db.session.query(ForumPost)
+            .filter(ForumPost.thread_id == self.id)
+            .count() - 1
+        )
+
+    def latest_post(self):
+        return (
+            db.session.query(ForumPost)
+            .filter(ForumPost.thread_id == self.id)
+            .order_by(ForumPost.date_modified.desc())
+            .first()
+        )
 
 
 class ForumPost(db.Model):

@@ -21,8 +21,8 @@ def landing():
 
 
 def news():
-    posts = db.session.query(ForumThread).join(ForumThread.board).filter(Board.is_news == True)
-    return render_template("newspaper/news.html", posts=posts)
+    threads = db.session.query(ForumThread).join(ForumThread.board).filter(Board.is_news == True)
+    return render_template("newspaper/news.html", threads=threads)
 
 
 def puzzle():

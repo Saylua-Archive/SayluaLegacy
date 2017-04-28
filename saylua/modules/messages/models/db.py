@@ -19,6 +19,8 @@ class ConversationHandle(db.Model):
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
 
+    user = db.relationship("User")
+
     title = db.Column(db.String(256))
     unread = db.Column(db.Boolean, default=False)
     hidden = db.Column(db.Boolean, default=False)
@@ -28,6 +30,17 @@ class ConversationHandle(db.Model):
         if self.unread:
             return '/conversation_read/' + str(self.conversation_id) + '/'
         return '/conversation/' + str(self.conversation_id) + '/'
+
+    def status(self):
+        if self.hidden:
+            return 'deleted'
+        if self.unread:
+            return 'unread'
+        return 'read'
+
+    def recipients(self):
+        return db.session.query(ConversationHandle).filter(
+            ConversationHandle.conversation_id == self.conversation_id).all()
 
     @classmethod
     def read_conversations(cls, keys, user_id):
@@ -67,6 +80,8 @@ class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    author = db.relationship("User")
+
     text = db.Column(db.Text())
     date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 

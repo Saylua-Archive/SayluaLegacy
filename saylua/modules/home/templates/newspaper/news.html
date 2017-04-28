@@ -2,21 +2,15 @@
 {% set section_title = "News" %}
 {% block section_body %}
 <div class="news-post-container">
-  {% for post in posts %}
+  {% for thread in threads %}
   <h2>
     <img src="{{ random_item_image() }}" class="news-post-avatar"/>
-    {{ post.title }}
+    {{ thread.title }}
   </h2>
-  <div class="news-post-attribution">by <a href="/user/">Tiff</a> on {{ post.date_created|relative_time }}</div>
+  <div class="news-post-attribution">by <a href="/user/">Tiff</a> on {{ thread.date_created|expanded_relative_time }}</div>
   <article>
-    <p>
-      Check out the WIP explore feature here: <a href="/explore/">Explore</a>
-    </p>
-    <p>
-      Saylua is a pet about the beauty where the site conquers all. Virtualize your collections into
-      pets on this Smashing Hulk Hogan simulator. Loxi Vela ipsum.
-    </p>
-    <a href="/forums/">View Comments (0)</a>
+    {{ thread.first_post().body|markdown }}
+    <a href="{{ thread.url() }}">View Comments ({{ thread.reply_count() }})</a>
   </article>
   {% endfor %}
 </div>
