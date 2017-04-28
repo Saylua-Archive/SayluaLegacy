@@ -1,9 +1,11 @@
+{% from "_macros/user_link.html" import user_link %}
+
 {% extends "layout.html" %}
 {% set page_title = "Search Results" %}
 {% block body %}
 <h1>Search Saylua{{ ": {}".format(query) if query }}</h1>
 <form method="get">
-  <div class="center full padded">
+  <div class="center">
     <input name="q" class="half" type="text" value="{{query}}" placeholder="Search Saylua">
     <input type="submit" value="Search">
   </div>
@@ -11,8 +13,16 @@
 
 {% if query %}
   <h3>Users Found</h3>
+  {% for username in usernames %}
+  {{ user_link(username.user) }}
+  {% endfor %}
 
   <h3>Items Found</h3>
+  {% for item in items %}
+  <a href="{{ item.url() }}">
+    {{ item.name }}
+  </a>
+  {% endfor %}
 
   <h3>Pets Found</h3>
 {% endif %}

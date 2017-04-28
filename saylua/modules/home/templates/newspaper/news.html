@@ -1,13 +1,13 @@
 {% extends "newspaper/template.html" %}
 {% set section_title = "News" %}
 {% block section_body %}
-<div class="news-post">
-  {% for i in range(5) %}
+<div class="news-post-container">
+  {% for post in posts %}
   <h2>
     <img src="{{ random_item_image() }}" class="news-post-avatar"/>
-    Explore in our map on Saylua
+    {{ post.title }}
   </h2>
-  <div class="news-post-attribution">by <a href="/user/">Tiff</a> on Feb 17, 2017 9:43PM SMT</div>
+  <div class="news-post-attribution">by <a href="/user/">Tiff</a> on {{ post.date_created|relative_time }}</div>
   <article>
     <p>
       Check out the WIP explore feature here: <a href="/explore/">Explore</a>
