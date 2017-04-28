@@ -17,10 +17,10 @@ def forums_home():
     return render_template("main.html", categories=categories)
 
 
-def forums_board(board_slug):
+def forums_board(canon_name):
     form = ForumThreadForm(request.form)
     try:
-        board = db.session.query(Board).filter(Board.url_slug == board_slug).one()
+        board = db.session.query(Board).filter(Board.canon_name == canon_name).one()
 
         if request.method == 'POST' and form.validate():
             title = request.form.get('title')

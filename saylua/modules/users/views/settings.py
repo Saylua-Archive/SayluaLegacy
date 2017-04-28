@@ -47,10 +47,12 @@ def user_settings_username():
     can_change = g.user.last_username_change < cutoff_time
     if request.method == "POST" and form.validate():
         username = form.username.data
-        if username.lower() in g.user.usernamesLower:
+        if username.lower() in g.user.usernames:
             # If the user is changing to a name they already own, change case
             g.user.name = username
             g.user.last_username_change = datetime.datetime.now()
+            username_obj = Username.get(username)
+            username_obj.case_name = username
             db.session.commit()
             flash("Your username has been changed to " + username)
             return redirect(url_for("users.settings_username"))

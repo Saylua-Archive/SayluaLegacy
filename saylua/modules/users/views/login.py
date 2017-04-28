@@ -5,7 +5,7 @@ from saylua.wrappers import login_required
 
 from ..forms.login import LoginForm, RegisterForm, login_check
 
-from flask import render_template, redirect, make_response, request, g
+from flask import render_template, redirect, make_response, request, flash, g
 
 import datetime
 
@@ -64,7 +64,8 @@ def logout():
         .first()
     )
 
-    if session.user_id != g.user.id: # Make sure people can't log each other out
+    # Make sure people can't log each other out
+    if not session or session.user_id != g.user.id:
         return render_template("403.html"), 403
 
     if session:
@@ -81,6 +82,9 @@ def register():
     form = RegisterForm(request.form)
 
     if request.method == 'POST' and form.validate():
+        if (form.invite_code.data != 'cat'):
+            flash('The invite code you entered is invalid.', 'error')
+            return render_template('login/register.html', form=form)
         username = form.username.data
         password = form.password.data
         email = form.email.data
