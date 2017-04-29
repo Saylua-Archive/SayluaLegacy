@@ -1,5 +1,8 @@
 from flask import render_template, redirect, g
+
+from saylua import db
 from saylua.utils import is_devserver
+from saylua.modules.forums.models.db import ForumThread, Board
 
 import random
 
@@ -18,7 +21,8 @@ def landing():
 
 
 def news():
-    return render_template("newspaper/news.html")
+    threads = db.session.query(ForumThread).join(ForumThread.board).filter(Board.is_news == True)
+    return render_template("newspaper/news.html", threads=threads)
 
 
 def puzzle():

@@ -25,13 +25,7 @@
         {{ form_checkbox(form.accept_tos) }}
       </td>
     </tr>
-    <tr>
-      <td></td>
-      <td>
-        {{ form.recaptcha() }}
-        {{ form_errors(form.recaptcha) }}
-      </td>
-    </tr>
+    {{ form_row(form.recaptcha) }}
     <tr>
       <td></td>
       <td>

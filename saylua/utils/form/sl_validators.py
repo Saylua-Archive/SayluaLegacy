@@ -1,6 +1,7 @@
 import re
 from wtforms import validators
 
+from saylua import app
 from saylua.models.user import User
 
 
@@ -194,7 +195,7 @@ class MatchesRegex(SayluaValidator):
 
 class Email(MatchesRegex):
     def __init__(self, message=None):
-        self.regex = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
+        self.regex = app.config['EMAIL_REGEX']
         self.message = message
         self.defaultMessage = '<field> must be a valid email!'
 
@@ -204,9 +205,22 @@ class Email(MatchesRegex):
 
 class Username(MatchesRegex):
     def __init__(self, message=None):
-        self.regex = '^[A-Za-z0-9+~._-]+$'
+        self.regex = app.config['USERNAME_REGEX']
         self.message = message
         self.defaultMessage = 'Usernames may only contain letters, numbers, and +~._-'
+
+    def clientValidatorMessage(self):
+        return self.message or self.defaultMessage
+
+
+class UsernameOrEmail(MatchesRegex):
+    def __init__(self, message=None):
+        # This is pretty ugly but it makes this work easily on the clientside
+        # validator as well.
+        self.regex = ('(' + app.config['EMAIL_REGEX'] + '|' +
+            app.config['USERNAME_REGEX'] + ')')
+        self.message = message
+        self.defaultMessage = 'Please enter a valid username or email.'
 
     def clientValidatorMessage(self):
         return self.message or self.defaultMessage
