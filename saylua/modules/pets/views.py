@@ -1,7 +1,6 @@
 from flask import render_template, redirect
 from saylua import db
 from .models.db import Pet
-from .soul_names import soul_name
 from saylua.models.user import User
 
 
@@ -30,16 +29,3 @@ def pet_collection(username):
         .all()
     )
     return render_template("den.html", pets=pets)
-
-
-def create_pet():
-    new_pet = Pet()
-    min_length = 5
-    new_name = soul_name(min_length)
-    found = db.session.query(Pet).filter(Pet.soul_name == new_name).one_or_none()
-    while found:
-        min_length += 1
-        new_name = soul_name(min_length)
-        found = db.session.query(Pet).filter(Pet.soul_name == new_name).one_or_none()
-    new_pet.soul_name = new_name
-    return new_pet

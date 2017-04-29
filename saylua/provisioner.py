@@ -4,7 +4,7 @@ from saylua.utils import is_devserver
 from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, ForumPost
 from saylua.models.user import User
 from saylua.modules.items.models.db import Item, InventoryItem
-
+from saylua.modules.pets.models.db import Pet, Species, SpeciesCoat
 from saylua.modules.pets.soul_names import soul_name
 from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
 
@@ -35,7 +35,7 @@ def generate_admin_user():
 
 
 def generate_items():
-    subpath = 'img/items/'
+    subpath = 'img' + os.sep + 'items' + os.sep
     path = os.path.join(app.static_folder, subpath)
     admin = db.session.query(User).filter(User.active_username == 'admin').one()
     for img in os.listdir(path):
@@ -55,6 +55,15 @@ def generate_items():
                 item=item,
                 count=99
             )
+
+
+def generate_pets():
+    subpath = 'img' + os.sep + 'pets' + os.sep
+    path = os.path.join(app.static_folder, subpath)
+    for species_name in os.listdir(path):
+        species_path = path + species_name + os.sep
+        if os.path.isdir(species_path):
+            yield
 
 
 def generate_boards():
