@@ -47,8 +47,9 @@ class RegisterForm(Form):
     recaptcha = RecaptchaField(validators=[Recaptcha(message='Please check the CAPTCHA.')])
 
 
-class RecoverForm(Form):
+class RecoveryForm(Form):
     username_or_email = SlField('Username/Email', [
         sl_validators.Required(),
         sl_validators.UsernameOrEmail(),
         login_check.UsernameOrEmailExists])
+    recaptcha = RecaptchaField(validators=[Recaptcha(message='Please check the CAPTCHA.')])
