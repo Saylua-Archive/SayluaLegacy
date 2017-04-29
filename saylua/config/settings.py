@@ -18,5 +18,8 @@ LAST_ACTION_OFFSET = 5
 # Maximum number of usernames that a single user can own
 MAX_USERNAMES = 10
 
+EMAIL_REGEX = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
+USERNAME_REGEX = '^[A-Za-z0-9+~._-]+$'
+
 # Disable the Flask-SQLAlchemy event system for now as it's kinda buggy and not needed
 SQLALCHEMY_TRACK_MODIFICATIONS = False

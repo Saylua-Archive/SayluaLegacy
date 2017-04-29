@@ -89,9 +89,13 @@ class User(db.Model):
         return (
             db.session.query(cls)
             .join(Username, cls.id == Username.user_id)
-            .filter(db.func.lower(Username.name) == username.lower())
+            .filter(Username.name == username.lower())
             .one_or_none()
         )
+
+    @classmethod
+    def from_email(cls, email):
+        return db.session.query(cls).filter(cls.email == email).one_or_none()
 
     @classmethod
     def hash_password(cls, password, salt=None):
