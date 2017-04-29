@@ -1,7 +1,5 @@
-from saylua import app, db
-from saylua.models.user import User
+from saylua import app
 from saylua.utils import pluralize, saylua_time
-from saylua.modules.forums.models.db import ForumPost, ForumThread
 
 from flask_markdown import Markdown
 
@@ -74,64 +72,3 @@ def saylua_relative_time(d):
         return '1 hour ago'
     else:
         return '{} hours ago'.format(s / 3600)
-
-
-# Filters that act on models
-@app.template_filter('message_status')
-def saylua_message_status(user_conversation):
-    if user_conversation.hidden:
-        return 'deleted'
-    if user_conversation.unread:
-        return 'unread'
-    return 'read'
-
-
-# TODO: Remove all database template filters.
-# Query filters. Use these only when necessary.
-@app.template_filter('user_from_id')
-def user_from_id(user_id):
-    user = (
-        db.session.query(User)
-        .filter(User.id == user_id)
-        .one_or_none()
-    )
-    return user
-
-
-@app.template_filter('last_post_thread')
-def last_post_thread(thread_id):
-    return (
-        db.session.query(ForumPost)
-        .filter(ForumPost.thread_id == thread_id)
-        .order_by(ForumPost.date_modified.desc())
-        .first()
-    )
-
-
-@app.template_filter('last_post_board')
-def last_post_board(board_id):
-    return (
-        db.session.query(ForumPost)
-        .join(ForumThread, ForumPost.thread)
-        .filter(ForumThread.board_id == board_id)
-        .order_by(ForumPost.date_modified.desc())
-        .first()
-    )
-
-
-@app.template_filter('thread_by_id')
-def thread_by_id(thread_id):
-    return (
-        db.session.query(ForumThread)
-        .filter(ForumThread.id == thread_id)
-        .first()
-    )
-
-
-@app.template_filter('count_thread_posts')
-def count_thread_posts(thread_id):
-    return (
-        db.session.query(ForumPost)
-        .filter(ForumPost.thread_id == thread_id)
-        .count()
-    )

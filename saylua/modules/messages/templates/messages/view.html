@@ -22,7 +22,7 @@
 </div>
 <div class="center full padded">
   {% set last_message = conversation_messages|last %}
-  Last message by {{ user_link(user_from_id(last_message.author_id)) }}
+  Last message by {{ user_link(last_message.author) }}
   on {{ last_message.date_created|expanded_relative_time }}
 </div>
 <form method="post" class="validated-form" data-error-id="message-post-error">
@@ -48,14 +48,13 @@
   </table>
 </form>
 {% for message in conversation_messages|reverse %}
-{% set message_user = user_from_id(message.author_id) %}
 <table class="conversation-message">
   <tr>
     <th rowspan="2">
-      <div class="full">{{ user_link(message_user) }}</div>
+      <div class="full">{{ user_link(message.author) }}</div>
       <div class="item">
-        <a href="{{ message_user.url() }}">
-          <img src="/static/img/pets/arko.png">
+        <a href="{{ message.author.url() }}">
+          <img src="{{ random_pet_image() }}">
         </a>
       </div>
     </th>

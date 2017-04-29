@@ -40,12 +40,12 @@
         </p>
       </a>
       <div class="forum-latest-post">
-        {% set last_post = board.id|last_post_board %}
+        {% set last_post = board.latest_post() %}
         {% if last_post is not none %}
         <img src="/static/img/pets/eydrun.png" />
         <p>
-          <a href="/forums/thread/{{ last_post.thread_id }}">{{ (last_post.thread_id|thread_by_id).title }}
-          </a> by <a href="/user/{{ last_post.author.name }}">
+          <a href="{{ last_post.thread.url() }}">{{ last_post.thread.title }}
+          </a> by <a href="{{ last_post.author.url() }}">
             {{ last_post.author.name }}</a>
           <span class="line">({{ last_post.date_created|relative_time }})</span>
         </p>

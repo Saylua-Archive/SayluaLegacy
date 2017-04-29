@@ -3,7 +3,7 @@ from saylua import app, db
 from saylua.models.user import LoginSession, User
 from saylua.wrappers import login_required
 
-from ..forms.login import LoginForm, RegisterForm, login_check
+from ..forms.login import LoginForm, RegisterForm, RecoveryForm, login_check
 
 from flask import render_template, redirect, make_response, request, flash, g
 
@@ -48,7 +48,8 @@ def login():
 
 
 def recover_login():
-    return render_template('login/recover.html')
+    form = RecoveryForm(request.form)
+    return render_template('login/recover.html', form=form)
 
 
 def reset_password(user, code):

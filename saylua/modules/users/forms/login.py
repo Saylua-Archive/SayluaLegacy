@@ -8,10 +8,10 @@ login_check = UserCheck()
 
 
 class LoginForm(Form):
-    username = SlField('Username', [
+    username_or_email = SlField('Username/Email', [
         sl_validators.Required(),
-        sl_validators.Username(),
-        login_check.UsernameExists])
+        sl_validators.UsernameOrEmail(),
+        login_check.UsernameOrEmailExists])
     password = SlPasswordField('Password', [
         sl_validators.Required(),
         login_check.PasswordValid])
@@ -44,4 +44,12 @@ class RegisterForm(Form):
     accept_tos = SlBooleanField(
         'I agree to the <a href="/terms/" target="_blank">Terms of Service</a>',
         [sl_validators.Required(message='You must agree to the Terms of Service!')])
+    recaptcha = RecaptchaField(validators=[Recaptcha(message='Please check the CAPTCHA.')])
+
+
+class RecoveryForm(Form):
+    username_or_email = SlField('Username/Email', [
+        sl_validators.Required(),
+        sl_validators.UsernameOrEmail(),
+        login_check.UsernameOrEmailExists])
     recaptcha = RecaptchaField(validators=[Recaptcha(message='Please check the CAPTCHA.')])

@@ -54,16 +54,15 @@
       </td>
       <td>
         With
-        {% for recipient_key in message.recipient_keys %}
-          {% set recipient = user_from_id(recipient_key) %}
-          {{ user_link(recipient) }}
+        {% for recipient in message.recipients() %}
+          {{ user_link(recipient.user) }}
         {% endfor %}
       </td>
       <td>
         {{ message.last_updated|relative_time }}
       </td>
       <td>
-        {{ message|message_status }}
+        {{ message.status() }}
       </td>
     </tr>
     {% endfor %}

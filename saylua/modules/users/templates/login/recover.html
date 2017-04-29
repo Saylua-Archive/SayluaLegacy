@@ -1,9 +1,32 @@
+{% from "_macros/forms.html" import form_row %}
+
 {% extends "layout.html" %}
 {% set page_title = "Recover Credentials" %}
 {% block body %}
 <h1>Recover Login Credentials</h1>
 <p>
-  If you've forgotten either your username or password, you can enter your email here, and we'll
-  send you an email with details needed to access your account. 
+  If you've forgotten how to login to your account, you can enter your email
+  or username here, and we'll send you an email with details needed to access
+  your account.
 </p>
+<form class="validated-form" method="post" id="recovery-form">
+  <table class="form-table center">
+    {{ form_row(form.username_or_email) }}
+    {{ form_row(form.recaptcha) }}
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" value="Recover account" name="recover">
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <p><a href="/login/">Login to your existing account</a></p>
+        <p><a href="/register/">Register a new account!</a></p>
+      </td>
+    </tr>
+  </table>
+</form>
+
 {% endblock %}

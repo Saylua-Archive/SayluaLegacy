@@ -53,17 +53,6 @@ def inject_truncate():
     return dict(truncate=truncate)
 
 
-@app.context_processor
-def inject_user_from_id():
-    def user_from_id(id):
-        return (
-            db.session.query(User)
-            .filter(User.id == id)
-            .one_or_none()
-        )
-    return dict(user_from_id=user_from_id)
-
-
 # Injected variables.
 
 @app.context_processor
