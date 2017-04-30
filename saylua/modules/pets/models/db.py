@@ -16,8 +16,9 @@ class SpeciesCoat(db.Model):
     __tablename__ = "species_coats"
 
     id = db.Column(db.Integer, primary_key=True)
-    species_name = db.Column(db.String(80), db.ForeignKey("species.name"))
     name = db.Column(db.String(80))
+    species_name = db.Column(db.String(80), db.ForeignKey("species.name"))
+    species = db.relationship("Species")
     description = db.Column(db.Text)
 
 

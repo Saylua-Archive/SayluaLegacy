@@ -63,7 +63,17 @@ def generate_pets():
     for species_name in os.listdir(path):
         species_path = path + species_name + os.sep
         if os.path.isdir(species_path):
-            yield
+            new_species = Species(name=species_name, description="A species of great beauty.")
+            #yield new_species
+            for img_name in os.listdir(species_path):
+                coat_name, ext = os.path.splitext(img_name)
+                if ext.lower() == '.png':
+                    new_coat = SpeciesCoat(
+                        name=coat_name,
+                        species_name=species_name,
+                        description=("A beautiful example of a" + species_name))
+                    print(new_coat.species_name)
+                    #yield new_coat
 
 
 def generate_boards():
