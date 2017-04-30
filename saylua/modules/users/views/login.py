@@ -35,12 +35,14 @@ def login():
         expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
         new_session = LoginSession(user_id=found_id, expires=expires)
 
-        db.session.add(new_session)
+        # In case there is a session id collission, merge the session entries.
+        db.session.merge(new_session)
         db.session.commit()
 
         # Generate a matching cookie and redirect
         resp = make_response(redirect('/'))
         resp.set_cookie("session_id", new_session.id, expires=expires)
+        resp.set_cookie("user_id", str(found_id), expires=expires)
 
         return resp
 

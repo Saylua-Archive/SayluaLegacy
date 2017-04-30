@@ -3,20 +3,18 @@
 {% extends "layout.html" %}
 {% set page_title = "Recover Credentials" %}
 {% block body %}
-<h1>Recover Login Credentials</h1>
+<h1>Reset Password: {{ user }} </h1>
 <p>
-  If you've forgotten how to login to your account, you can enter your email
-  or username here, and we'll send you an email with details needed to access
-  your account.
+  Enter a new password for your account to regain access.
 </p>
-<form class="validated-form" method="post" id="recovery-form">
+<form class="validated-form" method="post" id="reset-form">
   <table class="form-table center">
-    {{ form_row(form.username_or_email) }}
-    {{ form_row(form.recaptcha) }}
+    {{ form_row(form.password) }}
+    {{ form_row(form.confirm_password) }}
     <tr>
       <td></td>
       <td>
-        <input type="submit" value="Recover account" name="recover">
+        <input type="submit" value="Reset password" name="reset">
       </td>
     </tr>
     <tr>

@@ -70,7 +70,7 @@ class PasswordForm(Form):
         sl_validators.Max(app.config['MAX_PASSWORD_LENGTH'])
     ])
     confirm_password = SlPasswordField('Confirm Password', [
-        sl_validators.EqualTo('confirm_password', message='Passwords must match.')
+        sl_validators.EqualTo('new_password', message='Passwords must match.')
     ])
 
     def setUser(self, user):

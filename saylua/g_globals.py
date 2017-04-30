@@ -1,6 +1,7 @@
 from saylua import app, db
 from saylua.models.user import LoginSession
 from flask import request, g
+
 import datetime
 
 
@@ -12,23 +13,25 @@ def load_user():
 
     # Load user
     session_id = request.cookies.get('session_id')
+    user_id = request.cookies.get('user_id')
 
-    if session_id:
-        session = (
-            db.session.query(LoginSession)
-            .filter(LoginSession.id == session_id)
-            .first()
-        )
+    if session_id and user_id:
+        try:
+            user_id = int(user_id)
+        except ValueError:
+            return
+
+        session = db.session.query(LoginSession).get((session_id, user_id))
 
         if session:
-            user = session.get_user()
+            user = session.user
 
             if user and session.active:
                 g.logged_in = True
                 g.user = user
 
                 # Update user's last_action timestamp if it's been at least
-                # LAST_ACTION_OFFSET minutes
+                # LAST_ACTION_OFFSET minutes.
                 current = datetime.datetime.now()
                 mins_ago = current - datetime.timedelta(
                     minutes=app.config['LAST_ACTION_OFFSET'])

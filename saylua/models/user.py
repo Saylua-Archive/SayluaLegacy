@@ -171,11 +171,11 @@ class BankAccount(db.Model):
 
     __tablename__ = "bank_accounts"
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     user = db.relationship("User", back_populates="bank_account")
-    bank_ss = db.Column(db.Integer, default=0)
-    bank_cc = db.Column(db.Integer, default=0)
+
+    star_shards = db.Column(db.Integer, default=0)
+    cloud_coins = db.Column(db.Integer, default=0)
 
 
 class Username(db.Model):
@@ -211,13 +211,12 @@ class Username(db.Model):
 
 
 class LoginSession(db.Model):
-    """User login session.
-    """
-
     __tablename__ = "sessions"
 
     id = db.Column(db.String(256), primary_key=True)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    user = db.relationship("User")
+
     expires = db.Column(db.DateTime)
 
     def __init__(self, user_id, expires):
@@ -229,9 +228,32 @@ class LoginSession(db.Model):
     def active(self):
         return (self.expires > datetime.datetime.now())
 
-    def get_user(self):
-        return (
-            db.session.query(User)
-            .filter(User.id == self.user_id)
-            .one_or_none()
-        )
+
+class ResetCode(db.Model):
+    __tablename__ = "reset_codes"
+
+    id = db.Column(db.String(256), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    user = db.relationship("User")
+
+    # Use this to determine whether the code is expired.
+    date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+
+    def __init__(self, user_id):
+        self.id = str(uuid4())
+        self.user_id = user_id
+
+
+class InviteCode(db.Model):
+    __tablename__ = "invite_codes"
+
+    id = db.Column(db.String(256), primary_key=True)
+
+    # An invite code is considered claimed if a user exists.
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    user = db.relationship("User")
+
+    disabled = db.Column(db.Integer)
+
+    def __init__(self, user_id):
+        self.id = str(uuid4())
