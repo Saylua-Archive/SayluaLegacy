@@ -28,7 +28,7 @@ def inject_include_static():
 @app.context_processor
 def inject_random_image():
     def random_image(folder_name):
-        subpath = 'img/' + folder_name + '/'
+        subpath = 'img' + os.sep + folder_name + os.sep
         path = os.path.join(app.static_folder, subpath)
         return random_image_helper(path)
 
@@ -42,11 +42,12 @@ def inject_random_image():
 
 def random_image_helper(folder):
     name = random.choice(os.listdir(folder))
-    name_path = folder + os.sep + name
+    name_path = folder + name
+    subpath = name_path[name_path.rfind("static" + os.sep) + 7:]
     if os.path.isdir(name_path):
-        return random_image_helper(name_path)
+        return random_image_helper(name_path + os.sep)
     elif name.endswith(".png") or name.endswith(".jpg"):
-        return (url_for('static', filename=name_path) +
+        return (url_for('static', filename=subpath) +
             '?v=' + str(get_static_version_id()))
     else:
         return random_image_helper(folder)
