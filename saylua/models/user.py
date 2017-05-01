@@ -1,9 +1,11 @@
 from bcryptmaster import bcrypt
-from uuid import uuid4
-import datetime
 
 from saylua import db
+from saylua.utils import random_token
+
 from sqlalchemy.ext.hybrid import hybrid_property
+
+import datetime
 
 
 # An exception thrown if an operation would make a user's currency negative
@@ -220,7 +222,7 @@ class LoginSession(db.Model):
     expires = db.Column(db.DateTime)
 
     def __init__(self, user_id, expires):
-        self.id = str(uuid4())
+        self.id = random_token(128)
         self.user_id = user_id
         self.expires = expires
 
@@ -232,7 +234,7 @@ class LoginSession(db.Model):
 class ResetCode(db.Model):
     __tablename__ = "reset_codes"
 
-    id = db.Column(db.String(256), primary_key=True)
+    code = db.Column(db.String(256), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     user = db.relationship("User")
 
@@ -240,14 +242,14 @@ class ResetCode(db.Model):
     date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
     def __init__(self, user_id):
-        self.id = str(uuid4())
+        self.id = random_token()
         self.user_id = user_id
 
 
 class InviteCode(db.Model):
     __tablename__ = "invite_codes"
 
-    id = db.Column(db.String(256), primary_key=True)
+    code = db.Column(db.String(256), primary_key=True)
 
     # An invite code is considered claimed if a user exists.
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
@@ -256,4 +258,4 @@ class InviteCode(db.Model):
     disabled = db.Column(db.Integer)
 
     def __init__(self, user_id):
-        self.id = str(uuid4())
+        self.id = random_token()
