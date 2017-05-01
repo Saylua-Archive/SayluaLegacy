@@ -64,16 +64,23 @@ def generate_pets():
         species_path = path + species_name + os.sep
         if os.path.isdir(species_path):
             new_species = Species(name=species_name, description="A species of great beauty.")
-            #yield new_species
+            yield new_species
             for img_name in os.listdir(species_path):
                 coat_name, ext = os.path.splitext(img_name)
                 if ext.lower() == '.png':
                     new_coat = SpeciesCoat(
                         name=coat_name,
                         species_name=species_name,
-                        description=("A beautiful example of a" + species_name))
-                    print(new_coat.species_name)
-                    #yield new_coat
+                        description=("A beautiful " + species_name))
+                    yield new_coat
+                    soul_name = Pet.new_soul_name()
+                    new_pet = Pet(
+                        soul_name=soul_name,
+                        coat_id=new_coat.id,
+                        species_name=species_name,
+                        name=soul_name.capitalize()
+                    )
+                    yield new_pet
 
 
 def generate_boards():
@@ -234,6 +241,10 @@ def setup():
         print("Adding Placeholder Items")
         for item in generate_items():
             db.session.add(item)
+
+        print("Adding Placeholder Pets, Coats, and Species")
+        for pet_coat_species in generate_pets():
+            db.session.add(pet_coat_species)
 
         db.session.commit()
 

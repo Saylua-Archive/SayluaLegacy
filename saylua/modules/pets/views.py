@@ -9,7 +9,8 @@ def pet_profile(name):
 
 
 def pet_reserve():
-    return render_template("reserve.html")
+    adoptee = Pet.query.order_by(db.func.random()).first()
+    return render_template("reserve.html", adoptee)
 
 
 def pet_collection_default():
