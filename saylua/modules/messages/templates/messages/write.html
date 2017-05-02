@@ -1,3 +1,5 @@
+{% from "_macros/forms.html" import form_row %}
+
 {% extends "layout.html" %}
 {% set page_title = "Write a New Message" %}
 
@@ -7,39 +9,14 @@
 
 {% block body %}
 <h1>Writing a New Message</h1>
-<p class="center full padded">
+<p class="center">
   <a href="/messages/"><img src="/static/img/icons/arrow_left.png"> Back to Your Inbox</a>
 </p>
-<form method="post" class="validated-form" data-error-id="message-post-error">
-  <table class="form-table full padded">
-    <tr>
-      <td colspan="2" id="message-post-error"></td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.recipient.label }}
-      </th>
-      <td>
-        {{ form.recipient() }}
-        <small class="form-tip">Enter the username for the message recipient</small>
-      </td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.title.label }}
-      </th>
-      <td>
-        {{ form.title() }}
-      </td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.text.label }}
-      </th>
-      <td>
-        {{ form.text() }}
-      </td>
-    </tr>
+<form method="post" class="validated-form">
+  <table class="form-table">
+    {{ form_row(form.recipient, tip="Enter the username for the message recipient") }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.text) }}
     <tr>
       <td></td>
       <td>

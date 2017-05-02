@@ -8,13 +8,9 @@ from saylua.models.user import User
 import re
 
 
-def flash_errors(form):
-    for field, errors in form.errors.items():
-        for error in errors:
-            flash(error, 'error')
-
-
 # Used mainly for login, but also for other places.
+# This is sort of hackish. Basically, it's used to make sure we don't query for
+# the user object more than necessary during form validation.
 class UserCheck:
     def __init__(self, user=None):
         self.user = user

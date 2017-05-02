@@ -8,7 +8,6 @@ from .models.db import Conversation, ConversationHandle, Message
 from saylua.models.user import User
 
 from forms import ConversationForm, ConversationReplyForm, recipient_check
-from saylua.utils.form import flash_errors
 
 CONVERSATIONS_PER_PAGE = 25
 
@@ -75,7 +74,6 @@ def messages_write_new():
         new_id = start_conversation(g.user.id, to, form.title.data, form.text.data)
         return redirect('/conversation/' + str(new_id) + '/', code=302)
 
-    flash_errors(form)
     return render_template('messages/write.html', form=form)
 
 
@@ -110,7 +108,7 @@ def messages_view_conversation(key):
             return redirect('/conversation/' + str(key) + '/', code=302)
         else:
             flash('Message reply failed for an unexpected reason.', 'error')
-    flash_errors(form)
+
     members = (
         db.session.query(User)
         .join(ConversationHandle)
