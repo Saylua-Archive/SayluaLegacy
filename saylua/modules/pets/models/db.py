@@ -1,5 +1,6 @@
 from saylua import db
 from ..soul_names import soul_name
+import os
 
 
 # Pets are divided into species and species are divided into variations
@@ -43,6 +44,9 @@ class Pet(db.Model):
     # If either of these is set to a number other than 0, the pet is for sale
     ss_price = db.Column(db.Integer, default=0)
     cc_price = db.Column(db.Integer, default=0)
+
+    def image(this):
+        return
 
     # Generate a new unique soul name
     @classmethod
