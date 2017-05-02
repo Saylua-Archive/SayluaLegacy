@@ -4,6 +4,7 @@ from saylua import db
 from saylua.utils import random_token
 
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import validates
 
 import datetime
 
@@ -86,6 +87,10 @@ class User(db.Model):
             .one_or_none()
         )
 
+    @validates('email')
+    def validate_email(self, key, address):
+        return address.lower()
+
     @classmethod
     def from_username(cls, username):
         return (
@@ -97,7 +102,7 @@ class User(db.Model):
 
     @classmethod
     def from_email(cls, email):
-        return db.session.query(cls).filter(cls.email == email).one_or_none()
+        return db.session.query(cls).filter(cls.email == email.lower()).one_or_none()
 
     @classmethod
     def hash_password(cls, password, salt=None):
@@ -251,11 +256,16 @@ class InviteCode(db.Model):
 
     code = db.Column(db.String(256), primary_key=True)
 
-    # An invite code is considered claimed if a user exists.
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    user = db.relationship("User")
+    # An invite code is considered claimed if a recipient user exists.
+    recipient_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    recipient = db.relationship("User", foreign_keys=[recipient_id])
 
-    disabled = db.Column(db.Integer)
+    # The person who originally created the invite code.
+    sender_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    sender = db.relationship("User", foreign_keys=[sender_id])
 
-    def __init__(self, user_id):
-        self.id = random_token()
+    disabled = db.Column(db.Integer, default=False)
+
+    def __init__(self, sender_id):
+        self.code = random_token()
+        self.sender_id = sender_id

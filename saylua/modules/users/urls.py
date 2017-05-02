@@ -34,4 +34,6 @@ urlpatterns = [
     # Admin views
     url('/admin/user/', view_func=views.admin.user_manage,
         name='user_manage', methods=['GET', 'POST']),
+    url('/admin/user/invite/', view_func=views.admin.user_invite,
+        name='user_invite', methods=['GET', 'POST']),
 ]

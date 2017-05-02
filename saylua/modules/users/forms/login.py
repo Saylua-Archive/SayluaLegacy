@@ -26,7 +26,8 @@ class RegisterForm(Form):
         sl_validators.UsernameUnique()])
     email = SlField('Email Address', [
         sl_validators.Required(),
-        sl_validators.Email()])
+        sl_validators.Email(),
+        sl_validators.EmailUnique()])
     password = SlPasswordField('Password', [
         sl_validators.Required(),
         sl_validators.Min(app.config['MIN_PASSWORD_LENGTH']),
@@ -37,7 +38,8 @@ class RegisterForm(Form):
         sl_validators.EqualTo('password', message='Passwords must match.')
     ])
     invite_code = SlField('Invite Code', [
-        sl_validators.Required()])
+        sl_validators.Required(),
+        login_check.InviteCodeValid])
     at_least_13 = SlBooleanField(
         'I certify that I am at least 13 years old.',
         [sl_validators.Required(message='You must be at least 13 to join Saylua.')])

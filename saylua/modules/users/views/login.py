@@ -77,6 +77,7 @@ def logout():
 
     resp = make_response(redirect('/'))
     resp.set_cookie('session_id', '', expires=0)
+    flash("Bye bye! We hope to see you again soon.")
     return resp
 
 
@@ -85,9 +86,6 @@ def register():
     form = RegisterForm(request.form)
 
     if request.method == 'POST' and form.validate():
-        if (form.invite_code.data != 'cat'):
-            flash('The invite code you entered is invalid.', 'error')
-            return render_template('login/register.html', form=form)
         username = form.username.data
         password = form.password.data
         email = form.email.data
@@ -102,6 +100,12 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
+        # Claim the user's invite code if one was used.
+        invite_code = login_check.invite_code
+        if invite_code:
+            invite_code.recipient_id = new_user.id
+            db.session.add(invite_code)
+
         # Add a session to the datastore
         expires = datetime.datetime.utcnow()
         expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
@@ -113,6 +117,7 @@ def register():
         # Generate a matching cookie and redirct
         resp = make_response(redirect('/'))
         resp.set_cookie('session_id', new_session.id, expires=expires)
+        resp.set_cookie('user_id', str(new_user.id), expires=expires)
         return resp
 
     return render_template('login/register.html', form=form)

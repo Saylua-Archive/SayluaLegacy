@@ -51,7 +51,8 @@ class EmailForm(Form):
     email = SlField('Email Address', [
         sl_validators.Required(),
         sl_validators.Email(),
-        IsNot])
+        IsNot,
+        sl_validators.EmailUnique()])
 
     def setUser(self, user):
         self.IsNot.pattern = user.email

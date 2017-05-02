@@ -1,9 +1,7 @@
-from flask import flash
-
 from wtforms import validators
 
-from saylua import app
-from saylua.models.user import User
+from saylua import app, db
+from saylua.models.user import User, InviteCode
 
 import re
 
@@ -41,3 +39,12 @@ class UserCheck:
             return
         if not User.check_password(self.user, field.data):
             raise validators.StopValidation("Your password is incorrect.")
+
+    def InviteCodeValid(self, form, field):
+        self.invite_code = db.session.query(InviteCode).get(field.data)
+        if not self.invite_code or self.invite_code.disabled:
+            raise validators.StopValidation(
+                "Sorry, the invite code you entered is invalid.")
+        elif self.invite_code.recipient_id:
+            raise validators.StopValidation(
+                "Sorry, the invite code you entered has already been claimed.")

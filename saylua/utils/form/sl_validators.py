@@ -237,3 +237,13 @@ class UsernameUnique(SayluaValidator):
         if self.whitelist and username in self.whitelist:
             return True
         return not User.from_username(username)
+
+
+class EmailUnique(SayluaValidator):
+    def __init__(self, message=None):
+        self.message = message
+        self.defaultMessage = 'A user with that email already exists.'
+
+    def validate(self, form, field):
+        email = field.data
+        return not User.from_email(email)
