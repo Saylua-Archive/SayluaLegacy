@@ -1,0 +1,20 @@
+{% extends "admin/template.html" %}
+{% set section_title = "Manage Invite Codes" %}
+{% block section_body %}
+
+<h2>Generate New Invite Code</h2>
+
+<form method="post">
+  <input name="generate" type="submit" value="Generate new code" />
+</form>
+
+<h2>Existing Invite Codes</h2>
+{% for code in codes %}
+  {{ code.code }}
+{% else %}
+<p>
+  Woah, looks like there aren't any invite codes here!
+</p>
+{% endfor %}
+
+{% endblock %}

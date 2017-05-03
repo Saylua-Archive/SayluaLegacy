@@ -17,6 +17,9 @@
     <a href="/admin/user/"{%- if request.url_rule.endpoint == 'user_manage' %} class="active"{% endif %}>
       Manage Users
     </a>
+    <a href="/admin/user/invite/"{%- if request.url_rule.endpoint == 'user_invite' %} class="active"{% endif %}>
+      Manage Invite Codes
+    </a>
     <h4>Forums</h4>
     <a href="/admin/forums/newboard/"{%- if request.url_rule.endpoint == 'new_board' %} class="active"{% endif %}>
       Add New Boards
