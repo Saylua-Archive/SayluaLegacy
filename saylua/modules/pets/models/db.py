@@ -1,6 +1,8 @@
 from saylua import db
 from ..soul_names import soul_name
 import os
+from saylua.utils import get_static_version_id
+from flask import url_for
 
 
 # Pets are divided into species and species are divided into variations
@@ -46,7 +48,9 @@ class Pet(db.Model):
     cc_price = db.Column(db.Integer, default=0)
 
     def image(this):
-        return
+        subpath = ("img" + os.sep + "pets" + os.sep + this.species_name + os.sep + this.coat.name +
+            ".png")
+        return url_for("static", filename=subpath) + "?v=" + str(get_static_version_id())
 
     # Generate a new unique soul name
     @classmethod

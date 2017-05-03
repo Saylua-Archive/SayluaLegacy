@@ -3,7 +3,8 @@
 {% set page_title = "Adoption Center" %}
 {% block body %}
 <h1>The Adoption Center</h1>
+<img src="{{ adoptee.image() }}"></img>
 <button>
-  Adopt a Pet
+  Adopt {{ adoptee.name }}
 </button>
 {% endblock %}
