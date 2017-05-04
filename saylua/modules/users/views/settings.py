@@ -1,7 +1,6 @@
 from saylua import app, db
 from saylua.models.user import User, Username
 from saylua.wrappers import login_required
-from saylua.utils.form import flash_errors
 
 from flask import render_template, redirect, g, url_for, flash, request
 
@@ -34,7 +33,6 @@ def user_settings_details():
         form.populate_obj(g.user)
         db.session.commit()
         flash("Your user details have been saved.")
-    flash_errors(form)
     return render_template("settings/details.html", form=form)
 
 
@@ -103,7 +101,6 @@ def user_settings_email():
         flash("Your email has successfully been changed!")
 
         # TODO Send new validation email here.
-    flash_errors(form)
 
     return render_template("settings/email.html", form=form)
 

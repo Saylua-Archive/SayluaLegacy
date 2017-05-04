@@ -2,7 +2,9 @@ from dateutil import tz
 
 import time
 import re
+import string
 import os
+import random
 
 
 def is_devserver():
@@ -46,6 +48,15 @@ def get_from_request(request, key, form_key=None, args_key=None):
     elif request.args.get(args_key):
         result = request.args.get(args_key)
     return result
+
+
+def random_token(length=32):
+    choices = string.ascii_letters + string.digits
+    return ''.join(random.SystemRandom().choice(choices) for _ in range(length))
+
+
+def canonize(s):
+    return urlize(s)
 
 
 def urlize(s):

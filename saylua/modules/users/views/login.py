@@ -1,9 +1,9 @@
 from saylua import app, db
 
-from saylua.models.user import LoginSession, User
+from saylua.models.user import LoginSession
 from saylua.wrappers import login_required
 
-from ..forms.login import LoginForm, RegisterForm, RecoveryForm, login_check
+from ..forms.login import LoginForm, login_check
 
 from flask import render_template, redirect, make_response, request, flash, g
 
@@ -35,25 +35,18 @@ def login():
         expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
         new_session = LoginSession(user_id=found_id, expires=expires)
 
-        db.session.add(new_session)
+        # In case there is a session id collission, merge the session entries.
+        db.session.merge(new_session)
         db.session.commit()
 
         # Generate a matching cookie and redirect
         resp = make_response(redirect('/'))
         resp.set_cookie("session_id", new_session.id, expires=expires)
+        resp.set_cookie("user_id", str(found_id), expires=expires)
 
         return resp
 
     return render_template('login/login.html', form=form)
-
-
-def recover_login():
-    form = RecoveryForm(request.form)
-    return render_template('login/recover.html', form=form)
-
-
-def reset_password(user, code):
-    return render_template('login/recover.html')
 
 
 @login_required
@@ -75,42 +68,5 @@ def logout():
 
     resp = make_response(redirect('/'))
     resp.set_cookie('session_id', '', expires=0)
+    flash("Bye bye! We hope to see you again soon.")
     return resp
-
-
-# Registration form shown to the user
-def register():
-    form = RegisterForm(request.form)
-
-    if request.method == 'POST' and form.validate():
-        if (form.invite_code.data != 'cat'):
-            flash('The invite code you entered is invalid.', 'error')
-            return render_template('login/register.html', form=form)
-        username = form.username.data
-        password = form.password.data
-        email = form.email.data
-
-        phash = User.hash_password(password)
-        new_user = User(
-            username=username,
-            phash=phash,
-            email=email
-        )
-
-        db.session.add(new_user)
-        db.session.commit()
-
-        # Add a session to the datastore
-        expires = datetime.datetime.utcnow()
-        expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
-        new_session = LoginSession(user_id=new_user.id, expires=expires)
-
-        db.session.add(new_session)
-        db.session.commit()
-
-        # Generate a matching cookie and redirct
-        resp = make_response(redirect('/'))
-        resp.set_cookie('session_id', new_session.id, expires=expires)
-        return resp
-
-    return render_template('login/register.html', form=form)

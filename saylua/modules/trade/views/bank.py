@@ -1,6 +1,5 @@
 from saylua.models.user import User, InvalidCurrencyException
 from saylua.utils import get_from_request
-from saylua.utils.form import flash_errors
 from saylua.wrappers import login_required
 from saylua.modules.messages.models.db import Notification
 
@@ -41,5 +40,4 @@ def bank_transfer():
                 Notification.send(recipient.id, '%s sent you %d SS and %d CC'
                     % (g.user.name, ss, cc), '/bank/')
                 return redirect('/bank/transfer/')
-    flash_errors(form)
     return render_template('bank/transfer.html', form=form)

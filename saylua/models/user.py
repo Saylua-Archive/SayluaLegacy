@@ -1,9 +1,12 @@
 from bcryptmaster import bcrypt
-from uuid import uuid4
-import datetime
 
 from saylua import db
+from saylua.utils import random_token
+
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import validates
+
+import datetime
 
 
 # An exception thrown if an operation would make a user's currency negative
@@ -84,6 +87,10 @@ class User(db.Model):
             .one_or_none()
         )
 
+    @validates('email')
+    def validate_email(self, key, address):
+        return address.lower()
+
     @classmethod
     def from_username(cls, username):
         return (
@@ -95,7 +102,7 @@ class User(db.Model):
 
     @classmethod
     def from_email(cls, email):
-        return db.session.query(cls).filter(cls.email == email).one_or_none()
+        return db.session.query(cls).filter(cls.email == email.lower()).one_or_none()
 
     @classmethod
     def hash_password(cls, password, salt=None):
@@ -171,11 +178,11 @@ class BankAccount(db.Model):
 
     __tablename__ = "bank_accounts"
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     user = db.relationship("User", back_populates="bank_account")
-    bank_ss = db.Column(db.Integer, default=0)
-    bank_cc = db.Column(db.Integer, default=0)
+
+    star_shards = db.Column(db.Integer, default=0)
+    cloud_coins = db.Column(db.Integer, default=0)
 
 
 class Username(db.Model):
@@ -211,17 +218,16 @@ class Username(db.Model):
 
 
 class LoginSession(db.Model):
-    """User login session.
-    """
-
     __tablename__ = "sessions"
 
     id = db.Column(db.String(256), primary_key=True)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    user = db.relationship("User")
+
     expires = db.Column(db.DateTime)
 
     def __init__(self, user_id, expires):
-        self.id = str(uuid4())
+        self.id = random_token(128)
         self.user_id = user_id
         self.expires = expires
 
@@ -229,9 +235,37 @@ class LoginSession(db.Model):
     def active(self):
         return (self.expires > datetime.datetime.now())
 
-    def get_user(self):
-        return (
-            db.session.query(User)
-            .filter(User.id == self.user_id)
-            .one_or_none()
-        )
+
+class ResetCode(db.Model):
+    __tablename__ = "reset_codes"
+
+    code = db.Column(db.String(256), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    user = db.relationship("User")
+
+    # Use this to determine whether the code is expired.
+    date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+
+    def __init__(self, user_id):
+        self.id = random_token()
+        self.user_id = user_id
+
+
+class InviteCode(db.Model):
+    __tablename__ = "invite_codes"
+
+    code = db.Column(db.String(256), primary_key=True)
+
+    # An invite code is considered claimed if a recipient user exists.
+    recipient_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    recipient = db.relationship("User", foreign_keys=[recipient_id])
+
+    # The person who originally created the invite code.
+    sender_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    sender = db.relationship("User", foreign_keys=[sender_id])
+
+    disabled = db.Column(db.Integer, default=False)
+
+    def __init__(self, sender_id):
+        self.code = random_token()
+        self.sender_id = sender_id

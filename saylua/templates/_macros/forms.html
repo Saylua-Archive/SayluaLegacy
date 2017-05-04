@@ -11,6 +11,7 @@
 {%- endmacro %}
 
 {% macro form_row(field, tip=None, placeholder=None) -%}
+{% if field %}
 <tr>
   <th class="label">
     {{ field.label }}
@@ -20,6 +21,7 @@
     {{ form_errors(field, tip) }}
   </td>
 </tr>
+{% endif %}
 {%- endmacro %}
 
 {% macro form_checkbox(field) -%}
