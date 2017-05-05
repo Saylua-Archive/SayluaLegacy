@@ -6,14 +6,13 @@
   display: block;
   float: left;
   padding: .8rem 2rem;
-}
+  &:hover {
+    background: $accentSoftColor;
+  }
 
-.tab:hover {
-  background: $accentSoftColor;
-}
-
-.tab.selected {
-  background: $mainSofterColor;
+  &.selected {
+    background: $mainSofterColor;
+  }
 }
 
 p.error {
@@ -30,10 +29,10 @@ a.tiny-button {
   padding: 6px 10px;
   border-radius: 7px;
   background-color: $white;
-}
 
-a.tiny-button:hover {
-  background-color: $mainSofterColor;
+  &:hover {
+    background-color: $mainSofterColor;
+  }
 }
 
 .divider {

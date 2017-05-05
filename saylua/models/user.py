@@ -271,3 +271,6 @@ class InviteCode(db.Model):
     def __init__(self, sender_id):
         self.code = random_token()
         self.sender_id = sender_id
+
+    def url(self):
+        return '/register/?invite_code=' + self.code

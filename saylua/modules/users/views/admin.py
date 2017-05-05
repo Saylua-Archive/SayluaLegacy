@@ -17,5 +17,5 @@ def user_invite():
         new_code = InviteCode(g.user.id)
         db.session.add(new_code)
         db.session.commit()
-    codes = db.session.query(InviteCode).order_by(InviteCode.date_created.asc()).limit(30)
+    codes = db.session.query(InviteCode).order_by(InviteCode.date_created.asc()).limit(30).all()
     return render_template('admin/invite.html', codes=codes)
