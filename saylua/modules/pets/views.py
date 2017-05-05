@@ -1,4 +1,4 @@
-from flask import render_template, redirect
+from flask import render_template, g, redirect, request, flash
 from saylua import db
 from .models.db import Pet
 from saylua.models.user import User
@@ -9,6 +9,20 @@ def pet_profile(name):
 
 
 def pet_reserve():
+    if request.method == 'POST':
+        adopter = g.user
+        soul_name = request.form.get('soul_name')
+        adoptee = db.session.query(Pet).filter(Pet.soul_name == soul_name).one_or_none()
+        if adoptee is None:
+            flash("Sorry, I couldn't find a pet with that soul name.")
+        elif adoptee.owner_id is not None:
+            flash("I'm afraid " + adoptee.name + " already has a companion.")
+        else:
+            adoptee.owner_id = adopter.id
+            db.session.add(adoptee)
+            db.commit()
+            flash("You have adopted " + adoptee.name + "!")
+            return redirect('/pet/' + soul_name, code=302)
     adoptee = Pet.query.order_by(db.func.random()).first()
     return render_template("reserve.html", adoptee=adoptee)
 
