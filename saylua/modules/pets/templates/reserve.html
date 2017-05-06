@@ -8,7 +8,10 @@
   <img src="{{ adoptee.image() }}"></img>
 </div>
 <img src="/static/img/characters/vera-everly.png">
-<button>
-  Adopt {{ adoptee.name }}
-</button>
+<form method="post">
+  <input type="hidden" name="soul_name" value="{{ adoptee.soul_name }}">
+  <button>
+    Adopt {{ adoptee.name }}
+  </button>
+</form>
 {% endblock %}

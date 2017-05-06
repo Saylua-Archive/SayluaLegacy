@@ -5,12 +5,18 @@ from saylua.models.user import User
 
 
 def pet_profile(name):
-    return render_template("profile.html")
+    pet = db.session.query(Pet).filter(Pet.soul_name == name).one_or_none()
+    if pet is None:
+        return render_template('404.html'), 404
+    return render_template("profile.html", pet=pet)
 
 
 def pet_reserve():
     if request.method == 'POST':
         adopter = g.user
+        if not adopter:
+            flash("You need to be logged in to adopt a companion!", "error")
+            return redirect("/login")
         soul_name = request.form.get('soul_name')
         adoptee = db.session.query(Pet).filter(Pet.soul_name == soul_name).one_or_none()
         if adoptee is None:
@@ -20,7 +26,7 @@ def pet_reserve():
         else:
             adoptee.owner_id = adopter.id
             db.session.add(adoptee)
-            db.commit()
+            db.session.commit()
             flash("You have adopted " + adoptee.name + "!")
             return redirect('/pet/' + soul_name, code=302)
     adoptee = Pet.query.order_by(db.func.random()).first()
@@ -28,15 +34,15 @@ def pet_reserve():
 
 
 def pet_collection_default():
-    username = 'user'
-    return redirect('/den/' + username, code=302)
+    username = "user"
+    return redirect("/den/" + username, code=302)
 
 
 def pet_collection(username):
     user = User.from_username(username)
     # User not found
     if user is None:
-        return render_template('notfound.html')
+        return render_template("404.html"), 404
 
     pets = (
         db.session.query(Pet)
