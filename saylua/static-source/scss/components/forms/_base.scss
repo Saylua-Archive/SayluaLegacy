@@ -1,4 +1,3 @@
-@import '../../assets/variables';
 @import '../../assets/transitions';
 
 input, textarea, select {
@@ -14,11 +13,6 @@ input.error, textarea.error {
 
 input[type='checkbox'].error {
   outline: 1px solid $errorColor;
-}
-
-a.button {
-  display: block;
-  width: auto;
 }
 
 input[type='submit'], button, a.button, a.button:link, a.button:visited {
