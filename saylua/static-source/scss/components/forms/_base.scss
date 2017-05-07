@@ -5,10 +5,10 @@ input, textarea, select {
   line-height: 150%;
   padding: 0.25em 0.8rem;
   border: 1px solid #ddd;
-}
 
-input.error, textarea.error {
-  border-color: $errorColor;
+  &.error {
+    border-color: $errorColor;
+  }
 }
 
 input[type='checkbox'].error {
