@@ -4,8 +4,26 @@
 {% set section_title = "Manage Users" %}
 {% block section_body %}
 
-{% for user in users %}
-  {{ user_link(user) }}
-{% endfor %}
+<h2>Enter Username</h2>
+
+<form method="get">
+  <input type="text" placeholder="Username" name="username" />
+  <input type="submit" value="Manage User" />
+</form>
+
+
+<h2>Current Users on Site</h2>
+<table class="alternating-table">
+  {% for user in users %}
+  <tr>
+    <td>
+      {{ user_link(user) }}
+    </td>
+    <td>
+      <a href="/admin/user/?username={{ user.name }}">Manage User</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
 
 {% endblock %}

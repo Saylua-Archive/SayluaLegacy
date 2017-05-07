@@ -1,6 +1,7 @@
 from saylua import app, db
 
 from saylua.models.user import LoginSession, User
+from saylua.utils import get_from_request
 
 from ..forms.register import RegisterForm, register_check
 
@@ -15,6 +16,7 @@ def register():
         flash('Sorry, registration is currently disabled. Check back later!', 'error')
         return redirect('/login')
     form = RegisterForm(request.form)
+    form.invite_code.data = get_from_request(request, 'invite_code')
 
     if not app.config.get('INVITE_ONLY'):
         del form.invite_code

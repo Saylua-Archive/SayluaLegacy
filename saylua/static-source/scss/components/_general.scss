@@ -1,19 +1,17 @@
-@import '../assets/variables';
 @import '../assets/transitions';
 
 .tab {
   @include slow-color-trans;
   display: block;
   float: left;
-  padding: .8rem 2rem;
-}
+  padding: 0.8rem 2rem;
+  &:hover {
+    background: $accentSoftColor;
+  }
 
-.tab:hover {
-  background: $accentSoftColor;
-}
-
-.tab.selected {
-  background: $mainSofterColor;
+  &.selected {
+    background: $mainSofterColor;
+  }
 }
 
 p.error {
@@ -24,16 +22,21 @@ p.error {
   color: $errorColor;
 }
 
+a.button {
+  display: block;
+  width: auto;
+}
+
 a.tiny-button {
   @include fast-color-trans;
   margin: 3px;
   padding: 6px 10px;
   border-radius: 7px;
   background-color: $white;
-}
 
-a.tiny-button:hover {
-  background-color: $mainSofterColor;
+  &:hover {
+    background-color: $mainSofterColor;
+  }
 }
 
 .divider {
