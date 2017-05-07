@@ -38,6 +38,10 @@ class User(db.Model):
     # Role
     role_name = db.Column(db.String(100), default="user")
 
+    # Active Companion
+    companion_id = db.Column(db.Integer, db.ForeignKey("pets.id"))
+    companion = db.relationship("Pet")
+
     # Human Avatar
     ha_url = db.Column(db.String(100), default="/api/ha/m/")
 

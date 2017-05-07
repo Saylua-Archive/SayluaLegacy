@@ -42,7 +42,7 @@
       <div class="forum-latest-post">
         {% set last_post = board.latest_post() %}
         {% if last_post is not none %}
-        <img src="/static/img/pets/eydrun.png" />
+        <img src="{{ random_pet_image() }}" />
         <p>
           <a href="{{ last_post.thread.url() }}">{{ last_post.thread.title }}
           </a> by <a href="{{ last_post.author.url() }}">

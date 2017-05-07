@@ -25,6 +25,7 @@ def pet_reserve():
             flash("I'm afraid " + adoptee.name + " already has a companion.")
         else:
             adoptee.owner_id = adopter.id
+            adoptee.bonding_date = db.func.now()
             db.session.add(adoptee)
             db.session.commit()
             flash("You have adopted " + adoptee.name + "!")

@@ -1,3 +1,4 @@
+{% from "_macros/user_link.html" import user_link %}
 {% extends "layout.html" %}
 {% set page_title = "Pet Profile" %}
 {% block header_scripts %}
@@ -33,15 +34,15 @@
       <table>
         <tr>
           <td>Owner</td>
-          <td><a href="/user/">User</a></td>
+          <td> {{ user_link(pet.owner) }}</td>
         </tr>
         <tr>
           <td>{{ pet.name }}'s ID</td>
-          <td>WildSwimmingBear</td>
+          <td>{{ pet.soul_name }}</td>
         </tr>
         <tr>
           <td>Bonding Day</td>
-          <td>March 20, 1994</td>
+          <td>{{ pet.date_bonded|show_date }}</td>
         </tr>
         <tr>
           <td>Pronouns</td>

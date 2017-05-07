@@ -33,6 +33,7 @@ class Pet(db.Model):
     soul_name = db.Column(db.String(80), unique=True)
 
     owner_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    owner = db.relationship("User")
     # Only set if the pet is a variation
     coat_id = db.Column(db.Integer, db.ForeignKey("species_coats.id"))
     coat = db.relationship("SpeciesCoat")
@@ -42,6 +43,7 @@ class Pet(db.Model):
     # Personal profile information for the pet
     name = db.Column(db.String(80))
     description = db.Column(db.Text)
+    date_bonded = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
     # If either of these is set to a number other than 0, the pet is for sale
     ss_price = db.Column(db.Integer, default=0)
