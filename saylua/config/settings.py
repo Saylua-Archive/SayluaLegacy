@@ -31,4 +31,4 @@ INVITE_ONLY = True
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # Email settings
-AUTOSEND_EMAIL = 'noreply@mg.saylua.com'
+AUTOSEND_EMAIL = 'mailgun@mg.saylua.com'

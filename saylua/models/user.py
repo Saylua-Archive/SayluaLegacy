@@ -88,7 +88,7 @@ class User(db.Model):
         )
 
     def make_email_confirmation_code(self):
-        code = EmailConfirmationCode(self.id)
+        code = EmailConfirmationCode(self.id, self.email)
         db.session.merge(code)
         db.session.commit()
         return code
@@ -267,12 +267,16 @@ class EmailConfirmationCode(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     user = db.relationship("User")
 
+    # Record the email address the user had when making the confirmation request.
+    email = db.Column(db.String(120))
+
     # Use this to determine whether the code is expired.
     date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
-    def __init__(self, user_id):
+    def __init__(self, user_id, email):
         self.code = random_token()
         self.user_id = user_id
+        self.email = email
 
     def url(self):
         return '/register/email/?id=%s&code=%s' % (self.user_id, self.code)

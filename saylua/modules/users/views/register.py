@@ -1,7 +1,7 @@
 from saylua import app, db
 
 from saylua.models.user import LoginSession, User
-from saylua.utils import get_from_request
+from saylua.utils import get_from_request, is_devserver
 from saylua.utils.email import send_confirmation_email
 
 from ..forms.register import RegisterForm, register_check
@@ -63,14 +63,23 @@ def register():
         send_confirmation_email(new_user)
         return resp
 
-    return render_template('login/register.html', form=form)
+    return render_template('register/register.html', form=form)
 
 
 # The endpoint to confirm email addresses.
 def register_email():
     if g.logged_in and not g.user.email_confirmed and request.method == 'POST':
-        send_confirmation_email(g.user)
-        return 'Confirmation email sent'
+        code = g.user.make_email_confirmation_code()
+
+        # This is mostly because Python's requests libary doesn't work in
+        # App Engine's SDK, so we can't test emails on dev.
+        if is_devserver():
+            flash('DEBUG MODE: Your confirmation code is %s' % code.url())
+        else:
+            send_confirmation_email(g.user, code)
+            flash('A confirmation email has been sent to your email at %s.' % g.user.email)
+
+        return render_template('register/confirm_email_sent.html')
 
     # Note that users do not have to be logged in to confirm an email address.
-    return 'Hello'
+    return render_template('register/email_confirmed.html')

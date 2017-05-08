@@ -4,16 +4,18 @@ import requests
 
 def send_email(to, subject, text):
     return requests.post(
-        "https://api.mailgun.net/v3/mg.saylua.com",
+        "https://api.mailgun.net/v3/mg.saylua.com/messages",
         auth=("api", app.config.get('MAILGUN_API_KEY')),
-        data={"from": "Saylua Mailbot <%s>" % app.config.get('AUTOSEND_EMAIL'),
+        data={"from": app.config.get('AUTOSEND_EMAIL'),
               "to": to,
-              "subject": "Hello",
+              "subject": subject,
               "text": text})
 
 
-def send_confirmation_email(user):
-    code = user.make_email_confirmation_code()
+def send_confirmation_email(user, code=None):
+    if not code:
+        code = user.make_email_confirmation_code()
+
     url = app.config.get('MAIN_URL_ROOT') + code.url()
 
     to = [user.email]
