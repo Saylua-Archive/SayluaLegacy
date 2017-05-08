@@ -32,7 +32,7 @@ class User(db.Model):
 
     # Email, Password
     email = db.Column(db.String(120), unique=True)
-    email_verified = db.Column(db.Boolean, default=False)
+    email_confirmed = db.Column(db.Boolean, default=False)
     phash = db.Column(db.String(200))
 
     # Role
@@ -86,6 +86,12 @@ class User(db.Model):
             .filter(Role.name == self.role_name)
             .one_or_none()
         )
+
+    def make_email_confirmation_code(self):
+        code = EmailConfirmationCode(self.id)
+        db.session.merge(code)
+        db.session.commit()
+        return code
 
     @validates('email')
     def validate_email(self, key, address):
@@ -249,6 +255,30 @@ class ResetCode(db.Model):
     def __init__(self, user_id):
         self.id = random_token()
         self.user_id = user_id
+
+    def expired(self):
+        return self.date_created < datetime.datetime.now() - datetime.timedelta(hours=1)
+
+
+class EmailConfirmationCode(db.Model):
+    __tablename__ = "email_confirmation_codes"
+
+    code = db.Column(db.String(256), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    user = db.relationship("User")
+
+    # Use this to determine whether the code is expired.
+    date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+
+    def __init__(self, user_id):
+        self.code = random_token()
+        self.user_id = user_id
+
+    def url(self):
+        return '/register/email/?id=%s&code=%s' % (self.user_id, self.code)
+
+    def expired(self):
+        return self.date_created < datetime.datetime.now() - datetime.timedelta(days=1)
 
 
 class InviteCode(db.Model):

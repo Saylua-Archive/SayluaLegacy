@@ -96,7 +96,7 @@ def user_settings_email():
     form.setUser(g.user)
     if request.method == "POST" and form.validate():
         g.user.email = form.email.data
-        g.user.email_verified = False
+        g.user.email_confirmed = False
         db.session.commit()
         flash("Your email has successfully been changed!")
 
