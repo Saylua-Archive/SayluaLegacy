@@ -33,12 +33,15 @@ class Pet(db.Model):
     soul_name = db.Column(db.String(80), unique=True)
 
     owner_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    owner = db.relationship("User")
+    owner = db.relationship("User", foreign_keys=[owner_id])
     # Only set if the pet is a variation
     coat_id = db.Column(db.Integer, db.ForeignKey("species_coats.id"))
     coat = db.relationship("SpeciesCoat")
     species_name = db.Column(db.String(80), db.ForeignKey("species.name"))
     species = db.relationship("Species")
+
+    # Which way is the pet's image facing
+    facing_right = db.Column(db.Boolean, default=True)
 
     # Personal profile information for the pet
     name = db.Column(db.String(80))

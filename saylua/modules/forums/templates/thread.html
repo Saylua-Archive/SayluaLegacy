@@ -50,9 +50,11 @@
         <a href="{{ post.author.url() }}" class="avatar-view">
           <img src="{{ post.author.ha_url }}" />
         </a>
-        <a href="/pet/shc/" class="active-pet-view">
-          <img src="{{ random_pet_image() }}">
+        {% if post.author.companion %}
+        <a href="/pet/{{ post.author.companion.soul_name }}/" class="active-pet-view">
+          <img src="{{ post.author.companion.image() }}">
         </a>
+        {% endif %}
       </div>
     </div>
     <div class="forum-post-body">

@@ -5,9 +5,11 @@
       <a href="/avatar/" id="avatar-view" class="avatar-view">
         <img src="{{g.user.ha_url}}" id="avatar-image" />
       </a>
-      <a href="/pet/shc/" id="active-pet-view" class="active-pet-view">
-        <img src="{{ random_pet_image() }}" id="active-pet-image">
+      {% if g.user.companion %}
+      <a href="/pet/{{ g.user.companion.soul_name }}/" id="active-pet-view" class="active-pet-view">
+        <img src="{{ g.user.companion.image() }}" id="active-pet-image">
       </a>
+      {% endif %}
     </div>
   </div>
   <div id="user-info-section" class="sidebar-section">

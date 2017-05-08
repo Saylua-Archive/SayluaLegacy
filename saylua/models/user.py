@@ -40,7 +40,7 @@ class User(db.Model):
 
     # Active Companion
     companion_id = db.Column(db.Integer, db.ForeignKey("pets.id"))
-    companion = db.relationship("Pet")
+    companion = db.relationship("Pet", foreign_keys=[companion_id])
 
     # Human Avatar
     ha_url = db.Column(db.String(100), default="/api/ha/m/")

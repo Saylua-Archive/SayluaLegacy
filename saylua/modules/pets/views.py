@@ -27,6 +27,9 @@ def pet_reserve():
             adoptee.owner_id = adopter.id
             adoptee.bonding_date = db.func.now()
             db.session.add(adoptee)
+            if adopter.companion is None:
+                adopter.companion = adoptee
+                db.session.add(adopter)
             db.session.commit()
             flash("You have adopted " + adoptee.name + "!")
             return redirect('/pet/' + soul_name, code=302)
