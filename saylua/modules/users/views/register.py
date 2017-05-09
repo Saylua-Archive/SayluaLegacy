@@ -1,6 +1,6 @@
 from saylua import app, db
 
-from saylua.models.user import LoginSession, User
+from saylua.models.user import LoginSession, User, EmailConfirmationCode
 from saylua.utils import get_from_request, is_devserver
 from saylua.utils.email import send_confirmation_email
 
@@ -80,6 +80,17 @@ def register_email():
             flash('A confirmation email has been sent to your email at %s.' % g.user.email)
 
         return render_template('register/confirm_email_sent.html')
+    user_id = request.args.get('id')
+    confirm_code = request.args.get('code')
+
+    if user_id and confirm_code:
+        code = db.session.query(EmailConfirmationCode).get((confirm_code, user_id))
+
+    if not code or code.invalid():
+        return render_template('register/email_confirmation_invalid.html')
+
+    code.user.email_confirmed = True
+    db.session.commit()
 
     # Note that users do not have to be logged in to confirm an email address.
     return render_template('register/email_confirmed.html')

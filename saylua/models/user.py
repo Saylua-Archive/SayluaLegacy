@@ -284,6 +284,9 @@ class EmailConfirmationCode(db.Model):
     def expired(self):
         return self.date_created < datetime.datetime.now() - datetime.timedelta(days=1)
 
+    def invalid(self):
+        return self.expired() or self.email != self.user.email
+
 
 class InviteCode(db.Model):
     __tablename__ = "invite_codes"
