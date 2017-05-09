@@ -35,5 +35,5 @@ def pet_reserve():
     new_adoptee = Pet.query.filter(Pet.owner_id == None).order_by(db.func.random()).first() # noqa
     if new_adoptee is None:
         flash("The adoption center is currently empty! Everyone has found a happy home!")
-        redirect('/news/', code=302)
+        return redirect('/news/', code=302)
     return render_template("reserve.html", adoptee=new_adoptee)
