@@ -41,6 +41,8 @@ class User(db.Model):
     # Active Companion
     companion_id = db.Column(db.Integer, db.ForeignKey("pets.id"))
     companion = db.relationship("Pet", foreign_keys=[companion_id])
+    pets = db.relationship("Pet", primaryjoin='Pet.owner_id == User.id',
+        back_populates="owner", lazy='dynamic')
 
     # Human Avatar
     ha_url = db.Column(db.String(100), default="/api/ha/m/")

@@ -1,7 +1,6 @@
 from flask import render_template, g, redirect, request, flash
 from saylua import db
 from .models.db import Pet
-from saylua.models.user import User
 
 
 def pet_profile(name):
@@ -33,24 +32,8 @@ def pet_reserve():
             db.session.commit()
             flash("You have adopted " + adoptee.name + "!")
             return redirect('/pet/' + soul_name, code=302)
-    adoptee = Pet.query.order_by(db.func.random()).first()
-    return render_template("reserve.html", adoptee=adoptee)
-
-
-def pet_collection_default():
-    username = "user"
-    return redirect("/den/" + username, code=302)
-
-
-def pet_collection(username):
-    user = User.from_username(username)
-    # User not found
-    if user is None:
-        return render_template("404.html"), 404
-
-    pets = (
-        db.session.query(Pet)
-        .filter(Pet.user_id == user.id)
-        .all()
-    )
-    return render_template("den.html", pets=pets)
+    new_adoptee = Pet.query.filter(Pet.owner_id == None).order_by(db.func.random()).first() # noqa
+    if new_adoptee is None:
+        flash("The adoption center is currently empty! Everyone has found a happy home!")
+        redirect('/news/', code=302)
+    return render_template("reserve.html", adoptee=new_adoptee)

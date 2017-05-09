@@ -65,8 +65,13 @@
       {{ viewed_user.bio }}
     </div>
     <h3>{{ viewed_user.name }}'s Pets</h3>
-    {% for i in range(20) %}
-    <img src="{{ random_pet_image() }}" style="width:20%; float:left">
+    {% for pet in pets %}
+    <div style="width:20%; float:left">
+      <a href="/pet/{{ pet.soul_name }}/">
+        <img src="{{ pet.image() }}" style="width:100%; float:left">
+        <div style="width:100%; float:left; text-align:center">{{ pet.name }}</div>
+      </a>
+    </div>
     {% endfor %}
   </div>
 </div>
