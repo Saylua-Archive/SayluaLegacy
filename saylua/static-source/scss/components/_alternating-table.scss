@@ -1,0 +1,14 @@
+@import '../assets/utils';
+
+.alternating-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  tr:not(.header) {
+    @extend %alternating-item;
+  }
+
+  td {
+    padding: 0.25em 1.6rem;
+  }
+}

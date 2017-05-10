@@ -3,11 +3,7 @@
 
 .theme-admin {
   @import 'main';
-
-  h2, h3, h4, h5 {
-    border-color: $neutralDarkColor;
-  }
-
+  
   .banner {
     filter: grayscale(50%);
   }

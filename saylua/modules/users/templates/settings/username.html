@@ -27,8 +27,8 @@
   </table>
 </form>
 
-<table class="form-table">
-  <tr>
+<table class="alternating-table">
+  <tr class="header">
     <th class="h2" colspan="2">
       Your Past Usernames
     </th>
@@ -40,7 +40,7 @@
     </td>
     <td>
       {% if username.name == g.user.name.lower() %}
-        <em>Current Username</em>
+        <em>Current username</em>
       {% else %}
         <form method="post" action="/settings/username/release/">
           <input type="hidden" name="username" value="{{ username.name }}">
