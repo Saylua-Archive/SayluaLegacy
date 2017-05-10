@@ -93,6 +93,12 @@ class User(db.Model):
         db.session.commit()
         return code
 
+    def make_password_reset_code(self):
+        code = PasswordResetCode(self.id)
+        db.session.merge(code)
+        db.session.commit()
+        return code
+
     @validates('email')
     def validate_email(self, key, address):
         return address.lower()
@@ -242,8 +248,8 @@ class LoginSession(db.Model):
         return (self.expires > datetime.datetime.now())
 
 
-class ResetCode(db.Model):
-    __tablename__ = "reset_codes"
+class PasswordResetCode(db.Model):
+    __tablename__ = "password_reset_codes"
 
     code = db.Column(db.String(256), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
@@ -253,11 +259,14 @@ class ResetCode(db.Model):
     date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
     def __init__(self, user_id):
-        self.id = random_token()
+        self.code = random_token()
         self.user_id = user_id
 
     def expired(self):
         return self.date_created < datetime.datetime.now() - datetime.timedelta(hours=1)
+
+    def url(self):
+        return '/login/reset/%s/%s' % (self.user_id, self.code)
 
 
 class EmailConfirmationCode(db.Model):

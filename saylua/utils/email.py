@@ -1,8 +1,13 @@
 from saylua import app
+from saylua.utils import is_devserver
+
 import requests
 
 
 def send_email(to, subject, text):
+    # AppEngine SDK doesn't work with requests...
+    if is_devserver():
+        return None
     return requests.post(
         "https://api.mailgun.net/v3/mg.saylua.com/messages",
         auth=("api", app.config.get('MAILGUN_API_KEY')),
