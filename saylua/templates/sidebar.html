@@ -14,6 +14,9 @@
   </div>
   <div id="user-info-section" class="sidebar-section">
     <p>You are <a href="{{ g.user.url() }}">{{ g.user.name }}</a></p>
+    {% if g.user.companion %}
+    <p>Your companion is <a href="/pet/{{ g.user.companion.soul_name }}/">{{ g.user.companion.name }}</a></p>
+    {% endif %}
     <p>
       <img src="/static/img/icons/weather_clouds.png">
       <a href="/bank/">{{ g.user.cloud_coins|pluralize('Cloud Coin') }}</a>
