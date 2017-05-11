@@ -1,4 +1,6 @@
 from ..forms.login import RecoveryForm, login_check
+
+from saylua.utils import is_devserver
 from saylua.utils.email import send_email
 
 from flask import render_template, request, flash
@@ -10,10 +12,12 @@ def recover_login():
         user = login_check.user
         code = user.make_password_reset_code()
 
-        send_email(user.email, 'Saylua Password Reset',
-            'Your password reset link is: ' + code.url())
-
-        flash('Recovery email sent! Check the email address on file for the next step.')
+        if is_devserver():
+            flash('DEBUG MODE: Your reset code is %s' % code.url())
+        else:
+            send_email(user.email, 'Saylua Password Reset',
+                'Your password reset link is: ' + code.url())
+            flash('Recovery email sent! Check the email address on file for the next step.')
 
     return render_template('login/recover.html', form=form)
 
