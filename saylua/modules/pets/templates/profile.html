@@ -17,7 +17,7 @@
 </div>
 {% if g.user and pet.owner_id == g.user.id %}
 <div id="pet-actions">
-  <form id="accompany" method="post">
+  <form id="accompany" action="/accompany/" method="post">
     <input type="hidden" name="accompany" value="{{ pet.id }}">
     {% if g.user.companion_id == pet.id %}
     <button>Stop Accompanying {{ pet.name }}</button>
@@ -88,7 +88,7 @@
   </div>
 </div>
 {% if g.user and pet.owner_id == g.user.id %}
-<form id="abandon" method="post">
+<form id="abandon" action="/abandon/" method="post">
   <input type="hidden" name="abandonee" value="{{ pet.id }}">
   <a class="abandon-link" href="javascript:{}" onclick="document.getElementById('abandon').submit(); return false;">
     Abandon {{ pet.name }}

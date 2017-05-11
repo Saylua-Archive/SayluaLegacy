@@ -1,17 +1,20 @@
 {% from "_macros/pagination.html" import pagination %}
 {% extends "layout.html" %}
 {% set page_title = "Adoption Center" %}
+{% block header_scripts %}
+<link rel="stylesheet" href="{{ include_static('css/pets.min.css') }}">
+{% endblock %}
 {% block body %}
 <h1>The Adoption Center</h1>
-<div class="reserve-left-side">
-  <div>This little one really likes you!</div>
+<div>This little one really likes you!</div>
+<div class="reserve">
   <img src="{{ adoptee.image() }}"></img>
-</div>
-<img src="/static/img/characters/vera-everly.png">
+  <img class="reserve-npc" src="/static/img/characters/vera-everly.png">
 <form method="post">
   <input type="hidden" name="soul_name" value="{{ adoptee.soul_name }}">
   <button>
     Adopt {{ adoptee.name }}
   </button>
 </form>
+</div>
 {% endblock %}
