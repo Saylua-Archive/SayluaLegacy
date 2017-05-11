@@ -92,9 +92,11 @@
     <p>
       &copy; 2016 <a href="/">Saylua</a>
     </p>
+    {% if g.logged_in and g.user.get_role().can_access_admin %}
     <p>
       <a href="/admin/">Admin Panel</a>
     </p>
+    {% endif %}
   </div>
 </footer>
 <script src="{{ include_static('js/Global.min.js') }}"></script>

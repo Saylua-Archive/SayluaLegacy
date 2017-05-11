@@ -3,7 +3,7 @@ from namelist import name_list
 from badwords import bad_words
 
 
-def soulname(min_length=7):
+def soul_name(min_length=7):
     start = ""
     while len(start) < 3:
         start = random.choice(name_list)
@@ -11,7 +11,7 @@ def soulname(min_length=7):
     while len(start) < min_length:
         start = extend_name(start)
     if is_bad(start):
-        return soulname(min_length) # try again if fails the check
+        return soul_name(min_length) # try again if fails the check
     return start.lower()
 
 

@@ -60,7 +60,9 @@
     <div class="forum-latest-post">
       {% set last_post = thread.latest_post() %}
       {% if last_post is not none %}
-      <img src="{{ random_pet_image() }}" />
+      {% if last_post.author.companion %}
+      <img src="{{ last_post.author.companion.image() }}" />
+      {% endif %}
       <p>
         by <a href="/user/{{ last_post.author.name }}">
           {{ last_post.author.name }}</a>

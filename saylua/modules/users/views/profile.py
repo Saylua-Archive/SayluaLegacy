@@ -25,5 +25,5 @@ def user_profile(username):
     # Redirect the URL if this is not the main username for the user
     if user.name.lower() != username:
         return redirect('/user/' + user.name.lower() + '/', code=302)
-
-    return render_template('profile/main.html', viewed_user=user)
+    pets = user.pets.all()
+    return render_template('profile/main.html', viewed_user=user, pets=pets)
