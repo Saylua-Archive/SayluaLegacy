@@ -114,7 +114,7 @@ def user_settings_password():
     form.setUser(g.user)
     if request.method == "POST" and form.validate():
         password = form.new_password.data
-        g.user.phash = User.hash_password(password)
+        g.user.password_hash = User.hash_password(password)
         db.session.commit()
         flash("Your password has been changed.")
         return redirect(url_for("users.settings_password"))

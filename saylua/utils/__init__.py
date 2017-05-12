@@ -52,7 +52,7 @@ def get_from_request(request, key, form_key=None, args_key=None):
 
 def random_token(length=32):
     choices = string.ascii_letters + string.digits
-    return ''.join(random.SystemRandom().choice(choices) for _ in range(length))
+    return ''.join([random.SystemRandom().choice(choices) for _ in range(length)])
 
 
 def canonize(s):

@@ -1,9 +1,11 @@
-from ..forms.login import RecoveryForm, login_check
+from ..forms.login import RecoveryForm, PasswordResetForm, login_check
 
+from saylua import db
+from saylua.models.user import User, PasswordResetCode
 from saylua.utils import is_devserver
 from saylua.utils.email import send_email
 
-from flask import render_template, request, flash
+from flask import render_template, request, flash, redirect
 
 
 def recover_login():
@@ -22,5 +24,19 @@ def recover_login():
     return render_template('login/recover.html', form=form)
 
 
-def reset_password(user, code):
-    return render_template('login/recover.html')
+def reset_password(user_id, code):
+    code = db.sesison.query(PasswordResetCode).get((code, user_id))
+    if not code or code.invalid():
+        flash('The password reset code you have entered is invalid.', 'error')
+        return redirect('/')
+
+    form = PasswordResetForm(request.form)
+    if request.method == 'POST' and form.validate():
+        user = db.session.query(User).get(user_id)
+        user.password_hash = User.hash_password(user.form.password.data)
+        code.date_used = db.func.now()
+        db.session.commit()
+        flash('Your password has successfully been changed!')
+        return redirect('/login')
+
+    return render_template('login/reset.html', form)

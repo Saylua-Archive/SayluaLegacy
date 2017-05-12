@@ -27,10 +27,10 @@ def register():
         password = form.password.data
         email = form.email.data
 
-        phash = User.hash_password(password)
+        password_hash = User.hash_password(password)
         new_user = User(
             username=username,
-            phash=phash,
+            password_hash=password_hash,
             email=email
         )
 

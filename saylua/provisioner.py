@@ -21,12 +21,12 @@ import os
 def generate_admin_user():
     username = "admin"
     role_name = "admin"
-    phash = User.hash_password("password")  # Yes, the default password is password.
+    password_hash = User.hash_password("password")  # Yes, the default password is password.
     email = "admin@saylua.wizards"
 
     yield User(
         username=username,
-        phash=phash,
+        password_hash=password_hash,
         email=email,
         role_name=role_name,
         star_shards=15,
@@ -130,12 +130,12 @@ def generate_posts():
 def generate_users():
     for i in range(4):
         username = soulname(7)
-        phash = User.hash_password("password")  # Yes, the default password is password
+        password_hash = User.hash_password("password")  # Yes, the default password is password
         email = "{0}@dongs.{0}.biz".format(username)
 
         yield User(
             username=username,
-            phash=phash,
+            password_hash=password_hash,
             email=email,
             star_shards=15,
             cloud_coins=50000

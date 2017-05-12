@@ -33,7 +33,7 @@ class User(db.Model):
     # Email, Password
     email = db.Column(db.String(120), unique=True)
     email_confirmed = db.Column(db.Boolean, default=False)
-    phash = db.Column(db.String(200))
+    password_hash = db.Column(db.String(200))
 
     # Role
     role_name = db.Column(db.String(100), default="user")
@@ -124,7 +124,7 @@ class User(db.Model):
 
     @classmethod
     def check_password(cls, user, password):
-        return cls.hash_password(password, user.phash) == user.phash
+        return cls.hash_password(password, user.password_hash) == user.password_hash
 
     @classmethod
     def update_currency(cls, user_id, cc=0, ss=0):
@@ -163,12 +163,12 @@ class User(db.Model):
         if user.star_shards < 0 or user.cloud_coins < 0:
             raise InvalidCurrencyException('Currency cannot be negative!')
 
-    def __init__(self, username, email, phash, role_name=None, star_shards=None, cloud_coins=None):
+    def __init__(self, username, email, password_hash, role_name=None, star_shards=None, cloud_coins=None):
         self.active_username = username
         Username.create(username, self)
 
         self.email = email
-        self.phash = phash
+        self.password_hash = password_hash
 
         if role_name:
             self.role_name = role_name
@@ -255,6 +255,9 @@ class PasswordResetCode(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     user = db.relationship("User")
 
+    # Only set if the code has been used.
+    date_used = db.Column(db.DateTime(timezone=True))
+
     # Use this to determine whether the code is expired.
     date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
@@ -264,6 +267,9 @@ class PasswordResetCode(db.Model):
 
     def expired(self):
         return self.date_created < datetime.datetime.now() - datetime.timedelta(hours=1)
+
+    def invalid(self):
+        return self.expired() or self.date_used
 
     def url(self):
         return '/login/reset/%s/%s' % (self.user_id, self.code)
