@@ -90,6 +90,7 @@ def register_email():
         return render_template('register/email_confirmation_invalid.html')
 
     code.user.email_confirmed = True
+    code.used = True
     db.session.commit()
 
     # Note that users do not have to be logged in to confirm an email address.

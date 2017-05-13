@@ -25,7 +25,7 @@ def recover_login():
 
 
 def reset_password(user_id, code):
-    code = db.sesison.query(PasswordResetCode).get((code, user_id))
+    code = db.session.query(PasswordResetCode).get((code, user_id))
     if not code or code.invalid():
         flash('The password reset code you have entered is invalid.', 'error')
         return redirect('/')
@@ -33,10 +33,10 @@ def reset_password(user_id, code):
     form = PasswordResetForm(request.form)
     if request.method == 'POST' and form.validate():
         user = db.session.query(User).get(user_id)
-        user.password_hash = User.hash_password(user.form.password.data)
-        code.date_used = db.func.now()
+        user.password_hash = User.hash_password(form.password.data)
+        code.used = True
         db.session.commit()
-        flash('Your password has successfully been changed!')
+        flash('Your password has successfully been changed! Here, try logging in now.')
         return redirect('/login')
 
-    return render_template('login/reset.html', form)
+    return render_template('login/reset.html', form=form)
