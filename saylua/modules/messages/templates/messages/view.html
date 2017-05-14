@@ -15,16 +15,15 @@
 </div>
 <div class="center full padded">
   Conversation between:
-  {% for user_id in conversation.user_ids %}
-    {% set user = user_from_id(user_id) %}
+  {% for member in members %}
     {% if loop.index > 1 %} and {% endif %}
-    {{ user_link(user) }}
+    {{ user_link(member) }}
   {% endfor %}
 </div>
 <div class="center full padded">
-  {% set last_message = conversation.messages|last %}
-  Last message by {{ user_link(user_from_id(last_message.user_id)) }}
-  on {{ last_message.time|expanded_relative_time }}
+  {% set last_message = conversation_messages|last %}
+  Last message by {{ user_link(last_message.author) }}
+  on {{ last_message.date_created|expanded_relative_time }}
 </div>
 <form method="post" class="validated-form" data-error-id="message-post-error">
   <table class="form-table full padded">
@@ -48,20 +47,19 @@
     </tr>
   </table>
 </form>
-{% for message in conversation.messages|reverse %}
-{% set message_user = user_from_id(message.user_id) %}
+{% for message in conversation_messages|reverse %}
 <table class="conversation-message">
   <tr>
     <th rowspan="2">
-      <div class="full">{{ user_link(message_user) }}</div>
+      <div class="full">{{ user_link(message.author) }}</div>
       <div class="item">
-        <a href="{{ message_user|user_url }}">
-          <img src="/static/img/pets/arko.png">
+        <a href="{{ message.author.url() }}">
+          <img src="{{ random_pet_image() }}">
         </a>
       </div>
     </th>
     <td class="message-body">
-      <span class="right small">{{ message.time|expanded_relative_time }}</span>
+      <span class="right small">{{ message.date_created|expanded_relative_time }}</span>
     </td>
   </tr>
   <tr>

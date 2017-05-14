@@ -5,13 +5,18 @@
       <a href="/avatar/" id="avatar-view" class="avatar-view">
         <img src="{{g.user.ha_url}}" id="avatar-image" />
       </a>
-      <a href="/pet/shc/" id="active-pet-view" class="active-pet-view">
-        <img src="{{ random_pet_image() }}" id="active-pet-image">
+      {% if g.user.companion %}
+      <a href="/pet/{{ g.user.companion.soul_name }}/" id="active-pet-view" class="active-pet-view">
+        <img src="{{ g.user.companion.image() }}" id="active-pet-image">
       </a>
+      {% endif %}
     </div>
   </div>
   <div id="user-info-section" class="sidebar-section">
     <p>You are <a href="{{ g.user.url() }}">{{ g.user.name }}</a></p>
+    {% if g.user.companion %}
+    <p>Your companion is <a href="/pet/{{ g.user.companion.soul_name }}/">{{ g.user.companion.name }}</a></p>
+    {% endif %}
     <p>
       <img src="/static/img/icons/weather_clouds.png">
       <a href="/bank/">{{ g.user.cloud_coins|pluralize('Cloud Coin') }}</a>
@@ -28,16 +33,16 @@
     <table class="form-table center">
       <tr>
         <td>
-          {{ sidebar_form.username.label }}
-          {{ sidebar_form.username() }}
-          <small class="form-error" data-field-name="{{ sidebar_form.username.name }}"></small>
+          {{ sidebar_form.username_or_email.label }}
+          {{ sidebar_form.username_or_email() }}
+          <small class="form-tip" data-field-name="{{ sidebar_form.username_or_email.name }}"></small>
         </td>
       </tr>
       <tr>
         <td>
           {{ sidebar_form.password.label }}
           {{ sidebar_form.password() }}
-          <small class="form-error" data-field-name="{{ sidebar_form.password.name }}"></small>
+          <small class="form-tip" data-field-name="{{ sidebar_form.password.name }}"></small>
         </td>
       </tr>
       <tr>

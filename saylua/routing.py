@@ -27,7 +27,7 @@ class SayluaApp(Flask):
 
 
 class SayluaRouter(Blueprint):
-    """URL Routing syntas xugar."""
+    """URL Routing syntax sugar."""
 
     @classmethod
     def create_blueprint(cls, module_name, import_name):

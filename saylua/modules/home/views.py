@@ -1,12 +1,15 @@
 from flask import render_template, redirect, g
+
+from saylua import db
 from saylua.utils import is_devserver
+from saylua.modules.forums.models.db import ForumThread, Board
 
 import random
 
 
 def home():
     try:
-        if g.user or is_devserver():
+        if is_devserver() or g.user:
             return redirect('/news/', code=302)
         return landing()
     except AttributeError:
@@ -18,7 +21,8 @@ def landing():
 
 
 def news():
-    return render_template("newspaper/news.html")
+    threads = db.session.query(ForumThread).join(ForumThread.board).filter(Board.is_news == True)
+    return render_template("newspaper/news.html", threads=threads)
 
 
 def puzzle():

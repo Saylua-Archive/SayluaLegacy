@@ -1,38 +1,29 @@
+{% from "_macros/forms.html" import form_row, form_errors %}
+
 {% extends "layout.html" %}
 {% set page_title = "Transfer Currency" %}
 {% block body %}
 <h1>Transfer Currency</h1>
 {% include 'bank/nav.html' %}
-<form method="post" class="validated-form" data-error-id="transfer-post-error">
-  <table class="form-table center padded">
-    <tr>
-      <td colspan="2" id="transfer-post-error"></td>
-    </tr>
+<form method="post" class="validated-form">
+  <table class="form-table">
+    {{ form_row(form.recipient, tip="Enter the username of the person who will receive the currency.") }}
     <tr>
       <th class="label">
-        {{ form.recipient.label }}
-      </th>
-      <td>
-        {{ form.recipient() }}
-        <small class="form-tip">Enter the username of the person who will receive the currency</small>
-      </td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.cloud_coins.label }} <img src="/static/img/icons/weather_clouds.png">
+        {{ form.cloud_coins.label }} <img src="{{ include_static('img/icons/weather_clouds.png') }}" alt="Cloud Coin" title="Cloud Coin" />
       </th>
       <td>
         {{ form.cloud_coins() }}
-        <small class="form-tip">Leave blank if you are not sending any Cloud Coins</small>
+        {{ form_errors(form.cloud_coins, tip="Leave blank if you are not sending any Cloud Coins.") }}
       </td>
     </tr>
     <tr>
       <th class="label">
-        {{ form.star_shards.label }} <img src="/static/img/icons/star_1.png">
+        {{ form.star_shards.label }} <img src="{{ include_static('img/icons/star_1.png') }}" alt="Star Shard" title="Star Shard" />
       </th>
       <td>
         {{ form.star_shards() }}
-        <small class="form-tip">Leave blank if you are not sending any Star Shards</small>
+        {{ form_errors(form.star_shards, tip="Leave blank if you are not sending any Star Shards.") }}
       </td>
     </tr>
     <tr>

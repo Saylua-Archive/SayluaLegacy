@@ -27,3 +27,17 @@
     }
   }
 }
+
+.settings-body {
+  flex-grow: 1;
+}
+
+.settings-toggle-form {
+  th.label {
+    width: 30%;
+
+    @media (max-width: 500px) {
+      width: 100%;
+    }
+  }
+}

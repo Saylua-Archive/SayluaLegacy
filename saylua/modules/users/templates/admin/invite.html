@@ -1,0 +1,39 @@
+{% from "_macros/user_link.html" import user_link %}
+
+{% extends "admin/template.html" %}
+{% set section_title = "Manage Invite Codes" %}
+{% block section_body %}
+
+<h2>Generate New Invite Code</h2>
+
+<form method="post">
+  <input name="generate" type="submit" value="Generate new code" />
+</form>
+
+<h2>Existing Invite Codes</h2>
+
+{% if codes %}
+<table class="alternating-table">
+  {% for code in codes %}
+  <tr>
+    <td>
+      <a href="{{ code.url() }}">{{ code.code }}</a>
+    </td>
+    <td class="small">
+      Created {{ code.date_created|relative_time }}
+    </td>
+    <td class="small">
+      {% if code.recipient_id %}
+      Claimed by {{ user_link(code.recipient) }} {{ code.recipient.date_joined|relative_time }}
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p>
+  No invite codes yet.
+</p>
+{% endif %}
+
+{% endblock %}

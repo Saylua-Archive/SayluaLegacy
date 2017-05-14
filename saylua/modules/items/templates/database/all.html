@@ -1,22 +1,24 @@
 {% from "_macros/pagination.html" import pagination %}
 {% extends "layout.html" %}
 {% set page_title = "Item Database" %}
+
+{% block header_scripts %}
+  <link rel="stylesheet" type="text/css" href="{{ include_static('css/items.min.css') }}">
+{% endblock %}
 {% block body %}
 <h1>Item Database</h1>
-<div class="full center padded">
+<div class="center">
   {{ pagination() }}
 </div>
-<div class="row-5">
-  {% for item in items %}
-  <div class="col-1 center">
-    <a href="/item/{{ item.url_name }}/">
-      <img src="{{ item.image_url }}" class="item">
-      <span class="full">{{ item.name }}</span>
-    </a>
-  </div>
-  {% endfor %}
+{% for item in items %}
+<div>
+  <a href="{{ item.url() }}">
+    <img src="{{ item.image_url() }}" class="item">
+    {{ item.name }}
+  </a>
 </div>
-<div class="full center padded">
+{% endfor %}
+<div class="center">
   {{ pagination() }}
 </div>
 {% endblock %}

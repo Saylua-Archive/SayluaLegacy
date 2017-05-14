@@ -1,5 +1,4 @@
 from saylua.routing import url
-
 import views
 
 
@@ -20,6 +19,6 @@ urlpatterns = [
         name="notifications"),
     url('/notifications/', view_func=views.notifications.notifications_main_post,
         name="notifications_post", methods=['POST']),
-    url('/notification/<key>/', view_func=views.notifications.notification_follow,
+    url('/notification/<key>/', view_func=views.notifications.notification_read,
         name="notifications_follow")
 ]

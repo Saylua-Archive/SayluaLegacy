@@ -1,7 +1,6 @@
-from saylua import app
-from saylua.models.user import User
+from saylua import app, db
+from saylua.models.user import User, Username
 from saylua.wrappers import login_required
-from saylua.utils.form import flash_errors
 
 from flask import render_template, redirect, g, url_for, flash, request
 
@@ -15,10 +14,13 @@ import datetime
 @login_required
 def user_settings():
     form = GeneralSettingsForm(request.form, obj=g.user)
-    if request.method == "POST" and form.validate():
-        form.populate_obj(g.user)
-        g.user.put()
-        flash("Your settings have been saved.")
+    if request.method == "POST":
+        if form.validate():
+            form.populate_obj(g.user)
+            db.session.commit()
+            flash("Your settings have been saved.")
+        else:
+            flash("You have tried to save invalid settings.", "error")
 
     # Allows user to change general on/off settings
     return render_template("settings/main.html", form=form)
@@ -29,45 +31,34 @@ def user_settings_details():
     form = DetailsForm(request.form, obj=g.user)
     if request.method == "POST" and form.validate():
         form.populate_obj(g.user)
-        g.user.put()
+        db.session.commit()
         flash("Your user details have been saved.")
-    flash_errors(form)
     return render_template("settings/details.html", form=form)
 
 
 @login_required
-def user_settings_css():
-    if request.method == 'POST':
-        g.user.css = request.form.get('css')
-        g.user.put()
-        flash("Your CSS has been updated.")
-    return render_template("settings/css.html")
-
-
-@login_required
 def user_settings_username():
-    form = UsernameForm(request.form, obj={"username": g.user.display_name})
+    form = UsernameForm(request.form, obj={"username": g.user.name})
     form.setUser(g.user)
 
     cutoff_time = datetime.datetime.now() - datetime.timedelta(days=1)
     can_change = g.user.last_username_change < cutoff_time
     if request.method == "POST" and form.validate():
-        if not can_change:
-            flash("You've already changed your username once within the past 24 hours.", "error")
-            return redirect(url_for("user_settings_username"))
-
-        username = form.display_name.data
+        username = form.username.data
         if username.lower() in g.user.usernames:
             # If the user is changing to a name they already own, change case
-            g.user.display_name = username
-            g.user.usernames.remove(username.lower())
-            g.user.usernames.append(username.lower())
+            g.user.name = username
             g.user.last_username_change = datetime.datetime.now()
-            g.user.put()
+            username_obj = Username.get(username)
+            username_obj.case_name = username
+            db.session.commit()
             flash("Your username has been changed to " + username)
-            return redirect(url_for("user_settings_username"))
+            return redirect(url_for("users.settings_username"))
         else:
             # If the username does not exist things are fine as well.
+            if not can_change:
+                flash("You've already changed your username within the past 24 hours.", "error")
+                return redirect(url_for("users.settings_username"))
             max_usernames = app.config['MAX_USERNAMES']
             if len(g.user.usernames) >= max_usernames:
                 # User cannot exceed maximum number of usernames.
@@ -75,13 +66,12 @@ def user_settings_username():
                     Release some old usernames to change your name.""" % max_usernames,
                     "error")
                 return render_template('user/settings/username.html')
-            g.user.display_name = username
-            g.user.usernames.append(username.lower())
+            g.user.name = username
             g.user.last_username_change = datetime.datetime.now()
-            g.user.put()
-            flash("Your username has been changed to " + username)
-            return redirect(url_for("user_settings_username"))
-    flash_errors(form)
+            new_username = Username.create(username, g.user)
+            db.session.commit()
+            flash("Your username has been changed to " + new_username.name)
+            return redirect(url_for("users.settings_username"))
 
     return render_template("settings/username.html", form=form)
 
@@ -91,13 +81,13 @@ def user_settings_username_release():
     username = request.form.get("username")
     if not username or username not in g.user.usernames:
         flash("You are trying to release an invalid username.", "error")
-    elif username == g.user.display_name.lower():
+    elif username == g.user.name.lower():
         flash("You can't release the username you are currently using.", "error")
     else:
-        g.user.usernames.remove(username)
-        g.user.put()
+        Username.query.filter_by(name=username).delete()
+        db.session.commit()
         flash("You've successfully released the username " + username)
-    return redirect(url_for("user_settings_username"))
+    return redirect(url_for("users.settings_username"))
 
 
 @login_required
@@ -107,11 +97,10 @@ def user_settings_email():
     if request.method == "POST" and form.validate():
         g.user.email = form.email.data
         g.user.email_verified = False
-        g.user.put()
+        db.session.commit()
         flash("Your email has successfully been changed!")
 
         # TODO Send new validation email here.
-    flash_errors(form)
 
     return render_template("settings/email.html", form=form)
 
@@ -122,12 +111,9 @@ def user_settings_password():
     form.setUser(g.user)
     if request.method == "POST" and form.validate():
         password = form.new_password.data
-
         g.user.phash = User.hash_password(password)
-        g.user.put()
+        db.session.commit()
         flash("Your password has been changed.")
-
-        return redirect(url_for("user_settings_password"))
-    flash_errors(form)
+        return redirect(url_for("users.settings_password"))
 
     return render_template("settings/password.html", form=form)

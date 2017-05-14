@@ -29,24 +29,26 @@
       </span>
     </div>
   </li>
-  {% for board in category.boards %}
+  {% for board in category.get_boards() %}
   <li class="forum-board-row">
     <img src="{{ random_item_image() }}" class="forum-board-icon faded" />
     <div class="forum-row-content">
-      <a href="/forums/board/{{ board.url_slug }}/" class="forum-board-text">
+      <a href="{{ board.url() }}" class="forum-board-text">
         <span class="forum-board-link">{{ board.title }}</span>
         <p>
           {{ board.description }}
         </p>
       </a>
       <div class="forum-latest-post">
-        {% set last_post = board.id|last_post_board %}
+        {% set last_post = board.latest_post() %}
         {% if last_post is not none %}
-        <img src="/static/img/pets/eydrun.png" />
+        {% if last_post.author.companion %}
+        <img src="{{ last_post.author.companion.image() }}" />
+        {% endif %}
         <p>
-          <a href="/forums/thread/{{ last_post.thread_id }}">{{ (last_post.thread_id|thread_by_id).title }}
-          </a> by <a href="/user/{{ last_post.author|name_from_author_id }}">
-            {{ last_post.author|name_from_author_id }}</a>
+          <a href="{{ last_post.thread.url() }}">{{ last_post.thread.title }}
+          </a> by <a href="{{ last_post.author.url() }}">
+            {{ last_post.author.name }}</a>
           <span class="line">({{ last_post.date_created|relative_time }})</span>
         </p>
         {% endif %}

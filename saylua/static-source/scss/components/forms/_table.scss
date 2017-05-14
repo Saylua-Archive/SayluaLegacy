@@ -1,0 +1,73 @@
+@import '../../assets/variables';
+
+.form-table {
+  width: 90%;
+  padding: 1em 0;
+
+  .label {
+    width: 25%;
+    text-align: right;
+  }
+
+  td, th {
+    font-weight: normal;
+    padding: 0.5em 0.8rem;
+    text-align: left;
+    vertical-align: top;
+    background: none;
+  }
+
+  input, textarea {
+    width: 100%;
+  }
+
+  input[type='submit'], input[type='checkbox'] {
+    width: auto;
+  }
+
+  textarea {
+    height: 200px;
+    &.big {
+      width: 100%;
+      height: 300px;
+      margin: 0;
+    }
+  }
+
+  .form-tip {
+    font-size: 0.8em;
+    line-height: 1.6em;
+    display: block;
+    width: 100%;
+    min-height: 1.6em;
+    margin: 0;
+    text-align: left;
+
+    &.error {
+      color: $errorColor;
+    }
+  }
+
+  @media (max-width: 500px) {
+    display: flex;
+    flex-direction: column;
+
+    align-items: stretch;
+
+    tr {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 0.5em 0.8rem;
+
+      align-items: stretch;
+
+      th, td, .label {
+        display: block;
+        width: 100%;
+        padding: 0.25em 0;
+        text-align: left;
+      }
+    }
+  }
+}

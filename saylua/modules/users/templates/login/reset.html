@@ -1,0 +1,30 @@
+{% from "_macros/forms.html" import form_row %}
+
+{% extends "layout.html" %}
+{% set page_title = "Recover Credentials" %}
+{% block body %}
+<h1>Reset Password: {{ user }} </h1>
+<p>
+  Enter a new password for your account to regain access.
+</p>
+<form class="validated-form" method="post" id="reset-form">
+  <table class="form-table center">
+    {{ form_row(form.password) }}
+    {{ form_row(form.confirm_password) }}
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" value="Reset password" name="reset">
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <p><a href="/login/">Login to an existing account</a></p>
+        <p><a href="/register/">Register a new account!</a></p>
+      </td>
+    </tr>
+  </table>
+</form>
+
+{% endblock %}

@@ -1,6 +1,6 @@
 from saylua import app
 from saylua.models.user import User
-from saylua.modules.messages.models.db import UserConversation
+from saylua.modules.messages.models.db import ConversationHandle
 from saylua.modules.messages.models.db import Notification
 from saylua.utils import get_static_version_id
 
@@ -11,7 +11,6 @@ from functools import partial
 
 import os
 import random
-
 import datetime
 
 
@@ -27,14 +26,10 @@ def inject_include_static():
 
 @app.context_processor
 def inject_random_image():
-    def random_image(folder):
-        subpath = 'img/' + folder + '/'
+    def random_image(folder_name):
+        subpath = 'img' + os.sep + folder_name + os.sep
         path = os.path.join(app.static_folder, subpath)
-        name = None
-        while not name or name == '.DS_Store':
-            name = random.choice(os.listdir(path))
-        return (url_for('static', filename=subpath + name) +
-            '?v=' + str(get_static_version_id()))
+        return random_image_helper(path)
 
     return dict(random_pet_image=partial(random_image, 'pets'),
         random_item_image=partial(random_image, 'items'),
@@ -44,6 +39,19 @@ def inject_random_image():
         random_icon_image=partial(random_image, 'icons'))
 
 
+def random_image_helper(folder):
+    name = random.choice(os.listdir(folder))
+    name_path = folder + name
+    subpath = name_path[name_path.rfind("static" + os.sep) + 7:]
+    if os.path.isdir(name_path):
+        return random_image_helper(name_path + os.sep)
+    elif name.endswith(".png") or name.endswith(".jpg"):
+        return (url_for('static', filename=subpath) +
+            '?v=' + str(get_static_version_id()))
+    else:
+        return random_image_helper(folder)
+
+
 @app.context_processor
 def inject_truncate():
     def truncate(s, maxlen=50):
@@ -51,17 +59,6 @@ def inject_truncate():
             return (s[:maxlen] + '...')
         return s
     return dict(truncate=truncate)
-
-
-@app.context_processor
-def inject_user_from_id():
-    def user_from_id(id):
-        return (
-            db.session.query(User)
-            .filter(User.id == id)
-            .one_or_none()
-        )
-    return dict(user_from_id=user_from_id)
 
 
 # Injected variables.
@@ -75,10 +72,21 @@ def inject_version_id():
 def inject_notifications():
     if not g.logged_in:
         return {}
-    notifications_count = Notification.query(Notification.user_id == g.user.id,
-        Notification.is_read == False).count(limit=100)
-    notifications = Notification.query(Notification.user_id == g.user.id).order(
-        Notification.is_read, -Notification.time).fetch(limit=5)
+    notifications_count = (
+        db.session.query(Notification.id)
+        .filter(Notification.user_id == g.user.id)
+        .filter(Notification.unread == True)
+        .limit(100)
+        .count()
+    )
+    notifications = (
+        db.session.query(Notification)
+        .filter(Notification.user_id == g.user.id)
+        .filter(Notification.unread)
+        .order_by(Notification.time.desc())
+        .limit(5)
+        .all()
+    )
     if not notifications:
         notifications = []
     return dict(notifications_count=notifications_count, notifications=notifications)
@@ -88,16 +96,25 @@ def inject_notifications():
 def inject_messages():
     if not g.logged_in:
         return {}
-    messages_count = UserConversation.query(
-        UserConversation.user_id == g.user.id,
-        UserConversation.is_read == False,
-        UserConversation.is_deleted == False).count(limit=100)
-    messages = UserConversation.query(UserConversation.user_id == g.user.id,
-        UserConversation.is_deleted == False).order(
-        UserConversation.is_read, -UserConversation.time).fetch(limit=5)
-    if not messages:
-        messages = []
-    return dict(messages_count=messages_count, messages=messages)
+    nav_messages_count = (
+        db.session.query(ConversationHandle.conversation_id)
+        .filter(ConversationHandle.user_id == g.user.id)
+        .filter(ConversationHandle.hidden == False)
+        .filter(ConversationHandle.unread == True)
+        .count()
+    )
+    nav_messages = (
+        db.session.query(ConversationHandle)
+        .filter(ConversationHandle.user_id == g.user.id)
+        .filter(ConversationHandle.hidden == False)
+        .order_by(ConversationHandle.last_updated.desc())
+        .order_by(ConversationHandle.unread)
+        .limit(5)
+        .all()
+    )
+    if not nav_messages:
+        nav_messages = []
+    return dict(nav_messages_count=nav_messages_count, nav_messages=nav_messages)
 
 
 @app.context_processor
@@ -111,7 +128,7 @@ def inject_users_online():
         minutes=app.config['USERS_ONLINE_RANGE'])
 
     user_count = (
-        db.session.query(User)
+        db.session.query(User.id)
         .filter(User.last_action >= mins_ago)
         .count()
     )

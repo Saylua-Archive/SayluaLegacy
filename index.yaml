@@ -10,7 +10,7 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-- kind: ConversationUser
+- kind: ConversationHandle
   properties:
   - name: user_key
   - name: is_read

@@ -1,0 +1,38 @@
+@import '../../assets/transitions';
+
+input, textarea, select {
+  font-size: 1.6rem;
+  line-height: 150%;
+  padding: 0.25em 0.8rem;
+  border: 1px solid #ddd;
+
+  &.error {
+    border-color: $errorColor;
+  }
+}
+
+input[type='checkbox'].error {
+  outline: 1px solid $errorColor;
+}
+
+input[type='submit'], button, a.button, a.button:link, a.button:visited {
+  @include slow-color-trans;
+  font-size: 1em;
+  line-height: 150%;
+  padding: 0.5em 1.6rem;
+  cursor: pointer;
+  color: $white;
+  border: none;
+  border-radius: 12px;
+  background-color: $accentColor;
+}
+
+input[type='submit'].small, button.small {
+  font-size: 0.8em;
+  padding: 0.5em 0.8rem;
+}
+
+input[type='submit']:hover, button:hover, a.button:hover {
+  text-decoration: none;
+  background-color: $mainColor;
+}

@@ -1,7 +1,5 @@
-from saylua import app, db
-from saylua.models.user import User
+from saylua import app
 from saylua.utils import pluralize, saylua_time
-from saylua.modules.forums.models.db import ForumPost, ForumThread
 
 from flask_markdown import Markdown
 
@@ -51,6 +49,7 @@ def saylua_expanded_relative_time(d):
     return result
 
 
+# TODO Fix problem with database time not matching datetime.datetime
 @app.template_filter('relative_time')
 def saylua_relative_time(d):
     diff = datetime.datetime.now() - d
@@ -73,78 +72,3 @@ def saylua_relative_time(d):
         return '1 hour ago'
     else:
         return '{} hours ago'.format(s / 3600)
-
-
-# Filters that act on models
-@app.template_filter('message_status')
-def saylua_message_status(user_conversation):
-    if user_conversation.is_deleted:
-        return 'deleted'
-    if not user_conversation.is_read:
-        return 'unread'
-    if user_conversation.is_first:
-        return 'sent'
-    if user_conversation.is_replied:
-        return 'replied'
-    return 'read'
-
-
-# TODO: Remove all database template filters.
-# Query filters. Use these only when necessary.
-@app.template_filter('user_from_id')
-def user_from_id(user_id):
-    user = (
-        db.session.query(User)
-        .filter(User.id == user_id)
-        .one_or_none()
-    )
-
-    return user
-
-
-@app.template_filter('name_from_author_id')
-def display_name_from_user_id(user_id):
-    user = user_from_id(user_id)
-    if user:
-        return user.name
-
-    return "Unknown User"
-
-
-@app.template_filter('last_post_thread')
-def last_post_thread(thread_id):
-    return (
-        db.session.query(ForumPost)
-        .filter(ForumPost.thread_id == thread_id)
-        .order_by(ForumPost.date_modified.desc())
-        .first()
-    )
-
-
-@app.template_filter('last_post_board')
-def last_post_board(board_id):
-    return (
-        db.session.query(ForumPost)
-        .join(ForumThread, ForumPost.thread)
-        .filter(ForumThread.board_id == board_id)
-        .order_by(ForumPost.date_modified.desc())
-        .first()
-    )
-
-
-@app.template_filter('thread_by_id')
-def thread_by_id(thread_id):
-    return (
-        db.session.query(ForumThread)
-        .filter(ForumThread.id == thread_id)
-        .first()
-    )
-
-
-@app.template_filter('count_thread_posts')
-def count_thread_posts(thread_id):
-    return (
-        db.session.query(ForumPost)
-        .filter(ForumPost.thread_id == thread_id)
-        .count()
-    )

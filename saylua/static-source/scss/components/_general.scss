@@ -1,0 +1,46 @@
+@import '../assets/transitions';
+
+.tab {
+  @include slow-color-trans;
+  display: block;
+  float: left;
+  padding: 0.8rem 2rem;
+  &:hover {
+    background: $accentSoftColor;
+  }
+
+  &.selected {
+    background: $mainSofterColor;
+  }
+}
+
+p.error {
+  line-height: 150%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: $errorColor;
+}
+
+a.button {
+  display: block;
+  width: auto;
+}
+
+a.tiny-button {
+  @include fast-color-trans;
+  margin: 3px;
+  padding: 6px 10px;
+  border-radius: 7px;
+  background-color: $white;
+
+  &:hover {
+    background-color: $mainSofterColor;
+  }
+}
+
+.divider {
+  width: 100%;
+  margin-bottom: 1em;
+  border-bottom: 1px $mainSofterColor solid;
+}

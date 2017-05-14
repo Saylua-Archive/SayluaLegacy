@@ -44,20 +44,21 @@ ul li {
 }
 
 h1 {
+  font-family: $headerFont;
   font-size: 2.6rem;
+  font-weight: bold;
   line-height: 100%;
   width: 100%;
   margin: 0;
   margin-bottom: 0.5em;
   padding: 0.5em 0 0.25em 0;
   text-align: center;
-  color: $mainDarkColor;
-  font-family: $headerFont;
   letter-spacing: 1px;
-  font-weight: bold;
+  color: $mainDarkColor;
 }
 
 h2, h3, h4, th.h3, .h3, th.h2, .h2 {
+  font-family: $headerFont;
   font-size: 2rem;
   font-weight: normal;
   line-height: 130%;
@@ -66,7 +67,6 @@ h2, h3, h4, th.h3, .h3, th.h2, .h2 {
   text-align: left;
   border-bottom: 1px $neutralDarkColor solid;
   background: none;
-  font-family: $headerFont;
 }
 
 h3, h3, th.h3, .h3 {

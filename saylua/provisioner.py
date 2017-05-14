@@ -1,10 +1,14 @@
-from saylua import db
+from saylua import app, db
 from saylua.models.role import Role
 from saylua.utils import is_devserver
 from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, ForumPost
 from saylua.models.user import User
-from saylua.modules.pets.soulnames import soulname
+from saylua.modules.items.models.db import Item, InventoryItem
+from saylua.modules.pets.models.db import Pet, Species, SpeciesCoat
+from saylua.modules.pets.soul_names import soul_name
 from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
+
+import os
 
 
 # To run this import setup in the interactive console and run it as such
@@ -15,19 +19,68 @@ from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
 # setup()
 
 def generate_admin_user():
-    display_name = "admin"
+    username = "admin"
     role_name = "admin"
-    phash = User.hash_password("password")  # Yes, the default password is password
+    phash = User.hash_password("password")  # Yes, the default password is password.
     email = "admin@saylua.wizards"
 
     yield User(
-        display_name=display_name,
+        username=username,
         phash=phash,
         email=email,
         role_name=role_name,
         star_shards=15,
         cloud_coins=50000
     )
+
+
+def generate_items():
+    subpath = 'img' + os.sep + 'items' + os.sep
+    path = os.path.join(app.static_folder, subpath)
+    admin = db.session.query(User).filter(User.active_username == 'admin').one()
+    for img in os.listdir(path):
+        item_name, ext = os.path.splitext(img)
+        if ext.lower() == '.png':
+            item = Item(
+                name=item_name,
+                canon_name=item_name,
+                description='A lovely little ' + item_name + ' for you to much on,'
+            )
+
+            yield item
+
+            # Give admin lots of items.
+            yield InventoryItem(
+                user=admin,
+                item=item,
+                count=99
+            )
+
+
+def generate_pets():
+    subpath = 'img' + os.sep + 'pets' + os.sep
+    path = os.path.join(app.static_folder, subpath)
+    for species_name in os.listdir(path):
+        species_path = path + species_name + os.sep
+        if os.path.isdir(species_path):
+            new_species = Species(name=species_name, description="A species of great beauty.")
+            yield new_species
+            for img_name in os.listdir(species_path):
+                coat_name, ext = os.path.splitext(img_name)
+                if ext.lower() == '.png':
+                    new_coat = SpeciesCoat(
+                        name=coat_name,
+                        species_name=species_name,
+                        description=("A beautiful " + species_name))
+                    yield new_coat
+                    soul_name = Pet.new_soul_name()
+                    new_pet = Pet(
+                        soul_name=soul_name,
+                        coat_id=new_coat.id,
+                        species_name=species_name,
+                        name=soul_name.capitalize()
+                    )
+                    yield new_pet
 
 
 def generate_boards():
@@ -37,26 +90,36 @@ def generate_boards():
         category = BoardCategory(title=category)
         yield category
 
+        title = soul_name(7)
+        yield Board(
+            title=title + " announcements",
+            canon_name=title,
+            categories=[category],
+            description="Announcements for " + title,
+            is_news=True,
+            order=0
+        )
+
         for n in range(4):
-            title = soulname(7)
-            url_slug = title
+            title = soul_name(7)
             description = "A board for talking about " + title
 
             yield Board(
                 title=title,
-                url_slug=url_slug,
+                canon_name=title,
                 categories=[category],
-                description=description
+                description=description,
+                order=(n + 1)
             )
 
 
 def generate_threads():
     for board in db.session.query(Board).all():
         for i in range(3):
-            title = "I really, really like {}!".format(soulname(24))
+            title = "I really, really like {}!".format(soul_name(24))
             author = 1
 
-            yield ForumThread(title=title, author=author, board=board)
+            yield ForumThread(title=title, author_id=author, board=board)
 
 
 def generate_posts():
@@ -84,20 +147,20 @@ def generate_posts():
 
     for thread in db.session.query(ForumThread).all():
         for i in range(randrange(1, 15)):
-            body = choice(content_phrases).format(soulname(24))
+            body = choice(content_phrases).format(soul_name(24))
             author = choice(users).id
 
-            yield ForumPost(body=body, author=author, thread=thread)
+            yield ForumPost(body=body, author_id=author, thread=thread)
 
 
 def generate_users():
     for i in range(4):
-        display_name = soulname(7)
+        username = soul_name(7)
         phash = User.hash_password("password")  # Yes, the default password is password
-        email = "{0}@dongs.{0}.biz".format(display_name)
+        email = "{0}@dongs.{0}.biz".format(username)
 
         yield User(
-            display_name=display_name,
+            username=username,
             phash=phash,
             email=email,
             star_shards=15,
@@ -174,6 +237,14 @@ def setup():
         print("Adding Placeholder Posts")
         for item in generate_posts():
             db.session.add(item)
+
+        print("Adding Placeholder Items")
+        for item in generate_items():
+            db.session.add(item)
+
+        print("Adding Placeholder Pets, Coats, and Species")
+        for pet_coat_species in generate_pets():
+            db.session.add(pet_coat_species)
 
         db.session.commit()
 

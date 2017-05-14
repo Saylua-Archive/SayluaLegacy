@@ -1,24 +1,15 @@
+{% from "_macros/forms.html" import form_row %}
+
 {% extends "settings/template.html" %}
 {% set section_title = "Change Username" %}
 {% block section_body %}
 <p>
-  You can only change your username once every 24 hours. After you change your username,
+  You can only claim a new username every 24 hours. After you change your username,
   your old username will redirect to your new username unless you release it.
 </p>
-<form method="post" class="validated-form" data-error-id="user-settings-username-error">
-  <table class="form-table full">
-    <tr>
-      <td colspan="2" id="user-settings-username-error"></td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.username.label }}
-      </th>
-      <td>
-        {{ form.username() }}
-        <small class="form-tip">Valid characters: letters, numbers, and +~._-</small>
-      </td>
-    </tr>
+<form method="post" class="validated-form">
+  <table class="form-table">
+    {{ form_row(form.username, tip="Valid characters: letters, numbers, and +~._-") }}
     <tr>
       <th class="label">
         <label>Last Changed</label>
@@ -36,23 +27,23 @@
   </table>
 </form>
 
-<table class="form-table full">
-  <tr>
-    <th class="section-header" colspan="2">
+<table class="alternating-table">
+  <tr class="header">
+    <th class="h2" colspan="2">
       Your Past Usernames
     </th>
   </tr>
-  {% for username in g.user.usernames|reverse %}
+  {% for username in g.user.username_objects|reverse %}
   <tr>
     <td>
-      {{ username }}
+      {{ username.case_name }}
     </td>
     <td>
-      {% if username == g.user.display_name.lower() %}
-        <em>Current Username</em>
+      {% if username.name == g.user.name.lower() %}
+        <em>Current username</em>
       {% else %}
         <form method="post" action="/settings/username/release/">
-          <input type="hidden" name="username" value="{{ username }}">
+          <input type="hidden" name="username" value="{{ username.name }}">
           <button type="submit" class="link-button" name="submit">
             Release username
           </button>

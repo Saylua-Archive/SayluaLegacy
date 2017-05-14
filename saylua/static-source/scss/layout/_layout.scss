@@ -13,17 +13,18 @@
   height: 7.6rem;
   padding: 1.8rem;
   text-align: center;
+  color: $white;
   background: $mainSofterColor url('/static/img/backgrounds/1.jpg');
   background-size: cover;
-  color: $white;
 
   flex-shrink: 0;
 
   .logo {
-    flex-grow: 1;
-    flex-shrink: 0;
     font-size: 4rem;
     font-weight: bold;
+
+    flex-grow: 1;
+    flex-shrink: 0;
 
     img {
       @include filter-trans;
@@ -71,15 +72,15 @@
   table.form-table {
     width: 100%;
     td {
-      text-align: center;
       padding: 0.1em 0.8rem;
+      text-align: center;
     }
   }
 
   h3 {
+    margin-bottom: 0;
     text-align: center;
     border-bottom: 1px $neutralDarkColor dotted;
-    margin-bottom: 0;
   }
 }
 
@@ -92,15 +93,16 @@
   flex-direction: column;
   width: 20%;
   padding: 1em 1.6rem;
-  align-items: center;
 
+  align-items: center;
   flex-grow: 0;
   flex-shrink: 0;
 
   .sidebar-section {
+    max-width: 40rem;
+
     flex-grow: 1;
     flex-shrink: 1;
-    max-width: 40rem;
   }
 
   .active-pet-view:hover {
@@ -171,9 +173,10 @@ footer {
   }
 
   .sidebar {
+    flex-direction: row;
     width: 100%;
     padding: 1rem 1%;
-    flex-direction: row;
+
     align-items: center;
     justify-content: center;
   }

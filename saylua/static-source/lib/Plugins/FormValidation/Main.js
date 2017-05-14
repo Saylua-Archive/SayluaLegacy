@@ -24,13 +24,13 @@ class _ValidatedForm {
   // Parse a form and store all its
   constructor(form) {
     this.form = form;
-    this.errorElementMap = {};
+    this.errorContainerMap = {};
     this.checkedFields = {};
 
-    let errorElements = this.form.getElementsByClassName('form-error');
-    for (let i = 0; i < errorElements.length; i++) {
-      let e = errorElements[i];
-      this.errorElementMap[e.getAttribute('data-field-name')] = e;
+    let errorContainers = this.form.getElementsByClassName('form-tip');
+    for (let i = 0; i < errorContainers.length; i++) {
+      let e = errorContainers[i];
+      this.errorContainerMap[e.getAttribute('data-field-name')] = e;
     }
   }
 
@@ -107,12 +107,19 @@ class _ValidatedForm {
     }
 
     // Render the error message.
-    if (this.errorElementMap[field.name]) {
-      this.errorElementMap[field.name].innerHTML = err || '';
-      if (err) {
-        addClass(field, 'error');
-      } else {
-        removeClass(field, 'error');
+    let errorContainer = this.errorContainerMap[field.name];
+    if (errorContainer) {
+      errorContainer.innerHTML = err || '';
+    }
+    if (err) {
+      addClass(field, 'error');
+      if (errorContainer) {
+        addClass(errorContainer, 'error');
+      }
+    } else {
+      removeClass(field, 'error');
+      if (errorContainer) {
+        removeClass(errorContainer, 'error');
       }
     }
     return !err;

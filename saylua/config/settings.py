@@ -11,12 +11,20 @@ MAX_PASSWORD_LENGTH = 200
 
 MAX_USER_STATUS_LENGTH = 15
 
-# Number of minutes from a user's last action for them to be counted as online
+# Number of minutes from a user's last action for them to be counted as online.
 USERS_ONLINE_RANGE = 15
 LAST_ACTION_OFFSET = 5
 
-# Maximum number of usernames that a single user can own
+# Maximum number of usernames that a single user can own.
 MAX_USERNAMES = 10
 
-# Disable the Flask-SQLAlchemy event system for now as it's kinda buggy and not needed
+# Regexes and stuff.
+EMAIL_REGEX = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
+USERNAME_REGEX = '^[A-Za-z0-9+~._-]+$'
+
+# Registration settings.
+REGISTRATION_DISABLED = False
+INVITE_ONLY = True
+
+# Disable the Flask-SQLAlchemy event system for now as it's kinda buggy and not needed.
 SQLALCHEMY_TRACK_MODIFICATIONS = False

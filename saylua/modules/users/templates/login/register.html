@@ -8,10 +8,11 @@
 <form class="validated-form" method="post" id="register-form">
   {{ form.csrf_token }}
   <table class="form-table center">
-    {{ form_row(form.username) }}
+    {{ form_row(form.username, tip="Valid characters: letters, numbers, and +~._-") }}
     {{ form_row(form.password) }}
     {{ form_row(form.confirm_password) }}
     {{ form_row(form.email) }}
+    {{ form_row(form.invite_code) }}
     <tr>
       <td></td>
       <td>
@@ -24,13 +25,7 @@
         {{ form_checkbox(form.accept_tos) }}
       </td>
     </tr>
-    <tr>
-      <td></td>
-      <td>
-        {{ form.recaptcha() }}
-        {{ form_errors(form.recaptcha) }}
-      </td>
-    </tr>
+    {{ form_row(form.recaptcha) }}
     <tr>
       <td></td>
       <td>

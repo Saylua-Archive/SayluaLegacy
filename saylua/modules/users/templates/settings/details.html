@@ -1,3 +1,5 @@
+{% from "_macros/forms.html" import form_row %}
+
 {% extends "settings/template.html" %}
 {% set section_title = "Profile Details" %}
 {% block section_body %}
@@ -5,44 +7,12 @@
   These fields contain information about yourself that you'd like to have shown on your profile.
   They are entirely optional.
 </p>
-<form method="post" class="validated-form" data-error-id="user-settings-profile-error">
-  <table class="form-table full">
-    <tr>
-      <td colspan="2" id="user-settings-profile-error"></td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.status.label }}
-      </th>
-      <td>
-        {{ form.status(placeholder="Your Status") }}
-        <small class="form-tip">Your status is a bit of text displayed next to your name. </small>
-      </td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.gender.label }}
-      </th>
-      <td>
-        {{ form.gender() }}
-      </td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.pronouns.label }}
-      </th>
-      <td>
-        {{ form.pronouns() }}
-      </td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.bio.label }}
-      </th>
-      <td>
-        {{ form.bio(placeholder="Write a bit about yourself for others to see. ") }}
-      </td>
-    </tr>
+<form method="post" class="validated-form">
+  <table class="form-table">
+    {{ form_row(form.status, tip="Your status is a bit of text displayed next to your name.") }}
+    {{ form_row(form.gender) }}
+    {{ form_row(form.pronouns) }}
+    {{ form_row(form.bio, placeholder="Write a bit about yourself for others to see.") }}
     <tr>
       <td></td>
       <td>

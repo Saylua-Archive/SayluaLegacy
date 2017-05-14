@@ -1,6 +1,5 @@
-from saylua.models.user import User
+from saylua.models.user import User, InvalidCurrencyException
 from saylua.utils import get_from_request
-from saylua.utils.form import flash_errors
 from saylua.wrappers import login_required
 from saylua.modules.messages.models.db import Notification
 
@@ -28,18 +27,17 @@ def bank_transfer():
             recipient = recipient_check.user
             try:
                 User.transfer_currency(g.user.id, recipient.id, cc, ss)
-            except User.InvalidCurrencyException:
+            except InvalidCurrencyException:
                 flash('You do not have enough funds to send the amount entered.', 'error')
             except:
                 flash('Currency transfer failed for an unexpected reason. Try again later.',
                     'error')
             else:
                 flash('You have successfully sent %d SS and %d CC to %s'
-                    % (ss, cc, recipient.display_name))
+                    % (ss, cc, recipient.name))
 
                 # Send a notification to the user who received the currency
                 Notification.send(recipient.id, '%s sent you %d SS and %d CC'
-                    % (g.user.display_name, ss, cc), '/bank/')
+                    % (g.user.name, ss, cc), '/bank/')
                 return redirect('/bank/transfer/')
-    flash_errors(form)
     return render_template('bank/transfer.html', form=form)

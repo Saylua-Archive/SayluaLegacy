@@ -1,9 +1,10 @@
-from google.appengine.ext import ndb
 from dateutil import tz
 
 import time
 import re
+import string
 import os
+import random
 
 
 def is_devserver():
@@ -19,14 +20,6 @@ def get_static_version_id():
     if not is_devserver():
         version = get_gae_version()
     return version
-
-
-def make_ndb_key(key_string):
-    try:
-        key = ndb.Key(urlsafe=key_string)
-    except Exception:
-        return None
-    return key
 
 
 def pluralize(count, singular_noun, plural_noun=None):
@@ -55,6 +48,15 @@ def get_from_request(request, key, form_key=None, args_key=None):
     elif request.args.get(args_key):
         result = request.args.get(args_key)
     return result
+
+
+def random_token(length=32):
+    choices = string.ascii_letters + string.digits
+    return ''.join(random.SystemRandom().choice(choices) for _ in range(length))
+
+
+def canonize(s):
+    return urlize(s)
 
 
 def urlize(s):

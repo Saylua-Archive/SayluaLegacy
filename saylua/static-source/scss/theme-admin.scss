@@ -3,13 +3,38 @@
 
 .theme-admin {
   @import 'main';
-
+  
   .banner {
     filter: grayscale(50%);
-    -ms-filter: grayscale(50%);
-    -webkit-filter: grayscale(0.5);
-    -webkit-filter: grayscale(50%);
-    -moz-filter: grayscale(50%);
-    -o-filter: grayscale(50%);
+  }
+
+  .admin-panel-body {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: stretch;
+
+    .admin-panel-menu {
+      width: 20%;
+      flex-shrink: 0;
+      margin-right: 1.6rem;
+      border-right: 1px solid $neutralColor;
+
+      a {
+        @include fast-color-trans;
+        line-height: 150%;
+        display: block;
+        width: 100%;
+        padding: 0.8rem;
+
+        &:hover {
+          background: $neutralColor;
+        }
+      }
+    }
+
+    .admin-panel-content {
+      flex-grow: 1;
+    }
   }
 }

@@ -8,7 +8,7 @@ def generateCustomKwargs(field, error_class, kwargs):
         c = kwargs.pop('class', '') or kwargs.pop('class_', '')
         kwargs['class'] = '%s %s' % (error_class, c)
 
-    if 'placeholder' not in kwargs:
+    if not kwargs.get('placeholder'):
         kwargs['placeholder'] = field.label.text
 
     # Integrate with clientside validation.
@@ -71,6 +71,10 @@ class SlCheckboxInput(SlInput):
         if getattr(field, 'checked', field.data):
             kwargs['checked'] = True
         return super(SlCheckboxInput, self).__call__(field, **kwargs)
+
+
+class SlFileInput(SlInput):
+    input_type = 'file'
 
 
 class SlNumberInput(SlInput):

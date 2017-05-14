@@ -1,6 +1,6 @@
-from saylua import app
+from saylua import db
+
 from saylua.utils import get_from_request
-from saylua.utils.form import flash_errors
 from saylua.wrappers import admin_access_required
 
 from .models.db import Item
@@ -9,23 +9,21 @@ from flask import render_template, redirect, url_for, flash, request
 from forms import ItemUploadForm
 
 
-@app.route('/admin/items/add/', methods=['GET', 'POST'])
 @admin_access_required
 def admin_panel_items_add():
     form = ItemUploadForm(request.form)
     form.name.data = get_from_request(request, 'name')
     form.description.data = get_from_request(request, 'description')
     if request.method == 'POST' and form.validate():
-        item = Item.create(name=form.name.data, image_url=form.image_url.data,
+        item = Item(name=form.name.data, canon_name=Item.make_canon_name(form.name.data),
             description=form.description.data)
-        item.put()
-        flash('You have successfully created a new item! ')
-        return redirect(url_for('admin_panel_items_add'))
-    flash_errors(form)
-    return render_template('admin/items/add.html', form=form)
+        db.session.add(item)
+        db.session.commit()
+        flash('You have successfully created a new item!')
+        return redirect(url_for('items.items_admin_add'))
+    return render_template('admin/add.html', form=form)
 
 
-@app.route('/admin/items/edit/', methods=['GET'])
 @admin_access_required
 def admin_panel_items_edit():
-    return render_template('admin/items/edit.html')
+    return render_template('admin/edit.html')

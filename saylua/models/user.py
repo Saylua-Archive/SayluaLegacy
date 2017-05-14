@@ -1,8 +1,12 @@
 from bcryptmaster import bcrypt
-from uuid import uuid4
-import datetime
 
 from saylua import db
+from saylua.utils import random_token
+
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import validates
+
+import datetime
 
 
 # An exception thrown if an operation would make a user's currency negative
@@ -17,8 +21,12 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    display_name = db.relationship("DisplayName", uselist=False, back_populates="user")
+
+    active_username = db.Column(db.String(80), unique=True)
+
     last_username_change = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    username_objects = db.relationship("Username", back_populates="user")
+
     last_action = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
     date_joined = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
@@ -29,6 +37,12 @@ class User(db.Model):
 
     # Role
     role_name = db.Column(db.String(100), default="user")
+
+    # Active Companion
+    companion_id = db.Column(db.Integer, db.ForeignKey("pets.id"))
+    companion = db.relationship("Pet", foreign_keys=[companion_id])
+    pets = db.relationship("Pet", primaryjoin='Pet.owner_id == User.id',
+        back_populates="owner", lazy='dynamic')
 
     # Human Avatar
     ha_url = db.Column(db.String(100), default="/api/ha/m/")
@@ -45,25 +59,28 @@ class User(db.Model):
     # Misc profile stuff
     gender = db.Column(db.String(100), default="")
     pronouns = db.Column(db.String(200), default="")
-    bio = db.Column(db.String(1000), default="")
+    bio = db.Column(db.String(1000), default="Hello, world")
     status = db.Column(db.String(15), default="")
 
     # Settings
-    notified_on_pings = db.Column(db.Boolean)
-    autosubscribe_threads = db.Column(db.Boolean)
-    autosubscribe_posts = db.Column(db.Boolean)
-
-    # Misc profile stuff
-    gender = db.Column(db.String(32))
-    pronouns = db.Column(db.String(128))
-    bio = db.Column(db.Text(), default="Hello, world!") # FIXME: This should really have a limit.
+    notified_on_pings = db.Column(db.Boolean, default=True)
+    autosubscribe_threads = db.Column(db.Boolean, default=True)
+    autosubscribe_posts = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<User %r>' % self.name
 
-    @property
+    @hybrid_property
     def name(self):
-        return self.display_name.display_name
+        return self.active_username
+
+    @name.setter
+    def setName(self, name):
+        self.active_username = name
+
+    @property
+    def usernames(self):
+        return [u.name for u in self.username_objects]
 
     def url(self):
         return "/user/" + self.name.lower() + "/"
@@ -76,14 +93,22 @@ class User(db.Model):
             .one_or_none()
         )
 
+    @validates('email')
+    def validate_email(self, key, address):
+        return address.lower()
+
     @classmethod
     def from_username(cls, username):
         return (
             db.session.query(cls)
-            .join(DisplayName, cls.display_name)
-            .filter(db.func.lower(DisplayName.display_name) == username.lower())
+            .join(Username, cls.id == Username.user_id)
+            .filter(Username.name == username.lower())
             .one_or_none()
         )
+
+    @classmethod
+    def from_email(cls, email):
+        return db.session.query(cls).filter(cls.email == email.lower()).one_or_none()
 
     @classmethod
     def hash_password(cls, password, salt=None):
@@ -95,40 +120,47 @@ class User(db.Model):
     def check_password(cls, user, password):
         return cls.hash_password(password, user.phash) == user.phash
 
-    # @classmethod
-    # @ndb.transactional(xg=True)
-    # def transfer_currency(cls, from_key, to_key, cc=0, ss=0):
-    #     from_user, to_user = ndb.get_multi([from_key, to_key])
-    #     from_user.star_shards -= ss
-    #     from_user.cloud_coins -= cc
+    @classmethod
+    def update_currency(cls, user_id, cc=0, ss=0):
+        user = db.session.query(User).get(user_id)
+        user.star_shards += ss
+        user.cloud_coins += cc
 
-    #     to_user.star_shards += ss
-    #     to_user.cloud_coins += cc
+        # Throw exceptions if the currency amount is invalid
+        cls.except_if_currency_invalid(user)
+        db.session.add(user)
+        db.session.commit()
+        return [user.cloud_coins, user.star_shards]
 
-    #     # Throw exceptions if the currency amount is invalid
-    #     cls.except_if_currency_invalid(from_user)
-    #     cls.except_if_currency_invalid(to_user)
+    @classmethod
+    def transfer_currency(cls, from_id, to_id, cc=0, ss=0):
+        from_user = db.session.query(User).get(from_id)
+        to_user = db.session.query(User).get(to_id)
+        if cc > from_user.cloud_coins or ss > from_user.star_shards:
+            raise InvalidCurrencyException('Insufficient funds!')
+        from_user.star_shards -= ss
+        from_user.cloud_coins -= cc
+        to_user.star_shards += ss
+        to_user.cloud_coins += cc
 
-    #     ndb.put_multi([from_user, to_user])
+        # Throw exceptions if the currency amount is invalid
+        if cc < 0 or ss < 0:
+            raise InvalidCurrencyException('Transfers cannot be negative!')
+        cls.except_if_currency_invalid(from_user)
+        cls.except_if_currency_invalid(to_user)
+        db.session.add(from_user)
+        db.session.add(to_user)
+        db.session.commit()
 
-    # @classmethod
-    # def update_currency(cls, user_id, cc=0, ss=0):
-    #     user = user_id.get()
-    #     user.star_shards += ss
-    #     user.cloud_coins += cc
+    @classmethod
+    def except_if_currency_invalid(cls, user):
+        if user.star_shards < 0 or user.cloud_coins < 0:
+            raise InvalidCurrencyException('Currency cannot be negative!')
 
-    #     # Throw exceptions if the currency amount is invalid
-    #     cls.except_if_currency_invalid(user)
-    #     user.put()
-    #     return [user.cloud_coins, user.star_shards]
+    def __init__(self, username, email, phash, role_name=None, star_shards=None, cloud_coins=None):
+        self.active_username = username
+        Username.create(username, self)
 
-    # @classmethod
-    # def except_if_currency_invalid(cls, user):
-    #     if user.star_shards < 0 or user.cloud_coins < 0:
-    #         raise InvalidCurrencyException('Currency cannot be negative!')
-
-    def __init__(self, display_name, email, phash, role_name=None, star_shards=None, cloud_coins=None):
-        self.display_name = DisplayName(display_name=display_name)
         self.email = email
         self.phash = phash
 
@@ -152,47 +184,56 @@ class BankAccount(db.Model):
 
     __tablename__ = "bank_accounts"
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     user = db.relationship("User", back_populates="bank_account")
-    bank_ss = db.Column(db.Integer, default=0)
-    bank_cc = db.Column(db.Integer, default=0)
+
+    star_shards = db.Column(db.Integer, default=0)
+    cloud_coins = db.Column(db.Integer, default=0)
 
 
-class DisplayName(db.Model):
-    """Represents the actual displayed name of a user.
+class Username(db.Model):
+    """Represents the username of a user.
 
     Multiple names can be tied to one user, but only one of
     them can be active and nested within the user class.
 
-    One to one relationship with `User`.
+    Many to one relationship with `User`.
     """
 
-    __tablename__ = "display_names"
+    __tablename__ = "usernames"
 
-    id = db.Column(db.Integer, primary_key=True)
-    active = db.Column(db.Boolean, default=True)
+    # The unique username stored in lowercase.
+    name = db.Column(db.String(80), primary_key=True)
+
+    # A record of the name as the user typed it.
+    case_name = db.Column(db.String(80))
 
     # The linked user
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    user = db.relationship("User", back_populates="display_name")
+    user = db.relationship("User", back_populates="username_objects")
 
-    # The actual display name
-    display_name = db.Column(db.String(80), unique=True)
+    # Account for case sensitivity in username uniqueness.
+    @classmethod
+    def create(cls, name, user):
+        return cls(name=name.lower(), case_name=name, user=user)
+
+    # Get username object from username.
+    @classmethod
+    def get(cls, name):
+        return db.session.query(cls).get(name.lower())
 
 
 class LoginSession(db.Model):
-    """User login session.
-    """
-
     __tablename__ = "sessions"
 
     id = db.Column(db.String(256), primary_key=True)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    user = db.relationship("User")
+
     expires = db.Column(db.DateTime)
 
     def __init__(self, user_id, expires):
-        self.id = str(uuid4())
+        self.id = random_token(128)
         self.user_id = user_id
         self.expires = expires
 
@@ -200,9 +241,42 @@ class LoginSession(db.Model):
     def active(self):
         return (self.expires > datetime.datetime.now())
 
-    def get_user(self):
-        return (
-            db.session.query(User)
-            .filter(User.id == self.user_id)
-            .one_or_none()
-        )
+
+class ResetCode(db.Model):
+    __tablename__ = "reset_codes"
+
+    code = db.Column(db.String(256), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    user = db.relationship("User")
+
+    # Use this to determine whether the code is expired.
+    date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+
+    def __init__(self, user_id):
+        self.id = random_token()
+        self.user_id = user_id
+
+
+class InviteCode(db.Model):
+    __tablename__ = "invite_codes"
+
+    code = db.Column(db.String(256), primary_key=True)
+
+    # An invite code is considered claimed if a recipient user exists.
+    recipient_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    recipient = db.relationship("User", foreign_keys=[recipient_id])
+
+    # The person who originally created the invite code.
+    sender_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    sender = db.relationship("User", foreign_keys=[sender_id])
+
+    disabled = db.Column(db.Integer, default=False)
+
+    date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+
+    def __init__(self, sender_id):
+        self.code = random_token()
+        self.sender_id = sender_id
+
+    def url(self):
+        return '/register/?invite_code=' + self.code

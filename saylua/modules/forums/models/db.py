@@ -7,29 +7,6 @@ r_board_categories = db.Table('r_board_categories',
 )
 
 
-class Board(db.Model):
-    """Forum Boards. Container for threads.
-    Many to Many relationship with `BoardCategory`.
-    """
-
-    __tablename__ = 'forum_boards'
-
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(256))
-    url_slug = db.Column(db.String(256))
-    description = db.Column(db.Text())
-
-    categories = db.relationship("BoardCategory",
-        secondary=r_board_categories,
-        back_populates="boards"
-    )
-
-    threads = db.relationship("ForumThread", back_populates="board")
-
-    def url(self):
-        return "/forums/board/" + self.url_slug + "/"
-
-
 class BoardCategory(db.Model):
     """Forum Board Categories.
     Many to Many relationship with `Board`.
@@ -40,10 +17,51 @@ class BoardCategory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(128))
 
+    order = db.Column(db.Integer)
+
     boards = db.relationship("Board",
         secondary=r_board_categories,
-        back_populates="categories"
+        back_populates="categories",
+        lazy='dynamic'
     )
+
+    def get_boards(self):
+        return self.boards.order_by(Board.order.asc())
+
+
+class Board(db.Model):
+    """Forum Boards. Container for threads.
+    Many to Many relationship with `BoardCategory`.
+    """
+
+    __tablename__ = 'forum_boards'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(256))
+    canon_name = db.Column(db.String(256), unique=True)
+    description = db.Column(db.Text())
+
+    is_news = db.Column(db.Boolean(), default=False)
+    order = db.Column(db.Integer)
+
+    categories = db.relationship("BoardCategory",
+        secondary=r_board_categories,
+        back_populates="boards"
+    )
+
+    threads = db.relationship("ForumThread", back_populates="board")
+
+    def url(self):
+        return "/forums/board/" + self.canon_name + "/"
+
+    def latest_post(self):
+        return (
+            db.session.query(ForumPost)
+            .join(ForumThread, ForumPost.thread)
+            .filter(ForumThread.board_id == self.id)
+            .order_by(ForumPost.date_modified.desc())
+            .first()
+        )
 
 
 class ForumThread(db.Model):
@@ -55,7 +73,8 @@ class ForumThread(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(256))
-    author = db.Column(db.Integer)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    author = db.relationship("User")
 
     date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
     date_modified = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
@@ -66,10 +85,28 @@ class ForumThread(db.Model):
     board_id = db.Column(db.Integer, db.ForeignKey('forum_boards.id'))
     board = db.relationship("Board", back_populates="threads")
 
-    posts = db.relationship("ForumPost", back_populates="thread")
+    posts = db.relationship("ForumPost", back_populates="thread", lazy='dynamic')
 
     def url(self):
         return "/forums/thread/" + str(self.id) + "/"
+
+    def first_post(self):
+        return self.posts.order_by(ForumPost.date_created.asc()).first()
+
+    def reply_count(self):
+        return (
+            db.session.query(ForumPost)
+            .filter(ForumPost.thread_id == self.id)
+            .count() - 1
+        )
+
+    def latest_post(self):
+        return (
+            db.session.query(ForumPost)
+            .filter(ForumPost.thread_id == self.id)
+            .order_by(ForumPost.date_modified.desc())
+            .first()
+        )
 
 
 class ForumPost(db.Model):
@@ -80,7 +117,9 @@ class ForumPost(db.Model):
     __tablename__ = "forum_thread_posts"
 
     id = db.Column(db.Integer, primary_key=True)
-    author = db.Column(db.Integer)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    author = db.relationship("User")
+
     body = db.Column(db.Text())
 
     date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())

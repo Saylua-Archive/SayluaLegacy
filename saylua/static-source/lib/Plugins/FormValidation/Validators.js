@@ -42,6 +42,12 @@ export const validatorList = {
       return reg.test(input);
     }
   },
+  'endswith': {
+    'error': '<field> must end with <1>.',
+    'validator': function (input, suffix) {
+      return input.toLowerCase().endsWith(suffix.toLowerCase());
+    }
+  },
   'equalto': {
     'error': '<field> must match <1>.',
     'validator': function (input, match_name) {

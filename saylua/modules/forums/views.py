@@ -11,24 +11,25 @@ POSTS_PER_PAGE = 10
 
 
 def forums_home():
-    categories = db.session.query(BoardCategory).all()
+    categories = (db.session.query(BoardCategory)
+        .order_by(BoardCategory.order.asc())
+        .all())
     return render_template("main.html", categories=categories)
 
 
-def forums_board(board_slug):
+def forums_board(canon_name):
     form = ForumThreadForm(request.form)
     try:
-        board = db.session.query(Board).filter(Board.url_slug == board_slug).one()
+        board = db.session.query(Board).filter(Board.canon_name == canon_name).one()
 
         if request.method == 'POST' and form.validate():
             title = request.form.get('title')
             body = request.form.get('body')
             author = g.user.id
             board_id = board.id
-            new_thread = ForumThread(title=title, author=author, board_id=board_id)
+            new_thread = ForumThread(title=title, author_id=author, board_id=board_id)
+            new_post = ForumPost(author_id=author, thread=new_thread, body=body)
             db.session.add(new_thread)
-            db.session.flush()
-            new_post = ForumPost(author=author, thread_id=new_thread.id, body=body)
             db.session.add(new_post)
             db.session.commit()
             return redirect(board.url())
@@ -49,7 +50,13 @@ def forums_board(board_slug):
             .all()
         )
 
-        page_count = threads_query.count() // THREADS_PER_PAGE
+        threads_count = (
+            db.session.query(ForumThread)
+            .filter(ForumThread.board_id == board.id)
+            .count()
+        )
+
+        page_count = (THREADS_PER_PAGE + threads_count - 1) // THREADS_PER_PAGE
 
         return render_template("board.html", form=form,
             board=board, threads=threads, page_count=page_count)
@@ -69,7 +76,7 @@ def forums_thread(thread_id):
         if request.method == 'POST' and form.validate():
             author = g.user.id
             body = request.form.get('body')
-            new_post = ForumPost(author=author, thread_id=thread_id, body=body)
+            new_post = ForumPost(author_id=author, thread_id=thread_id, body=body)
             db.session.add(new_post)
             db.session.commit()
             return redirect("forums/thread/" + str(thread_id) + "/")
@@ -89,7 +96,13 @@ def forums_thread(thread_id):
             .offset((page_number - 1) * POSTS_PER_PAGE)
         )
 
-        page_count = post_query.count() // POSTS_PER_PAGE
+        posts_count = (
+            db.session.query(ForumPost)
+            .filter(ForumPost.thread_id == thread_id)
+            .count()
+        )
+
+        page_count = (POSTS_PER_PAGE + posts_count - 1) // POSTS_PER_PAGE
         other_boards = db.session.query(Board).all()
 
         return render_template("thread.html", form=form, board=board, thread=thread,

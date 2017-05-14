@@ -1,23 +1,44 @@
+{% from "_macros/user_link.html" import user_link %}
 {% extends "layout.html" %}
 {% set page_title = "Pet Profile" %}
 {% block header_scripts %}
 <link rel="stylesheet" href="{{ include_static('css/pets.min.css') }}">
 {% endblock %}
 {% block body %}
-<h1>Kevin's Room</h1>
+<h1>{{ pet.name }}'s Room</h1>
 <div id="pet-room">
   <div class="room-background" style="background-image: url('{{ random_background_image() }}')"></div>
   <div class="pet" id="pet-image-container">
-    <img src="{{ random_pet_image() }}">
+    <img src="{{ pet.image() }}">
   </div>
   <div class="mini-small">
     <img src="{{ random_mini_image() }}">
   </div>
 </div>
+{% if g.user and pet.owner_id == g.user.id %}
+<div id="pet-actions">
+  <form id="accompany" action="/accompany/" method="post">
+    <input type="hidden" name="accompany" value="{{ pet.id }}">
+    {% if g.user.companion_id == pet.id %}
+    <button>Stop Accompanying {{ pet.name }}</button>
+    {% else %}
+    <button>Accompany {{ pet.name }}</button>
+    {% endif %}
+  </form>
+</div>
+{% endif %}
+{% if pet.owner_id is none %}
+<form action="/reserve/" method="post">
+  <input type="hidden" name="soul_name" value="{{ pet.soul_name }}">
+  <button>
+    Adopt {{ pet.name }}
+  </button>
+</form>
+{% endif %}
 
 <div class="pet-profile-column pet-profile-column-full">
   <div class="pet-profile-box">
-    <h2>Kevin's Description</h2>
+    <h2>{{ pet.name }}'s Description</h2>
     <p>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     </p>
@@ -29,19 +50,19 @@
 <div class="pet-profile-info">
   <div class="pet-profile-column">
     <div class="pet-profile-box">
-      <h2>Kevin's Stats</h2>
+      <h2>{{ pet.name }}'s Stats</h2>
       <table>
         <tr>
           <td>Owner</td>
-          <td><a href="/user/">User</a></td>
+          <td> {{ user_link(pet.owner) }} </td>
         </tr>
         <tr>
-          <td>Kevin's ID</td>
-          <td>WildSwimmingBear</td>
+          <td>{{ pet.name }}'s ID</td>
+          <td>{{ pet.soul_name }}</td>
         </tr>
         <tr>
           <td>Bonding Day</td>
-          <td>March 20, 1994</td>
+          <td>{{ pet.date_bonded|show_date }}</td>
         </tr>
         <tr>
           <td>Pronouns</td>
@@ -52,20 +73,28 @@
   </div>
   <div class="pet-profile-column">
     <div class="pet-profile-box">
-      <h2>Kevin's Favorite Things</h2>
+      <h2>{{ pet.name }}'s Favorite Things</h2>
       <img src="{{ random_item_image() }}" style="float: left;">
       <img src="{{ random_item_image() }}" style="float: left;">
       <img src="{{ random_item_image() }}" style="float: left;">
       <img src="{{ random_item_image() }}" style="float: left;">
     </div>
     <div class="pet-profile-box">
-      <h2>Kevin's Mini</h2>
+      <h2>{{ pet.name }}'s Mini</h2>
       <div class="mini">
         <img src="{{ random_mini_image() }}">
       </div>
     </div>
   </div>
 </div>
+{% if g.user and pet.owner_id == g.user.id %}
+<form id="abandon" action="/abandon/" method="post">
+  <input type="hidden" name="abandonee" value="{{ pet.id }}">
+  <a class="abandon-link" href="javascript:{}" onclick="document.getElementById('abandon').submit(); return false;">
+    Abandon {{ pet.name }}
+  </a>
+</form>
+{% endif %}
 
 {% endblock %}
 {% block footer_scripts %}
