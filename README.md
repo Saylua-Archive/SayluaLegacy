@@ -94,6 +94,11 @@ Making the following change reduces startup time exponentially, and gets rid of 
 
                   _remove_pred(dirs, lambda d: d.startswith(_IGNORED_PREFIX) or d in _IGNORED_DIRS)
 
+- To deploy to production using gcloud
+gcloud app deploy --project saylua-1280
+- To deploy to staging using gcloud
+gcloud app deploy --project saylua-staging
+
 ## Authors
 
 Mike Bradley

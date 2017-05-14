@@ -23,14 +23,14 @@ def pet_accompany():
             current_companion = g.user.companion
             if not current_companion:
                 g.user.companion_id = companion.id
-                flash(companion.name + " is now accompanying you!")
+                flash("{} is now accompanying you!".format(companion.name))
             elif current_companion.id == companion.id:
                 g.user.companion_id = None
-                flash(companion.name + " has gone back to your den.")
+                flash("{} has gone back to your den.".format(companion.name))
             else:
                 g.user.companion_id = companion.id
-                flash(companion.name + " is now accompanying you! " +
-                    current_companion.name + " has gone back to your den.")
+                flash("{} is now accompanying you! {} has gone back to your den."
+                    .format(companion.name, current_companion.name))
             db.session.add(g.user)
             db.session.commit()
     return redirect('/pet/' + companion.soul_name, code=302)
@@ -67,7 +67,7 @@ def pet_reserve():
         if adoptee is None:
             flash("Sorry, I couldn't find a pet with that soul name.")
         elif adoptee.owner_id is not None:
-            flash("I'm afraid " + adoptee.name + " already has a companion.")
+            flash("I'm afraid {} already has a companion.".format(adoptee.name))
         else:
             adoptee.owner_id = adopter.id
             adoptee.bonding_date = db.func.now()
@@ -76,7 +76,7 @@ def pet_reserve():
                 adopter.companion = adoptee
                 db.session.add(adopter)
             db.session.commit()
-            flash("You have adopted " + adoptee.name + "!")
+            flash("You have adopted {}!".format(adoptee.name))
             return redirect('/pet/' + soul_name, code=302)
     new_adoptee = Pet.query.filter(Pet.owner_id == None).order_by(db.func.random()).first() # noqa
     if new_adoptee is None:
