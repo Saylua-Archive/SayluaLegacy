@@ -12,6 +12,7 @@ npm-debug.log
 yarn.lock
 secure.py
 local_settings.py
+secure_staging.py
 
 # Ignore all third party dependencies other than bcrypt.
 lib/*
