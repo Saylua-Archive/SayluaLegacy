@@ -11,7 +11,6 @@ from functools import partial
 
 import os
 import random
-
 import datetime
 
 
@@ -27,14 +26,10 @@ def inject_include_static():
 
 @app.context_processor
 def inject_random_image():
-    def random_image(folder):
-        subpath = 'img/' + folder + '/'
+    def random_image(folder_name):
+        subpath = 'img' + os.sep + folder_name + os.sep
         path = os.path.join(app.static_folder, subpath)
-        name = None
-        while not name or name == '.DS_Store':
-            name = random.choice(os.listdir(path))
-        return (url_for('static', filename=subpath + name) +
-            '?v=' + str(get_static_version_id()))
+        return random_image_helper(path)
 
     return dict(random_pet_image=partial(random_image, 'pets'),
         random_item_image=partial(random_image, 'items'),
@@ -42,6 +37,19 @@ def inject_random_image():
         random_mini_image=partial(random_image, 'minis'),
         random_background_image=partial(random_image, 'backgrounds'),
         random_icon_image=partial(random_image, 'icons'))
+
+
+def random_image_helper(folder):
+    name = random.choice(os.listdir(folder))
+    name_path = folder + name
+    subpath = name_path[name_path.rfind("static" + os.sep) + 7:]
+    if os.path.isdir(name_path):
+        return random_image_helper(name_path + os.sep)
+    elif name.endswith(".png") or name.endswith(".jpg"):
+        return (url_for('static', filename=subpath) +
+            '?v=' + str(get_static_version_id()))
+    else:
+        return random_image_helper(folder)
 
 
 @app.context_processor
