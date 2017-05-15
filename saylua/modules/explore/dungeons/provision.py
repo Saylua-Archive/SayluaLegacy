@@ -1,7 +1,9 @@
 import json
 import os
 
-## Reasons
+
+class InvalidAnimationName(Exception):
+    pass
 
 
 class InvalidScriptName(Exception):
@@ -51,52 +53,15 @@ def read_schema(schema_location):
 
 
 def interpret_schema(namespaced_files):
-    """Resolves dynamic variables denoted with '$' into their respective
-    values if a matching entry is found within the namespace.
-
-    Most functionality disabled due to the addition of SQLALchemy.
-    Remains for posterity and possible future use.
+    """Validates and translates file contents to JSON.
     """
 
     for i, file in enumerate(namespaced_files):
-        if file.get('type') in ['entity', 'tile', 'trait']:
+        if file.get('type') in ['entity', 'tile', 'trait', 'animation']:
             try:
                 content = json.loads(file.get('content'))
             except json.decoder.JSONDecodeError as e:
                 raise InvalidSchemaJSON(str(e))
-
-#            # Determine if we need to replace dynamic variables
-#            if content.get('events'):
-#                # Keep track of which keys we should remove
-#                prune_keys = []
-#
-#                for event in content.get('events'):
-#                    if event.startswith('$'):
-#                        # We must search for a matching script.
-#                        target_name = content['events'][event]
-#                        stripped_event = event[1:]
-#                        results = list(filter(
-#                            lambda x: (x.name == target_name and x.get('type') == 'script'),
-#                            namespaced_files
-#                        ))
-#
-#                        if len(results) == 1:
-#                            result = results[0]
-#                            content['events'][stripped_event] = result.get('content')
-#
-#                            prune_keys.append(event)
-#
-#                        else:
-#                            raise InvalidScriptName(
-#                                'Returned {} results when searching for script \'{}\'.'.format(
-#                                    len(results),
-#                                    target_name
-#                                )
-#                            )
-#
-#                # Remove interpreted keys
-#                for key in prune_keys:
-#                    file['events'].pop(key)
 
             # Replace old raw string with JSON-ified content
             namespaced_files[i]['content'] = content
@@ -113,6 +78,20 @@ def interpret_schema(namespaced_files):
 def generate_models_from_schema(schema):
     """Returns models from a specific set of dungeon model types.
     """
+
+    def find_animation(target_name, schema):
+        target = [x for x in schema if (x.get('type') == 'animation' and x.get('name') == target_name)]
+
+        if len(target) == 1:
+            return target[0]
+
+        else:
+            raise InvalidAnimationName(
+                'Returned {} results when searching for animation \'{}\'.'.format(
+                    len(target),
+                    target_name
+                )
+            )
 
     def find_script(target_name, models):
         target = [x for x in models if (x.__tablename__ == 'dungeon_scripts' and x.name == target_name)]
@@ -224,6 +203,12 @@ def generate_models_from_schema(schema):
 
                 # Store trait
                 entity.traits.append(target)
+
+        if content.get('$animations'):
+            target_name = content.get('$animations')
+            target = find_animation(target_name, schema)
+
+            entity.animations = target.get('content')
 
         models.append(entity)
 

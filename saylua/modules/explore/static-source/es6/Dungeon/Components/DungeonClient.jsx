@@ -57,9 +57,7 @@ export default class DungeonClient extends Component {
   }
 
 
-  handleKeyPress(event, synthetic) {
-    synthetic = synthetic ? synthetic : false;
-
+  handleKeyPress(event, synthetic=false) {
     let key, keyName;
 
     if (synthetic === false && event !== undefined) {

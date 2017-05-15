@@ -106,7 +106,7 @@ class DungeonScriptWrapper(db.Model):
     __tablename__ = 'dungeon_script_wrappers'
 
     id = db.Column(db.Integer, primary_key=True)
-    event_name = db.Column(db.String(128), unique=True)
+    event_name = db.Column(db.String(128))
 
     event_script = db.relationship(
         DungeonScript,
@@ -150,6 +150,7 @@ class DungeonEntity(db.Model, SerializerBase):
     display_name = db.Column(db.String(128))
     description = db.Column(db.Text())
     type = db.Column(db.String(128))
+    animations = db.Column(db.JSON())
 
     events = db.relationship(
         DungeonScriptWrapper,

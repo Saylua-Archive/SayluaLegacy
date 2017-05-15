@@ -32,11 +32,13 @@ class Pet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     soul_name = db.Column(db.String(80), unique=True)
 
-    owner_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    owner_id = db.Column(db.Integer, db.ForeignKey("users.id", name="owner_id"))
     owner = db.relationship("User", foreign_keys=[owner_id], back_populates="pets")
+
     # Only set if the pet is a variation
     coat_id = db.Column(db.Integer, db.ForeignKey("species_coats.id"))
     coat = db.relationship("SpeciesCoat")
+
     species_name = db.Column(db.String(80), db.ForeignKey("species.name"))
     species = db.relationship("Species")
 
