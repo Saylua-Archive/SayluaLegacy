@@ -11,7 +11,4 @@ mdx_linkify
 flask_sqlalchemy
 pytest
 PyMySQL
-
-# Local dependencies (Stuff we don't need in prod).
-pillow
-flake8
+requests

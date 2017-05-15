@@ -10,7 +10,8 @@
     "js-test": "mocha --compilers js:babel-register saylua/**/static-source/**/tests/*.js*",
     "py-test": "python -m pytest",
     "test": "npm run lint && npm run py-test && npm run js-test",
-    "deploy": "appcfg.py update ."
+    "deploy": "appcfg.py -A saylua-staging update .",
+    "deploy-prod": "appcfg.py -A saylua-1280 update ."
   },
   "repository": {
     "type": "git",

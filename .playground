@@ -1,5 +1,0 @@
-{
-  "template_name" : "Saylua",
-  "template_description" : "Virtual pet web game.",
-  "open_files": ["main.py"]
-}

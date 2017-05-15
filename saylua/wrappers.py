@@ -35,6 +35,20 @@ def login_required(f, redirect='users.login'):
     return decorated_function
 
 
+def email_confirmation_required(f, redirect='home.main'):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not g.logged_in:
+            return _redirect(url_for('users.login'))
+
+        if not g.user.email_confirmed:
+            return _redirect(url_for(redirect))
+
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
 # Same as login_required but returns a 400 response for API endpoints.
 def api_login_required(f, error='You must be logged in to use this feature.'):
     @wraps(f)
@@ -49,9 +63,6 @@ def api_login_required(f, error='You must be logged in to use this feature.'):
 def admin_access_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if not g.logged_in:
-            return _redirect(url_for('users.login'))
-
         if not g.user.get_role() or not g.user.get_role().can_access_admin:
             return render_template('403.html'), 403
 

@@ -2,6 +2,8 @@ from saylua import app, db
 from saylua.models.user import User, Username
 from saylua.wrappers import login_required
 
+from saylua.utils.email import send_confirmation_email
+
 from flask import render_template, redirect, g, url_for, flash, request
 
 from ..forms.settings import (GeneralSettingsForm, DetailsForm, UsernameForm,
@@ -96,11 +98,12 @@ def user_settings_email():
     form.setUser(g.user)
     if request.method == "POST" and form.validate():
         g.user.email = form.email.data
-        g.user.email_verified = False
+        g.user.email_confirmed = False
         db.session.commit()
-        flash("Your email has successfully been changed!")
+        flash("Your email address has been changed! A confirmation has been sent to your new email.")
 
-        # TODO Send new validation email here.
+        # Success! Send confirmation email.
+        send_confirmation_email(g.user)
 
     return render_template("settings/email.html", form=form)
 
@@ -111,7 +114,7 @@ def user_settings_password():
     form.setUser(g.user)
     if request.method == "POST" and form.validate():
         password = form.new_password.data
-        g.user.phash = User.hash_password(password)
+        g.user.password_hash = User.hash_password(password)
         db.session.commit()
         flash("Your password has been changed.")
         return redirect(url_for("users.settings_password"))

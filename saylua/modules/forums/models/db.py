@@ -76,8 +76,8 @@ class ForumThread(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     author = db.relationship("User")
 
-    date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
-    date_modified = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    date_created = db.Column(db.DateTime, server_default=db.func.now())
+    date_modified = db.Column(db.DateTime, server_default=db.func.now())
 
     is_pinned = db.Column(db.Boolean(), default=False)
     is_locked = db.Column(db.Boolean(), default=False)
@@ -122,8 +122,8 @@ class ForumPost(db.Model):
 
     body = db.Column(db.Text())
 
-    date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
-    date_modified = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    date_created = db.Column(db.DateTime, server_default=db.func.now())
+    date_modified = db.Column(db.DateTime, server_default=db.func.now())
 
     thread_id = db.Column(db.Integer, db.ForeignKey('forum_threads.id'))
     thread = db.relationship("ForumThread", back_populates="posts")
