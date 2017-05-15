@@ -33,7 +33,7 @@ class GameLog(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     game_id = db.Column(db.Integer, nullable=False)
     score = db.Column(db.Integer)
-    time = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    time = db.Column(db.DateTime, server_default=db.func.now())
 
     # Note: Game logs are differently formatted per type of game.
     game_log = db.Column(db.Text)

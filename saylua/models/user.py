@@ -24,16 +24,16 @@ class User(db.Model):
 
     active_username = db.Column(db.String(80), unique=True)
 
-    last_username_change = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    last_username_change = db.Column(db.DateTime, server_default=db.func.now())
     username_objects = db.relationship("Username", back_populates="user")
 
-    last_action = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
-    date_joined = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    last_action = db.Column(db.DateTime, server_default=db.func.now())
+    date_joined = db.Column(db.DateTime, server_default=db.func.now())
 
     # Email, Password
     email = db.Column(db.String(120), unique=True)
-    email_verified = db.Column(db.Boolean, default=False)
-    phash = db.Column(db.String(200))
+    email_confirmed = db.Column(db.Boolean, default=False)
+    password_hash = db.Column(db.String(200))
 
     # Role
     role_name = db.Column(db.String(100), default="user")
@@ -49,7 +49,7 @@ class User(db.Model):
 
     # Ban Status
     permabanned = db.Column(db.Boolean, default=False)
-    banned_until = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    banned_until = db.Column(db.DateTime, server_default=db.func.now())
 
     # Currency
     star_shards = db.Column(db.Integer, default=0)
@@ -93,6 +93,18 @@ class User(db.Model):
             .one_or_none()
         )
 
+    def make_email_confirmation_code(self):
+        code = EmailConfirmationCode(self.id, self.email)
+        db.session.merge(code)
+        db.session.commit()
+        return code
+
+    def make_password_reset_code(self):
+        code = PasswordResetCode(self.id)
+        db.session.merge(code)
+        db.session.commit()
+        return code
+
     @validates('email')
     def validate_email(self, key, address):
         return address.lower()
@@ -118,7 +130,7 @@ class User(db.Model):
 
     @classmethod
     def check_password(cls, user, password):
-        return cls.hash_password(password, user.phash) == user.phash
+        return cls.hash_password(password, user.password_hash) == user.password_hash
 
     @classmethod
     def update_currency(cls, user_id, cc=0, ss=0):
@@ -157,12 +169,12 @@ class User(db.Model):
         if user.star_shards < 0 or user.cloud_coins < 0:
             raise InvalidCurrencyException('Currency cannot be negative!')
 
-    def __init__(self, username, email, phash, role_name=None, star_shards=None, cloud_coins=None):
+    def __init__(self, username, email, password_hash, role_name=None, star_shards=None, cloud_coins=None):
         self.active_username = username
         Username.create(username, self)
 
         self.email = email
-        self.phash = phash
+        self.password_hash = password_hash
 
         if role_name:
             self.role_name = role_name
@@ -242,19 +254,60 @@ class LoginSession(db.Model):
         return (self.expires > datetime.datetime.now())
 
 
-class ResetCode(db.Model):
-    __tablename__ = "reset_codes"
+class PasswordResetCode(db.Model):
+    __tablename__ = "password_reset_codes"
 
     code = db.Column(db.String(256), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     user = db.relationship("User")
 
+    used = db.Column(db.Boolean, default=False)
+
     # Use this to determine whether the code is expired.
-    date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    date_created = db.Column(db.DateTime, server_default=db.func.now())
 
     def __init__(self, user_id):
-        self.id = random_token()
+        self.code = random_token()
         self.user_id = user_id
+
+    def expired(self):
+        return self.date_created < (datetime.datetime.now() - datetime.timedelta(days=1))
+
+    def invalid(self):
+        return self.expired() or self.used
+
+    def url(self):
+        return '/login/reset/%s/%s' % (self.user_id, self.code)
+
+
+class EmailConfirmationCode(db.Model):
+    __tablename__ = "email_confirmation_codes"
+
+    code = db.Column(db.String(256), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    user = db.relationship("User")
+
+    used = db.Column(db.Boolean, default=False)
+
+    # Record the email address the user had when making the confirmation request.
+    email = db.Column(db.String(120))
+
+    # Use this to determine whether the code is expired.
+    date_created = db.Column(db.DateTime, server_default=db.func.now())
+
+    def __init__(self, user_id, email):
+        self.code = random_token()
+        self.user_id = user_id
+        self.email = email
+
+    def url(self):
+        return '/register/email/?id=%s&code=%s' % (self.user_id, self.code)
+
+    def expired(self):
+        return self.date_created < (datetime.datetime.now() - datetime.timedelta(days=1))
+
+    def invalid(self):
+        return self.expired() or self.used or self.email != self.user.email
 
 
 class InviteCode(db.Model):
@@ -272,7 +325,7 @@ class InviteCode(db.Model):
 
     disabled = db.Column(db.Integer, default=False)
 
-    date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    date_created = db.Column(db.DateTime, server_default=db.func.now())
 
     def __init__(self, sender_id):
         self.code = random_token()

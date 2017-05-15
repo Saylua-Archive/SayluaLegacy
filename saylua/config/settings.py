@@ -1,6 +1,7 @@
 DEBUG = True
 SESSION_LIMIT = 5
 COOKIE_DURATION = 30
+MAIN_URL_ROOT = 'https://saylua.com'
 
 # Form fields
 MIN_USERNAME_LENGTH = 3
@@ -28,3 +29,6 @@ INVITE_ONLY = True
 
 # Disable the Flask-SQLAlchemy event system for now as it's kinda buggy and not needed.
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+# Email settings
+AUTOSEND_EMAIL = 'Saylua Bot <noreply@mg.saylua.com>'

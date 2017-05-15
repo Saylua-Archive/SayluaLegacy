@@ -8,6 +8,17 @@
   border: $highlightDarkColor 1px solid;
   border-radius: 5px;
   background: $highlightSoftColor;
+
+  &.notification-email-validation {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+
+    form {
+      padding: 1em 1.6rem;
+    }
+  }
 }
 
 .notification a.close-button {

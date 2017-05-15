@@ -45,6 +45,8 @@ class UsernameForm(Form):
 
 
 class EmailForm(Form):
+    password_check = UserCheck()
+
     IsNot = sl_validators.IsNot('',
             message='The email you entered is the same as your old email.')
 
@@ -54,7 +56,12 @@ class EmailForm(Form):
         IsNot,
         sl_validators.EmailUnique()])
 
+    password = SlPasswordField('Password', [
+        sl_validators.Required(),
+        password_check.PasswordValid])
+
     def setUser(self, user):
+        self.password_check.user = user
         self.IsNot.pattern = user.email
 
 

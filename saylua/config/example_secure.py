@@ -8,3 +8,7 @@ RECAPTCHA_PRIVATE_KEY = 'dummy'
 
 # Database
 SQLALCHEMY_DATABASE_URI = 'mysql://username:password@localhost/sayluadb'
+
+# API KEYS
+MAILGUN_API_KEY = 'dummy'
+MAILGUN_VALIDATION_KEY = 'validate_emails'

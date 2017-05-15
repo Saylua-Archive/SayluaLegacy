@@ -20,7 +20,7 @@ def admin_panel_items_add():
         db.session.add(item)
         db.session.commit()
         flash('You have successfully created a new item!')
-        return redirect(url_for('items.items_admin_add'))
+        return redirect(url_for('items.admin_add'))
     return render_template('admin/add.html', form=form)
 
 
