@@ -49,6 +49,8 @@ libraries:
   version: latest
 - name: MySQLdb
   version: latest
+- name: ssl
+  version: latest
 
 # Files to ignore in production
 skip_files:
