@@ -29,8 +29,8 @@ def image(base, items):
     items = items.split(',')
 
     # This will be replaced with calls to the database later
-    base = os.path.join(app.static_folder, 'img/ha.png')
-    image_url_base = os.path.join(app.static_folder, 'img/ha')
+    base = os.path.join(app.static_folder, 'img/avatar/m.png')
+    image_url_base = os.path.join(app.static_folder, 'img/avatar')
     item_images = os.listdir(image_url_base)
 
     result = Image.open(base, 'r')

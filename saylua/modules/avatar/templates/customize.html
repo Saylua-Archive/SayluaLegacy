@@ -2,14 +2,10 @@
 {% set page_title = "Human Avatar" %}
 {% block body %}
 <h1>Customize Your Avatar</h1>
-<div class="left center" style="width:30%;">
-	<img src="/api/ha/m/" id="preview-ha">
-	<form method="post">
-		<input type="hidden" name="img" id="ha-image-url" value="/api/ha/m/">
-		<input type="submit" value="Save Human Avatar">
-	</form>
-</div>
-<div id="clothing" class="left" style="width:70%;"></div>
+<img src="{{ g.user.avatar_url() }}" id="preview-ha">
+<p>
+	Avatar Customization will come someday.
+</p>
 {% endblock %}
 {% block footer_scripts %}
 <script src="{{ include_static('js/Avatar.min.js') }}"></script>

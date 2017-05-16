@@ -1,6 +1,6 @@
 from bcryptmaster import bcrypt
 
-from saylua import db
+from saylua import db, app
 from saylua.utils import random_token
 
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -44,9 +44,6 @@ class User(db.Model):
     pets = db.relationship("Pet", primaryjoin='Pet.owner_id == User.id',
         back_populates="owner", lazy='dynamic')
 
-    # Human Avatar
-    ha_url = db.Column(db.String(100), default="/api/ha/m/")
-
     # Ban Status
     permabanned = db.Column(db.Boolean, default=False)
     banned_until = db.Column(db.DateTime, server_default=db.func.now())
@@ -81,6 +78,10 @@ class User(db.Model):
     @property
     def usernames(self):
         return [u.name for u in self.username_objects]
+
+    def avatar_url(self):
+        # Until we implement human avatars for real...
+        return '/static/img/avatar/base.png'
 
     def url(self):
         return "/user/" + self.name.lower() + "/"
