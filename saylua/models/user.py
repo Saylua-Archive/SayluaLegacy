@@ -1,6 +1,6 @@
 from bcryptmaster import bcrypt
 
-from saylua import db, app
+from saylua import db
 from saylua.utils import random_token
 
 from sqlalchemy.ext.hybrid import hybrid_property
