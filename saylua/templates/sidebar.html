@@ -2,8 +2,8 @@
   {% if g.logged_in %}
   <div id="avatar-section" class="sidebar-section">
     <div id="pet-avatar-view" class="pet-avatar-view">
-      <a href="/avatar/" id="avatar-view" class="avatar-view">
-        <img src="{{g.user.ha_url}}" id="avatar-image" />
+      <a href="{{ g.user.url() }}" id="avatar-view" class="avatar-view">
+        <img src="{{ g.user.avatar_url() }}" id="avatar-image" />
       </a>
       {% if g.user.companion %}
       <a href="/pet/{{ g.user.companion.soul_name }}/" id="active-pet-view" class="active-pet-view">
@@ -57,6 +57,7 @@
         </td>
       </tr>
     </table>
+    {{ sidebar_form.csrf_token }}
   </form>
   {% endif %}
 </div>

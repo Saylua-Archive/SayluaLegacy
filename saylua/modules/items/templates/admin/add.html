@@ -10,7 +10,7 @@
   <table class="form-table">
     {{ form_row(form.name) }}
     {{ form_row(form.image) }}
-    {{ form_row(form.description) }}
+    {{ form_row(form.description) }}{{ sidebar_form.csrf_token }}
     <tr>
       <td></td>
       <td>
@@ -18,5 +18,6 @@
       </td>
     </tr>
   </table>
+  {{ form.csrf_token }}
 </form>
 {% endblock %}

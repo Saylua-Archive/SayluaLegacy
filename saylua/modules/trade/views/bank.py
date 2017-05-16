@@ -17,7 +17,7 @@ def bank_transfer():
     form = BankTransferForm(request.form)
     form.recipient.data = get_from_request(request, 'recipient', args_key='to')
 
-    if request.method == 'POST' and form.validate():
+    if form.validate_on_submit():
         ss = form.star_shards.data or 0
         cc = form.cloud_coins.data or 0
 

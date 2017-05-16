@@ -26,7 +26,7 @@ def inject_sidebar_login_form():
 def login():
     form = LoginForm(request.form)
 
-    if request.method == 'POST' and form.validate():
+    if form.validate_on_submit():
         found = login_check.user
         found_id = found.id
 

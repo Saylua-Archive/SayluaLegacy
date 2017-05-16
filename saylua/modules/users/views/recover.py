@@ -10,7 +10,7 @@ from flask import render_template, request, flash, redirect
 
 def recover_login():
     form = RecoveryForm(request.form)
-    if request.method == 'POST' and form.validate():
+    if form.validate_on_submit():
         user = login_check.user
         code = user.make_password_reset_code()
 
@@ -31,7 +31,7 @@ def reset_password(user_id, code):
         return redirect('/')
 
     form = PasswordResetForm(request.form)
-    if request.method == 'POST' and form.validate():
+    if form.validate_on_submit():
         user = db.session.query(User).get(user_id)
         user.password_hash = User.hash_password(form.password.data)
         code.used = True

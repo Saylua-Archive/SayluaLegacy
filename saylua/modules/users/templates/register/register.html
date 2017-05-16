@@ -6,7 +6,6 @@
 <h1>Register a New Account on Saylua</h1>
 
 <form class="validated-form" method="post" id="register-form">
-  {{ form.csrf_token }}
   <table class="form-table center">
     {{ form_row(form.username, tip="Valid characters: letters, numbers, and +~._-") }}
     {{ form_row(form.password) }}
@@ -40,5 +39,6 @@
       </td>
     </tr>
   </table>
+  {{ form.csrf_token }}
 </form>
 {% endblock %}

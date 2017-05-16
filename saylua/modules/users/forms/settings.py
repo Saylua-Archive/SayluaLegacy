@@ -1,11 +1,12 @@
 from saylua import app
 
-from wtforms import Form, RadioField
+from flask_wtf import FlaskForm
+from wtforms import RadioField
 from saylua.utils.form import sl_validators, UserCheck
 from saylua.utils.form.fields import SlField, SlTextAreaField, SlPasswordField
 
 
-class GeneralSettingsForm(Form):
+class GeneralSettingsForm(FlaskForm):
     notified_on_pings = RadioField('Receive notifications for pings?',
         choices=[('True', 'Yes'), ('False', 'No')])
     autosubscribe_threads = RadioField('Autosubscribe to your own threads?',
@@ -19,14 +20,14 @@ class GeneralSettingsForm(Form):
         obj.autosubscribe_posts = self.autosubscribe_posts.data == 'True'
 
 
-class DetailsForm(Form):
+class DetailsForm(FlaskForm):
     status = SlField('Status', [sl_validators.Max(app.config['MAX_USER_STATUS_LENGTH'])])
     gender = SlField('Gender')
     pronouns = SlField('Pronouns')
     bio = SlTextAreaField('About Me')
 
 
-class UsernameForm(Form):
+class UsernameForm(FlaskForm):
     IsNot = sl_validators.IsNot('',
             message='The username you entered is the same as your current username.')
     UsernameUnique = sl_validators.UsernameUnique()
@@ -44,7 +45,7 @@ class UsernameForm(Form):
         self.UsernameUnique.whitelist = user.usernames
 
 
-class EmailForm(Form):
+class EmailForm(FlaskForm):
     password_check = UserCheck()
 
     IsNot = sl_validators.IsNot('',
@@ -65,7 +66,7 @@ class EmailForm(Form):
         self.IsNot.pattern = user.email
 
 
-class PasswordForm(Form):
+class PasswordForm(FlaskForm):
     password_check = UserCheck()
 
     old_password = SlPasswordField('Old Password', [

@@ -1,26 +1,26 @@
 {% macro form_errors(field, tip=None) -%}
-    <small class="form-tip{% if field.errors %} error{% endif %}" data-field-name="{{ field.name }}">
-      {% for error in field.errors %}
-      {{ error }}
-      {% else %}
-        {% if tip %}
-        {{ tip }}
-        {% endif %}
-      {% endfor %}
-    </small>
+  <small class="form-tip{% if field.errors %} error{% endif %}" data-field-name="{{ field.name }}">
+    {% for error in field.errors %}
+    {{ error }}
+    {% else %}
+      {% if tip %}
+      {{ tip }}
+      {% endif %}
+    {% endfor %}
+  </small>
 {%- endmacro %}
 
 {% macro form_row(field, tip=None, placeholder=None) -%}
 {% if field %}
-<tr>
-  <th class="label">
-    {{ field.label }}
-  </th>
-  <td>
-    {{ field(placeholder=placeholder) }}
-    {{ form_errors(field, tip) }}
-  </td>
-</tr>
+  <tr>
+    <th class="label">
+      {{ field.label }}
+    </th>
+    <td>
+      {{ field(placeholder=placeholder) }}
+      {{ form_errors(field, tip) }}
+    </td>
+  </tr>
 {% endif %}
 {%- endmacro %}
 

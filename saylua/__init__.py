@@ -6,6 +6,8 @@ from .routing import SayluaApp
 
 from os.path import join
 from flask import send_from_directory, render_template
+from flask_wtf.csrf import CsrfProtect
+
 from flask_sqlalchemy import SQLAlchemy
 from saylua.utils import is_devserver
 from google.appengine.api import app_identity
@@ -19,6 +21,7 @@ if is_devserver():
     app.config.from_pyfile('config/local_settings.py')
 
 db = SQLAlchemy(app)
+csrf = CsrfProtect(app)
 
 import context_processors
 import g_globals
@@ -54,7 +57,6 @@ with app.app_context():
 def favicon():
     return send_from_directory(join(app.root_path, 'static'), 'favicon.ico',
         mimetype='image/vnd.microsoft.icon')
-
 
 @app.errorhandler(404)
 def page_not_found(e):

@@ -1,6 +1,7 @@
 from saylua import app
 
-from wtforms import Form, validators
+from flask_wtf import FlaskForm
+from wtforms import validators
 from saylua.utils.form import sl_validators, UserCheck
 from saylua.utils.form.fields import SlField, SlIntegerField
 
@@ -9,7 +10,7 @@ from saylua.utils.form.fields import SlField, SlIntegerField
 recipient_check = UserCheck()
 
 
-class BankTransferForm(Form):
+class BankTransferForm(FlaskForm):
     recipient = SlField('Recipient Name', [
         sl_validators.Required(),
         sl_validators.NotBlank(),

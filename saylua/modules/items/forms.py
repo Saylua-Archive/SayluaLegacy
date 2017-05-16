@@ -1,9 +1,9 @@
-from wtforms import Form
+from flask_wtf import FlaskForm
 from saylua.utils.form import sl_validators
 from saylua.utils.form.fields import SlField, SlFileField, SlTextAreaField
 
 
-class ItemUploadForm(Form):
+class ItemUploadForm(FlaskForm):
     name = SlField('Item Name', [
         sl_validators.Required(),
         sl_validators.NotBlank()])

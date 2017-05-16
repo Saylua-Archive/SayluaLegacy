@@ -22,7 +22,7 @@ def register():
     if not app.config.get('INVITE_ONLY'):
         del form.invite_code
 
-    if request.method == 'POST' and form.validate():
+    if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
         email = form.email.data

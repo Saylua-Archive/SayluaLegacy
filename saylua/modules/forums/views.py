@@ -22,7 +22,7 @@ def forums_board(canon_name):
     try:
         board = db.session.query(Board).filter(Board.canon_name == canon_name).one()
 
-        if request.method == 'POST' and form.validate():
+        if form.validate_on_submit():
             title = request.form.get('title')
             body = request.form.get('body')
             author = g.user.id
@@ -73,7 +73,7 @@ def forums_thread(thread_id):
         thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one()
         board = thread.board
 
-        if request.method == 'POST' and form.validate():
+        if form.validate_on_submit():
             author = g.user.id
             body = request.form.get('body')
             new_post = ForumPost(author_id=author, thread_id=thread_id, body=body)

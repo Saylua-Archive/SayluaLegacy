@@ -1,3 +1,4 @@
+{% from "_macros/forms.html" import form_row %}
 {% from "_macros/pagination.html" import pagination %}
 {% from "_macros/user_link.html" import user_link %}
 
@@ -10,7 +11,7 @@
 
 {% block body %}
 <h1>Viewing Conversation: {{ conversation.title }}</h1>
-<div class="center full padded">
+<div class="center">
   <a href="/messages/"><img src="/static/img/icons/arrow_left.png"> Back to Your Inbox</a>
 </div>
 <div class="center full padded">
@@ -20,24 +21,14 @@
     {{ user_link(member) }}
   {% endfor %}
 </div>
-<div class="center full padded">
+<div class="center">
   {% set last_message = conversation_messages|last %}
   Last message by {{ user_link(last_message.author) }}
   on {{ last_message.date_created|expanded_relative_time }}
 </div>
-<form method="post" class="validated-form" data-error-id="message-post-error">
-  <table class="form-table full padded">
-    <tr>
-      <td colspan="2" id="message-post-error"></td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.text.label }}
-      </th>
-      <td>
-        {{ form.text(placeholder="Type your reply here") }}
-      </td>
-    </tr>
+<form method="post" class="validated-form">
+  <table class="form-table">
+    {{ form_row(form.text, placeholder="Type your reply here") }}
     <tr>
       <td></td>
       <td>
@@ -46,6 +37,7 @@
       </td>
     </tr>
   </table>
+  {{ form.csrf_token }}
 </form>
 {% for message in conversation_messages|reverse %}
 <table class="conversation-message">
