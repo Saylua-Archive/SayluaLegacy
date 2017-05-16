@@ -69,7 +69,7 @@ def messages_write_new():
     form.title.data = get_from_request(request, 'title')
     form.text.data = get_from_request(request, 'text')
 
-    if request.method == 'POST' and form.validate():
+    if form.validate_on_submit():
         to = recipient_check.user.id
         new_id = start_conversation(g.user.id, to, form.title.data, form.text.data)
         return redirect('/conversation/' + str(new_id) + '/', code=302)
@@ -101,7 +101,7 @@ def messages_view_conversation(key):
 
     form = ConversationReplyForm()
     form.text.data = get_from_request(request, 'text')
-    if request.method == 'POST' and form.validate():
+    if form.validate_on_submit():
         result = reply_conversation(key, g.user.id, form.text.data)
         if result:
             flash('You have replied to the message!')

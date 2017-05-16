@@ -1,9 +1,9 @@
-from wtforms import Form
+from flask_wtf import FlaskForm
 from saylua.utils.form import sl_validators
 from saylua.utils.form.fields import SlField, SlTextAreaField
 
 
-class ForumThreadForm(Form):
+class ForumThreadForm(FlaskForm):
     title = SlField('Thread Title', [
         sl_validators.Required(),
         sl_validators.NotBlank(),
@@ -14,7 +14,7 @@ class ForumThreadForm(Form):
         sl_validators.Min(2)])
 
 
-class ForumPostForm(Form):
+class ForumPostForm(FlaskForm):
     body = SlTextAreaField('Post Content', [
         sl_validators.Required(),
         sl_validators.NotBlank(),

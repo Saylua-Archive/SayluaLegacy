@@ -16,13 +16,10 @@ import datetime
 @login_required
 def user_settings():
     form = GeneralSettingsForm(request.form, obj=g.user)
-    if request.method == "POST":
-        if form.validate():
-            form.populate_obj(g.user)
-            db.session.commit()
-            flash("Your settings have been saved.")
-        else:
-            flash("You have tried to save invalid settings.", "error")
+    if form.validate_on_submit():
+        form.populate_obj(g.user)
+        db.session.commit()
+        flash("Your settings have been saved.")
 
     # Allows user to change general on/off settings
     return render_template("settings/main.html", form=form)
@@ -31,7 +28,7 @@ def user_settings():
 @login_required
 def user_settings_details():
     form = DetailsForm(request.form, obj=g.user)
-    if request.method == "POST" and form.validate():
+    if form.validate_on_submit():
         form.populate_obj(g.user)
         db.session.commit()
         flash("Your user details have been saved.")
@@ -45,7 +42,7 @@ def user_settings_username():
 
     cutoff_time = datetime.datetime.now() - datetime.timedelta(days=1)
     can_change = g.user.last_username_change < cutoff_time
-    if request.method == "POST" and form.validate():
+    if form.validate_on_submit():
         username = form.username.data
         if username.lower() in g.user.usernames:
             # If the user is changing to a name they already own, change case
@@ -96,7 +93,7 @@ def user_settings_username_release():
 def user_settings_email():
     form = EmailForm(request.form, obj=g.user)
     form.setUser(g.user)
-    if request.method == "POST" and form.validate():
+    if form.validate_on_submit():
         g.user.email = form.email.data
         g.user.email_confirmed = False
         db.session.commit()
@@ -112,7 +109,7 @@ def user_settings_email():
 def user_settings_password():
     form = PasswordForm(request.form)
     form.setUser(g.user)
-    if request.method == "POST" and form.validate():
+    if form.validate_on_submit():
         password = form.new_password.data
         g.user.password_hash = User.hash_password(password)
         db.session.commit()

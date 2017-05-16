@@ -12,17 +12,17 @@
 <h1>Your Inbox</h1>
 <h3>
   Your Conversations
-  <a class="right normal" href="/messages/write/">
+  <a href="/messages/write/">
     <img src="/static/img/icons/pencil.png">
     Send a New Message
   </a>
 </h3>
 {% if messages|length > 0 %}
 <form method="post">
-  <div class="padded full center">
+  <div class="center">
     {{ pagination(page_count=page_count) }}
   </div>
-  <div class="full padded center">
+  <div class="center">
     <input type="submit" class="small" name="hide" value="Hide Selected Conversations" />
     <input type="submit" class="small" name="read" value="Mark Selected as Read" />
   </div>
@@ -67,19 +67,19 @@
     </tr>
     {% endfor %}
   </table>
-  <div class="full padded center">
+  <div class="center">
     <input type="submit" class="small" name="hide" value="Hide Selected Conversations" />
     <input type="submit" class="small" name="read" value="Mark Selected as Read" />
   </div>
-  <div class="padded full center">
+  <div class="center">
     {{ pagination(page_count=page_count) }}
   </div>
 </form>
 {% else %}
-<p class="center full padded">
+<p class="center">
   You have no messages!
 </p>
-<p class="center full padded">
+<p class="center">
   <a href="/"> Go back home?</a>
 </p>
 {% endif %}

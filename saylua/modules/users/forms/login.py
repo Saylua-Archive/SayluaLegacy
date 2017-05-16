@@ -1,5 +1,5 @@
 from saylua import app
-from wtforms import Form
+from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import RecaptchaField, Recaptcha
 from saylua.utils.form import sl_validators, UserCheck
 from saylua.utils.form.fields import SlField, SlPasswordField
@@ -7,7 +7,7 @@ from saylua.utils.form.fields import SlField, SlPasswordField
 login_check = UserCheck()
 
 
-class LoginForm(Form):
+class LoginForm(FlaskForm):
     username_or_email = SlField('Username/Email', [
         sl_validators.Required(),
         sl_validators.UsernameOrEmail(),
@@ -17,7 +17,7 @@ class LoginForm(Form):
         login_check.PasswordValid])
 
 
-class RecoveryForm(Form):
+class RecoveryForm(FlaskForm):
     username_or_email = SlField('Username/Email', [
         sl_validators.Required(),
         sl_validators.UsernameOrEmail(),
@@ -25,7 +25,7 @@ class RecoveryForm(Form):
     recaptcha = RecaptchaField(validators=[Recaptcha(message='Please check the CAPTCHA.')])
 
 
-class PasswordResetForm(Form):
+class PasswordResetForm(FlaskForm):
     password = SlPasswordField('New Password', [
         sl_validators.Required(),
         sl_validators.Min(app.config['MIN_PASSWORD_LENGTH']),
