@@ -1,6 +1,7 @@
 from flask import render_template, g, redirect, request, flash
 from saylua import db
 from .models.db import Pet
+import datetime
 
 
 def pet_profile(name):
@@ -64,13 +65,19 @@ def pet_reserve():
             return redirect("/login")
         soul_name = request.form.get('soul_name')
         adoptee = db.session.query(Pet).filter(Pet.soul_name == soul_name).one_or_none()
-        if adoptee is None:
+        youngest = (Pet.query.filter(Pet.owner_id == g.user.id)
+                .order_by(Pet.date_bonded.desc()).first())
+        if youngest and (datetime.datetime.now() - youngest.date_bonded).days < 1:
+            flash(("I'm afraid I can't let you adopt adopt a new companion today, " +
+                "you should focus on making sure {} is settling into their new home.")
+                .format(youngest.name))
+        elif adoptee is None:
             flash("Sorry, I couldn't find a pet with that soul name.")
         elif adoptee.owner_id is not None:
             flash("I'm afraid {} already has a companion.".format(adoptee.name))
         else:
             adoptee.owner_id = adopter.id
-            adoptee.bonding_date = db.func.now()
+            adoptee.date_bonded = db.func.now()
             db.session.add(adoptee)
             if adopter.companion is None:
                 adopter.companion = adoptee
