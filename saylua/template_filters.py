@@ -1,13 +1,20 @@
 from saylua import app
 from saylua.utils import pluralize, saylua_time
 
-from flask_markdown import Markdown
+from flask import Markup
+from markdown import Markdown
+from mdx_linkify.mdx_linkify import LinkifyExtension
 
 import datetime
 
 
-# Attach Flask Markdown to our app.
-Markdown(app, auto_reset=True, extensions=["linkify"])
+# Reused markdown instance.
+md = Markdown(extensions=[LinkifyExtension()])
+
+
+@app.template_filter('markdown')
+def saylua_markdown(text):
+    return Markup(md.reset().convert(text))
 
 
 @app.template_filter('pluralize')

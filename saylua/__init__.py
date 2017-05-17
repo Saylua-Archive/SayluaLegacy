@@ -6,7 +6,7 @@ from .routing import SayluaApp
 
 from os.path import join
 from flask import send_from_directory, render_template
-from flask_wtf.csrf import CsrfProtect
+from flask_wtf.csrf import CSRFProtect
 
 from flask_sqlalchemy import SQLAlchemy
 from saylua.utils import is_devserver
@@ -21,7 +21,7 @@ if is_devserver():
     app.config.from_pyfile('config/local_settings.py')
 
 db = SQLAlchemy(app)
-csrf = CsrfProtect(app)
+csrf = CSRFProtect(app)
 
 import context_processors
 import g_globals
