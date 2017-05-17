@@ -63,6 +63,7 @@
 
       <form method="post" action="/register/email/">
         <input type="submit" class="small" name="resend" value="Resend Confirmation?" />
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
       </form>
     </div>
     {% endif %}

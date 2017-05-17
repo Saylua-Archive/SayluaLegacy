@@ -19,6 +19,7 @@
 <div id="pet-actions">
   <form id="accompany" action="/accompany/" method="post">
     <input type="hidden" name="accompany" value="{{ pet.id }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     {% if g.user.companion_id == pet.id %}
     <button>Stop Accompanying {{ pet.name }}</button>
     {% else %}
@@ -30,6 +31,7 @@
 {% if pet.owner_id is none %}
 <form action="/reserve/" method="post">
   <input type="hidden" name="soul_name" value="{{ pet.soul_name }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
   <button>
     Adopt {{ pet.name }}
   </button>
@@ -90,6 +92,7 @@
 {% if g.user and pet.owner_id == g.user.id %}
 <form id="abandon" action="/abandon/" method="post">
   <input type="hidden" name="abandonee" value="{{ pet.id }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
   <a class="abandon-link" href="javascript:{}" onclick="document.getElementById('abandon').submit(); return false;">
     Abandon {{ pet.name }}
   </a>

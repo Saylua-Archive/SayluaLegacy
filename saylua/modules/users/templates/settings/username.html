@@ -48,6 +48,7 @@
           <button type="submit" class="link-button" name="submit">
             Release username
           </button>
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         </form>
       {% endif %}
     </td>
