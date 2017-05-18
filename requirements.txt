@@ -7,7 +7,7 @@ Flask
 python-dateutil
 Flask-WTF
 markdown
-mdx_linkify
+git+https://github.com/r0wb0t/markdown-urlize
 flask_sqlalchemy
 pytest
 PyMySQL
