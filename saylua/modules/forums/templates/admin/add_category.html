@@ -2,6 +2,7 @@
 {% set section_title = "New Board Category" %}
 {% block section_body %}
 <form method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
   <input type="text" placeholder="Category Title" name="category">
   <button type="submit" class="small">Create Category</button>
 </form>

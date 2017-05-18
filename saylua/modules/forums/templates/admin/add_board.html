@@ -4,6 +4,7 @@
 <form method="post">
   <input type="text" placeholder="Board Title" name="title">
   <input type="text" placeholder="Board Description" name="description">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
   <select name="category">
     <option value="" disabled selected>Choose a Category</option>
     {% for category in categories %}

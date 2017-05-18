@@ -74,6 +74,7 @@
   <div class="center">
     {{ pagination(page_count=page_count) }}
   </div>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 </form>
 {% else %}
 <p class="center">
