@@ -48,7 +48,6 @@ class SayluaRouter(Blueprint):
 
 class SayluaLoader(DispatchingJinjaLoader):
     """Prevent template namespace collisions between modules.
-
     Additionally, prefer local templates to global templates.
     This means that global templates will no longer override local templates.
     """
@@ -57,11 +56,11 @@ class SayluaLoader(DispatchingJinjaLoader):
         if blueprint is not None and blueprint in self.app.blueprints:
             loader = self.app.blueprints[blueprint].jinja_loader
             if loader is not None:
-                yield loader, template
+                yield blueprint, loader
 
         loader = self.app.jinja_loader
         if loader is not None:
-                yield loader, template
+            yield self.app, loader
 
 
 def url(rule, view_func, name=None, methods=["GET"]):

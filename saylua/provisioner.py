@@ -171,82 +171,83 @@ def generate_users():
 
 def purge(absolutely_sure_about_this=False):
     """Removes existing models from the database."""
+    with app.app_context():
+        if is_devserver() or absolutely_sure_about_this:
+            db.drop_all()
+            db.session.commit()
+            db.session.flush()
+            db.create_all()
 
-    if is_devserver() or absolutely_sure_about_this:
-        db.drop_all()
-        db.session.commit()
-        db.session.flush()
-        db.create_all()
-
-    else:
-        raise Exception("Get out of here.")
+        else:
+            raise Exception("Get out of here.")
 
 
 def setup():
-    db.create_all()
+    with app.app_context():
+        db.create_all()
 
-    # Create the role "admin" with all privileges
-    admin_role = Role(name="admin")
-    role_columns = [column.key for column in admin_role.__table__.columns]
+        # Create the role "admin" with all privileges
+        admin_role = Role(name="admin")
+        role_columns = [column.key for column in admin_role.__table__.columns]
 
-    for key in role_columns:
-        if key.startswith("can"):
-            setattr(admin_role, key, True)
+        for key in role_columns:
+            if key.startswith("can"):
+                setattr(admin_role, key, True)
 
-    db.session.add(admin_role)
-    print("Admin Role Created")
+        db.session.add(admin_role)
+        print("Admin Role Created")
 
-    # Add the "user" role
-    user_role = Role(name="user")
-    user_role.can_post_threads = True
-    user_role.can_comment = True
-    db.session.add(user_role)
-    print("User Role Created")
+        # Add the "user" role
+        user_role = Role(name="user")
+        user_role.can_post_threads = True
+        user_role.can_comment = True
+        db.session.add(user_role)
+        print("User Role Created")
 
-    # Add the "moderator" role
-    moderator_role = Role(name="moderator")
-    moderator_role.can_post_threads = True
-    moderator_role.can_move_threads = True
-    moderator_role.can_comment = True
-    db.session.add(moderator_role)
-    print("Moderator Role Created")
+        # Add the "moderator" role
+        moderator_role = Role(name="moderator")
+        moderator_role.can_post_threads = True
+        moderator_role.can_move_threads = True
+        moderator_role.can_comment = True
+        db.session.add(moderator_role)
+        print("Moderator Role Created")
 
-    # Turn dungeon schemas into models
-    for model in provision_dungeon_schema():
-        db.session.add(model)
-
-    db.session.commit()
-
-    # Add placeholders if on the dev server
-    if is_devserver():
-        print("Adding Initial Admin User")
-        for item in generate_admin_user():
-            db.session.add(item)
-
-        print("Adding Placeholder Users")
-        for item in generate_users():
-            db.session.add(item)
-
-        print("Adding Placeholder Boards")
-        for item in generate_boards():
-            db.session.add(item)
-
-        print("Adding Placeholder Threads")
-        for item in generate_threads():
-            db.session.add(item)
-
-        print("Adding Placeholder Posts")
-        for item in generate_posts():
-            db.session.add(item)
-
-        print("Adding Placeholder Items")
-        for item in generate_items():
-            db.session.add(item)
-
-        print("Adding Placeholder Pets, Coats, and Species")
-        for pet_coat_species in generate_pets():
-            db.session.add(pet_coat_species)
+        # Turn dungeon schemas into models
+        for model in provision_dungeon_schema():
+            db.session.add(model)
 
         db.session.commit()
 
-    print("Database Setup Complete")
+        # Add placeholders if on the dev server
+        if is_devserver():
+            print("Adding Initial Admin User")
+            for item in generate_admin_user():
+                db.session.add(item)
+
+            print("Adding Placeholder Users")
+            for item in generate_users():
+                db.session.add(item)
+
+            print("Adding Placeholder Boards")
+            for item in generate_boards():
+                db.session.add(item)
+
+            print("Adding Placeholder Threads")
+            for item in generate_threads():
+                db.session.add(item)
+
+            print("Adding Placeholder Posts")
+            for item in generate_posts():
+                db.session.add(item)
+
+            print("Adding Placeholder Items")
+            for item in generate_items():
+                db.session.add(item)
+
+            print("Adding Placeholder Pets, Coats, and Species")
+            for pet_coat_species in generate_pets():
+                db.session.add(pet_coat_species)
+
+            db.session.commit()
+
+        print("Database Setup Complete")
