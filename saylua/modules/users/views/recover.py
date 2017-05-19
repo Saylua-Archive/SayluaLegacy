@@ -1,6 +1,6 @@
 from ..forms.login import RecoveryForm, PasswordResetForm, login_check
 
-from saylua import db
+from saylua import db, app
 from saylua.models.user import User, PasswordResetCode
 from saylua.utils import is_devserver
 from saylua.utils.email import send_email
@@ -17,8 +17,10 @@ def recover_login():
         if is_devserver():
             flash('DEBUG MODE: Your reset code is %s' % code.url())
         else:
+            url = app.config.get('MAIN_URL_ROOT') + code.url()
             send_email(user.email, 'Saylua Password Reset',
-                'Your password reset link is: ' + code.url())
+                text=render_template('email/reset_password.txt', name=user.name, url=url),
+                html=render_template('email/reset_password.html', name=user.name, url=url))
             flash('Recovery email sent! Check the email address on file for the next step.')
 
     return render_template('login/recover.html', form=form)

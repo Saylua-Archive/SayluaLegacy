@@ -1,10 +1,12 @@
 from saylua import app
 from saylua.utils import is_devserver
 
+from flask import render_template
+
 import requests
 
 
-def send_email(to, subject, text):
+def send_email(to, subject, text, html=None):
     # AppEngine SDK doesn't work with requests...
     if is_devserver():
         return None
@@ -14,7 +16,8 @@ def send_email(to, subject, text):
         data={"from": app.config.get('AUTOSEND_EMAIL'),
               "to": to,
               "subject": subject,
-              "text": text})
+              "text": text,
+              "html": html})
 
 
 def send_confirmation_email(user, code=None):
@@ -25,6 +28,6 @@ def send_confirmation_email(user, code=None):
 
     to = [user.email]
     subject = "Confirm your Saylua account, %s" % user.name
-    text = ("""You've registered a new account on Saylua. Please click the link
-        below to verify your email: %s """ % url)
-    return send_email(to, subject, text)
+    text = render_template('email/email_confirmation.txt', name=user.name, url=url)
+    html = render_template('email/email_confirmation.html', name=user.name, url=url)
+    return send_email(to, subject, text=text, html=html)

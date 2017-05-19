@@ -1,3 +1,5 @@
+{% from "_macros/user_link.html" import user_link %}
+
 <div id="sidebar" class="sidebar">
   {% if g.logged_in %}
   <div id="avatar-section" class="sidebar-section">
@@ -13,7 +15,7 @@
     </div>
   </div>
   <div id="user-info-section" class="sidebar-section">
-    <p>You are <a href="{{ g.user.url() }}">{{ g.user.name }}</a></p>
+    <p>You are {{ user_link(g.user) }}</p>
     {% if g.user.companion %}
     <p>Your companion is <a href="/pet/{{ g.user.companion.soul_name }}/">{{ g.user.companion.name }}</a></p>
     {% endif %}

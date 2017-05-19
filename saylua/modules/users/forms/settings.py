@@ -1,23 +1,15 @@
 from saylua import app
 
 from flask_wtf import FlaskForm
-from wtforms import RadioField
+from wtforms import BooleanField
 from saylua.utils.form import sl_validators, UserCheck
 from saylua.utils.form.fields import SlField, SlTextAreaField, SlPasswordField
 
 
 class GeneralSettingsForm(FlaskForm):
-    notified_on_pings = RadioField('Receive notifications for pings?',
-        choices=[('True', 'Yes'), ('False', 'No')])
-    autosubscribe_threads = RadioField('Autosubscribe to your own threads?',
-        choices=[('True', 'Yes'), ('False', 'No')])
-    autosubscribe_posts = RadioField('Autosubscribe to threads you post on?',
-        choices=[('True', 'Yes'), ('False', 'No')])
-
-    def populate_obj(self, obj):
-        obj.notified_on_pings = self.notified_on_pings.data == 'True'
-        obj.autosubscribe_threads = self.autosubscribe_threads.data == 'True'
-        obj.autosubscribe_posts = self.autosubscribe_posts.data == 'True'
+    notified_on_pings = BooleanField('Receive notifications for pings?')
+    autosubscribe_threads = BooleanField('Autosubscribe to your own threads?')
+    autosubscribe_posts = BooleanField('Autosubscribe to threads you post on?')
 
 
 class DetailsForm(FlaskForm):
