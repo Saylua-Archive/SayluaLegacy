@@ -11,13 +11,12 @@ def pet_profile(name):
     return render_template("profile.html", pet=pet)
 
 
-def pet_accompany():
+def pet_accompany(soul_name):
     if not g.user:
         flash("You need to be logged in to do this!", "error")
         return redirect("/login")
-    companion_id = request.form.get('accompany')
-    if companion_id:
-        companion = db.session.query(Pet).filter(Pet.id == companion_id).one_or_none()
+    if soul_name:
+        companion = db.session.query(Pet).filter(Pet.soul_name == soul_name).one_or_none()
         if companion is None or companion.owner_id != g.user.id:
             flash("You can't accompany this companion.")
         else:
