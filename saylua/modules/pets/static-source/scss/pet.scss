@@ -63,6 +63,7 @@
 
   align-items: flex-start;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .pet-profile-column {
@@ -74,6 +75,10 @@
   align-items: stretch;
 
   &.pet-profile-column-full {
+    width: 100%;
+  }
+
+  @media(max-width: 500px) {
     width: 100%;
   }
 }
@@ -88,10 +93,4 @@
 .abandon-link {
   float: right;
   margin-right: 16rem;
-}
-
-@media(max-width: 500px) {
-  .pet-profile-column {
-    width: 100%;
-  }
 }
