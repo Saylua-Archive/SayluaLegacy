@@ -53,6 +53,10 @@
   }
 }
 
+#pet-actions {
+  padding: 0.5em 0.4rem;
+}
+
 .pet-profile-info {
   display: flex;
   flex-direction: row;
@@ -84,4 +88,10 @@
 .abandon-link {
   float: right;
   margin-right: 16rem;
+}
+
+@media(max-width: 500px) {
+  .pet-profile-column {
+    width: 100%;
+  }
 }
