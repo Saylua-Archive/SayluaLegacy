@@ -63,6 +63,10 @@ class Board(db.Model):
             .first()
         )
 
+    @classmethod
+    def by_canon_name(cls, name):
+        return db.session.query(cls).filter(cls.canon_name == name.lower()).one_or_none()
+
 
 class ForumThread(db.Model):
     """Forum Threads.
