@@ -52,10 +52,13 @@ class Pet(db.Model):
     ss_price = db.Column(db.Integer, default=0)
     cc_price = db.Column(db.Integer, default=0)
 
-    def image(this):
-        subpath = ("img" + os.sep + "pets" + os.sep + this.species_name + os.sep + this.coat.name +
+    def image(self):
+        subpath = ("img" + os.sep + "pets" + os.sep + self.species_name + os.sep + self.coat.name +
             ".png")
         return url_for("static", filename=subpath) + "?v=" + str(get_static_version_id())
+
+    def url(self):
+        return '/pet/' + self.soul_name
 
     # Generate a new unique soul name
     @classmethod

@@ -147,12 +147,9 @@
     justify-content: space-around;
 
     h3 {
-      width: 20%;
+      width: 30%;
       text-align: center;
       border: 0;
-
-      flex-grow: 0;
-      flex-shrink: 0;
     }
 
     @media(max-width: 500px) {

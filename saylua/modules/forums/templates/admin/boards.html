@@ -1,0 +1,30 @@
+{% from "_macros/forms.html" import form_row, form_checkbox %}
+
+{% extends "admin/template.html" %}
+{% set section_title = "Manage Boards" %}
+{% block section_body %}
+
+<h2>Edit Existing Boards</h2>
+
+<h2>Create New Board</h2>
+<form method="post" class="validated-form">
+  <table class="form-table">
+    {{ form_row(form.title) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.category) }}
+    <tr>
+      <td></td>
+      <td>
+        {{ form_checkbox(form.is_news) }}
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" value="Add New Board" name="post">
+      </td>
+    </tr>
+  </table>
+  {{ form.csrf_token }}
+</form>
+{% endblock %}

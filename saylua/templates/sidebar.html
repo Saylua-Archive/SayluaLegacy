@@ -8,7 +8,7 @@
         <img src="{{ g.user.avatar_url() }}" id="avatar-image" />
       </a>
       {% if g.user.companion %}
-      <a href="/pet/{{ g.user.companion.soul_name }}/" id="active-pet-view" class="active-pet-view">
+      <a href="{{ g.user.companion.url() }}/" id="active-pet-view" class="active-pet-view">
         <img src="{{ g.user.companion.image() }}" id="active-pet-image">
       </a>
       {% endif %}
@@ -17,7 +17,7 @@
   <div id="user-info-section" class="sidebar-section">
     <p>You are {{ user_link(g.user) }}</p>
     {% if g.user.companion %}
-    <p>Your companion is <a href="/pet/{{ g.user.companion.soul_name }}/">{{ g.user.companion.name }}</a></p>
+    <p>Your companion is <a href="{{ g.user.companion.url() }}/">{{ g.user.companion.name }}</a></p>
     {% endif %}
     <p>
       <img src="/static/img/icons/weather_clouds.png">

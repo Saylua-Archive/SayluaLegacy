@@ -55,10 +55,9 @@ def random_token(length=32):
     return ''.join([random.SystemRandom().choice(choices) for _ in range(length)])
 
 
-def canonize(s):
-    return urlize(s)
+def canonize(name):
+    name = re.sub(r'(\s|\W)+', '_', name)
 
-
-def urlize(s):
-    s = re.sub('[^0-9a-zA-Z]+', '_', s).lower()
-    return s
+    # Remove trailing characters from punctuation or elsewhere.
+    name = name.strip('_-')
+    return name.lower()

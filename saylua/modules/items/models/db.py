@@ -1,6 +1,5 @@
-import re
-
 from saylua import db
+from saylua.utils import canonize
 
 
 class Item(db.Model):
@@ -14,13 +13,11 @@ class Item(db.Model):
 
     @classmethod
     def make_canon_name(cls, name):
-        name = re.sub(r'\s', '_', name)
-        name = re.sub(r'\W', '-', name)
-        return name.lower()
+        return canonize(name)
 
     @classmethod
     def by_canon_name(cls, name):
-        return cls.query(cls.canon_name == name.lower()).get()
+        return db.session.query(cls).filter(cls.canon_name == name.lower()).one_or_none()
 
     def url(self):
         return '/item/' + self.canon_name

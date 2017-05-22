@@ -5,8 +5,8 @@ from . import views
 
 urlpatterns = [
     # Admin Views
-    url('/admin/forums/newboard/', view_func=admin_views.new_board,
-        name='admin_new_board', methods=['GET', 'POST']),
+    url('/admin/forums/boards/', view_func=admin_views.manage_boards,
+        name='admin_board', methods=['GET', 'POST']),
     url('/admin/forums/newcategory/', view_func=admin_views.new_board_category,
         name='admin_new_category', methods=['GET', 'POST']),
 

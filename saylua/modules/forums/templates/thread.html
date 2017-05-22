@@ -41,7 +41,7 @@
           <img src="{{ post.author.avatar_url() }}" />
         </a>
         {% if post.author.companion %}
-        <a href="/pet/{{ post.author.companion.soul_name }}/" class="active-pet-view">
+        <a href="{{ post.author.companion.url() }}" class="active-pet-view">
           <img src="{{ post.author.companion.image() }}">
         </a>
         {% endif %}

@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% set page_title = "Pet Reserve" %}
+{% block header_scripts %}
+<link rel="stylesheet" href="{{ include_static('css/pets.min.css') }}">
+{% endblock %}
+{% block body %}
+<h1>The Pet Reserve</h1>
+<p>
+  The pet reserve is currently empty. Looks like everybody found a new home.
+</p>
+<img class="reserve-npc" src="/static/img/characters/vera-everly.png" />
+{% endblock %}
