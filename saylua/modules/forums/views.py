@@ -14,7 +14,7 @@ def forums_home():
     categories = (db.session.query(BoardCategory)
         .order_by(BoardCategory.order.asc())
         .all())
-    return render_template("main.html", categories=categories)
+    return render_template("forums_home.html", categories=categories)
 
 
 def forums_board(canon_name):

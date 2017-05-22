@@ -8,17 +8,6 @@
 {% block body %}
 <h1>{{ thread.title }}</h1>
 
-<form method="post" class="center" action="move/">
-  <select name="destination" required>
-    <option value="" disabled selected>Move Thread To Board</option>
-    {% for other_board in other_boards %}
-      <option value="{{ other_board.id }}">{{ other_board.title }}</option>
-    {% endfor %}
-  </select>
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-  <button type="submit" class="small" name="move">Move Thread</button>
-</form>
-
 <div class="forum-thread-controls">
   <span class="forum-breadcrumb">
     <a href="/forums/">Forums</a> &#187;
@@ -99,5 +88,18 @@
     </tr>
   </table>
   {{ form.csrf_token }}
+</form>
+{% endblock %}
+
+{% block staff_actions %}
+<form method="post" class="center" action="move/">
+  <select name="destination" required>
+    <option value="" disabled selected>Move Thread To Board</option>
+    {% for other_board in other_boards %}
+      <option value="{{ other_board.id }}">{{ other_board.title }}</option>
+    {% endfor %}
+  </select>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+  <button type="submit" class="small" name="move">Move Thread</button>
 </form>
 {% endblock %}

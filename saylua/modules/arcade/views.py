@@ -4,7 +4,7 @@ from models.db import Game, GameLog
 
 
 def games_main():
-    return render_template("main.html")
+    return render_template("arcade.html")
 
 
 def games_blocks():
