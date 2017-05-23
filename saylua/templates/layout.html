@@ -118,7 +118,7 @@
     <p>
       &copy; 2016 <a href="/">Saylua</a>
     </p>
-    {% if g.logged_in and g.user.get_role().can_access_admin %}
+    {% if g.logged_in and g.user.has_admin_access() %}
     <p>
       <a href="/admin/">Admin Panel</a>
     </p>

@@ -42,6 +42,8 @@ class Board(db.Model):
     description = db.Column(db.Text())
 
     is_news = db.Column(db.Boolean(), default=False)
+    requires_moderator = db.Column(db.Boolean(), default=False)
+
     order = db.Column(db.Integer)
 
     categories = db.relationship("BoardCategory",
