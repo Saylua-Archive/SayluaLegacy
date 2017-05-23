@@ -1,4 +1,5 @@
-from flask import redirect as _redirect, url_for, render_template, g
+from flask import redirect as _redirect, url_for, render_template, g, flash
+
 from saylua.utils import is_devserver
 from functools import wraps
 
@@ -20,7 +21,7 @@ def devserver_only(f):
     return decorated_function
 
 
-def login_required(f, redirect='users.login'):
+def login_required(f, redirect='users.login', error='You must be logged in to use this feature.'):
     """Redirects non-logged in users to a specified location.
 
     Usage: `@login_required`, `@login_required(redirect=<url>)`
@@ -29,10 +30,21 @@ def login_required(f, redirect='users.login'):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not g.logged_in:
+            flash(error)
             return _redirect(url_for(redirect))
         return f(*args, **kwargs)
 
     return decorated_function
+
+
+# Based on http://www.artima.com/weblogs/viewpost.jsp?thread=240845
+class login_required_with_args(object):
+    def __init__(self, redirect='users.login', error='You must be logged in to use this feature.'):
+        self.redirect = redirect
+        self.error = error
+
+    def __call__(self, f):
+        return login_required(f, self.redirect, self.error)
 
 
 def email_confirmation_required(f, redirect='home.main'):

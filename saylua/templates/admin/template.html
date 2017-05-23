@@ -21,11 +21,11 @@
       Manage Invite Codes
     </a>
     <h4>Forums</h4>
-    <a href="/admin/forums/newboard/"{%- if request.url_rule.endpoint == 'new_board' %} class="active"{% endif %}>
-      Add New Boards
+    <a href="/admin/forums/boards/"{%- if request.url_rule.endpoint == 'manage_boards' %} class="active"{% endif %}>
+      Manage Boards
     </a>
     <a href="/admin/forums/newcategory/"{%- if request.url_rule.endpoint == 'new_board_category' %} class="active"{% endif %}>
-      Add New Board Category
+      Manage Categories
     </a>
   </div>
   <div class="admin-panel-content">

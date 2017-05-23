@@ -3,6 +3,7 @@
 .form-table {
   width: 90%;
   padding: 1em 0;
+  text-align: left;
 
   .label {
     width: 25%;
@@ -12,17 +13,15 @@
   td, th {
     font-weight: normal;
     padding: 0.5em 0.8rem;
-    text-align: left;
     vertical-align: top;
     background: none;
   }
 
-  input, textarea {
+  input[type="text"],
+  input[type="number"],
+  input[type="password"],
+  textarea {
     width: 100%;
-  }
-
-  input[type='submit'], input[type='checkbox'] {
-    width: auto;
   }
 
   textarea {

@@ -85,7 +85,7 @@
         {% if notifications_count > 99 %}
           <span class="alert-number">99+</span>
         {% elif notifications_count > 0 %}
-          <span class="alert-number">{{notifications_count}}</span>
+          <span class="alert-number">{{ notifications_count }}</span>
         {% endif %}
       </a>
       <a href="/messages/" class="navbar-link" data-section="messages-menu">
@@ -93,12 +93,12 @@
         {% if nav_messages_count > 99 %}
           <span class="alert-number">99+</span>
         {% elif nav_messages_count > 0 %}
-          <span class="alert-number">{{nav_messages_count}}</span>
+          <span class="alert-number">{{ nav_messages_count }}</span>
         {% endif %}
       </a>
       <div id="dropdown-user-menu" class="dropdown-menu">
         <div id="user-menu" class="menu">
-          <h3>Logged in as {{g.user.name}}</h3>
+          <h3>Logged in as {{ g.user.name }}</h3>
           <a href="{{ g.user.url() }}"><img src="/static/img/icons/user.png"> My Profile</a>
           <a href="/settings/"><img src="/static/img/icons/cog.png"> Account Settings</a>
           <span class="dropdown-separator"></span>

@@ -272,13 +272,13 @@ class PasswordResetCode(db.Model):
         self.user_id = user_id
 
     def expired(self):
-        return self.date_created < (datetime.datetime.now() - datetime.timedelta(days=1))
+        return self.date_created < (datetime.datetime.now() - datetime.timedelta(hours=1))
 
     def invalid(self):
         return self.expired() or self.used
 
     def url(self):
-        return '/login/reset/%s/%s' % (self.user_id, self.code)
+        return '/login/reset/%s/%s/' % (self.user_id, self.code)
 
 
 class EmailConfirmationCode(db.Model):

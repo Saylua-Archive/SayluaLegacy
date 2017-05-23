@@ -53,12 +53,17 @@
   }
 }
 
+#pet-actions {
+  padding: 0.5em 0.4rem;
+}
+
 .pet-profile-info {
   display: flex;
   flex-direction: row;
 
   align-items: flex-start;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .pet-profile-column {
@@ -70,6 +75,10 @@
   align-items: stretch;
 
   &.pet-profile-column-full {
+    width: 100%;
+  }
+
+  @media(max-width: 500px) {
     width: 100%;
   }
 }

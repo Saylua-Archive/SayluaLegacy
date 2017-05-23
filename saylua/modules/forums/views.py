@@ -4,7 +4,7 @@ from saylua import db
 from saylua.utils.pagination import Pagination
 
 from .models.db import Board, BoardCategory, ForumThread, ForumPost
-from .forms import ForumThreadForm, ForumPostForm
+from .forms.main import ForumThreadForm, ForumPostForm
 
 
 THREADS_PER_PAGE = 10
@@ -15,13 +15,13 @@ def forums_home():
     categories = (db.session.query(BoardCategory)
         .order_by(BoardCategory.order.asc())
         .all())
-    return render_template("main.html", categories=categories)
+    return render_template("forums_home.html", categories=categories)
 
 
 def forums_board(canon_name):
     form = ForumThreadForm(request.form)
     try:
-        board = db.session.query(Board).filter(Board.canon_name == canon_name).one()
+        board = Board.by_canon_name(canon_name)
 
         if form.validate_on_submit():
             title = request.form.get('title')

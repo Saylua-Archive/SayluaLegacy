@@ -21,7 +21,8 @@ def landing():
 
 
 def news():
-    threads = db.session.query(ForumThread).join(ForumThread.board).filter(Board.is_news == True)
+    threads = db.session.query(ForumThread).join(ForumThread.board).filter(
+        Board.is_news == True).order_by(ForumThread.date_created.desc())
     return render_template("newspaper/news.html", threads=threads)
 
 
