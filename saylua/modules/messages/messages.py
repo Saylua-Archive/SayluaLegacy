@@ -1,6 +1,7 @@
 from flask import render_template, redirect, flash, request, g
 import flask_sqlalchemy
 from saylua import db
+from saylua.utils.pagination import Pagination
 
 from saylua.wrappers import login_required
 from saylua.utils import pluralize, get_from_request
@@ -18,24 +19,16 @@ def messages_main():
     page_number = request.args.get('page', 1)
     page_number = int(page_number)
 
-    conversations = (
+    conversations_query = (
         db.session.query(ConversationHandle)
         .filter(ConversationHandle.user_id == g.user.id)
         .filter(ConversationHandle.hidden == False)
         .order_by(ConversationHandle.last_updated.desc())
         .order_by(ConversationHandle.unread)
-        .limit(CONVERSATIONS_PER_PAGE)
-        .offset((page_number - 1) * CONVERSATIONS_PER_PAGE)
-        .all()
     )
-    conversation_count = (
-        db.session.query(ConversationHandle.user_id)
-        .filter(ConversationHandle.user_id == g.user.id)
-        .filter(ConversationHandle.hidden == False)
-        .count()
-    )
-    page_count = (CONVERSATIONS_PER_PAGE + conversation_count - 1) // CONVERSATIONS_PER_PAGE
-    return render_template('messages/all.html', messages=conversations, page_count=page_count)
+
+    pagination = Pagination(per_page=CONVERSATIONS_PER_PAGE, query=conversations_query)
+    return render_template('messages/all.html', pagination=pagination)
 
 
 # The submit action for the user to update their messages.
