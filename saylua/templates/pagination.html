@@ -1,5 +1,3 @@
-{% macro pagination(current_page=1, page_count=10, url_base="?page=", url_end="", page_buffer=2) -%}
-
 {% if page_count > 1 %}
 
   {% if request.args.get('page') %}
@@ -58,4 +56,3 @@
   </div>
 
 {% endif %}
-{%- endmacro %}

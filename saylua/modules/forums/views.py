@@ -1,6 +1,7 @@
 from flask import render_template, redirect, g, flash, request
 import flask_sqlalchemy
 from saylua import db
+from saylua.utils.pagination import Pagination
 
 from .models.db import Board, BoardCategory, ForumThread, ForumPost
 from .forms import ForumThreadForm, ForumPostForm
@@ -34,32 +35,17 @@ def forums_board(canon_name):
             db.session.commit()
             return redirect(board.url())
 
-        page_number = request.args.get('page', 1)
-        page_number = int(page_number)
-
         threads_query = (
             db.session.query(ForumThread)
             .filter(ForumThread.board_id == board.id)
             .order_by(ForumThread.is_pinned.desc(), ForumThread.date_modified.desc())
         )
 
-        threads = (
-            threads_query
-            .limit(THREADS_PER_PAGE)
-            .offset((page_number - 1) * THREADS_PER_PAGE)
-            .all()
-        )
-
-        threads_count = (
-            db.session.query(ForumThread)
-            .filter(ForumThread.board_id == board.id)
-            .count()
-        )
-
-        page_count = (THREADS_PER_PAGE + threads_count - 1) // THREADS_PER_PAGE
+        pagination = Pagination(per_page=THREADS_PER_PAGE,
+            query=threads_query)
 
         return render_template("board.html", form=form,
-            board=board, threads=threads, page_count=page_count)
+            board=board, pagination=pagination)
 
     except (flask_sqlalchemy.orm.exc.MultipleResultsFound, flask_sqlalchemy.orm.exc.NoResultFound):
         return render_template('404.html'), 404
@@ -90,23 +76,13 @@ def forums_thread(thread_id):
             .order_by(ForumPost.date_created)
         )
 
-        posts = (
-            post_query
-            .limit(POSTS_PER_PAGE)
-            .offset((page_number - 1) * POSTS_PER_PAGE)
-        )
+        pagination = Pagination(per_page=POSTS_PER_PAGE,
+            query=post_query)
 
-        posts_count = (
-            db.session.query(ForumPost)
-            .filter(ForumPost.thread_id == thread_id)
-            .count()
-        )
-
-        page_count = (POSTS_PER_PAGE + posts_count - 1) // POSTS_PER_PAGE
         other_boards = db.session.query(Board).all()
 
         return render_template("thread.html", form=form, board=board, thread=thread,
-                posts=posts, page_count=page_count, other_boards=other_boards)
+                pagination=pagination, other_boards=other_boards)
 
     except (flask_sqlalchemy.orm.exc.MultipleResultsFound, flask_sqlalchemy.orm.exc.NoResultFound):
         return render_template('404.html'), 404
