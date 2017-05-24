@@ -1,4 +1,3 @@
-{% from "_macros/pagination.html" import pagination %}
 {% from "_macros/forms.html" import form_errors %}
 {% extends "layout.html" %}
 {% set page_title = thread.title %}
@@ -28,11 +27,11 @@
 </div>
 
 <div class="pagination center">
-  {{ pagination(page_count=page_count) }}
+  {{ pagination.render() }}
 </div>
 
 <div class="forum-posts-container">
-{% for post in posts %}
+{% for post in pagination.items %}
   <div class="forum-post" id="forum-post-{{ loop.index }}">
     <div class="forum-post-info">
       <a href="{{ post.author.url() }}">{{ post.author.name }}</a>
@@ -66,7 +65,7 @@
 </div>
 
 <div class="center">
-{{ pagination(page_count=page_count) }}
+{{ pagination.render() }}
 </div>
 
 <form method="post" class="validated-form" id="write-forum-reply">

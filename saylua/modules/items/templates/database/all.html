@@ -1,4 +1,3 @@
-{% from "_macros/pagination.html" import pagination %}
 {% extends "layout.html" %}
 {% set page_title = "Item Database" %}
 
@@ -8,9 +7,9 @@
 {% block body %}
 <h1>Item Database</h1>
 <div class="center">
-  {{ pagination() }}
+  {{ pagination.render() }}
 </div>
-{% for item in items %}
+{% for item in pagination.items %}
 <div>
   <a href="{{ item.url() }}">
     <img src="{{ item.image_url() }}" class="item">
@@ -19,6 +18,6 @@
 </div>
 {% endfor %}
 <div class="center">
-  {{ pagination() }}
+  {{ pagination.render() }}
 </div>
 {% endblock %}

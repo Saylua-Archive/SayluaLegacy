@@ -1,4 +1,3 @@
-{% from "_macros/pagination.html" import pagination %}
 {% from "_macros/forms.html" import form_row %}
 {% extends "layout.html" %}
 {% set page_title = board.title %}
@@ -32,7 +31,7 @@
     </div>
   </div>
 </h2>
-{% for thread in threads %}
+{% for thread in pagination.items %}
 <div class="forum-thread">
   <div class="forum-thread-icon">
     <img src="/static/img/icons/lock.png" />
@@ -75,7 +74,7 @@
 {% endfor %}
 
 <div class="center">
-{{ pagination(page_count=page_count) }}
+{{ pagination.render() }}
 </div>
 
 <h2 class="forum-board-header" id="write-thread">
