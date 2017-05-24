@@ -16,7 +16,7 @@
   </div>
 </div>
 {% if g.user and pet.owner_id == g.user.id %}
-<div id="pet-actions" class="center">
+<div class="center pet-actions">
   <form id="accompany" action="/accompany/{{ pet.soul_name }}/" method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     {% if g.user.companion_id == pet.id %}
@@ -26,6 +26,9 @@
     {% endif %}
     <input type="submit" value="{{ button_text }}" name="accompany" />
   </form>
+  <a href="/edit_pet/{{ pet.soul_name }}/">
+    <input type="submit" value="Edit Profile" />
+  </a>
 </div>
 {% endif %}
 {% if pet.owner_id is none %}
