@@ -29,6 +29,7 @@ def manage_boards():
         category = form.category.data
         description = form.description.data
         is_news = form.is_news.data
+        moderators_only = form.moderators_only
 
         category = db.session.query(BoardCategory).get(category)
 
@@ -38,9 +39,20 @@ def manage_boards():
             flash("Board name is too similar to an existing board.", 'error')
         else:
             new_board = Board(title=title, canon_name=canon_name,
-                categories=[category], description=description, is_news=is_news)
+                categories=[category], description=description, is_news=is_news,
+                moderators_only=moderators_only)
             db.session.add(new_board)
             db.session.commit()
 
             flash("New board: \"" + title + "\" successfully created!")
-    return render_template("admin/boards.html", form=form)
+    return render_template("admin/boards.html", form=form, categories=categories)
+
+
+@admin_access_required
+def edit_board(canon_name):
+    board = Board.by_canon_name(canon_name)
+    form = ForumBoardForm(request.form, obj=board)
+    categories = db.session.query(BoardCategory).all()
+    form.category.choices = [(c.id, c.title) for c in categories]
+
+    return render_template("admin/board_edit.html", form=form)

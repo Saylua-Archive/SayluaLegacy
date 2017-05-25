@@ -7,6 +7,8 @@ urlpatterns = [
     # Admin Views
     url('/admin/forums/boards/', view_func=admin_views.manage_boards,
         name='admin_board', methods=['GET', 'POST']),
+    url('/admin/forums/boards/<canon_name>/', view_func=admin_views.edit_board,
+        name='admin_board_edit', methods=['GET', 'POST']),
     url('/admin/forums/newcategory/', view_func=admin_views.new_board_category,
         name='admin_new_category', methods=['GET', 'POST']),
 

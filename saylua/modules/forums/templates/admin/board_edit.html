@@ -1,10 +1,11 @@
 {% from "_macros/forms.html" import form_row, form_checkbox %}
 
 {% extends "admin/template.html" %}
-{% set section_title = "Manage Boards" %}
+{% set section_title = "Edit Existing Board" %}
 {% block section_body %}
 
-<h2>Create New Board</h2>
+<h2>Edit Existing Board</h2>
+
 <form method="post" class="validated-form">
   <table class="form-table">
     {{ form_row(form.title) }}
@@ -28,23 +29,4 @@
   {{ form.csrf_token }}
 </form>
 
-<h2>Edit Existing Boards</h2>
-
-{% for category in categories %}
-  <h3>
-    {{ category.title }}
-  </h3>
-  <table class="alternating-table">
-    {% for board in category.boards %}
-    <tr>
-      <td>
-        {{ board.title }}
-      </td>
-      <td>
-        <a href="/admin/forums/boards/{{ board.canon_name }}/">Edit Board</a>
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
-{% endfor %}
 {% endblock %}

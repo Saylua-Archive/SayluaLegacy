@@ -25,8 +25,11 @@ class BoardCategory(db.Model):
         lazy='dynamic'
     )
 
-    def get_boards(self):
-        return self.boards.order_by(Board.order.asc())
+    def get_boards(self, user=None):
+        query = self.boards
+        if not user or not user.has_moderation_access():
+            query = query.filter(Board.moderators_only == False)
+        return query.order_by(Board.order.asc()).all()
 
 
 class Board(db.Model):
@@ -42,7 +45,7 @@ class Board(db.Model):
     description = db.Column(db.Text())
 
     is_news = db.Column(db.Boolean(), default=False)
-    requires_moderator = db.Column(db.Boolean(), default=False)
+    moderators_only = db.Column(db.Boolean(), default=False)
 
     order = db.Column(db.Integer)
 
