@@ -27,7 +27,7 @@ class BoardCategory(db.Model):
 
     def get_boards(self, user=None):
         query = self.boards
-        if not user or not user.has_moderation_access():
+        if not (user and user.has_moderation_access()):
             query = query.filter(Board.moderators_only == False)
         return query.order_by(Board.order.asc()).all()
 

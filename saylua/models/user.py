@@ -107,7 +107,7 @@ class User(db.Model):
     def is_muted(self):
         return self.permamuted or (self.muted_until and self.muted_until > datetime.datetime.now())
 
-    def has_moderation_acess(self):
+    def has_moderation_access(self):
         return self.role.can_moderate
 
     def has_admin_access(self):
