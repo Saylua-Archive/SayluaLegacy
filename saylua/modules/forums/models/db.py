@@ -1,4 +1,4 @@
-from saylua import db
+from saylua import db, app
 
 
 r_board_categories = db.Table('r_board_categories',
@@ -44,7 +44,6 @@ class Board(db.Model):
     canon_name = db.Column(db.String(256), unique=True)
     description = db.Column(db.Text())
 
-    is_news = db.Column(db.Boolean(), default=False)
     moderators_only = db.Column(db.Boolean(), default=False)
 
     order = db.Column(db.Integer)
@@ -58,6 +57,9 @@ class Board(db.Model):
 
     def url(self):
         return "/forums/board/" + self.canon_name + "/"
+
+    def is_new(self):
+        return self.canon_name == app.config.get('NEWS_BOARD_CANON_NAME')
 
     def latest_post(self):
         return (

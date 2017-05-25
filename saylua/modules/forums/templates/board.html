@@ -99,3 +99,7 @@
   {{ form.csrf_token }}
 </form>
 {% endblock %}
+
+{% block admin_actions %}
+<a href="/admin/forums/boards/{{ board.canon_name }}/" class="button">Edit Board</a>
+{% endblock %}

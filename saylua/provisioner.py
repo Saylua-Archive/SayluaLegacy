@@ -89,16 +89,6 @@ def generate_boards():
         category = BoardCategory(title=category)
         yield category
 
-        title = soul_name(7)
-        yield Board(
-            title=title + " announcements",
-            canon_name=title,
-            categories=[category],
-            description="Announcements for " + title,
-            is_news=True,
-            order=0
-        )
-
         for n in range(4):
             title = soul_name(7)
             description = "A board for talking about " + title
@@ -110,6 +100,15 @@ def generate_boards():
                 description=description,
                 order=(n + 1)
             )
+
+    title = soul_name(7)
+    yield Board(
+        title=title + " announcements",
+        canon_name='news',
+        categories=[category],
+        description="Announcements for " + title,
+        order=0
+    )
 
 
 def generate_threads():
