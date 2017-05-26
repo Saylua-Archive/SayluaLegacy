@@ -3,6 +3,8 @@ from saylua import db
 from saylua.wrappers import admin_access_required
 from flask import render_template, flash, request
 
+from sqlalchemy.exc import IntegrityError
+
 from .forms.admin import ForumBoardForm
 from .models.db import Board, BoardCategory
 
@@ -24,24 +26,17 @@ def manage_boards():
     categories = db.session.query(BoardCategory).all()
     form.category_id.choices = [(c.id, c.title) for c in categories]
     if form.validate_on_submit():
-        title = form.title.data
-        category = form.category_id.data
-        description = form.description.data
-        moderators_only = form.moderators_only
-        canon_name = form.canon_name.data
+        new_board = Board()
+        form.populate_obj(new_board)
 
-        category = db.session.query(BoardCategory).get(category)
-
-        if not canon_name or Board.by_canon_name(canon_name):
-            flash("Board name is too similar to an existing board.", 'error')
-        else:
-            new_board = Board(title=title, canon_name=canon_name,
-                categories=[category], description=description,
-                moderators_only=moderators_only)
+        try:
             db.session.add(new_board)
             db.session.commit()
 
-            flash("New board: \"" + title + "\" successfully created!")
+            flash("New board: \"" + new_board.title + "\" successfully created!")
+        except IntegrityError:
+            flash("Board canon name already exists!", "error")
+
     return render_template("admin/boards.html", form=form, categories=categories)
 
 
@@ -51,5 +46,13 @@ def edit_board(canon_name):
     form = ForumBoardForm(request.form, obj=board)
     categories = db.session.query(BoardCategory).all()
     form.category_id.choices = [(c.id, c.title) for c in categories]
+
+    if form.validate_on_submit():
+        form.populate_obj(board)
+
+        db.session.add(board)
+        db.session.commit()
+
+        flash("You've updated the board: " + board.title)
 
     return render_template("admin/board_edit.html", form=form)

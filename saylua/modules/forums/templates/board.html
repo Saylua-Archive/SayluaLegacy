@@ -83,6 +83,15 @@
   </div>
   Make a New Thread
 </h2>
+{% if not g.logged_in %}
+<p>
+  Please <a href="/login/">login</a> before posting any forum threads. 
+</p>
+{% elif not board.can_post(g.user) %}
+<p>
+  Sorry, you don't have permission to post on this board.
+</p>
+{% else %}
 <form method="post" class="validated-form">
   <table class="form-table">
     {{ form_row(form.title) }}
@@ -97,6 +106,7 @@
   </table>
   {{ form.csrf_token }}
 </form>
+{% endif %}
 {% endblock %}
 
 {% block admin_actions %}

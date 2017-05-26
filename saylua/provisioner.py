@@ -96,7 +96,7 @@ def generate_boards():
             yield Board(
                 title=title,
                 canon_name=title,
-                categories=[category],
+                category=category,
                 description=description,
                 order=(n + 1)
             )
@@ -105,7 +105,7 @@ def generate_boards():
     yield Board(
         title=title + " announcements",
         canon_name='news',
-        categories=[category],
+        category=category,
         description="Announcements for " + title,
         order=0
     )

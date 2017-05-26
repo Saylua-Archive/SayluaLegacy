@@ -1,4 +1,3 @@
-{% from "_macros/pagination.html" import pagination %}
 {% from "_macros/user_link.html" import user_link %}
 {% extends "layout.html" %}
 {% set page_title = "Users Online" %}
@@ -8,10 +7,10 @@
   {% for user in users_online %}
     {{ user_link(user) }}
   {% else %}
-    <p class="center full padded">
+    <p class="center">
       No one is online!
     </p>
-    <p class="center full padded">
+    <p class="center">
       <a href="/">Go back home?</a>
     </p>
   {% endfor %}
