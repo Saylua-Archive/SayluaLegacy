@@ -1,3 +1,5 @@
+{% from "_macros/highlighted_link.html" import highlighted_link %}
+
 {% extends "layout.html" %}
 {% set page_title = "User Settings: " + section_title %}
 {% block header_scripts %}
@@ -6,22 +8,12 @@
 {% block body %}
 <h1>User Settings: {{ section_title }} </h1>
 <div class="settings-row">
-  <div class="settings-menu">
-    <a href="/settings/"{%- if request.url_rule.endpoint == 'user_settings' %} class="active"{% endif %}>
-      General Settings
-    </a>
-    <a href="/settings/details/"{%- if request.url_rule.endpoint == 'user_settings_details' %} class="active"{% endif %}>
-      User Details
-    </a>
-    <a href="/settings/username/"{%- if request.url_rule.endpoint == 'user_settings_username' %} class="active"{% endif %}>
-      Change Username
-    </a>
-    <a href="/settings/email/"{%- if request.url_rule.endpoint == 'user_settings_email' %} class="active"{% endif %}>
-      Change Email
-    </a>
-    <a href="/settings/password/"{%- if request.url_rule.endpoint == 'user_settings_password' %} class="active"{% endif %}>
-      Change Password
-    </a>
+  <div class="section-sidebar">
+    {{ highlighted_link('General Settings', 'users.settings') }}
+    {{ highlighted_link('User Details', 'users.settings_details') }}
+    {{ highlighted_link('Change Username', 'users.settings_username') }}
+    {{ highlighted_link('Change Email', 'users.settings_email') }}
+    {{ highlighted_link('Change Password', 'users.settings_password') }}
   </div>
   <div class="settings-body">
     {% block section_body %}{% endblock %}

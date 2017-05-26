@@ -1,3 +1,5 @@
+{% from "_macros/highlighted_link.html" import highlighted_link %}
+
 {% extends "layout.html" %}
 {% set use_admin_theme = True %}
 {% set fullscreen = true %}
@@ -5,28 +7,16 @@
 {% block body %}
 <h1>Admin Panel: {{ section_title }} </h1>
 <div class="admin-panel-body">
-  <div class="admin-panel-menu">
+  <div class="section-sidebar">
     <h4>Items</h4>
-    <a href="/admin/items/add/"{%- if request.url_rule.endpoint == 'admin_panel_items_add' %} class="active"{% endif %}>
-      Add New Items
-    </a>
-    <a href="/admin/items/edit/"{%- if request.url_rule.endpoint == 'admin_panel_items_edit' %} class="active"{% endif %}>
-      Edit Items
-    </a>
+    {{ highlighted_link('Add New Items', 'items.admin_add') }}
+    {{ highlighted_link('Edit Items', 'items.admin_edit') }}
     <h4>Users</h4>
-    <a href="/admin/user/"{%- if request.url_rule.endpoint == 'user_manage' %} class="active"{% endif %}>
-      Manage Users
-    </a>
-    <a href="/admin/user/invite/"{%- if request.url_rule.endpoint == 'user_invite' %} class="active"{% endif %}>
-      Manage Invite Codes
-    </a>
+    {{ highlighted_link('Manage Users', 'users.admin_manage') }}
+    {{ highlighted_link('Manage Invite Codes', 'users.admin_invite') }}
     <h4>Forums</h4>
-    <a href="/admin/forums/boards/"{%- if request.url_rule.endpoint == 'manage_boards' %} class="active"{% endif %}>
-      Manage Boards
-    </a>
-    <a href="/admin/forums/newcategory/"{%- if request.url_rule.endpoint == 'new_board_category' %} class="active"{% endif %}>
-      Manage Categories
-    </a>
+    {{ highlighted_link('Manage Boards', 'forums.admin_boards') }}
+    {{ highlighted_link('Manage Categories', 'forums.admin_categories') }}
   </div>
   <div class="admin-panel-content">
     {% block section_body %}{% endblock %}

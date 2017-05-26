@@ -10,7 +10,7 @@ from .models.db import Board, BoardCategory
 
 
 @admin_access_required
-def new_board_category():
+def manage_categories():
     if request.method == 'POST':
         category = request.form.get('category')
         new_category = BoardCategory(title=category)
