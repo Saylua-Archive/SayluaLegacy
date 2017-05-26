@@ -1,8 +1,7 @@
 from saylua import app, db
-from saylua.models.role import Role
 from saylua.utils import is_devserver
 from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, ForumPost
-from saylua.models.user import User
+from saylua.models.user import User, Role
 from saylua.modules.items.models.db import Item, InventoryItem
 from saylua.modules.pets.models.db import Pet, Species, SpeciesCoat
 from saylua.modules.pets.soul_names import soul_name
@@ -90,16 +89,6 @@ def generate_boards():
         category = BoardCategory(title=category)
         yield category
 
-        title = soul_name(7)
-        yield Board(
-            title=title + " announcements",
-            canon_name=title,
-            categories=[category],
-            description="Announcements for " + title,
-            is_news=True,
-            order=0
-        )
-
         for n in range(4):
             title = soul_name(7)
             description = "A board for talking about " + title
@@ -111,6 +100,15 @@ def generate_boards():
                 description=description,
                 order=(n + 1)
             )
+
+    title = soul_name(7)
+    yield Board(
+        title=title + " announcements",
+        canon_name='news',
+        categories=[category],
+        description="Announcements for " + title,
+        order=0
+    )
 
 
 def generate_threads():
@@ -199,16 +197,12 @@ def setup():
 
         # Add the "user" role
         user_role = Role(name="user")
-        user_role.can_post_threads = True
-        user_role.can_comment = True
         db.session.add(user_role)
         print("User Role Created")
 
         # Add the "moderator" role
         moderator_role = Role(name="moderator")
-        moderator_role.can_post_threads = True
-        moderator_role.can_move_threads = True
-        moderator_role.can_comment = True
+        moderator_role.can_moderate = True
         db.session.add(moderator_role)
         print("Moderator Role Created")
 

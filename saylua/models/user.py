@@ -14,6 +14,12 @@ class InvalidCurrencyException(Exception):
     pass
 
 
+r_user_titles = db.Table('r_user_titles',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
+    db.Column('title_id', db.Integer, db.ForeignKey('titles.id'))
+)
+
+
 class User(db.Model):
     """The greatest User model of all time.
     """
@@ -36,7 +42,13 @@ class User(db.Model):
     password_hash = db.Column(db.String(200))
 
     # Role
-    role_name = db.Column(db.String(100), default="user")
+    role_name = db.Column(db.String(256), db.ForeignKey("roles.name"), default="user")
+    role = db.relationship("Role")
+
+    titles = db.relationship("Title",
+        secondary=r_user_titles,
+        back_populates="users"
+    )
 
     # Active Companion
     companion_id = db.Column(db.Integer, db.ForeignKey("pets.id"))
@@ -46,7 +58,10 @@ class User(db.Model):
 
     # Ban Status
     permabanned = db.Column(db.Boolean, default=False)
-    banned_until = db.Column(db.DateTime, server_default=db.func.now())
+    banned_until = db.Column(db.DateTime)
+
+    permamuted = db.Column(db.Boolean, default=False)
+    muted_until = db.Column(db.DateTime)
 
     # Currency
     star_shards = db.Column(db.Integer, default=0)
@@ -86,13 +101,17 @@ class User(db.Model):
     def url(self):
         return "/user/" + self.name.lower() + "/"
 
-    def get_role(self):
-        from saylua.models.role import Role
-        return (
-            db.session.query(Role)
-            .filter(Role.name == self.role_name)
-            .one_or_none()
-        )
+    def is_banned(self):
+        return self.permabanned or (self.banned_until and self.banned_until > datetime.datetime.now())
+
+    def is_muted(self):
+        return self.permamuted or (self.muted_until and self.muted_until > datetime.datetime.now())
+
+    def has_moderation_access(self):
+        return self.role.can_moderate
+
+    def has_admin_access(self):
+        return self.role.can_admin
 
     def make_email_confirmation_code(self):
         code = EmailConfirmationCode(self.id, self.email)
@@ -187,6 +206,44 @@ class User(db.Model):
             self.cloud_coins = cloud_coins
 
         self.bank_account = BankAccount()
+
+
+class Title(db.Model):
+    """Defines permissions for users.
+
+    Many to many with Users.
+    """
+
+    __tablename__ = "titles"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256), unique=True)
+    color = db.Column(db.String(256))
+
+    users = db.relationship("User",
+        secondary=r_user_titles,
+        back_populates="titles",
+        lazy='dynamic'
+    )
+
+
+class Role(db.Model):
+    """Defines permissions for users.
+
+    No explicit relationships exist between this and any
+    other model.
+    """
+
+    __tablename__ = "roles"
+
+    name = db.Column(db.String(256), primary_key=True)
+
+    # Access to forum moderation features.
+    can_moderate = db.Column(db.Boolean, default=False)
+
+    # This give access to anything you can do on the site.
+    # Note: For now granting roles is done through only the database.
+    can_admin = db.Column(db.Boolean, default=False)
 
 
 class BankAccount(db.Model):

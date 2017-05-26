@@ -193,6 +193,16 @@ class MatchesRegex(SayluaValidator):
         return self.regex
 
 
+class CanonName(MatchesRegex):
+    def __init__(self, message=None):
+        self.regex = app.config['CANON_NAME_REGEX']
+        self.message = message
+        self.defaultMessage = 'Canon names may only contain lowercase letters, numbers, and _'
+
+    def clientValidatorMessage(self):
+        return self.message or self.defaultMessage
+
+
 class Email(MatchesRegex):
     def __init__(self, message=None):
         self.regex = app.config['EMAIL_REGEX']

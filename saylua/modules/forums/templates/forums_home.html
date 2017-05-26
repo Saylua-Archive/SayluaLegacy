@@ -17,6 +17,8 @@
   </div>
 </div>
 {% for category in categories %}
+{% set boards = category.get_boards(g.user) %}
+{% if boards %}
 <ul class="forum-main-list">
   <li class="forum-category-header">
     <div class="forum-board-icon">
@@ -29,7 +31,7 @@
       </span>
     </div>
   </li>
-  {% for board in category.get_boards() %}
+  {% for board in category.get_boards(g.user) %}
   <li class="forum-board-row">
     <img src="{{ random_item_image() }}" class="forum-board-icon faded" />
     <div class="forum-row-content">
@@ -57,9 +59,10 @@
   </li>
   {% endfor %}
 </ul>
+{% endif %}
 {% endfor %}
 {% endblock %}
 
-{% block staff_actions %}
+{% block admin_actions %}
 <a href="/admin/forums/boards/" class="button">Manage Forum Boards</a>
 {% endblock %}

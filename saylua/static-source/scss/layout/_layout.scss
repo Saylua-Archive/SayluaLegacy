@@ -124,7 +124,8 @@
   }
 }
 
-.staff-actions {
+.admin-actions,
+.moderation-actions {
   @extend %content-width;
   display: flex;
   flex-direction: row;
@@ -132,14 +133,12 @@
   flex-grow: 1;
   flex-shrink: 0;
 
-  .staff-actions-content {
+  .admin-actions-content,
+  .moderation-actions-content {
     display: flex;
     flex-direction: row;
     padding: 0.5em 4px;
     text-align: center;
-    border: 2px dotted $neutralDarkColor;
-
-    background: $neutralColor;
 
     align-items: center;
     flex-grow: 1;
@@ -155,6 +154,16 @@
     @media(max-width: 500px) {
       flex-direction: column;
     }
+  }
+
+  .moderation-actions-content {
+    border: 2px dotted $neutralDarkColor;
+    background: $neutralColor;
+  }
+
+  .admin-actions-content {
+    border: 2px dotted $highlightDarkColor;
+    background: $highlightSoftColor;
   }
 }
 
@@ -202,13 +211,6 @@ footer {
     justify-content: flex-start;
   }
 
-  .avatar-view {
-    display: block;
-    overflow: hidden;
-    width: 100%;
-    height: 100px;
-  }
-
   .sidebar {
     flex-direction: row;
     width: 100%;
@@ -216,6 +218,55 @@ footer {
 
     align-items: center;
     justify-content: center;
+
+    .sidebar-section {
+      max-width: 70%;
+    }
+
+    // The pet and human avatar view has to become landscape.
+    .pet-avatar-view {
+      position: static;
+      display: flex;
+      flex-direction: row;
+      padding: 1em 0.8rem;
+
+      .avatar-view {
+        position: relative;
+        display: block;
+        width: 50%;
+        padding: 0;
+        margin: 0;
+
+        flex-grow: 0;
+        flex-shrink: 0;
+
+        &:after {
+          content: '';
+          display: block;
+          margin: 0;
+          padding: 0;
+          padding-bottom: 100%;
+        }
+
+        a {
+          position: absolute;
+          display: block;
+          overflow: hidden;
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .active-pet-view {
+        position: static;
+        width: 50%;
+        margin: 0;
+        padding: 0;
+
+        flex-grow: 0;
+        flex-shrink: 0;
+      }
+    }
   }
 
   .sidebar-filler {
