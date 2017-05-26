@@ -15,6 +15,17 @@ def pet_profile(name):
 
 
 @login_required
+def edit_pet(name):
+    pet = db.session.query(Pet).filter(Pet.soul_name == name).one_or_none()
+    if pet is None:
+        return render_template('404.html'), 404
+    if pet.owner_id != g.user.id:
+        flash("You can't edit {}'s profile!".format(pet.name))
+        return redirect('/pet/' + pet.soul_name, code=302)
+    return render_template("edit_pet.html", pet=pet)
+
+
+@login_required
 def pet_accompany(soul_name):
     if soul_name:
         companion = db.session.query(Pet).filter(Pet.soul_name == soul_name).one_or_none()
