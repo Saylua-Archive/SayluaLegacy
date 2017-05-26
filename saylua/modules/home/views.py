@@ -1,6 +1,6 @@
 from flask import render_template, redirect, g
 
-from saylua import db
+from saylua import db, app
 from saylua.utils import is_devserver
 from saylua.modules.forums.models.db import ForumThread, Board
 
@@ -21,9 +21,12 @@ def landing():
 
 
 def news():
+    news_canon_name = app.config.get('NEWS_BOARD_CANON_NAME')
     threads = db.session.query(ForumThread).join(ForumThread.board).filter(
-        Board.is_news == True).order_by(ForumThread.date_created.desc())
-    return render_template("newspaper/news.html", threads=threads)
+        Board.canon_name == news_canon_name).order_by(
+        ForumThread.date_created.desc())
+    return render_template("newspaper/news.html", threads=threads,
+        news_canon_name=news_canon_name)
 
 
 def puzzle():

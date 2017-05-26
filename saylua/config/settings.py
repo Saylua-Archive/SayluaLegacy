@@ -22,6 +22,7 @@ MAX_USERNAMES = 10
 # Regexes and stuff.
 EMAIL_REGEX = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
 USERNAME_REGEX = '^[A-Za-z0-9+~._-]+$'
+CANON_NAME_REGEX = '^[a-z0-9+_]+$'
 
 # Registration settings.
 REGISTRATION_DISABLED = False
@@ -32,3 +33,6 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # Email settings
 AUTOSEND_EMAIL = 'Saylua <noreply@mg.saylua.com>'
+
+# The canon name used to pull in news.
+NEWS_BOARD_CANON_NAME = 'news'

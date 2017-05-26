@@ -74,13 +74,25 @@
 </div>
 {% endblock %}
 
-{% if self.staff_actions() %}
-<div id="staff-actions" class="staff-actions">
+{% if self.moderation_actions() and g.logged_in and g.user.has_moderation_access() %}
+<div id="moderation-actions" class="moderation-actions">
   <div class="sidebar-filler"></div>
-  <div class="staff-actions-content">
-    <h3>Staff actions</h3>
+  <div class="moderation-actions-content">
+    <h3>Moderation actions</h3>
     <div>
-      {% block staff_actions %}{% endblock %}
+      {% block moderation_actions %}{% endblock %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if self.admin_actions() and g.logged_in and g.user.has_admin_access() %}
+<div id="admin-actions" class="admin-actions">
+  <div class="sidebar-filler"></div>
+  <div class="admin-actions-content">
+    <h3>Admin actions</h3>
+    <div>
+      {% block admin_actions %}{% endblock %}
     </div>
   </div>
 </div>
@@ -118,7 +130,7 @@
     <p>
       &copy; 2016 <a href="/">Saylua</a>
     </p>
-    {% if g.logged_in and g.user.get_role().can_access_admin %}
+    {% if g.logged_in and g.user.has_admin_access() %}
     <p>
       <a href="/admin/">Admin Panel</a>
     </p>
