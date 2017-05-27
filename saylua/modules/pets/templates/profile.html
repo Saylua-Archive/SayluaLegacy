@@ -16,7 +16,7 @@
   </div>
 </div>
 {% if g.user and pet.owner_id == g.user.id %}
-<div id="pet-actions" class="center">
+<div class="center pet-actions">
   <form id="accompany" action="/accompany/{{ pet.soul_name }}/" method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     {% if g.user.companion_id == pet.id %}
@@ -26,6 +26,9 @@
     {% endif %}
     <input type="submit" value="{{ button_text }}" name="accompany" />
   </form>
+  <a href="/edit_pet/{{ pet.soul_name }}/">
+    <input type="submit" value="Edit Profile" />
+  </a>
 </div>
 {% endif %}
 {% if pet.owner_id is none %}
@@ -41,12 +44,7 @@
 <div class="pet-profile-column pet-profile-column-full">
   <div class="pet-profile-box">
     <h2>{{ pet.name }}'s Description</h2>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
+    {{ pet.description }}
   </div>
 </div>
 <div class="pet-profile-info">
@@ -68,7 +66,7 @@
         </tr>
         <tr>
           <td>Pronouns</td>
-          <td>She / her</td>
+          <td>{{ pet.pronouns }}</td>
         </tr>
       </table>
     </div>
