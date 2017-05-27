@@ -46,6 +46,7 @@ class Pet(db.Model):
     # Personal profile information for the pet
     name = db.Column(db.String(80))
     description = db.Column(db.Text)
+    pronouns = db.Column(db.String(80))
     date_bonded = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
     # If either of these is set to a number other than 0, the pet is for sale

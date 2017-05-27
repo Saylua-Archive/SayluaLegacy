@@ -10,6 +10,8 @@ MAX_USERNAME_LENGTH = 15
 MIN_PASSWORD_LENGTH = 5
 MAX_PASSWORD_LENGTH = 200
 
+MAX_PET_NAME_LENGTH = 80
+
 MAX_USER_STATUS_LENGTH = 15
 
 # Number of minutes from a user's last action for them to be counted as online.

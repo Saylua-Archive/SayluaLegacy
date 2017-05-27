@@ -1,0 +1,25 @@
+{% from "_macros/forms.html" import form_row %}
+{% extends "layout.html" %}
+{% set page_title = "Pet Profile" %}
+{% block header_scripts %}
+<link rel="stylesheet" href="{{ include_static('css/pets.min.css') }}">
+{% endblock %}
+{% block body %}
+<h1>Edit {{pet.name}}'s Profile</h1>
+<form method="post" class="validated-form">
+  <table class="form-table">
+    {{ form_row(form.name) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.pronouns) }}
+    <tr>
+      <td td colspan="2" class="center">
+        <input type="submit" name="submit" value="Save Changes">
+      </td>
+    </tr>
+  </table>
+  {{ form.csrf_token }}
+</form>
+
+{% endblock %}
+{% block footer_scripts %}
+{% endblock %}
