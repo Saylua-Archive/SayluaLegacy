@@ -24,23 +24,13 @@ def edit_pet(name):
         flash("You can't edit {}'s profile!".format(pet.name))
         return redirect('/pet/' + pet.soul_name, code=302)
     form = PetEditForm(request.form, obj=pet)
-    return render_template("edit_pet.html", pet=pet, form=form)
-
-
-@login_required
-def edit_pet_post(name):
-    pet = db.session.query(Pet).filter(Pet.soul_name == name).one_or_none()
-    if pet is None:
-        return render_template('404.html'), 404
-    if pet.owner_id != g.user.id:
-        flash("You can't edit {}'s profile!".format(pet.name))
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            form.populate_obj(pet)
+            db.session.commit()
+            flash("Your settings have been saved.")
         return redirect('/pet/' + pet.soul_name, code=302)
-    form = PetEditForm(request.form)
-    if form.validate_on_submit():
-        form.populate_obj(pet)
-        db.session.commit()
-        flash("Your settings have been saved.")
-    return redirect('/pet/' + pet.soul_name, code=302)
+    return render_template("edit_pet.html", pet=pet, form=form)
 
 
 @login_required
