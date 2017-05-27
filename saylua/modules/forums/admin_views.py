@@ -5,19 +5,33 @@ from flask import render_template, flash, request
 
 from sqlalchemy.exc import IntegrityError
 
-from .forms.admin import ForumBoardForm
+from .forms.admin import ForumBoardForm, ForumCategoryForm
 from .models.db import Board, BoardCategory
 
 
 @admin_access_required
 def manage_categories():
-    if request.method == 'POST':
-        category = request.form.get('category')
-        new_category = BoardCategory(title=category)
-        db.session.add(new_category)
+    add_form = ForumCategoryForm(request.form)
+    if request.form.get('add') and add_form.validate_on_submit():
+        category = BoardCategory()
+        add_form.populate_obj(category)
+        db.session.add(category)
         db.session.commit()
-        flash("New category: " + category + " successfully created.")
-    return render_template("admin/add_category.html")
+        flash("New category: " + category.title + " successfully created.")
+
+    edit_forms = []
+    categories = db.session.query(BoardCategory).all()
+    for c in categories:
+        form = ForumCategoryForm(request.form, obj=c)
+        edit_forms.append(form)
+
+        if request.form.get('edit') and form.validate_on_submit():
+            form.populate_obj(c)
+            db.session.add(c)
+            db.session.commit()
+
+    return render_template("admin/categories.html", categories=categories,
+        add_form=add_form, edit_forms=edit_forms)
 
 
 @admin_access_required

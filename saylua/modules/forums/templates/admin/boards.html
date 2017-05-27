@@ -37,11 +37,14 @@
   <table class="alternating-table">
     {% for board in category.boards %}
     <tr>
-      <td>
-        {{ board.title }}
+      <td style="width: 70%;">
+        {{ board.title }} 
+        (<a href="{{ board.url() }}">View</a>)
       </td>
       <td>
-        <a href="/admin/forums/boards/{{ board.canon_name }}/">Edit Board</a>
+        <a href="/admin/forums/boards/{{ board.canon_name }}/">
+          Edit Board
+        </a>
       </td>
     </tr>
     {% endfor %}

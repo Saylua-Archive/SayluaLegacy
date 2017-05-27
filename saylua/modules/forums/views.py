@@ -81,7 +81,7 @@ def forums_thread(thread_id):
 
         other_boards = db.session.query(Board).all()
 
-        return render_template("thread.html", form=form, board=board, thread=thread,
+        return render_template("thread.html", form=form, thread=thread,
                 pagination=pagination, other_boards=other_boards)
 
     except (flask_sqlalchemy.orm.exc.MultipleResultsFound, flask_sqlalchemy.orm.exc.NoResultFound):

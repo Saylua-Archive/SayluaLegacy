@@ -10,7 +10,8 @@
 <div class="forum-thread-controls">
   <span class="forum-breadcrumb">
     <a href="/forums/">Forums</a> &#187;
-    <a href="{{ board.url() }}"> {{ board.title }}</a> &#187;
+    <a href="{{ board.category.url() }}">{{ thread.board.category.title }}</a> &#187;
+    <a href="{{ board.url() }}"> {{ thread.board.title }}</a> &#187;
     {{ truncate(thread.title, 40) }}
   </span>
 

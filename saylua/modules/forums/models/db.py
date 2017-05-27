@@ -11,12 +11,15 @@ class BoardCategory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(128))
 
-    order = db.Column(db.Integer)
+    order = db.Column(db.Integer, default=1)
 
     boards = db.relationship("Board",
         back_populates="category",
         lazy='dynamic'
     )
+
+    def url(self):
+        return '/forums/#' + self.title
 
     def get_boards(self, user=None):
         query = self.boards

@@ -7,7 +7,9 @@
 {% block body %}
 <h1>Viewing Board: {{ board.title }}</h1>
 <span class="forum-breadcrumb center">
-  <a href="/forums/">Forums</a> &#187; {{ board.title }}
+  <a href="/forums/">Forums</a> &#187;
+  <a href="{{ board.category.url() }}">{{ board.category.title }}</a> &#187; 
+  {{ board.title }}
 </span>
 
 <a class="write-thread-link" href="#write-thread">
@@ -85,7 +87,7 @@
 </h2>
 {% if not g.logged_in %}
 <p>
-  Please <a href="/login/">login</a> before posting any forum threads. 
+  Please <a href="/login/">login</a> before posting any forum threads.
 </p>
 {% elif not board.can_post(g.user) %}
 <p>

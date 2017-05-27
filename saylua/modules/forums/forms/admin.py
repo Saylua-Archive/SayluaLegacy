@@ -24,3 +24,11 @@ class ForumBoardForm(FlaskForm):
     order = SlIntegerField('Sort Order')
 
     moderators_only = SlBooleanField('Restrict this board to moderators')
+
+
+class ForumCategoryForm(FlaskForm):
+    title = SlField('Category Title', [
+        sl_validators.Required(),
+        sl_validators.NotBlank(),
+        sl_validators.Min(3)])
+    order = SlIntegerField('Sort Order')

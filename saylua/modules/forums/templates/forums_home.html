@@ -20,7 +20,7 @@
 {% set boards = category.get_boards(g.user) %}
 {% if boards %}
 <ul class="forum-main-list">
-  <li class="forum-category-header">
+  <li class="forum-category-header" id="{{ category.title }}">
     <div class="forum-board-icon">
       <img src="{{ random_pet_image() }}" />
     </div>
