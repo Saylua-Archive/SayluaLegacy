@@ -1,12 +1,6 @@
 from saylua import db, app
 
 
-r_board_categories = db.Table('r_board_categories',
-    db.Column('board_id', db.Integer, db.ForeignKey('forum_boards.id')),
-    db.Column('category_id', db.Integer, db.ForeignKey('forum_board_categories.id'))
-)
-
-
 class BoardCategory(db.Model):
     """Forum Board Categories.
     Many to Many relationship with `Board`.
@@ -15,21 +9,32 @@ class BoardCategory(db.Model):
     __tablename__ = "forum_board_categories"
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(128))
+    title = db.Column(db.String(256))
+    canon_name = db.Column(db.String(256), unique=True)
 
-    order = db.Column(db.Integer)
+    order = db.Column(db.Integer, default=1)
 
     boards = db.relationship("Board",
-        secondary=r_board_categories,
-        back_populates="categories",
+        back_populates="category",
         lazy='dynamic'
     )
+
+    def url(self):
+        return '/forums/#' + self.canon_name
 
     def get_boards(self, user=None):
         query = self.boards
         if not (user and user.has_moderation_access()):
             query = query.filter(Board.moderators_only == False)
         return query.order_by(Board.order.asc()).all()
+
+    @classmethod
+    def get_categories(cls):
+        return db.session.query(cls).order_by(cls.order.asc()).all()
+
+    @classmethod
+    def by_canon_name(cls, name):
+        return db.session.query(cls).filter(cls.canon_name == name.lower()).one_or_none()
 
 
 class Board(db.Model):
@@ -48,8 +53,8 @@ class Board(db.Model):
 
     order = db.Column(db.Integer)
 
-    categories = db.relationship("BoardCategory",
-        secondary=r_board_categories,
+    category_id = db.Column(db.Integer, db.ForeignKey('forum_board_categories.id'))
+    category = db.relationship("BoardCategory",
         back_populates="boards"
     )
 
@@ -58,8 +63,13 @@ class Board(db.Model):
     def url(self):
         return "/forums/board/" + self.canon_name + "/"
 
-    def is_new(self):
+    def is_news(self):
         return self.canon_name == app.config.get('NEWS_BOARD_CANON_NAME')
+
+    def can_post(self, user):
+        result = user
+        result = result and (not self.is_news()) or user.has_admin_access()
+        return result
 
     def latest_post(self):
         return (

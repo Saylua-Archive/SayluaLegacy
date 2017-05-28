@@ -1,0 +1,37 @@
+{% from "_macros/forms.html" import form_row %}
+
+{% extends "admin/template.html" %}
+{% set section_title = "Manage Board Categories" %}
+
+{% block section_body %}
+<h2>Edit Existing Categories</h2>
+<table class="alternating-table">
+  {% for category in categories %}
+  <tr>
+    <td>
+      {{ category.title }}
+      (<a href="{{ category.url() }}">View</a>)
+    </td>
+    <td>
+      <a href="/admin/forums/categories/{{ category.canon_name }}/">Edit</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h2>Add New Board Category</h2>
+<form method="post" class="validated-form">
+  <table class="form-table">
+    {{ form_row(form.title) }}
+    {{ form_row(form.canon_name) }}
+    {{ form_row(form.order) }}
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" value="Add New Category" name="add" />
+      </td>
+    </tr>
+  </table>
+  {{ form.csrf_token }}
+</form>
+{% endblock %}
