@@ -30,24 +30,30 @@
 
 <h2>Edit Existing Boards</h2>
 
+<table class="alternating-table">
 {% for category in categories %}
-  <h3>
-    {{ category.title }}
-  </h3>
-  <table class="alternating-table">
-    {% for board in category.boards %}
-    <tr>
-      <td style="width: 70%;">
-        {{ board.title }} 
-        (<a href="{{ board.url() }}">View</a>)
-      </td>
-      <td>
-        <a href="/admin/forums/boards/{{ board.canon_name }}/">
-          Edit Board
-        </a>
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
+  <tr class="h3 header">
+    <td>
+      {{ category.title }}
+    </td>
+    <td class="small">
+      (<a href="{{ category.url() }}">View Category</a> /
+      <a href="/admin/forums/categories/{{ category.canon_name }}/">Edit Category</a>)
+    </td>
+  </tr>
+  {% for board in category.boards %}
+  <tr>
+    <td>
+      {{ board.title }}
+      (<a href="{{ board.url() }}">View</a>)
+    </td>
+    <td>
+      <a href="/admin/forums/boards/{{ board.canon_name }}/">
+        Edit Board
+      </a>
+    </td>
+  </tr>
 {% endfor %}
+{% endfor %}
+</table>
 {% endblock %}

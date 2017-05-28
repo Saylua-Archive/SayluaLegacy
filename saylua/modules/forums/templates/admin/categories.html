@@ -1,38 +1,30 @@
 {% from "_macros/forms.html" import form_row %}
 
 {% extends "admin/template.html" %}
-{% set section_title = "New Board Category" %}
+{% set section_title = "Manage Board Categories" %}
+
 {% block section_body %}
-
-
 <h2>Edit Existing Categories</h2>
-<form method="post">
-  <table class="alternating-table">
-    <tr>
-      <td class="h3">Category Title</td>
-      <td class="h3">Sort Order</td>
-    </tr>
-    {% for form in edit_forms %}
-    <tr>
-      <td>
-        {{ form.title() }}
-      </td>
-      <td>
-        {{ form.order() }}
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
-
-  <input type="submit" value="Update Categories" class="center" />
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-</form>
+<table class="alternating-table">
+  {% for category in categories %}
+  <tr>
+    <td>
+      {{ category.title }}
+      (<a href="{{ category.url() }}">View</a>)
+    </td>
+    <td>
+      <a href="/admin/forums/categories/{{ category.canon_name }}/">Edit</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
 
 <h2>Add New Board Category</h2>
 <form method="post" class="validated-form">
   <table class="form-table">
-    {{ form_row(add_form.title) }}
-    {{ form_row(add_form.order) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.canon_name) }}
+    {{ form_row(form.order) }}
     <tr>
       <td></td>
       <td>
@@ -40,6 +32,6 @@
       </td>
     </tr>
   </table>
-  {{ add_form.csrf_token }}
+  {{ form.csrf_token }}
 </form>
 {% endblock %}

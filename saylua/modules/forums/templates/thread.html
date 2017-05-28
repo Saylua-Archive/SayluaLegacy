@@ -1,17 +1,19 @@
 {% from "_macros/forms.html" import form_errors %}
 {% extends "layout.html" %}
 {% set page_title = thread.title %}
+
 {% block header_scripts %}
-  <link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
 {% endblock %}
+
 {% block body %}
 <h1>{{ thread.title }}</h1>
 
 <div class="forum-thread-controls">
   <span class="forum-breadcrumb">
     <a href="/forums/">Forums</a> &#187;
-    <a href="{{ board.category.url() }}">{{ thread.board.category.title }}</a> &#187;
-    <a href="{{ board.url() }}"> {{ thread.board.title }}</a> &#187;
+    <a href="{{ thread.board.category.url() }}">{{ thread.board.category.title }}</a> &#187;
+    <a href="{{ thread.board.url() }}"> {{ thread.board.title }}</a> &#187;
     {{ truncate(thread.title, 40) }}
   </span>
 

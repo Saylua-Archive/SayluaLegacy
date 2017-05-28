@@ -4,6 +4,11 @@
 {% set use_admin_theme = True %}
 {% set fullscreen = true %}
 {% set page_title = "Admin Panel: " + section_title %}
+
+{% block header_scripts %}
+{% block section_header_scripts %}{% endblock %}
+{% endblock %}
+
 {% block body %}
 <h1>Admin Panel: {{ section_title }} </h1>
 <div class="admin-panel-body">

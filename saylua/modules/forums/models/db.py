@@ -9,7 +9,8 @@ class BoardCategory(db.Model):
     __tablename__ = "forum_board_categories"
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(128))
+    title = db.Column(db.String(256))
+    canon_name = db.Column(db.String(256), unique=True)
 
     order = db.Column(db.Integer, default=1)
 
@@ -19,13 +20,21 @@ class BoardCategory(db.Model):
     )
 
     def url(self):
-        return '/forums/#' + self.title
+        return '/forums/#' + self.canon_name
 
     def get_boards(self, user=None):
         query = self.boards
         if not (user and user.has_moderation_access()):
             query = query.filter(Board.moderators_only == False)
         return query.order_by(Board.order.asc()).all()
+
+    @classmethod
+    def get_categories(cls):
+        return db.session.query(cls).order_by(cls.order.asc()).all()
+
+    @classmethod
+    def by_canon_name(cls, name):
+        return db.session.query(cls).filter(cls.canon_name == name.lower()).one_or_none()
 
 
 class Board(db.Model):

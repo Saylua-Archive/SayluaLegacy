@@ -1,0 +1,22 @@
+{% from "_macros/forms.html" import form_row %}
+
+{% extends "admin/template.html" %}
+{% set section_title = "Edit Board Category" %}
+
+{% block section_body %}
+<h2>Edit Board Category</h2>
+<form method="post" class="validated-form">
+  <table class="form-table">
+    {{ form_row(form.title) }}
+    {{ form_row(form.canon_name) }}
+    {{ form_row(form.order) }}
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" value="Edit Category" />
+      </td>
+    </tr>
+  </table>
+  {{ form.csrf_token }}
+</form>
+{% endblock %}

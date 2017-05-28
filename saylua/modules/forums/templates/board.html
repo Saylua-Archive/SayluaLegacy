@@ -1,14 +1,16 @@
 {% from "_macros/forms.html" import form_row %}
 {% extends "layout.html" %}
 {% set page_title = board.title %}
+
 {% block header_scripts %}
-  <link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
 {% endblock %}
+
 {% block body %}
 <h1>Viewing Board: {{ board.title }}</h1>
 <span class="forum-breadcrumb center">
   <a href="/forums/">Forums</a> &#187;
-  <a href="{{ board.category.url() }}">{{ board.category.title }}</a> &#187; 
+  <a href="{{ board.category.url() }}">{{ board.category.title }}</a> &#187;
   {{ board.title }}
 </span>
 

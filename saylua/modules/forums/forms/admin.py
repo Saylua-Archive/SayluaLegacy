@@ -31,4 +31,9 @@ class ForumCategoryForm(FlaskForm):
         sl_validators.Required(),
         sl_validators.NotBlank(),
         sl_validators.Min(3)])
+    canon_name = SlField('Canon Name', [
+        sl_validators.Required(),
+        sl_validators.NotBlank(),
+        sl_validators.Min(3),
+        sl_validators.CanonName()])
     order = SlIntegerField('Sort Order')

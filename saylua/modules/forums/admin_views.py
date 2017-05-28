@@ -11,33 +11,36 @@ from .models.db import Board, BoardCategory
 
 @admin_access_required
 def manage_categories():
-    add_form = ForumCategoryForm(request.form)
-    if request.form.get('add') and add_form.validate_on_submit():
+    form = ForumCategoryForm(request.form)
+    if form.validate_on_submit():
         category = BoardCategory()
-        add_form.populate_obj(category)
+        form.populate_obj(category)
         db.session.add(category)
         db.session.commit()
         flash("New category: " + category.title + " successfully created.")
 
-    edit_forms = []
-    categories = db.session.query(BoardCategory).all()
-    for c in categories:
-        form = ForumCategoryForm(request.form, obj=c)
-        edit_forms.append(form)
-
-        if request.form.get('edit') and form.validate_on_submit():
-            form.populate_obj(c)
-            db.session.add(c)
-            db.session.commit()
+    categories = BoardCategory.get_categories()
 
     return render_template("admin/categories.html", categories=categories,
-        add_form=add_form, edit_forms=edit_forms)
+        form=form)
+
+
+@admin_access_required
+def edit_category(canon_name):
+    category = BoardCategory.by_canon_name(canon_name)
+    form = ForumCategoryForm(request.form, obj=category)
+    if form.validate_on_submit():
+        form.populate_obj(category)
+        db.session.add(category)
+        db.session.commit()
+        flash("Category successfully edited.")
+    return render_template("admin/category_edit.html", form=form)
 
 
 @admin_access_required
 def manage_boards():
     form = ForumBoardForm(request.form)
-    categories = db.session.query(BoardCategory).all()
+    categories = BoardCategory.get_categories()
     form.category_id.choices = [(c.id, c.title) for c in categories]
     if form.validate_on_submit():
         new_board = Board()
@@ -58,7 +61,7 @@ def manage_boards():
 def edit_board(canon_name):
     board = Board.by_canon_name(canon_name)
     form = ForumBoardForm(request.form, obj=board)
-    categories = db.session.query(BoardCategory).all()
+    categories = BoardCategory.get_categories()
     form.category_id.choices = [(c.id, c.title) for c in categories]
 
     if form.validate_on_submit():

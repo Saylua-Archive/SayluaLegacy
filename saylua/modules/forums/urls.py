@@ -11,6 +11,8 @@ urlpatterns = [
         name='admin_board_edit', methods=['GET', 'POST']),
     url('/admin/forums/categories/', view_func=admin_views.manage_categories,
         name='admin_categories', methods=['GET', 'POST']),
+    url('/admin/forums/categories/<canon_name>/', view_func=admin_views.edit_category,
+        name='admin_category_edit', methods=['GET', 'POST']),
 
     # Primary Views
     url('/forums/', view_func=views.forums_home, name='forum_home'),
