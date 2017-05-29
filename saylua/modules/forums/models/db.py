@@ -1,5 +1,9 @@
 from saylua import db, app
 
+from saylua.utils import truncate, canonize
+
+from saylua.modules.messages.models.db import Notification
+
 
 class BoardCategory(db.Model):
     """Forum Board Categories.
@@ -67,8 +71,9 @@ class Board(db.Model):
         return self.canon_name == app.config.get('NEWS_BOARD_CANON_NAME')
 
     def can_post(self, user):
-        result = user
-        result = result and (not self.is_news()) or user.has_admin_access()
+        result = user and user.has_communication_access()
+        if self.is_news():
+            result = result and user.has_admin_access()
         return result
 
     def latest_post(self):
@@ -76,7 +81,7 @@ class Board(db.Model):
             db.session.query(ForumPost)
             .join(ForumThread, ForumPost.thread)
             .filter(ForumThread.board_id == self.id)
-            .order_by(ForumPost.date_modified.desc())
+            .order_by(ForumPost.id.desc())
             .first()
         )
 
@@ -98,7 +103,7 @@ class ForumThread(db.Model):
     author = db.relationship("User")
 
     date_created = db.Column(db.DateTime, server_default=db.func.now())
-    date_modified = db.Column(db.DateTime, server_default=db.func.now())
+    date_modified = db.Column(db.DateTime, onupdate=db.func.now())
 
     is_pinned = db.Column(db.Boolean(), default=False)
     is_locked = db.Column(db.Boolean(), default=False)
@@ -108,11 +113,34 @@ class ForumThread(db.Model):
 
     posts = db.relationship("ForumPost", back_populates="thread", lazy='dynamic')
 
+    subscribers = db.relationship("User", secondary='forum_thread_subscriptions',
+        lazy='dynamic')
+
+    def notify_subscribers(self, post):
+        for user in self.subscribers:
+            if user.id == post.author_id:
+                continue
+            Notification.send(user.id, 'Someone has made a new post in the thread: ' + self.title,
+                post.url())
+
     def url(self):
-        return "/forums/thread/" + str(self.id) + "/"
+        return "/forums/thread/" + str(self.id) + "-" + canonize(truncate(self.title, 40)) + "/"
+
+    def subscription(self, user):
+        return user and db.session.query(ForumSubscription).get((self.id, user.id))
+
+    def can_post(self, user):
+        result = user and user.has_communication_access()
+        if self.is_locked:
+            result = result and user.has_moderation_access()
+        return result
+
+    def can_edit(self, user):
+        return user and user.has_communication_access() and (user.id == self.author.id or
+            user.has_moderation_access())
 
     def first_post(self):
-        return self.posts.order_by(ForumPost.date_created.asc()).first()
+        return self.posts.order_by(ForumPost.id.asc()).first()
 
     def reply_count(self):
         return (
@@ -125,7 +153,7 @@ class ForumThread(db.Model):
         return (
             db.session.query(ForumPost)
             .filter(ForumPost.thread_id == self.id)
-            .order_by(ForumPost.date_modified.desc())
+            .order_by(ForumPost.id.desc())
             .first()
         )
 
@@ -144,7 +172,34 @@ class ForumPost(db.Model):
     body = db.Column(db.Text())
 
     date_created = db.Column(db.DateTime, server_default=db.func.now())
-    date_modified = db.Column(db.DateTime, server_default=db.func.now())
+    date_modified = db.Column(db.DateTime, onupdate=db.func.now())
 
     thread_id = db.Column(db.Integer, db.ForeignKey('forum_threads.id'))
     thread = db.relationship("ForumThread", back_populates="posts")
+
+    def url(self):
+        index = (
+            db.session.query(ForumPost)
+            .filter(ForumPost.thread_id == self.thread_id)
+            .filter(ForumPost.id < self.id)
+            .count()
+        )
+        page = (index // app.config.get('POSTS_PER_PAGE')) + 1
+        return str(self.thread.url()) + str(page) + "/" + self.anchor()
+
+    def anchor(self):
+        return "#post-" + str(self.id)
+
+    def can_edit(self, user):
+        return user and user.has_communication_access() and (user.id == self.author.id or
+            user.has_moderation_access())
+
+
+class ForumSubscription(db.Model):
+    __tablename__ = "forum_thread_subscriptions"
+
+    thread_id = db.Column(db.Integer, db.ForeignKey('forum_threads.id'), primary_key=True)
+    thread = db.relationship("ForumThread")
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    user = db.relationship("User")
