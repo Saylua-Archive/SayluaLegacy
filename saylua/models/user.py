@@ -50,6 +50,8 @@ class User(db.Model):
         back_populates="users"
     )
 
+    post_count = db.Column(db.Integer, default=0)
+
     # Active Companion
     companion_id = db.Column(db.Integer, db.ForeignKey("pets.id"))
     companion = db.relationship("Pet", foreign_keys=[companion_id])
@@ -106,6 +108,9 @@ class User(db.Model):
 
     def is_muted(self):
         return self.permamuted or (self.muted_until and self.muted_until > datetime.datetime.now())
+
+    def has_communication_access(self):
+        return self.email_confirmed and not self.is_muted()
 
     def has_moderation_access(self):
         return self.role.can_moderate

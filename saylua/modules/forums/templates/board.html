@@ -8,16 +8,18 @@
 
 {% block body %}
 <h1>Viewing Board: {{ board.title }}</h1>
-<span class="forum-breadcrumb center">
+<span class="forum-breadcrumb">
   <a href="/forums/">Forums</a> &#187;
   <a href="{{ board.category.url() }}">{{ board.category.title }}</a> &#187;
   {{ board.title }}
 </span>
 
-<a class="write-thread-link" href="#write-thread">
-  <img src="/static/img/icons/pencil.png">
-  Make a New Thread
-</a>
+<div class="center">
+  <a class="subtle-button" href="#write-thread">
+    <img src="/static/img/icons/pencil.png" alt="pencil" title="Write" />
+    Make a New Thread
+  </a>
+</div>
 
 <h2 class="forum-board-header">
   <div class="forum-thread-icon">
@@ -36,19 +38,18 @@
   </div>
 </h2>
 {% for thread in pagination.items %}
-<div class="forum-thread">
+<div class="forum-thread{% if thread.is_pinned %} highlight{% endif %}">
   <div class="forum-thread-icon">
-    <img src="/static/img/icons/lock.png" />
     {% if thread.is_pinned %}
-    <img src="/static/img/icons/pin.png">
+    <img src="/static/img/icons/pin.png" alt="pin" title="Pinned" aria-label="Pinned" />
     {% endif %}
     {% if thread.is_locked %}
-    <img src="/static/img/icons/lock.png">
+    <img src="/static/img/icons/lock.png" alt="lock" title="Locked" aria-label="Locked" />
     {% endif %}
   </div>
   <div class="forum-thread-content">
     <div class="forum-thread-info">
-      <a href="/forums/thread/{{ thread.id }}/" class="forum-thread-title">
+      <a href="{{ thread.url() }}" class="forum-thread-title">
         {{ thread.title }}
       </a>
       <small>
@@ -90,6 +91,10 @@
 {% if not g.logged_in %}
 <p>
   Please <a href="/login/">login</a> before posting any forum threads.
+</p>
+{% elif not g.user.email_confirmed %}
+<p>
+  Please confirm your email address before making new forum threads.
 </p>
 {% elif not board.can_post(g.user) %}
 <p>

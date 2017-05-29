@@ -1,9 +1,5 @@
 {% if page_count > 1 %}
 
-  {% if request.args.get('page') %}
-    {% set current_page = request.args.get('page')|int %}
-  {% endif %}
-
   {% set start_page_range = current_page - page_buffer %}
 
   {% set end_page_range = current_page + page_buffer %}

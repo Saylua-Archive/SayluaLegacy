@@ -1,27 +1,6 @@
 @import 'assets/variables';
 @import 'assets/transitions';
 
-.forum-thread-controls {
-  display: flex;
-  flex-direction: row;
-  padding: 0.5em 0.8rem;
-
-  align-items: baseline;
-  justify-content: space-between;
-
-  .forum-breadcrumb {
-    display: inline;
-    margin: 1em 0;
-    text-align: left;
-  }
-
-  @media (max-width: 500px) {
-    flex-direction: column;
-
-    align-items: center;
-  }
-}
-
 .forum-posts-container {
   display: flex;
   flex-direction: column;
@@ -29,6 +8,15 @@
   padding: 0 0.8rem;
 
   align-items: stretch;
+}
+
+.forum-thread-actions {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+
+  justify-content: center;
+  padding-bottom: 1em;
 }
 
 .forum-post {

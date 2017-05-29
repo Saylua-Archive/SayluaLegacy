@@ -37,6 +37,12 @@ def saylua_time(time):
     return time.astimezone(to_zone)
 
 
+def truncate(s, maxlen=50, placeholder='...'):
+    if len(s) > maxlen:
+        return (s[:maxlen] + placeholder)
+    return s
+
+
 def get_from_request(request, key, form_key=None, args_key=None):
     if not args_key:
         args_key = key

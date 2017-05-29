@@ -38,3 +38,7 @@ AUTOSEND_EMAIL = 'Saylua <noreply@mg.saylua.com>'
 
 # The canon name used to pull in news.
 NEWS_BOARD_CANON_NAME = 'news'
+
+# Forum configuration.
+THREADS_PER_PAGE = 10
+POSTS_PER_PAGE = 10

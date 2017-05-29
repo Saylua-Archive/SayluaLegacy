@@ -50,7 +50,7 @@
         <img src="{{ last_post.author.companion.image() }}" />
         {% endif %}
         <p>
-          <a href="{{ last_post.thread.url() }}">{{ last_post.thread.title }}
+          <a href="{{ last_post.url() }}">{{ last_post.thread.title }}
           </a> by <a href="{{ last_post.author.url() }}">
             {{ last_post.author.name }}</a>
           <span class="line">({{ last_post.date_created|relative_time }})</span>

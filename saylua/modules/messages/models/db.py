@@ -91,6 +91,8 @@ class Notification(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship("User")
+
     time = db.Column(db.DateTime, server_default=db.func.now())
     text = db.Column(db.Text())
     unread = db.Column(db.Boolean, default=True)
