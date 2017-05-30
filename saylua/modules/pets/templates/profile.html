@@ -49,7 +49,7 @@
 <div class="pet-profile-column pet-profile-column-full">
   <div class="pet-profile-box">
     <h2>{{ pet.name }}'s Description</h2>
-    {{ pet.description }}
+    {{ pet.description|markdown }}
   </div>
 </div>
 <div class="pet-profile-info">
@@ -92,15 +92,6 @@
     </div>
   </div>
 </div>
-{% if g.user and pet.owner_id == g.user.id %}
-<form id="abandon" action="/abandon/" method="post">
-  <input type="hidden" name="abandonee" value="{{ pet.id }}">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-  <button class="abandon-link link-button">
-    Abandon {{ pet.name }}
-  </button>
-</form>
-{% endif %}
 
 {% endblock %}
 {% block footer_scripts %}

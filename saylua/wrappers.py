@@ -23,38 +23,40 @@ def devserver_only(f):
     return decorated_function
 
 
-def login_required(f, redirect='users.login', error=DEFAULT_LOGIN_ERROR):
-    """Redirects non-logged in users to a specified location.
+def check_login(error=DEFAULT_LOGIN_ERROR, redirect='users.login'):
+    if not g.logged_in:
+        flash(error)
+        return _redirect(url_for(redirect))
 
-    Usage: `@login_required`, `@login_required(redirect=<url>)`
-    """
+    if g.user.is_banned():
+        flash("You can't use this feature while banned.", 'error')
+        return _redirect('/banned')
 
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not g.logged_in:
-            flash(error)
-            return _redirect(url_for(redirect))
-        return f(*args, **kwargs)
-
-    return decorated_function
+    return None
 
 
-# Based on http://www.artima.com/weblogs/viewpost.jsp?thread=240845
-class login_required_with_args(object):
+class login_required(object):
     def __init__(self, redirect='users.login', error=DEFAULT_LOGIN_ERROR):
         self.redirect = redirect
         self.error = error
 
     def __call__(self, f):
-        return login_required(f, self.redirect, self.error)
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            response = check_login(self.error, self.redirect)
+            if response:
+                return response
+            return f(*args, **kwargs)
+
+        return decorated_function
 
 
 def communication_access_required(f, redirect='home.main'):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if not g.logged_in:
-            flash(DEFAULT_LOGIN_ERROR)
-            return _redirect(url_for('users.login'))
+        response = check_login()
+        if response:
+            return response
 
         if g.user.is_muted():
             flash("You can't use this feature while muted.")
@@ -72,9 +74,9 @@ def communication_access_required(f, redirect='home.main'):
 def moderation_access_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if not g.logged_in:
-            flash(DEFAULT_LOGIN_ERROR)
-            return _redirect(url_for('users.login'))
+        response = check_login()
+        if response:
+            return response
 
         if not g.user.has_moderation_access():
             return render_template('403.html'), 403
@@ -87,9 +89,9 @@ def moderation_access_required(f):
 def admin_access_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if not g.logged_in:
-            flash(DEFAULT_LOGIN_ERROR)
-            return _redirect(url_for('users.login'))
+        response = check_login()
+        if response:
+            return response
 
         if not g.user.has_admin_access():
             return render_template('403.html'), 403

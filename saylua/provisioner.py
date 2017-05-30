@@ -1,7 +1,7 @@
 from saylua import app, db
 from saylua.utils import is_devserver, canonize
 from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, ForumPost
-from saylua.models.user import User, Role
+from saylua.modules.users.models.db import User, Role
 from saylua.modules.items.models.db import Item, InventoryItem
 from saylua.modules.pets.models.db import Pet, Species, SpeciesCoat
 from saylua.modules.pets.soul_names import soul_name

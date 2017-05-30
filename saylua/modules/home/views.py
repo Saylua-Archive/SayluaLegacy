@@ -20,6 +20,10 @@ def landing():
     return render_template("landing.html")
 
 
+def banned():
+    return render_template("banned.html")
+
+
 def news():
     news_canon_name = app.config.get('NEWS_BOARD_CANON_NAME')
     threads = db.session.query(ForumThread).join(ForumThread.board).filter(

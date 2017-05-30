@@ -76,3 +76,7 @@
   </div>
 </div>
 {% endblock %}
+
+{% block admin_actions %}
+<a href="/admin/user/{{ viewed_user.name }}/" class="button">Manage {{ viewed_user.name }}</a>
+{% endblock %}

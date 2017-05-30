@@ -1,5 +1,5 @@
 from saylua import app
-from saylua.models.user import User
+from saylua.modules.users.models.db import User
 from saylua.modules.messages.models.db import ConversationHandle
 from saylua.modules.messages.models.db import Notification
 from saylua.utils import get_static_version_id, truncate

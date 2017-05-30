@@ -1,6 +1,6 @@
 from flask import render_template, g, redirect, request, flash
 from saylua import db
-from saylua.wrappers import login_required, login_required_with_args
+from saylua.wrappers import login_required
 from forms import PetEditForm
 
 from .models.db import Pet
@@ -15,7 +15,7 @@ def pet_profile(name):
     return render_template("profile.html", pet=pet)
 
 
-@login_required
+@login_required()
 def edit_pet(name):
     pet = db.session.query(Pet).filter(Pet.soul_name == name).one_or_none()
     if pet is None:
@@ -33,7 +33,7 @@ def edit_pet(name):
     return render_template("edit_pet.html", pet=pet, form=form)
 
 
-@login_required
+@login_required()
 def pet_accompany(soul_name):
     if soul_name:
         companion = db.session.query(Pet).filter(Pet.soul_name == soul_name).one_or_none()
@@ -56,7 +56,7 @@ def pet_accompany(soul_name):
     return redirect('/pet/' + companion.soul_name, code=302)
 
 
-@login_required
+@login_required()
 def pet_abandon():
     abandon_id = request.form.get('abandonee')
     abandonee = db.session.query(Pet).filter(Pet.id == abandon_id).one_or_none()
@@ -81,7 +81,7 @@ def pet_reserve():
     return render_template("reserve.html", adoptee=new_adoptee)
 
 
-@login_required_with_args(redirect='pets.reserve', error='You need to be logged in to adopt a companion!')
+@login_required(redirect='pets.reserve', error='You need to be logged in to adopt a companion!')
 def pet_reserve_post():
     adopter = g.user
     soul_name = request.form.get('soul_name')

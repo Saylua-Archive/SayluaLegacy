@@ -8,12 +8,12 @@ from flask import render_template
 import json
 
 
-@login_required
+@login_required()
 def home():
     return render_template("map.html")
 
 
-@login_required
+@login_required()
 @devserver_only
 def api_entity_list():
     entities = [x.to_dict() for x in DungeonEntity.query.all()]
@@ -23,7 +23,7 @@ def api_entity_list():
     })
 
 
-@login_required
+@login_required()
 @devserver_only
 def api_tile_list():
     tiles = [x.to_dict() for x in DungeonTile.query.all()]
@@ -33,7 +33,7 @@ def api_tile_list():
     })
 
 
-@login_required
+@login_required()
 def generate_dungeon():
     # Acquire our dungeon
     dungeon = Dungeon.Dungeon()

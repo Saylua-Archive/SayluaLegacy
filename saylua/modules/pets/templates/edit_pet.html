@@ -5,14 +5,21 @@
 <link rel="stylesheet" href="{{ include_static('css/pets.min.css') }}">
 {% endblock %}
 {% block body %}
-<h1>Edit {{pet.name}}'s Profile</h1>
+<h1>Edit {{ pet.name }}'s Profile</h1>
+<p class="center">
+  <a href="{{ pet.url() }}">
+    <img src="/static/img/icons/arrow_left.png" alt="arrow" title="Back" aria-label="Back" />
+    Back to {{ pet.name }}'s Profile
+  </a>
+</p>
 <form method="post" class="validated-form">
   <table class="form-table">
     {{ form_row(form.name) }}
     {{ form_row(form.description) }}
     {{ form_row(form.pronouns) }}
     <tr>
-      <td td colspan="2" class="center">
+      <td></td>
+      <td>
         <input type="submit" name="submit" value="Save Changes">
       </td>
     </tr>
@@ -20,6 +27,13 @@
   {{ form.csrf_token }}
 </form>
 
-{% endblock %}
-{% block footer_scripts %}
+<h2>Other Actions</h2>
+<form id="abandon" action="/abandon/" method="post">
+  <input type="hidden" name="abandonee" value="{{ pet.id }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+  <button class="link-button">
+    Abandon {{ pet.name }}
+  </button>
+</form>
+
 {% endblock %}

@@ -1,7 +1,7 @@
 from saylua import db
 from flask import render_template, request
 
-from saylua.models.user import Username
+from saylua.modules.users.models.db import Username
 from saylua.modules.items.models.db import Item
 
 

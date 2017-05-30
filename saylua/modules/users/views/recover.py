@@ -1,7 +1,7 @@
 from ..forms.login import RecoveryForm, PasswordResetForm, login_check
 
 from saylua import db, app
-from saylua.models.user import User, PasswordResetCode
+from saylua.modules.users.models.db import User, PasswordResetCode
 from saylua.utils import is_devserver
 from saylua.utils.email import send_email
 
