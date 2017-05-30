@@ -2,7 +2,7 @@ import re
 from wtforms import validators
 
 from saylua import app
-from saylua.models.user import User
+from saylua.modules.users.models.db import User
 
 
 # Base class for other validators. This is mostly used for two reasons:
@@ -246,7 +246,7 @@ class UsernameUnique(SayluaValidator):
         username = field.data.lower()
         if self.whitelist and username in self.whitelist:
             return True
-        return not User.from_username(username)
+        return not User.by_username(username)
 
 
 class EmailUnique(SayluaValidator):

@@ -6,7 +6,7 @@ from .models.db import Notification
 import flask_sqlalchemy
 
 
-@login_required
+@login_required()
 def notifications_main():
     NOTIFICATIONS_PER_PAGE = 100
     page_number = request.args.get('page')
@@ -36,7 +36,7 @@ def notifications_main():
         viewed_notifications=notifications, page=page_number, more_pages=more)
 
 
-@login_required
+@login_required()
 def notifications_main_post():
     notification_ids = request.form.getlist('notification_id')
     keys = []
@@ -68,7 +68,7 @@ def notifications_main_post():
     return redirect('/notifications/', code=302)
 
 
-@login_required
+@login_required()
 def notification_read(key):
     try:
         found_notification = db.session.query(Notification).get(key)

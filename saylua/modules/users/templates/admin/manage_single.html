@@ -1,0 +1,43 @@
+{% from "_macros/user_link.html" import user_link %}
+{% from "_macros/forms.html" import form_row %}
+
+{% extends "admin/template.html" %}
+{% set section_title = "Manage User " + user.name %}
+{% block section_body %}
+
+<p class="center">
+  <a href="{{ url_for('users.admin_manage') }}">
+    <img src="/static/img/icons/arrow_left.png" alt="arrow" title="Back" aria-label="Back" />
+    Back to List of Users
+  </a>
+</p>
+
+<p class="center">
+  You are editing user: {{ user_link(user) }}
+</p>
+
+<p class="center">
+  <a href="{{ url_for('users.admin_ban', username=user.name) }}">
+    Ban or mute {{ user.name }}?
+  </a>
+</p>
+
+<h2>Edit {{ user.name }}'s Details</h2>
+
+<form method="post" class="validated-form">
+  <table class="form-table">
+    {{ form_row(form.status, tip="Your status is a bit of text displayed next to your name.") }}
+    {{ form_row(form.gender) }}
+    {{ form_row(form.pronouns) }}
+    {{ form_row(form.bio, placeholder="Write a bit about yourself for others to see.") }}
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" name="details" value="Save Details" />
+      </td>
+    </tr>
+  </table>
+  {{ form.csrf_token }}
+</form>
+
+{% endblock %}

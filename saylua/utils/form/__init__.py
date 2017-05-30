@@ -1,7 +1,7 @@
 from wtforms import validators
 
 from saylua import app, db
-from saylua.models.user import User, InviteCode
+from saylua.modules.users.models.db import User, InviteCode
 
 import re
 
@@ -23,13 +23,13 @@ class UserCheck:
                 raise validators.StopValidation(
                     "We can't find a user with the email %s." % field.data)
         else:
-            self.user = User.from_username(field.data)
+            self.user = User.by_username(field.data)
             if not self.user:
                 raise validators.StopValidation(
                     "We can't find a user with the name %s." % field.data)
 
     def UsernameExists(self, form, field):
-        self.user = User.from_username(field.data)
+        self.user = User.by_username(field.data)
         if not self.user:
             raise validators.StopValidation(
                 "We can't find a user with the name %s." % field.data)
