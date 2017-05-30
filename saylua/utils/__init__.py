@@ -30,6 +30,14 @@ def pluralize(count, singular_noun, plural_noun=None):
     return str(count) + ' ' + plural_noun
 
 
+def articlize(singular_noun):
+    vowels = ("a", "e", "i", "o", "u")
+    if singular_noun.startswith(vowels):
+        return "an " + singular_noun
+    else:
+        return "a " + singular_noun
+
+
 def saylua_time(time):
     from_zone = tz.gettz('UTC')
     to_zone = tz.gettz('America/New_York')

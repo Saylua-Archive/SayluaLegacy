@@ -2,10 +2,12 @@ from flask import render_template, g, redirect, request, flash
 from saylua import db
 from saylua.wrappers import login_required, login_required_with_args
 from forms import PetEditForm
+from saylua.utils import corpus, articlize
 
 from .models.db import Pet
 
 import datetime
+import random
 
 
 def pet_profile(name):
@@ -78,7 +80,11 @@ def pet_reserve():
     new_adoptee = Pet.query.filter(Pet.owner_id == None).order_by(db.func.random()).first() # noqa
     if new_adoptee is None:
         return render_template("reserve_empty.html")
-    return render_template("reserve.html", adoptee=new_adoptee)
+    cute_texts = (["This {} really likes you!".format(random.choice(corpus.little_pet)),
+            "This {} looks like it likes you!".format(new_adoptee.species.name),
+            "Have you ever considered adopting {}?".format(articlize(new_adoptee.species.name))])
+    cute_text = random.choice(cute_texts)
+    return render_template("reserve.html", adoptee=new_adoptee, cute_text=cute_text)
 
 
 @login_required_with_args(redirect='pets.reserve', error='You need to be logged in to adopt a companion!')
