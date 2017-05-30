@@ -2,7 +2,7 @@ from saylua import app
 from saylua.models.user import User
 from saylua.modules.messages.models.db import ConversationHandle
 from saylua.modules.messages.models.db import Notification
-from saylua.utils import get_static_version_id
+from saylua.utils import get_static_version_id, truncate
 
 from flask import g, url_for
 from saylua import db
@@ -54,10 +54,6 @@ def random_image_helper(folder):
 
 @app.context_processor
 def inject_truncate():
-    def truncate(s, maxlen=50):
-        if len(s) > maxlen:
-            return (s[:maxlen] + '...')
-        return s
     return dict(truncate=truncate)
 
 

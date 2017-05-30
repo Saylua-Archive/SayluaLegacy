@@ -1,8 +1,10 @@
 {% extends "layout.html" %}
 {% set page_title = "Forums" %}
+
 {% block header_scripts %}
-  <link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
 {% endblock %}
+
 {% block body %}
 <div class="forum-main-header">
   <h1>
@@ -20,7 +22,7 @@
 {% set boards = category.get_boards(g.user) %}
 {% if boards %}
 <ul class="forum-main-list">
-  <li class="forum-category-header">
+  <li class="forum-category-header" id="{{ category.canon_name }}">
     <div class="forum-board-icon">
       <img src="{{ random_pet_image() }}" />
     </div>
@@ -48,7 +50,7 @@
         <img src="{{ last_post.author.companion.image() }}" />
         {% endif %}
         <p>
-          <a href="{{ last_post.thread.url() }}">{{ last_post.thread.title }}
+          <a href="{{ last_post.url() }}">{{ last_post.thread.title }}
           </a> by <a href="{{ last_post.author.url() }}">
             {{ last_post.author.name }}</a>
           <span class="line">({{ last_post.date_created|relative_time }})</span>

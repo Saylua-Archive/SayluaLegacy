@@ -4,6 +4,35 @@
 {% set section_title = "Manage Boards" %}
 {% block section_body %}
 
+<h2>Edit Existing Boards</h2>
+
+<table class="alternating-table">
+{% for category in categories %}
+  <tr class="h3 header">
+    <td>
+      {{ category.title }}
+    </td>
+    <td class="small">
+      (<a href="{{ category.url() }}">View Category</a> /
+      <a href="/admin/forums/categories/{{ category.canon_name }}/">Edit Category</a>)
+    </td>
+  </tr>
+  {% for board in category.boards %}
+  <tr>
+    <td>
+      {{ board.title }}
+      (<a href="{{ board.url() }}">View</a>)
+    </td>
+    <td>
+      <a href="/admin/forums/boards/{{ board.canon_name }}/">
+        Edit Board
+      </a>
+    </td>
+  </tr>
+{% endfor %}
+{% endfor %}
+</table>
+
 <h2>Create New Board</h2>
 <form method="post" class="validated-form">
   <table class="form-table">
@@ -27,24 +56,4 @@
   </table>
   {{ form.csrf_token }}
 </form>
-
-<h2>Edit Existing Boards</h2>
-
-{% for category in categories %}
-  <h3>
-    {{ category.title }}
-  </h3>
-  <table class="alternating-table">
-    {% for board in category.boards %}
-    <tr>
-      <td>
-        {{ board.title }}
-      </td>
-      <td>
-        <a href="/admin/forums/boards/{{ board.canon_name }}/">Edit Board</a>
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
-{% endfor %}
 {% endblock %}

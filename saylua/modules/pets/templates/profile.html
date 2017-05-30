@@ -16,29 +16,34 @@
   </div>
 </div>
 {% if g.user and pet.owner_id == g.user.id %}
-<div class="center pet-actions">
+<div class="pet-actions">
   <form id="accompany" action="/accompany/{{ pet.soul_name }}/" method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    {% if g.user.companion_id == pet.id %}
-    {% set button_text = "Stop Accompanying " + pet.name %}
-    {% else %}
-    {% set button_text = "Accompany " + pet.name %}
-    {% endif %}
-    <input type="submit" value="{{ button_text }}" name="accompany" />
+    <button class="subtle-button">
+      <img src="/static/img/icons/compass.png" alt="compass" title="Accompany" aria-label="Accompany" />
+      {% if g.user.companion_id == pet.id %}
+      Stop Accompanying {{ pet.name }}
+      {% else %}
+      Accompany {{ pet.name }}
+      {% endif %}
+    </button>
   </form>
-  <a href="/edit_pet/{{ pet.soul_name }}/">
-    <input type="submit" value="Edit Profile" />
+  <a href="/edit_pet/{{ pet.soul_name }}/" class="subtle-button">
+    <img src="/static/img/icons/pencil.png" alt="pencil" title="Edit" aria-label="Edit" />
+    Edit Profile
   </a>
 </div>
-{% endif %}
-{% if pet.owner_id is none %}
-<form action="/reserve/" method="post">
-  <input type="hidden" name="soul_name" value="{{ pet.soul_name }}">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-  <button>
-    Adopt {{ pet.name }}
-  </button>
-</form>
+{% elif pet.owner_id is none %}
+<div class="pet-actions">
+  <form action="/reserve/" method="post">
+    <input type="hidden" name="soul_name" value="{{ pet.soul_name }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <button class="subtle-button">
+      <img src="/static/img/icons/heart.png" alt="heart" title="Adopt" aria-label="Adopt" />
+      Adopt {{ pet.name }}
+    </button>
+  </form>
+</div>
 {% endif %}
 
 <div class="pet-profile-column pet-profile-column-full">
@@ -91,9 +96,9 @@
 <form id="abandon" action="/abandon/" method="post">
   <input type="hidden" name="abandonee" value="{{ pet.id }}">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-  <a class="abandon-link" href="javascript:{}" onclick="document.getElementById('abandon').submit(); return false;">
+  <button class="abandon-link link-button">
     Abandon {{ pet.name }}
-  </a>
+  </button>
 </form>
 {% endif %}
 

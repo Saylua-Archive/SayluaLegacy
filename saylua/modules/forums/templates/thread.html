@@ -1,29 +1,42 @@
 {% from "_macros/forms.html" import form_errors %}
+{% from "_macros/forum_post.html" import forum_post %}
+
 {% extends "layout.html" %}
 {% set page_title = thread.title %}
+
 {% block header_scripts %}
-  <link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
 {% endblock %}
+
 {% block body %}
 <h1>{{ thread.title }}</h1>
 
-<div class="forum-thread-controls">
-  <span class="forum-breadcrumb">
-    <a href="/forums/">Forums</a> &#187;
-    <a href="{{ board.url() }}"> {{ board.title }}</a> &#187;
-    {{ truncate(thread.title, 40) }}
-  </span>
+<span class="forum-breadcrumb">
+  <a href="/forums/">Forums</a> &#187;
+  <a href="{{ thread.board.category.url() }}">{{ thread.board.category.title }}</a> &#187;
+  <a href="{{ thread.board.url() }}"> {{ thread.board.title }}</a> &#187;
+  {{ truncate(thread.title, 40) }}
+</span>
 
-  <div class="forum-thread-actions">
-    <a class="tiny-button" href="#write-forum-reply">
-      <img src="/static/img/icons/pencil.png">
-      Write a Reply
-    </a>
-    <a class="tiny-button" href="#">
-      <img src="/static/img/icons/bell.png">
+<div class="forum-thread-actions">
+  <a class="subtle-button" href="#write-forum-reply">
+    <img src="/static/img/icons/pencil.png" alt="pencil" title="Write" aria-label="Write" />
+    Write a Reply
+  </a>
+  <form method="post" action="{{ url_for('forums.thread_subscribe', thread_id=thread.id) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    {% if g.logged_in and thread.subscription(g.user) %}
+    <button class="subtle-button" name="unsubscribe">
+      <img src="/static/img/icons/bell.png" alt="bell" title="Unsubscribe" aria-label="Unsubscribe" />
+      Unsubscribe
+    </button>
+    {% else %}
+    <button class="subtle-button" name="subscribe">
+      <img src="/static/img/icons/bell.png" alt="bell" title="Subscribe" aria-label="Subscribe" />
       Subscribe
-    </a>
-  </div>
+    </button>
+    {% endif %}
+  </form>
 </div>
 
 <div class="pagination center">
@@ -31,37 +44,9 @@
 </div>
 
 <div class="forum-posts-container">
-{% for post in pagination.items %}
-  <div class="forum-post" id="forum-post-{{ loop.index }}">
-    <div class="forum-post-info">
-      <a href="{{ post.author.url() }}">{{ post.author.name }}</a>
-      <div class="pet-avatar-view">
-        <a href="{{ post.author.url() }}" class="avatar-view">
-          <img src="{{ post.author.avatar_url() }}" />
-        </a>
-        {% if post.author.companion %}
-        <a href="{{ post.author.companion.url() }}" class="active-pet-view">
-          <img src="{{ post.author.companion.image() }}">
-        </a>
-        {% endif %}
-      </div>
-    </div>
-    <div class="forum-post-body">
-      <div class="forum-post-metadata">
-        {{ post.date_created|expanded_relative_time }}
-        <span class="forum-post-actions">
-          <a href="#forum-post-{{ loop.index }}">Link</a> |
-          <a href="#">Quote</a>  |
-          <a href="#">Modify</a>
-        </span>
-      </div>
-
-      {{ post.body|markdown }}
-      <div class="divider"></div>
-      {{ post.author.name }} hasn't set a signature yet.
-    </div>
-  </div>
-{% endfor %}
+  {% for post in pagination.items %}
+  {{ forum_post(post) }}
+  {% endfor %}
 </div>
 
 <div class="center">
@@ -69,9 +54,29 @@
 </div>
 
 <form method="post" class="validated-form" id="write-forum-reply">
-<h2>
-  <label for="{{ form.body.id }}">Write a New Reply</label>
-</h2>
+  <h2>
+    <label for="{{ form.body.id }}">Write a New Reply</label>
+  </h2>
+
+  {% if not g.logged_in %}
+  <p>
+    Please <a href="/login/">login</a> before replying to forum threads.
+  </p>
+  {% elif not g.user.email_confirmed %}
+  <p>
+    Please confirm your email address before replying to forum threads.
+  </p>
+  {% elif not thread.can_post(g.user) %}
+  {% if thread.is_locked %}
+  <p>
+    Sorry, you can't post a thread while it's locked.
+  </p>
+  {% else %}
+  <p>
+    Sorry, you don't have permission to post on this thread.
+  </p>
+  {% endif %}
+  {% else %}
   <table class="form-table">
     <tr>
       <td class="center">
@@ -82,23 +87,53 @@
     <tr>
       <td class="center">
         <input type="submit" value="Post New Reply" name="post">
-        <input type="submit" value="Preview Reply" name="preview">
       </td>
     </tr>
   </table>
+  {% endif %}
   {{ form.csrf_token }}
 </form>
 {% endblock %}
 
 {% block moderation_actions %}
-<form method="post" class="center" action="move/">
+<form method="post" action="{{ url_for('forums.thread_move', thread_id=thread.id) }}">
   <select name="destination" required>
     <option value="" disabled selected>Move Thread To Board</option>
     {% for other_board in other_boards %}
       <option value="{{ other_board.id }}">{{ other_board.title }}</option>
     {% endfor %}
   </select>
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
   <button type="submit" class="small" name="move">Move Thread</button>
+</form>
+
+<form method="post" action="{{ url_for('forums.thread_pin', thread_id=thread.id) }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+  {% if thread.is_pinned %}
+  <button type="submit" class="subtle-button" name="unpin">
+    <img src="/static/img/icons/pin.png" alt="unpin" title="Unpin" aria-label="Unpin" />
+    Unpin Thread
+  </button>
+  {% else %}
+  <button type="submit" class="subtle-button" name="pin">
+    <img src="/static/img/icons/pin.png" alt="pin" title="Pin" aria-label="Pin" />
+    Pin Thread
+  </button>
+  {% endif %}
+</form>
+
+<form method="post" action="{{ url_for('forums.thread_lock', thread_id=thread.id) }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+  {% if thread.is_locked %}
+  <button type="submit" class="subtle-button" name="unlock">
+    <img src="/static/img/icons/lock_unlock.png" alt="unlock" title="Unlock" aria-label="Unlock" />
+    Unlock Thread
+  </button>
+  {% else %}
+  <button type="submit" class="subtle-button" name="lock">
+    <img src="/static/img/icons/lock.png" alt="lock" title="Lock" aria-label="Lock" />
+    Lock Thread
+  </button>
+  {% endif %}
 </form>
 {% endblock %}

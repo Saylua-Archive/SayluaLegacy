@@ -1,5 +1,5 @@
 from saylua import app, db
-from saylua.utils import is_devserver
+from saylua.utils import is_devserver, canonize
 from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, ForumPost
 from saylua.models.user import User, Role
 from saylua.modules.items.models.db import Item, InventoryItem
@@ -86,7 +86,7 @@ def generate_boards():
     categories = ["Saylua Talk", "Help", "Real Life", "Your Pets"]
 
     for category in categories:
-        category = BoardCategory(title=category)
+        category = BoardCategory(title=category, canon_name=canonize(category))
         yield category
 
         for n in range(4):
@@ -96,7 +96,7 @@ def generate_boards():
             yield Board(
                 title=title,
                 canon_name=title,
-                categories=[category],
+                category=category,
                 description=description,
                 order=(n + 1)
             )
@@ -105,7 +105,7 @@ def generate_boards():
     yield Board(
         title=title + " announcements",
         canon_name='news',
-        categories=[category],
+        category=category,
         description="Announcements for " + title,
         order=0
     )
