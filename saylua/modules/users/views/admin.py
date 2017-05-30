@@ -48,7 +48,12 @@ def user_ban(username):
     if request.form.get('ban') and ban_form.validate_on_submit():
         flash("User %s has been banned" % user.name)
 
-    return render_template('admin/ban.html', ban_form=ban_form, user=user)
+    mute_form = MuteForm(request.form)
+    if request.form.get('mute') and mute_form.validate_on_submit():
+        flash("User %s has been muted" % user.name)
+
+    return render_template('admin/ban.html', ban_form=ban_form,
+        mute_form=mute_form, user=user)
 
 
 @admin_access_required

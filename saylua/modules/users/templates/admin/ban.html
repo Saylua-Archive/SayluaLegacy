@@ -40,6 +40,20 @@
 
 
 <h2>Mute {{ user.name }}</h2>
+<form method="post" class="validated-form">
+  <table class="form-table">
+    {{ form_row(mute_form.reason, tip="Please explain why you are muting this user.") }}
+    {{ form_row(mute_form.days, tip="Number of days the user should be muted.") }}
+    {{ form_row(mute_form.permamuted) }}
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" name="mute" value="Mute {{ user.name }}" />
+      </td>
+    </tr>
+  </table>
+  {{ mute_form.csrf_token }}
+</form>
 
 
 {% endblock %}
