@@ -104,7 +104,7 @@ class User(db.Model):
 
     def is_muted(self):
         ban = self.ban
-        return ban and ban.ban_type == BanTypes.MUTED and ban.active()
+        return ban and ban.ban_type == BanTypes.MUTE and ban.active()
 
     def has_communication_access(self):
         return self.email_confirmed and not self.is_muted() and not self.is_banned()

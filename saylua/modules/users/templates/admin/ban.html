@@ -22,6 +22,47 @@
   </a>
 </p>
 
+{% if user.is_banned() or user.is_muted() %}
+<h2>{{ user.name }} is Currently {{ user.ban.past_tense().capitalize() }}</h2>
+<table class="center">
+  <tr>
+    <td>
+      Ban Type:
+      <strong>
+        {{ user.ban.past_tense() }}
+      </strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Reason:
+      <strong>
+        {{ user.ban.reason }}
+      </strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Length:
+      <strong>
+        {% if user.ban.is_permanent %}
+        Forever
+        {% else %}
+        Until {{ user.ban.banned_until|expanded_relative_time }}
+        {% endif %}
+      </strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <button name="undo" value="Undo">Un{{ user.ban.verb() }} {{ user.name }}?</button>
+      </form>
+    </td>
+  </tr>
+</table>
+{% endif %}
 
 <h2>Ban {{ user.name }}</h2>
 <form method="post" class="validated-form">

@@ -97,6 +97,10 @@
   <p>
     Sorry, you can't post threads while banned.
   </p>
+  {% elif g.user.is_muted() %}
+  <p>
+    Sorry, you can't post threads while muted.
+  </p>
   {% elif not g.user.email_confirmed %}
   <p>
     Please confirm your email address before making new forum threads.

@@ -24,6 +24,20 @@ class BanLog(db.Model):
     reason = db.Column(db.Text)
 
     date_banned = db.Column(db.DateTime, server_default=db.func.now())
+    date_modified = db.Column(db.DateTime, onupdate=db.func.now())
+
+    # Only set if a user is manually unbanned.
+    date_unbanned = db.Column(db.DateTime)
 
     def active(self):
         return self.is_permanent or (self.banned_until and self.banned_until > datetime.datetime.now())
+
+    def verb(self):
+        if self.ban_type == BanTypes.MUTE:
+            return 'mute'
+        return 'ban'
+
+    def past_tense(self):
+        if self.ban_type == BanTypes.MUTE:
+            return 'muted'
+        return 'banned'

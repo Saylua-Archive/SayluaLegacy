@@ -53,27 +53,30 @@ def user_ban(username):
     if request.form.get('ban'):
         ban_type = BanTypes.BAN
         form = ban_form
-        message = "User %s has been banned " % user.name
     elif request.form.get('mute'):
         ban_type = BanTypes.MUTE
         form = mute_form
-        message = "User %s has been muted " % user.name
+    elif user.ban and request.form.get('undo'):
+        ban = user.ban
+        user.ban.date_unbanned = datetime.datetime.now()
+        user.ban_id = None
+        db.session.commit()
+        flash('You have successfully %s %s.' % (ban.past_tense(), user.name))
     elif request.method == 'POST':
         flash('Invalid ban type!', 'error')
         return render_template('admin/ban.html', ban_form=ban_form, mute_form=mute_form, user=user)
 
     if form and form.validate_on_submit():
-        if form.days.data and form.is_permanent.data:
-            action = 'ban' if ban_type == BanTypes.BAN else 'mute'
-            flash("You can't both permanently and temporarily %s a user." % action, 'error')
-            return render_template('admin/ban.html', ban_form=ban_form, mute_form=mute_form, user=user)
-
         ban = BanLog(user=user, ban_type=ban_type)
+
+        if form.days.data and form.is_permanent.data:
+            flash("You can't both permanently and temporarily %s a user." % ban.verb(), 'error')
+            return render_template('admin/ban.html', ban_form=ban_form, mute_form=mute_form, user=user)
         if form.days.data:
             ban.banned_until = datetime.datetime.now() + datetime.timedelta(days=form.days.data)
-            message += "for %d days." % form.days.data
+            timeframe = "for %d days" % form.days.data
         else:
-            message += "permanently."
+            timeframe = "permanently"
         form.populate_obj(ban)
         db.session.add(ban)
         db.session.commit()
@@ -81,7 +84,7 @@ def user_ban(username):
         user.ban = ban
         db.session.commit()
 
-        flash(message)
+        flash("User %s has been %s %s." % (user.name, ban.past_tense(), timeframe))
     return render_template('admin/ban.html', ban_form=ban_form, mute_form=mute_form, user=user)
 
 
