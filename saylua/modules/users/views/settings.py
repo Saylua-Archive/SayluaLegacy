@@ -1,5 +1,5 @@
 from saylua import app, db
-from saylua.models.user import User, Username
+from saylua.modules.users.models.db import User, Username
 from saylua.wrappers import login_required
 
 from saylua.utils.email import send_confirmation_email
@@ -13,7 +13,7 @@ import datetime
 
 
 # User Settings
-@login_required
+@login_required(error="You must login to change your settings.")
 def user_settings():
     form = GeneralSettingsForm(request.form, obj=g.user)
     if form.validate_on_submit():
@@ -25,7 +25,7 @@ def user_settings():
     return render_template("settings/main.html", form=form)
 
 
-@login_required
+@login_required()
 def user_settings_details():
     form = DetailsForm(request.form, obj=g.user)
     if form.validate_on_submit():
@@ -35,7 +35,7 @@ def user_settings_details():
     return render_template("settings/details.html", form=form)
 
 
-@login_required
+@login_required()
 def user_settings_username():
     form = UsernameForm(request.form, obj={"username": g.user.name})
     form.setUser(g.user)
@@ -75,7 +75,7 @@ def user_settings_username():
     return render_template("settings/username.html", form=form)
 
 
-@login_required
+@login_required()
 def user_settings_username_release():
     username = request.form.get("username")
     if not username or username not in g.user.usernames:
@@ -89,7 +89,7 @@ def user_settings_username_release():
     return redirect(url_for("users.settings_username"))
 
 
-@login_required
+@login_required()
 def user_settings_email():
     form = EmailForm(request.form, obj=g.user)
     form.setUser(g.user)
@@ -105,7 +105,7 @@ def user_settings_email():
     return render_template("settings/email.html", form=form)
 
 
-@login_required
+@login_required()
 def user_settings_password():
     form = PasswordForm(request.form)
     form.setUser(g.user)

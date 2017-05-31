@@ -165,7 +165,7 @@ def forums_thread_lock(thread_id):
     return redirect(thread.url())
 
 
-@login_required
+@login_required()
 def forums_thread_subscribe(thread_id):
     thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one_or_none()
     if not thread:

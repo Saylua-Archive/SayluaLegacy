@@ -6,7 +6,7 @@ from saylua.utils.pagination import Pagination
 from saylua.wrappers import login_required
 from saylua.utils import pluralize, get_from_request
 from .models.db import Conversation, ConversationHandle, Message
-from saylua.models.user import User
+from saylua.modules.users.models.db import User
 
 from forms import ConversationForm, ConversationReplyForm, recipient_check
 
@@ -14,7 +14,7 @@ CONVERSATIONS_PER_PAGE = 25
 
 
 # The main page where the user views all of their messages.
-@login_required
+@login_required()
 def messages_main():
     page_number = request.args.get('page', 1)
     page_number = int(page_number)
@@ -32,7 +32,7 @@ def messages_main():
 
 
 # The submit action for the user to update their messages.
-@login_required
+@login_required()
 def messages_main_post():
     user_message_ids = request.form.getlist('user_conversation_id')
     keys = []
@@ -55,7 +55,7 @@ def messages_main_post():
 
 
 # The page for a user to write new messages.
-@login_required
+@login_required()
 def messages_write_new():
     form = ConversationForm(request.form)
     form.recipient.data = get_from_request(request, 'recipient', args_key='to')
@@ -74,7 +74,7 @@ def messages_write_new():
 # conversation they were looking to read. We make it a separate route so that the
 # main "looking at a message" route doesn't have to bother with looking up
 # the user's message metadata.
-@login_required
+@login_required()
 def messages_read(key):
     try:
         found_conversation = db.session.query(ConversationHandle).get((key, g.user.id))
@@ -86,7 +86,7 @@ def messages_read(key):
 
 
 # The page to view a specific conversation.
-@login_required
+@login_required()
 def messages_view_conversation(key):
     found_conversation = db.session.query(ConversationHandle).get((key, g.user.id))
     if not found_conversation:

@@ -1,6 +1,6 @@
 from saylua import app, db
 
-from saylua.models.user import LoginSession, User, EmailConfirmationCode
+from saylua.modules.users.models.db import LoginSession, User, EmailConfirmationCode
 from saylua.utils import get_from_request, is_devserver
 from saylua.utils.email import send_confirmation_email
 

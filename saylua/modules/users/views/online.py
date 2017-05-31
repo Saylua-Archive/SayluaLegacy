@@ -1,7 +1,7 @@
 from saylua import app, db
 
 from flask import render_template
-from saylua.models.user import User
+from saylua.modules.users.models.db import User
 import datetime
 
 

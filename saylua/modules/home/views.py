@@ -20,6 +20,12 @@ def landing():
     return render_template("landing.html")
 
 
+def banned():
+    if not (g.logged_in and g.user.is_banned()):
+        return render_template("404.html"), 404
+    return render_template("banned.html")
+
+
 def news():
     news_canon_name = app.config.get('NEWS_BOARD_CANON_NAME')
     threads = db.session.query(ForumThread).join(ForumThread.board).filter(
