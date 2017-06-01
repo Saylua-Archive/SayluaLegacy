@@ -21,8 +21,6 @@ def landing():
 
 
 def banned():
-    if not (g.logged_in and g.user.is_banned()):
-        return render_template("404.html"), 404
     return render_template("banned.html")
 
 
