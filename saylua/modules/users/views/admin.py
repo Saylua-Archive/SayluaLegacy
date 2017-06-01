@@ -1,13 +1,15 @@
 from saylua.wrappers import admin_access_required
 from flask import render_template, request, g, redirect, url_for, flash
 
-from saylua.modules.users.models.db import User, InviteCode
+from saylua.modules.users.models.db import User, InviteCode, BanLog, BanTypes
 from saylua import db
 
 from saylua.utils.pagination import Pagination
 
 from ..forms.admin import BanForm, MuteForm
 from ..forms.settings import DetailsForm
+
+import datetime
 
 
 @admin_access_required
@@ -45,15 +47,45 @@ def user_ban(username):
         return redirect(url_for('users.admin_manage'))
 
     ban_form = BanForm(request.form)
-    if request.form.get('ban') and ban_form.validate_on_submit():
-        flash("User %s has been banned" % user.name)
-
     mute_form = MuteForm(request.form)
-    if request.form.get('mute') and mute_form.validate_on_submit():
-        flash("User %s has been muted" % user.name)
 
-    return render_template('admin/ban.html', ban_form=ban_form,
-        mute_form=mute_form, user=user)
+    form = None
+    if request.form.get('ban'):
+        ban_type = BanTypes.BAN
+        form = ban_form
+    elif request.form.get('mute'):
+        ban_type = BanTypes.MUTE
+        form = mute_form
+    elif user.ban and request.form.get('undo'):
+        ban = user.ban
+        user.ban.date_unbanned = datetime.datetime.now()
+        user.ban_id = None
+        db.session.commit()
+        flash('You have successfully %s %s.' % (ban.past_tense(), user.name))
+    elif request.method == 'POST':
+        flash('Invalid ban type!', 'error')
+        return render_template('admin/ban.html', ban_form=ban_form, mute_form=mute_form, user=user)
+
+    if form and form.validate_on_submit():
+        ban = BanLog(user=user, ban_type=ban_type)
+
+        if form.days.data and form.is_permanent.data:
+            flash("You can't both permanently and temporarily %s a user." % ban.verb(), 'error')
+            return render_template('admin/ban.html', ban_form=ban_form, mute_form=mute_form, user=user)
+        if form.days.data:
+            ban.banned_until = datetime.datetime.now() + datetime.timedelta(days=form.days.data)
+            timeframe = "for %d days" % form.days.data
+        else:
+            timeframe = "permanently"
+        form.populate_obj(ban)
+        db.session.add(ban)
+        db.session.commit()
+
+        user.ban = ban
+        db.session.commit()
+
+        flash("User %s has been %s %s." % (user.name, ban.past_tense(), timeframe))
+    return render_template('admin/ban.html', ban_form=ban_form, mute_form=mute_form, user=user)
 
 
 @admin_access_required

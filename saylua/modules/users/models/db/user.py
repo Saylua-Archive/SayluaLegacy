@@ -4,7 +4,7 @@ from saylua import db
 from saylua.utils import random_token
 
 from .bank import BankAccount
-
+from .moderation import BanTypes
 from .codes import EmailConfirmationCode, PasswordResetCode
 
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -57,11 +57,8 @@ class User(db.Model):
         back_populates="owner", lazy='dynamic')
 
     # Ban Status
-    permabanned = db.Column(db.Boolean, default=False)
-    banned_until = db.Column(db.DateTime)
-
-    permamuted = db.Column(db.Boolean, default=False)
-    muted_until = db.Column(db.DateTime)
+    ban_id = db.Column(db.Integer, db.ForeignKey("ban_logs.id"))
+    ban = db.relationship("BanLog", foreign_keys=[ban_id])
 
     # Currency
     star_shards = db.Column(db.Integer, default=0)
@@ -102,10 +99,12 @@ class User(db.Model):
         return "/user/" + self.name.lower() + "/"
 
     def is_banned(self):
-        return self.permabanned or (self.banned_until and self.banned_until > datetime.datetime.now())
+        ban = self.ban
+        return ban and ban.ban_type == BanTypes.BAN and ban.active()
 
     def is_muted(self):
-        return self.permamuted or (self.muted_until and self.muted_until > datetime.datetime.now())
+        ban = self.ban
+        return ban and ban.ban_type == BanTypes.MUTE and ban.active()
 
     def has_communication_access(self):
         return self.email_confirmed and not self.is_muted() and not self.is_banned()
