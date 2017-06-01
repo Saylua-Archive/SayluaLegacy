@@ -1,7 +1,7 @@
-from saylua import db
+from saylua import app, db
 from ..soul_names import soul_name
 import os
-from saylua.utils import get_static_version_id
+from saylua.utils import get_static_version_id, is_devserver
 from flask import url_for
 
 
@@ -54,9 +54,13 @@ class Pet(db.Model):
     cc_price = db.Column(db.Integer, default=0)
 
     def image(self):
-        subpath = ("img" + os.sep + "pets" + os.sep + self.species_name + os.sep + self.coat.name +
+        if is_devserver():
+            subpath = ("img" + os.sep + "pets" + os.sep + self.species_name + os.sep + self.coat.name +
             ".png")
-        return url_for("static", filename=subpath) + "?v=" + str(get_static_version_id())
+            return url_for("static", filename=subpath) + "?v=" + str(get_static_version_id())
+        else:
+            return (app.config['IMAGE_BUCKET_ROOT'] + "/pets/" + self.species_name + "/" +
+                self.coat.name + ".png?v=" + str(get_static_version_id()))
 
     def url(self):
         return '/pet/' + self.soul_name
