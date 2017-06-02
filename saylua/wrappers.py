@@ -23,7 +23,7 @@ def devserver_only(f):
     return decorated_function
 
 
-def check_login(error=DEFAULT_LOGIN_ERROR, redirect='users.login'):
+def login_required_response(error=DEFAULT_LOGIN_ERROR, redirect='users.login'):
     if not g.logged_in:
         flash(error)
         return _redirect(url_for(redirect))
@@ -43,7 +43,7 @@ class login_required(object):
     def __call__(self, f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            response = check_login(self.error, self.redirect)
+            response = login_required_response(self.error, self.redirect)
             if response:
                 return response
             return f(*args, **kwargs)
@@ -51,62 +51,83 @@ class login_required(object):
         return decorated_function
 
 
-def communication_access_required(f, redirect='home.main'):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        response = check_login()
-        if response:
-            return response
+class communication_access_required(object):
+    def __init__(self, redirect='home.main'):
+        self.redirect = redirect
 
-        if g.user.is_muted():
-            flash("You can't use this feature while muted.")
-            return _redirect(url_for(redirect))
+    def __call__(self, f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            response = login_required_response()
+            if response:
+                return response
 
-        if not g.user.email_confirmed:
-            flash("Please confirm your email before using this feature.")
-            return _redirect(url_for(redirect))
+            if g.user.is_muted():
+                flash("You can't use this feature while muted.")
+                return _redirect(url_for(self.redirect))
 
-        return f(*args, **kwargs)
+            if not g.user.email_confirmed:
+                flash("Please confirm your email before using this feature.")
+                return _redirect(url_for(self.redirect))
 
-    return decorated_function
+            return f(*args, **kwargs)
 
-
-def moderation_access_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        response = check_login()
-        if response:
-            return response
-
-        if not g.user.has_moderation_access():
-            return render_template('403.html'), 403
-
-        return f(*args, **kwargs)
-
-    return decorated_function
+        return decorated_function
 
 
-def admin_access_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        response = check_login()
-        if response:
-            return response
+class moderation_access_required(object):
+    def __init__(self, redirect=None):
+        self.redirect = redirect
 
-        if not g.user.has_admin_access():
-            return render_template('403.html'), 403
+    def __call__(self, f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            response = login_required_response()
+            if response:
+                return response
 
-        return f(*args, **kwargs)
+            if not g.user.has_moderation_access():
+                if self.redirect:
+                    flash("You don't have permission to use this feature.")
+                    return _redirect(url_for(self.redirect))
+                return render_template('403.html'), 403
 
-    return decorated_function
+            return f(*args, **kwargs)
+
+        return decorated_function
+
+
+class admin_access_required(object):
+    def __init__(self, redirect=None):
+        self.redirect = redirect
+
+    def __call__(self, f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            response = login_required_response()
+            if response:
+                return response
+            if not g.user.has_admin_access():
+                if self.redirect:
+                    flash("You don't have permission to use this feature.")
+                    return _redirect(url_for(self.redirect))
+                return render_template('403.html'), 403
+
+            return f(*args, **kwargs)
+
+        return decorated_function
 
 
 # Same as login_required but returns a 400 response for API endpoints.
-def api_login_required(f, error='You must be logged in to use this feature.'):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not g.logged_in:
-            return json.dumps(dict(error=error)), 401
-        return f(*args, **kwargs)
+class api_login_required(object):
+    def __init__(self, error=DEFAULT_LOGIN_ERROR):
+        self.error = error
 
-    return decorated_function
+    def __call__(self, f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if login_required_response():
+                return json.dumps(dict(error=self.error)), 401
+            return f(*args, **kwargs)
+
+        return decorated_function

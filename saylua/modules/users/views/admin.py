@@ -12,7 +12,7 @@ from ..forms.settings import DetailsForm
 import datetime
 
 
-@admin_access_required
+@admin_access_required()
 def user_manage():
     username = request.args.get('username')
     if username:
@@ -23,7 +23,7 @@ def user_manage():
     return render_template('admin/manage.html', pagination=pagination)
 
 
-@admin_access_required
+@admin_access_required()
 def user_manage_single(username):
     user = User.by_username(username)
     if not user:
@@ -39,7 +39,7 @@ def user_manage_single(username):
     return render_template('admin/manage_single.html', form=form, user=user)
 
 
-@admin_access_required
+@admin_access_required()
 def user_ban(username):
     user = User.by_username(username)
     if not user:
@@ -88,7 +88,7 @@ def user_ban(username):
     return render_template('admin/ban.html', ban_form=ban_form, mute_form=mute_form, user=user)
 
 
-@admin_access_required
+@admin_access_required()
 def user_invite():
     if request.form.get("generate"):
         new_code = InviteCode(g.user.id)

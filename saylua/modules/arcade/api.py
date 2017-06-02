@@ -7,7 +7,7 @@ import json
 
 
 # Send a score to the API.
-@api_login_required
+@api_login_required()
 def api_send_score(game):
     try:
         gameName = Game(game)
