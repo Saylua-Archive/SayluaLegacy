@@ -9,7 +9,7 @@ from flask import render_template, redirect, url_for, flash, request
 from forms import ItemUploadForm
 
 
-@admin_access_required
+@admin_access_required()
 def admin_panel_items_add():
     form = ItemUploadForm(request.form)
     form.name.data = get_from_request(request, 'name')
@@ -24,6 +24,6 @@ def admin_panel_items_add():
     return render_template('admin/add.html', form=form)
 
 
-@admin_access_required
+@admin_access_required()
 def admin_panel_items_edit():
     return render_template('admin/edit.html')

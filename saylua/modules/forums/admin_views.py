@@ -9,7 +9,7 @@ from .forms.admin import ForumBoardForm, ForumCategoryForm
 from .models.db import Board, BoardCategory
 
 
-@admin_access_required
+@admin_access_required()
 def manage_categories():
     form = ForumCategoryForm(request.form)
     if form.validate_on_submit():
@@ -25,7 +25,7 @@ def manage_categories():
         form=form)
 
 
-@admin_access_required
+@admin_access_required()
 def edit_category(canon_name):
     category = BoardCategory.by_canon_name(canon_name)
     form = ForumCategoryForm(request.form, obj=category)
@@ -37,7 +37,7 @@ def edit_category(canon_name):
     return render_template("admin/category_edit.html", form=form)
 
 
-@admin_access_required
+@admin_access_required()
 def manage_boards():
     form = ForumBoardForm(request.form)
     categories = BoardCategory.get_categories()
@@ -57,7 +57,7 @@ def manage_boards():
     return render_template("admin/boards.html", form=form, categories=categories)
 
 
-@admin_access_required
+@admin_access_required()
 def edit_board(canon_name):
     board = Board.by_canon_name(canon_name)
     form = ForumBoardForm(request.form, obj=board)

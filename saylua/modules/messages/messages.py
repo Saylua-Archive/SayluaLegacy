@@ -3,7 +3,7 @@ import flask_sqlalchemy
 from saylua import db
 from saylua.utils.pagination import Pagination
 
-from saylua.wrappers import login_required
+from saylua.wrappers import login_required, communication_access_required
 from saylua.utils import pluralize, get_from_request
 from .models.db import Conversation, ConversationHandle, Message
 from saylua.modules.users.models.db import User
@@ -32,7 +32,7 @@ def messages_main():
 
 
 # The submit action for the user to update their messages.
-@login_required()
+@communication_access_required()
 def messages_main_post():
     user_message_ids = request.form.getlist('user_conversation_id')
     keys = []
@@ -55,7 +55,7 @@ def messages_main_post():
 
 
 # The page for a user to write new messages.
-@login_required()
+@communication_access_required()
 def messages_write_new():
     form = ConversationForm(request.form)
     form.recipient.data = get_from_request(request, 'recipient', args_key='to')
