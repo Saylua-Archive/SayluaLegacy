@@ -15,8 +15,8 @@ def admin_panel_items_add():
     form.name.data = get_from_request(request, 'name')
     form.description.data = get_from_request(request, 'description')
     if form.validate_on_submit():
-        item = Item(name=form.name.data, canon_name=Item.make_canon_name(form.name.data),
-            description=form.description.data)
+        item = Item()
+        form.populate_obj(item)
         db.session.add(item)
         db.session.commit()
         flash('You have successfully created a new item!')
