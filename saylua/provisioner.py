@@ -1,7 +1,7 @@
 from saylua import app, db
 from saylua.utils import is_devserver, canonize
 from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, ForumPost
-from saylua.modules.users.models.db import User, Role
+from saylua.modules.users.models.db import User, Title
 from saylua.modules.items.models.db import Item, InventoryItem
 from saylua.modules.pets.models.db import Pet, Species, SpeciesCoat
 from saylua.modules.pets.soul_names import soul_name
@@ -19,18 +19,26 @@ import os
 
 def generate_admin_user():
     username = "admin"
-    role_name = "admin"
     password_hash = User.hash_password("password")  # Yes, the default password is password.
     email = "admin@saylua.wizards"
 
-    yield User(
+    titles = ['Moderator', 'Admin', 'Programmer', 'Artist', 'Writer', 'Contributor']
+    admin = User(
         username=username,
         password_hash=password_hash,
         email=email,
-        role_name=role_name,
         star_shards=15,
-        cloud_coins=50000
+        cloud_coins=50000,
+        can_moderate=True,
+        can_admin=True,
     )
+
+    for t in titles:
+        title = Title(name=t, canon_name=canonize(t))
+        admin.titles.append(title)
+        yield title
+
+    yield admin
 
 
 def generate_items():
@@ -183,28 +191,6 @@ def purge(absolutely_sure_about_this=False):
 def setup():
     with app.app_context():
         db.create_all()
-
-        # Create the role "admin" with all privileges
-        admin_role = Role(name="admin")
-        role_columns = [column.key for column in admin_role.__table__.columns]
-
-        for key in role_columns:
-            if key.startswith("can"):
-                setattr(admin_role, key, True)
-
-        db.session.add(admin_role)
-        print("Admin Role Created")
-
-        # Add the "user" role
-        user_role = Role(name="user")
-        db.session.add(user_role)
-        print("User Role Created")
-
-        # Add the "moderator" role
-        moderator_role = Role(name="moderator")
-        moderator_role.can_moderate = True
-        db.session.add(moderator_role)
-        print("Moderator Role Created")
 
         # Turn dungeon schemas into models
         for model in provision_dungeon_schema():

@@ -1,7 +1,7 @@
 from saylua.wrappers import admin_access_required
 from flask import render_template, request, g, redirect, url_for, flash
 
-from saylua.modules.users.models.db import User, InviteCode, BanLog, BanTypes
+from saylua.modules.users.models.db import User, InviteCode, BanLog, BanTypes, Title, RUserTitles
 from saylua import db
 
 from saylua.utils.pagination import Pagination
@@ -31,12 +31,38 @@ def user_manage_single(username):
         return redirect(url_for('users.admin_manage'))
 
     form = DetailsForm(request.form, obj=user)
-    if form.validate_on_submit():
+    if request.form.get('details') and form.validate_on_submit():
         form.populate_obj(user)
         db.session.commit()
         flash("You have changed the %s's details." % user.name)
+    elif request.form.get('edit_title'):
+        title_action = request.form.get('edit_title')
+        try:
+            title_id = int(request.form.get('title_id'))
+        except ValueError:
+            flash('Invalid title entered.', 'error')
 
-    return render_template('admin/manage_single.html', form=form, user=user)
+        title = db.session.query(Title).get(title_id)
+        if not title:
+            flash('Title not found.', 'error')
+        elif title_action == 'remove':
+            # Remove the user's current title if it's being deleted from their account.
+            if user.title_id == title_id:
+                user.title_id = None
+            db.session.query(RUserTitles).filter(RUserTitles.user_id == user.id,
+                RUserTitles.title_id == title_id).delete()
+            db.session.commit()
+            flash("You've successfully removed %s from %s's titles." % (title.name, user.name))
+        elif title_action == 'add':
+            user_title = RUserTitles(user_id=user.id, title_id=title_id)
+            db.session.merge(user_title)
+            db.session.commit()
+            flash("You've added %s to %s's titles." % (title.name, user.name))
+
+    titles = db.session.query(Title).all()
+
+    return render_template('admin/manage_single.html', form=form, user=user,
+        titles=titles)
 
 
 @admin_access_required()

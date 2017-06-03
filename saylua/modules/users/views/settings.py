@@ -1,5 +1,5 @@
 from saylua import app, db
-from saylua.modules.users.models.db import User, Username
+from saylua.modules.users.models.db import User, Username, Title
 from saylua.wrappers import login_required
 
 from saylua.utils.email import send_confirmation_email
@@ -12,20 +12,45 @@ from ..forms.settings import (GeneralSettingsForm, DetailsForm, UsernameForm,
 import datetime
 
 
+SETTINGS_ERROR_MESSAGE = "You must login to change your settings."
+
+
 # User Settings
-@login_required(error="You must login to change your settings.")
+@login_required(error=SETTINGS_ERROR_MESSAGE)
 def user_settings():
     form = GeneralSettingsForm(request.form, obj=g.user)
-    if form.validate_on_submit():
+    titles = [Title(name='User', canon_name='user', id=None)] + g.user.titles
+    if request.form.get('settings') and form.validate_on_submit():
         form.populate_obj(g.user)
         db.session.commit()
         flash("Your settings have been saved.")
+    elif request.form.get('edit_title'):
+        title_id = request.form.get('title_id')
+        if title_id == 'None':
+            title_id = None
+        else:
+            try:
+                title_id = int(title_id)
+            except ValueError:
+                flash('You have tried to change to an invalid title.', 'error')
+
+        found = False
+        for title in titles:
+            if title_id == title.id:
+                found = True
+                break
+
+        if not found:
+            flash("Sorry, you don't have access to that title.")
+        else:
+            g.user.title_id = title_id
+            db.session.commit()
 
     # Allows user to change general on/off settings
-    return render_template("settings/main.html", form=form)
+    return render_template("settings/main.html", form=form, titles=titles)
 
 
-@login_required()
+@login_required(error=SETTINGS_ERROR_MESSAGE)
 def user_settings_details():
     form = DetailsForm(request.form, obj=g.user)
     if form.validate_on_submit():
@@ -35,7 +60,7 @@ def user_settings_details():
     return render_template("settings/details.html", form=form)
 
 
-@login_required()
+@login_required(error=SETTINGS_ERROR_MESSAGE)
 def user_settings_username():
     form = UsernameForm(request.form, obj={"username": g.user.name})
     form.setUser(g.user)
@@ -75,7 +100,7 @@ def user_settings_username():
     return render_template("settings/username.html", form=form)
 
 
-@login_required()
+@login_required(error=SETTINGS_ERROR_MESSAGE)
 def user_settings_username_release():
     username = request.form.get("username")
     if not username or username not in g.user.usernames:
@@ -89,7 +114,7 @@ def user_settings_username_release():
     return redirect(url_for("users.settings_username"))
 
 
-@login_required()
+@login_required(error=SETTINGS_ERROR_MESSAGE)
 def user_settings_email():
     form = EmailForm(request.form, obj=g.user)
     form.setUser(g.user)
@@ -105,7 +130,7 @@ def user_settings_email():
     return render_template("settings/email.html", form=form)
 
 
-@login_required()
+@login_required(error=SETTINGS_ERROR_MESSAGE)
 def user_settings_password():
     form = PasswordForm(request.form)
     form.setUser(g.user)

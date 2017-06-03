@@ -40,4 +40,55 @@
   {{ form.csrf_token }}
 </form>
 
+<h2>Edit {{ user.name }}'s Titles</h2>
+{% if user.titles %}
+<table class="alternating-table">
+  <tr class="header h3">
+    <td>
+      Title
+    </td>
+    <td>
+      Preview
+    </td>
+    <td>
+      Action
+    </td>
+  </tr>
+  {% for title in user.titles %}
+  <tr>
+    <td>
+      {{ title.name }}
+    </td>
+    <td>
+      {{ user_link(user, title_class=title.css_class()) }}
+    </td>
+    <td>
+      <form method="post">
+        <input type="hidden" name="title_id" value="{{ title.id }}" />
+        <button name="edit_title" value="remove" class="subtle-button">Remove Title?</button>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p>
+  {{ user.name }} doesn't have any titles.
+</p>
+{% endif %}
+
+<h2>Grant New Title to {{ user.name }}</h2>
+<form method="post">
+  <select name="title_id" required>
+    <option value selected>Pick a Title</option>
+    {% for title in titles %}
+    <option value="{{ title.id }}">
+      {{ title.name }}
+    </option>
+    {% endfor %}
+  </select>
+  <button name="edit_title" value="add">Grant Title</button>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+</form>
 {% endblock %}

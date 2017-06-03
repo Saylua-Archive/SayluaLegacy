@@ -1,0 +1,41 @@
+@import '../assets/variables';
+
+a,
+.theme-admin a {
+  &.title-banned {
+    text-decoration: line-through;
+  }
+
+  &.title-banned,
+  &.title-muted {
+    color: #888;
+  }
+
+  &.title-user {
+    color: $accentColor;
+  }
+
+  &.title-moderator {
+    color: $mainColor;
+  }
+
+  &.title-admin {
+    color: pink;
+  }
+
+  &.title-writer {
+    color: orange;
+  }
+
+  &.title-artist {
+    color: purple;
+  }
+
+  &.title-programmer {
+    color: blue;
+  }
+
+  &.title-contributor {
+    color: magenta;
+  }
+}
