@@ -18,12 +18,14 @@ SETTINGS_ERROR_MESSAGE = "You must login to change your settings."
 # User Settings
 @login_required(error=SETTINGS_ERROR_MESSAGE)
 def user_settings():
-    form = GeneralSettingsForm(request.form, obj=g.user)
+    form = GeneralSettingsForm(formdata=None, obj=g.user)
     titles = [Title(name='User', canon_name='user', id=None)] + g.user.titles
-    if request.form.get('settings') and form.validate_on_submit():
-        form.populate_obj(g.user)
-        db.session.commit()
-        flash("Your settings have been saved.")
+    if request.form.get('settings'):
+        form = GeneralSettingsForm(request.form, obj=g.user)
+        if form.validate_on_submit():
+            form.populate_obj(g.user)
+            db.session.commit()
+            flash("Your settings have been saved.")
     elif request.form.get('edit_title'):
         title_id = request.form.get('title_id')
         if title_id == 'None':
