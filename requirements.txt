@@ -12,3 +12,4 @@ flask_sqlalchemy
 pytest
 PyMySQL
 requests
+GoogleAppEngineCloudStorageClient
