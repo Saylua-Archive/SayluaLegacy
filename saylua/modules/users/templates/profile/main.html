@@ -1,3 +1,5 @@
+{% from "_macros/pet_avatar_view.html" import pet_avatar_view %}
+
 {% extends "layout.html" %}
 {% block header_scripts %}
 <link rel="stylesheet" type="text/css" href="{{ include_static('css/users.min.css') }}">
@@ -6,7 +8,7 @@
 <h1 id="profile-header">{{ viewed_user.name }}</h1>
 <div id="profile-container">
   <div id="profile-column">
-    <img src="{{ viewed_user.avatar_url() }}" id="profile-human-avatar">
+    {{ pet_avatar_view(viewed_user) }}
     <fieldset id="profile-details">
       <legend id="profile-details-legend">Details</legend>
       <table id="profile-details-table">
@@ -44,26 +46,30 @@
     </fieldset>
   </div>
   <div id="profile-body">
-    <div id="profile-navigation">
-      <a class="subtle-button" href="/user/{{ viewed_user.name }}/threads/">Threads</a>
-      <a class="subtle-button" href="/user/{{ viewed_user.name }}/posts/">Posts</a>
-      <a class="subtle-button" href="/shop/{{ viewed_user.name }}/">Shop</a>
+    <div id="profile-navigation" class="profile-navigation">
+      <span class="view-links">
+        <a class="subtle-button" href="/user/{{ viewed_user.name }}/threads/">Threads</a>
+        <a class="subtle-button" href="/user/{{ viewed_user.name }}/posts/">Posts</a>
+        <a class="subtle-button" href="/shop/{{ viewed_user.name }}/">Shop</a>
+      </span>
 
-      <span class="right">
-        <a class="normal" href="/messages/write/?to={{ viewed_user.name|urlencode }}">
-          <img src="/static/img/icons/pencil.png">
+      <span class="action-links">
+        <a class="subtle-button" href="/messages/write/?to={{ viewed_user.name }}">
+          <img src="/static/img/icons/pencil.png" alt="pencil" title="Write Message" aria-label="Write Message" />
           Message
         </a>
-        <a class="normal" href="/bank/transfer/?to={{ viewed_user.name|urlencode }}">
-          <img src="/static/img/icons/weather_clouds.png">
+        <a class="subtle-button" href="/bank/transfer/?to={{ viewed_user.name }}">
+          <img src="/static/img/icons/weather_clouds.png" alt="cloud coins" title="Send Money" aria-label="Send Money" />
           Send Money
         </a>
       </span>
     </div>
     <h3>About {{ viewed_user.name }}</h3>
+    {% if viewed_user.bio %}
     <div id="profile-about-me">
       {{ viewed_user.bio }}
     </div>
+    {% endif %}
     <h3>{{ viewed_user.name }}'s Pets</h3>
     {% for pet in pets %}
     <div style="width:20%; float:left">
