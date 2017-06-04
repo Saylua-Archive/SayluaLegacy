@@ -58,6 +58,7 @@ class Pet(db.Model):
             subpath = ("img" + os.sep + "pets" + os.sep + self.species_name + os.sep + self.coat.name +
             ".png")
             flash("static" + os.sep + subpath)
+            flash(os.path.dirname(os.path.realpath(__file__)))
             if os.path.isfile("static" + os.sep + subpath):
                 return url_for("static", filename=subpath) + "?v=" + str(get_static_version_id())
         return (app.config['IMAGE_BUCKET_ROOT'] + "/pets/" + self.species_name + "/" +
