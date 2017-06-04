@@ -39,10 +39,12 @@ class User(db.Model):
     email_confirmed = db.Column(db.Boolean, default=False)
     password_hash = db.Column(db.String(200))
 
-    # Role
-    role_name = db.Column(db.String(256), db.ForeignKey("roles.name"), default="user")
-    role = db.relationship("Role")
+    # Permissions.
+    can_moderate = db.Column(db.Boolean, default=False)
+    can_admin = db.Column(db.Boolean, default=False)
 
+    title_id = db.Column(db.Integer, db.ForeignKey("titles.id"))
+    title = db.relationship("Title", foreign_keys=[title_id])
     titles = db.relationship("Title",
         secondary="r_user_titles",
         back_populates="users"
@@ -98,6 +100,15 @@ class User(db.Model):
     def url(self):
         return "/user/" + self.name.lower() + "/"
 
+    def title_class(self):
+        if self.is_banned():
+            return 'title-banned'
+        elif self.is_muted():
+            return 'title-muted'
+        elif self.title:
+            return self.title.css_class()
+        return 'title-user'
+
     def is_banned(self):
         ban = self.ban
         return ban and ban.ban_type == BanTypes.BAN and ban.active()
@@ -110,10 +121,10 @@ class User(db.Model):
         return self.email_confirmed and not self.is_muted() and not self.is_banned()
 
     def has_moderation_access(self):
-        return self.role.can_moderate
+        return self.can_moderate
 
     def has_admin_access(self):
-        return self.role.can_admin
+        return self.can_admin
 
     def make_email_confirmation_code(self):
         code = EmailConfirmationCode(self.id, self.email)
@@ -191,23 +202,13 @@ class User(db.Model):
         if user.star_shards < 0 or user.cloud_coins < 0:
             raise InvalidCurrencyException('Currency cannot be negative!')
 
-    def __init__(self, username, email, password_hash, role_name=None, star_shards=None, cloud_coins=None):
+    def __init__(self, username, *args, **kwargs):
         self.active_username = username
         Username.create(username, self)
 
-        self.email = email
-        self.password_hash = password_hash
-
-        if role_name:
-            self.role_name = role_name
-
-        if star_shards:
-            self.star_shards = star_shards
-
-        if cloud_coins:
-            self.cloud_coins = cloud_coins
-
         self.bank_account = BankAccount()
+
+        super(User, self).__init__(*args, **kwargs)
 
 
 class Username(db.Model):

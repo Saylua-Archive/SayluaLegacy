@@ -38,7 +38,7 @@ urlpatterns = [
         name='admin_manage', methods=['GET', 'POST']),
     url('/admin/user/<username>/', view_func=views.admin.user_manage_single,
         name='admin_manage_single', methods=['GET', 'POST']),
-    url('/admin/ban/<username>/', view_func=views.admin.user_ban,
+    url('/admin/user/<username>/ban/', view_func=views.admin.user_ban,
         name='admin_ban', methods=['GET', 'POST']),
     url('/admin/invite/', view_func=views.admin.user_invite,
         name='admin_invite', methods=['GET', 'POST']),

@@ -1,0 +1,41 @@
+@import '../assets/variables';
+
+a,
+.theme-admin a {
+  &.title-banned {
+    text-decoration: line-through;
+  }
+
+  &.title-banned,
+  &.title-muted {
+    color: hsl(0, 0%, 53%);
+  }
+
+  &.title-user {
+    color: hsl(4, 72%, 62%);
+  }
+
+  &.title-moderator {
+    color: hsl(182, 100%, 45%);
+  }
+
+  &.title-admin {
+    color: hsl(328, 95%, 56%);
+  }
+
+  &.title-writer {
+    color: hsl(280, 100%, 50%);
+  }
+
+  &.title-artist {
+    color: hsl(150, 100%, 41%);
+  }
+
+  &.title-programmer {
+    color: hsl(231, 99%, 62%);
+  }
+
+  &.title-contributor {
+    color: hsl(336, 78%, 43%);
+  }
+}
