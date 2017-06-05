@@ -2,7 +2,7 @@ from saylua import app, db
 from ..soul_names import soul_name
 import os
 from saylua.utils import get_static_version_id, is_devserver
-from flask import url_for, flash
+from flask import url_for
 
 
 # Pets are divided into species and species are divided into variations
@@ -57,9 +57,12 @@ class Pet(db.Model):
         if is_devserver():
             subpath = ("img" + os.sep + "pets" + os.sep + self.species_name + os.sep + self.coat.name +
             ".png")
-            flash("static" + os.sep + subpath)
-            flash(os.path.dirname(os.path.realpath(__file__)))
-            if os.path.isfile("static" + os.sep + subpath):
+            image_path = (os.path.join( # The joys of going up five levels
+                os.path.dirname(
+                    os.path.dirname(
+                        os.path.dirname(
+                            os.path.dirname(__file__)))), "static", subpath))
+            if os.path.isfile(image_path):
                 return url_for("static", filename=subpath) + "?v=" + str(get_static_version_id())
         return (app.config['IMAGE_BUCKET_ROOT'] + "/pets/" + self.species_name + "/" +
             self.coat.name + ".png?v=" + str(get_static_version_id()))
