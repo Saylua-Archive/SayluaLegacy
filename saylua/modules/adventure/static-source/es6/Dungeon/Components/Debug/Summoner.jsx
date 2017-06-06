@@ -1,7 +1,7 @@
 import Inferno from "inferno";
 import Component from "inferno-component";
 
-import 'whatwg-fetch';
+import { slFetch } from "saylua-fetch";
 
 import { resolveImage } from "../../Core/graphics";
 
@@ -20,12 +20,12 @@ export default class DebugSummoner extends Component {
   }
 
   componentWillMount() {
-    let entities = fetch('/explore/api/list_entities', {
+    let entities = slFetch('/adventure/api/list_entities', {
       "credentials": 'same-origin',
       "method": 'POST'
     }).then(response => response.json());
 
-    let tiles = fetch('/explore/api/list_tiles', {
+    let tiles = slFetch('/adventure/api/list_tiles', {
       "credentials": 'same-origin',
       "method": 'POST'
     }).then(response => response.json());

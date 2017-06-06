@@ -143,7 +143,7 @@ def generate_models_from_schema(schema):
             )
 
     try:
-        from saylua.modules.explore.models.db import (
+        from saylua.modules.adventure.models.db import (
             DungeonScript, DungeonScriptWrapper,
             DungeonTrait, DungeonEntity,
             DungeonTile

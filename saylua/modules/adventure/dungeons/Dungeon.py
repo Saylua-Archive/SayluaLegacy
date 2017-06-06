@@ -1,4 +1,4 @@
-from saylua.modules.explore.models.db import DungeonEntity, DungeonTile
+from saylua.modules.adventure.models.db import DungeonEntity, DungeonTile
 from . import map_list
 import random
 

@@ -6,7 +6,7 @@
 
 import cloneDeep from "lodash.clonedeep";
 import astar from "astar";
-import 'whatwg-fetch';
+import { slFetch } from "saylua-fetch";
 
 import * as Scripting from "../Core/scripting";
 import * as GameLogic from "../Core/logic";
@@ -16,11 +16,11 @@ import { DebugReducer } from "./DebugReducer";
 
 
 export function getInitialGameState() {
-  let request = fetch('/explore/api/generate_dungeon', {
+  let request = slFetch('/adventure/api/generate_dungeon', {
     "credentials": 'same-origin',
     "method": 'POST',
     "headers": {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     }
   })
   .then(response => response.json())
