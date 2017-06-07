@@ -11,7 +11,7 @@ export function calculateSize () {
   if (baseWidth < 1000) {
     width = Math.floor(Math.min(650, baseWidth));
   } else {
-    width = Math.floor(Math.min(baseWidth * 0.65, 1400));
+    width = Math.floor(Math.min(baseWidth * 0.75, 1400));
   }
 
   height = Math.floor(width / ratio);
