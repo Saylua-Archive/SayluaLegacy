@@ -15,6 +15,7 @@ from google.appengine.api import app_identity
 app = SayluaApp(__name__)
 app.config.from_pyfile('config/secure.py')
 app.config.from_pyfile('config/settings.py')
+
 if app_identity.get_application_id() == "saylua-staging":
     app.config.from_pyfile('config/secure_staging.py')
 if is_devserver():
@@ -34,6 +35,7 @@ enabled_modules = [
     'admin',
     'arcade',
     'avatar',
+    'commerce',
     'explore',
     'forums',
     'home',
@@ -42,7 +44,6 @@ enabled_modules = [
     'museum',
     'pets',
     'search',
-    'trade',
     'users',
     'world'
 ]
@@ -58,6 +59,7 @@ def favicon():
     return send_from_directory(join(app.root_path, 'static'), 'favicon.ico',
         mimetype='image/vnd.microsoft.icon')
 
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
@@ -66,7 +68,3 @@ def page_not_found(e):
 @app.errorhandler(500)
 def application_error(e):
     return render_template("500.html"), 500
-
-
-# Make sure imports for other modules are at the bottom of the file
-import modules

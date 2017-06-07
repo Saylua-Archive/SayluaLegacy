@@ -12,18 +12,23 @@
 </form>
 
 
-<h2>Current Users on Site</h2>
+<h2>List of Users on the Site</h2>
+
+{{ pagination.render() }}
+
 <table class="alternating-table">
-  {% for user in users %}
+  {% for user in pagination.items %}
   <tr>
     <td>
       {{ user_link(user) }}
     </td>
     <td>
-      <a href="/admin/user/?username={{ user.name }}">Manage User</a>
+      <a href="/admin/user/{{ user.name }}/">Manage User</a>
     </td>
   </tr>
   {% endfor %}
 </table>
+
+{{ pagination.render() }}
 
 {% endblock %}

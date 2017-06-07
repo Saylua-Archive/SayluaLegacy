@@ -110,7 +110,7 @@ def forums_thread(thread, page=1):
             pagination=pagination, other_boards=other_boards)
 
 
-@moderation_access_required
+@moderation_access_required()
 def forums_thread_move(thread_id):
     thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one_or_none()
 
@@ -125,7 +125,7 @@ def forums_thread_move(thread_id):
     return redirect(thread.url())
 
 
-@moderation_access_required
+@moderation_access_required()
 def forums_thread_pin(thread_id):
     thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one_or_none()
     if not thread:
@@ -145,7 +145,7 @@ def forums_thread_pin(thread_id):
     return redirect(thread.url())
 
 
-@moderation_access_required
+@moderation_access_required()
 def forums_thread_lock(thread_id):
     thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one_or_none()
     if not thread:
@@ -165,7 +165,7 @@ def forums_thread_lock(thread_id):
     return redirect(thread.url())
 
 
-@login_required
+@login_required()
 def forums_thread_subscribe(thread_id):
     thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one_or_none()
     if not thread:
@@ -192,7 +192,7 @@ def forums_thread_subscribe(thread_id):
     return redirect(thread.url())
 
 
-@communication_access_required
+@communication_access_required()
 def forums_post_edit(post_id):
     post = db.session.query(ForumPost).get(post_id)
     if not post:

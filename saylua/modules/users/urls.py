@@ -36,6 +36,10 @@ urlpatterns = [
     # Admin views
     url('/admin/user/', view_func=views.admin.user_manage,
         name='admin_manage', methods=['GET', 'POST']),
-    url('/admin/user/invite/', view_func=views.admin.user_invite,
+    url('/admin/user/<username>/', view_func=views.admin.user_manage_single,
+        name='admin_manage_single', methods=['GET', 'POST']),
+    url('/admin/user/<username>/ban/', view_func=views.admin.user_ban,
+        name='admin_ban', methods=['GET', 'POST']),
+    url('/admin/invite/', view_func=views.admin.user_invite,
         name='admin_invite', methods=['GET', 'POST']),
 ]

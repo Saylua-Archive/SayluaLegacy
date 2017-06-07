@@ -6,7 +6,7 @@ from .models.db import Item, InventoryItem
 from flask import render_template, g
 
 
-@login_required
+@login_required()
 def items_inventory(category=None):
     inventory_query = db.session.query(InventoryItem).filter(InventoryItem.user_id == g.user.id)
     pagination = Pagination(per_page=10, query=inventory_query)

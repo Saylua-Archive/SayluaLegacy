@@ -1,5 +1,5 @@
 from saylua import app, db
-from saylua.models.user import LoginSession
+from saylua.modules.users.models.db import LoginSession
 from flask import request, g
 
 import datetime

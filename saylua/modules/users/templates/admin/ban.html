@@ -1,0 +1,101 @@
+{% from "_macros/user_link.html" import user_link %}
+{% from "_macros/forms.html" import form_row %}
+
+{% extends "admin/template.html" %}
+{% set section_title = "Ban or Mute User " + user.name %}
+{% block section_body %}
+
+<p class="center">
+  <a href="{{ url_for('users.admin_manage') }}">
+    <img src="/static/img/icons/arrow_left.png" alt="arrow" title="Back" aria-label="Back" />
+    Back to List of Users
+  </a>
+</p>
+
+<p class="center">
+  You are modifying user: {{ user_link(user) }}
+</p>
+
+<p class="center">
+  <a href="{{ url_for('users.admin_manage_single', username=user.name) }}">
+    Edit profile settings for {{ user.name }}?
+  </a>
+</p>
+
+{% if user.is_banned() or user.is_muted() %}
+<h2>{{ user.name }} is Currently {{ user.ban.past_tense().capitalize() }}</h2>
+<table class="center">
+  <tr>
+    <td>
+      Ban Type:
+      <strong>
+        {{ user.ban.past_tense() }}
+      </strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Reason:
+      <strong>
+        {{ user.ban.reason }}
+      </strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Length:
+      <strong>
+        {% if user.ban.is_permanent %}
+        Forever
+        {% else %}
+        Until {{ user.ban.banned_until|expanded_relative_time }}
+        {% endif %}
+      </strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <button name="undo" value="Undo">Un{{ user.ban.verb() }} {{ user.name }}?</button>
+      </form>
+    </td>
+  </tr>
+</table>
+{% endif %}
+
+<h2>Ban {{ user.name }}</h2>
+<form method="post" class="validated-form">
+  <table class="form-table">
+    {{ form_row(ban_form.reason, tip="Please explain why you are banning this user.") }}
+    {{ form_row(ban_form.days, tip="Number of days the user should be banned.") }}
+    {{ form_row(ban_form.is_permanent) }}
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" name="ban" value="Ban {{ user.name }}" />
+      </td>
+    </tr>
+  </table>
+  {{ ban_form.csrf_token }}
+</form>
+
+
+<h2>Mute {{ user.name }}</h2>
+<form method="post" class="validated-form">
+  <table class="form-table">
+    {{ form_row(mute_form.reason, tip="Please explain why you are muting this user.") }}
+    {{ form_row(mute_form.days, tip="Number of days the user should be muted.") }}
+    {{ form_row(mute_form.is_permanent) }}
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" name="mute" value="Mute {{ user.name }}" />
+      </td>
+    </tr>
+  </table>
+  {{ mute_form.csrf_token }}
+</form>
+
+
+{% endblock %}

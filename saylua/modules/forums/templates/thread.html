@@ -14,7 +14,7 @@
 <span class="forum-breadcrumb">
   <a href="/forums/">Forums</a> &#187;
   <a href="{{ thread.board.category.url() }}">{{ thread.board.category.title }}</a> &#187;
-  <a href="{{ thread.board.url() }}"> {{ thread.board.title }}</a> &#187;
+  <a href="{{ thread.board.url() }}">{{ thread.board.title }}</a> &#187;
   {{ truncate(thread.title, 40) }}
 </span>
 
@@ -62,20 +62,28 @@
   <p>
     Please <a href="/login/">login</a> before replying to forum threads.
   </p>
-  {% elif not g.user.email_confirmed %}
-  <p>
-    Please confirm your email address before replying to forum threads.
-  </p>
   {% elif not thread.can_post(g.user) %}
-  {% if thread.is_locked %}
-  <p>
-    Sorry, you can't post a thread while it's locked.
-  </p>
-  {% else %}
-  <p>
-    Sorry, you don't have permission to post on this thread.
-  </p>
-  {% endif %}
+    {% if g.user.is_banned() %}
+    <p>
+      Sorry, you can't reply to threads while banned.
+    </p>
+    {% elif g.user.is_muted() %}
+    <p>
+      Sorry, you can't reply to threads while muted.
+    </p>
+    {% elif thread.is_locked %}
+    <p>
+      Sorry, you can't post on a thread while it's locked.
+    </p>
+    {% elif not g.user.email_confirmed %}
+    <p>
+      Please confirm your email address before replying to forum threads.
+    </p>
+    {% else %}
+    <p>
+      Sorry, you don't have permission to post on this thread.
+    </p>
+    {% endif %}
   {% else %}
   <table class="form-table">
     <tr>

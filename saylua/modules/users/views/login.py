@@ -1,6 +1,6 @@
 from saylua import app, db
 
-from saylua.models.user import LoginSession
+from saylua.modules.users.models.db import LoginSession
 from saylua.wrappers import login_required
 
 from ..forms.login import LoginForm, login_check
@@ -49,7 +49,7 @@ def login():
     return render_template('login/login.html', form=form)
 
 
-@login_required
+@login_required(error="You must be logged in before you can logout.")
 def logout():
     session_id = request.cookies.get('session_id')
     session = (

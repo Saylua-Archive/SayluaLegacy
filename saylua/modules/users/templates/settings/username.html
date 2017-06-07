@@ -30,7 +30,7 @@
 
 <table class="alternating-table">
   <tr class="header">
-    <th class="h2" colspan="2">
+    <th class="h2" colspan="3">
       Your Past Usernames
     </th>
   </tr>
@@ -39,19 +39,30 @@
     <td>
       {{ username.case_name }}
     </td>
-    <td>
-      {% if username.name == g.user.name.lower() %}
-        <em>Current username</em>
-      {% else %}
-        <form method="post" action="/settings/username/release/">
-          <input type="hidden" name="username" value="{{ username.name }}">
-          <button type="submit" class="link-button" name="submit">
-            Release username
-          </button>
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        </form>
-      {% endif %}
+    {% if username.name == g.user.name.lower() %}
+    <td colspan="2">
+      <em>Current username</em>
     </td>
+    {% else %}
+    <td>
+      <form method="post">
+        <input type="hidden" name="username" value="{{ username.name }}">
+        <button type="submit" class="subtle-button" name="submit">
+          Switch username
+        </button>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      </form>
+    </td>
+    <td>
+      <form method="post" action="/settings/username/release/">
+        <input type="hidden" name="username" value="{{ username.name }}">
+        <button type="submit" class="link-button" name="submit">
+          Release username
+        </button>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      </form>
+    </td>
+    {% endif %}
   </tr>
   {% endfor %}
 </table>
