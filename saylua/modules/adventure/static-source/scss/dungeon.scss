@@ -50,7 +50,7 @@ $green: hsl(114, 52%, 57%);
 
 // Canvas container container container ahuehuaheuahuehauehauheuaheuhauehuaehuahuehauehuehuhauehuaheuaheuhehe
 $background-gradient-start: hsla(180, 100%, 50%, 0.31);
-$background-gradient-end: hsla(0, 91%, 13%, 0.7);
+$background-gradient-end: hsla(0, 60%, 13%, 0.7);
 
 
 // Debug section
@@ -72,7 +72,7 @@ $debug-search-section-border: lighten($debug-search-section-background, 7%);
 
 $debug-button-color: hsl(0, 10%, 74%);
 $debug-button-color-hover: $white;
-$debug-button-background: hsl(0, 12%, 35%);
+$debug-button-background: hsl(0, 12%, 10%);
 $debug-button-background-hover: hsl(340, 82%, 52%);
 
 /*****************************************************************
@@ -90,7 +90,7 @@ canvas {
 .dungeon-theatre {
   padding: 75px 0px;
 
-  background: linear-gradient(to bottom, $background-gradient-start 0%, $background-gradient-end 100%), url("/static/img/backgrounds/21.jpg");
+  background: linear-gradient(to bottom, $background-gradient-start 0%, $background-gradient-end 100%), url("/static/img/backgrounds/luaria.png");
   background-size: cover;
 
   width: 100%;

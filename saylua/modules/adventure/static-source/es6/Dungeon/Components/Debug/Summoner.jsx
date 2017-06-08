@@ -20,12 +20,12 @@ export default class DebugSummoner extends Component {
   }
 
   componentWillMount() {
-    let entities = slFetch('/adventure/api/list_entities', {
+    let entities = slFetch('/adventure/api/list_entities/', {
       "credentials": 'same-origin',
       "method": 'POST'
     }).then(response => response.json());
 
-    let tiles = slFetch('/adventure/api/list_tiles', {
+    let tiles = slFetch('/adventure/api/list_tiles/', {
       "credentials": 'same-origin',
       "method": 'POST'
     }).then(response => response.json());

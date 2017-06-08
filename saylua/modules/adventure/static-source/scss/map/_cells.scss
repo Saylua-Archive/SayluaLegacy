@@ -62,12 +62,8 @@
 .dungeon-mini-map {
   .cell {
     // GIMME THE FUTURE BABY I'M READY
-    display: -webkit-box;
-    display: -moz-box;
-    display: box;
+    display: flex;
 
-    -webkit-box-flex: 1;
-    -moz-box-flex: 1;
     box-flex: 1;
 
     height: 5px;
@@ -77,8 +73,6 @@
   .cell-row {
     // SO FUTURE
     display: flex;
-    display: -moz-flex;
-    display: -webkit-flex;
   }
 
   .cell-unseen {

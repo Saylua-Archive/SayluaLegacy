@@ -16,7 +16,7 @@ import { DebugReducer } from "./DebugReducer";
 
 
 export function getInitialGameState() {
-  let request = slFetch('/adventure/api/generate_dungeon', {
+  let request = slFetch('/adventure/api/generate_dungeon/', {
     "credentials": 'same-origin',
     "method": 'POST',
     "headers": {

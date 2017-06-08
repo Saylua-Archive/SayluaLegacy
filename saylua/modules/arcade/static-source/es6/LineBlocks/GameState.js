@@ -119,7 +119,6 @@ export default class GameState extends BaseModel {
       // TODO: Actually use the response. Retry this on failure.
       game.scoreSent = true;
       game.triggerUpdate();
-      //console.log(json);
     });
 
     this.triggerUpdate();

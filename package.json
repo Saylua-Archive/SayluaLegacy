@@ -52,8 +52,10 @@
     "inferno-test-utils": "^3.3.1",
     "mocha": "^3.2.0",
     "mocha-webpack": "^0.7.0",
+    "pseudomap": "^1.0.2",
     "redux": "^3.6.0",
     "webpack": "^2.2.1",
-    "whatwg-fetch": "^2.0.2"
+    "whatwg-fetch": "^2.0.2",
+    "yallist": "^3.0.2"
   }
 }
