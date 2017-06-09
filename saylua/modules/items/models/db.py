@@ -1,5 +1,7 @@
-from saylua import db
-from saylua.utils import canonize
+from saylua import app, db
+from saylua.utils import canonize, is_devserver, get_static_version_id
+from flask import url_for
+import os
 
 
 class Item(db.Model):
@@ -24,6 +26,17 @@ class Item(db.Model):
 
     def image_url(self):
         return '/static/img/items/' + self.canon_name + '.png'
+        if is_devserver():
+            subpath = ("img" + os.sep + "items" + os.sep + self.canon_name + ".png")
+            image_path = (os.path.join( # The joys of going up five levels
+                os.path.dirname(
+                    os.path.dirname(
+                        os.path.dirname(
+                            os.path.dirname(__file__)))), "static", subpath))
+            if os.path.isfile(image_path):
+                return url_for("static", filename=subpath) + "?v=" + str(get_static_version_id())
+        return (app.config['IMAGE_BUCKET_ROOT'] + "/items/" + self.canon_name +
+            ".png?v=" + str(get_static_version_id()))
 
     def grant(self, user_id, count):
         inventory_entry = InventoryItem.by_user_item(user_id, self.id)

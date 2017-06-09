@@ -20,15 +20,18 @@ def admin_panel_items_add():
         form.populate_obj(item)
         db.session.add(item)
         db.session.commit()
-        item_image = request.form.get('image')
+        item_image = request.files.get('image')
+        if not item_image:
+            flash("An item image is required!")
+            return render_template('admin/add.html', form=form)
         filename = app.config['IMAGE_BUCKET_NAME'] + "/items/" + item.canon_name + ".png"
         write_retry_params = gcs.RetryParams(backoff_factor=1.1)
         gcs_file = gcs.open(filename,
                           'w',
                           content_type='image/png',
-                          options={},
+                          options={'x-goog-acl': 'public-read'},
                           retry_params=write_retry_params)
-        gcs_file.write(item_image.encode('utf-8'))
+        gcs_file.write(item_image.read())
         gcs_file.close()
         flash('You have successfully created a new item!')
         return redirect(url_for('items.admin_add'))
