@@ -1,12 +1,13 @@
 // Standard sizes for different squares used on the site.
 
 @mixin square($size) {
+  display: block;
+  overflow-y: hidden;
   width: $size;
   max-width: 100%;
+  height: $size;
   margin: auto;
-
-  align-items: center;
-  justify-content: center;
+  text-align: center;
 }
 
 .pet {
@@ -27,4 +28,8 @@
 
 .item-big {
   @include square(16rem);
+}
+
+.npc-bust {
+  @include square(40rem);
 }

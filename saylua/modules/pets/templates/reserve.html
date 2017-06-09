@@ -8,7 +8,9 @@
 <div>This little one really likes you!</div>
 <div class="reserve">
   <img src="{{ adoptee.image() }}"></img>
-  <img class="reserve-npc" src="/static/img/characters/vera-everly.png" />
+  <div class="reserve-npc npc-bust">
+    <img src="/static/img/characters/vera-everly.png" />
+  </div>
 <form method="post">
   <input type="hidden" name="soul_name" value="{{ adoptee.soul_name }}">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>

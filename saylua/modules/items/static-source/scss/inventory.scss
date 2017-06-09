@@ -1,2 +1,18 @@
 @import 'assets/variables';
 @import 'assets/transitions';
+
+
+.item-grid{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+
+  .item-grid-element {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 20%;
+  }
+}

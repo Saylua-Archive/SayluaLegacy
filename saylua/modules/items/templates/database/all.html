@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
 {% set page_title = "Item Database" %}
-
 {% block header_scripts %}
   <link rel="stylesheet" type="text/css" href="{{ include_static('css/items.min.css') }}">
 {% endblock %}
@@ -10,9 +9,9 @@
   {{ pagination.render() }}
 </div>
 {% for item in pagination.items %}
-<div>
-  <a href="{{ item.url() }}">
-    <img src="{{ item.image_url() }}" class="item">
+<div class="item-grid">
+  <a href="{{ item.url() }}" class="item-grid-element">
+    <img src="{{ item.image_url() }}" class="item" />
     {{ item.name }}
   </a>
 </div>
