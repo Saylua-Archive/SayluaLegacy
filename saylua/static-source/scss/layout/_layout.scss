@@ -14,8 +14,9 @@
   padding: 1.8rem;
   text-align: center;
   color: $white;
-  background: $mainSofterColor url('/static/img/backgrounds/1.jpg');
+  background: $mainSofterColor url('/static/img/backgrounds/sayleus.png');
   background-size: cover;
+  background-position: 0 200px;
 
   flex-shrink: 0;
 
@@ -32,7 +33,7 @@
     }
 
     &:hover img {
-      filter: drop-shadow(0px 0px 5px #eceb72);
+      filter: drop-shadow(0px 0px 5px hsl(60, 76%, 69%));
     }
   }
 }

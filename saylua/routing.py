@@ -70,10 +70,10 @@ def url(rule, view_func, name=None, methods=["GET"]):
     ```
     from . import views
 
-    url('/explore/', view_func=views.explore_home, name='explore_home', methods=['GET'])
-    url('/explore/', view_func=views.explore_home, name='explore_home')
-    url('/explore/', views.explore_home, 'explore_home')
-    url('/explore/', views.explore_home)
+    url('/adventure/', view_func=views.adventure_home, name='adventure_home', methods=['GET'])
+    url('/adventure/', view_func=views.adventure_home, name='adventure_home')
+    url('/adventure/', views.adventure_home, 'adventure_home')
+    url('/adventure/', views.adventure_home)
     ```
 
     # Note that 'endpoint' is now 'name'.

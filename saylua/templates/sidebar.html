@@ -1,20 +1,10 @@
 {% from "_macros/user_link.html" import user_link %}
+{% from "_macros/pet_avatar_view.html" import pet_avatar_view %}
 
 <div id="sidebar" class="sidebar">
   {% if g.logged_in %}
   <div id="avatar-section" class="sidebar-section">
-    <div id="pet-avatar-view" class="pet-avatar-view">
-      <div class="avatar-view" id="avatar-view">
-        <a href="{{ g.user.url() }}">
-          <img src="{{ g.user.avatar_url() }}" alt="Human avatar" title="Human avatar" />
-        </a>
-      </div>
-      {% if g.user.companion %}
-      <a href="{{ g.user.companion.url() }}/" id="active-pet-view" class="active-pet-view">
-        <img src="{{ g.user.companion.image() }}" id="active-pet-image">
-      </a>
-      {% endif %}
-    </div>
+    {{ pet_avatar_view(g.user) }}
   </div>
   <div id="user-info-section" class="sidebar-section">
     <p>You are {{ user_link(g.user) }}</p>

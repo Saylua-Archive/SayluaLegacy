@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% set fullscreen = True %}
+{% set page_title = "Exploring" %}
+{% block header_scripts %}
+  <link rel="stylesheet" type="text/css" href="{{ include_static('css/adventure.min.css') }}">
+{% endblock %}
+
+{% block container %}
+  <div class="main-body dungeons-body">
+    <div class="dungeon-theatre">
+      <div class="dungeon-client-wrapper">
+        <div class="notifications-container">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                {% if category == 'error' %}
+                  <div class="notification error">Error: {{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
+                {% else %}
+                  <div class="notification">{{ message }} <a class="close-button" href="#" title="close">&#x00d7;</a></div>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+        </div>
+        <div id="dungeon-client-mount"></div>
+      </div>
+    </div>
+    <div class="debug-container">
+      <div id="dungeon-debug-mount"></div>
+    </div>
+    <div class="main-body-content">
+    </div>
+  </div>
+{% endblock %}
+{% block footer_scripts %}
+<!--<script src="{{ include_static('js/lib/pixi.min.js') }}"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.4.2/pixi.min.js"></script>
+
+<script src="{{ include_static('js/Dungeon.min.js') }}"></script>
+{% endblock %}

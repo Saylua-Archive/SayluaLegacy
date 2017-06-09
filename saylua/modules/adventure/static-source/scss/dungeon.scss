@@ -1,0 +1,546 @@
+/*****************************************************************
+  --> Cells.scss
+  Perhaps would be more appropriately named 'tiles.scss',
+  as tiles are templates and cells are instances of those
+  templates.
+
+  TABLE OF CONTENTS:
+    -- #0.00 Base (You are here)
+    -- #0.0a Colors
+    -- #0.1a Temporary Experimental Changes
+    -- #0.2a Main Layout
+    -- #0.3a Debug Layout
+    -- #0.3b Debug Styles
+    -- #0.3c Debug Section.General
+    -- #0.3d Debug Section.Editor
+    -- #0.3e Debug Section.Summoner
+
+*****************************************************************/
+
+@import 'map/cells';
+@import 'map/entities';
+
+html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+/*****************************************************************
+  -- #0.0a Colors
+  ===============================================================
+  Color variables.
+*****************************************************************/
+
+// -- Base colors
+
+$black: #222;
+$white: #fff;
+$green: hsl(114, 52%, 57%);
+
+// -- Derivative colors
+
+// -- Element specific colors
+
+// Canvas container container container ahuehuaheuahuehauehauheuaheuhauehuaehuahuehauehuehuhauehuaheuaheuhehe
+$background-gradient-start: hsla(180, 100%, 50%, 0.31);
+$background-gradient-end: hsla(0, 60%, 13%, 0.7);
+
+
+// Debug section
+$debug-background: hsl(0, 0%, 24%);
+$debug-menu-background: #e2e9e8;      // This is the color of the page background
+$debug-menu-active: hsl(0, 0%, 20%);
+$debug-menu-active-border: hsl(0, 0%, 19%);
+$debug-menu-hover: hsl(0, 0%, 15%);
+
+$fake-checkbox-checked: hsl(100, 75%, 48%);
+$fake-checkbox-unchecked: hsl(0, 75%, 48%);
+
+$debug-search-text: hsl(0, 0%, 49%);
+$debug-search-text-active: $white;
+$debug-search-background: hsl(0, 0%, 40%);
+$debug-search-background-active: darken($white, 5%);
+$debug-search-section-background: darken($debug-background, 4%);
+$debug-search-section-border: lighten($debug-search-section-background, 7%);
+
+$debug-button-color: hsl(0, 10%, 74%);
+$debug-button-color-hover: $white;
+$debug-button-background: hsl(0, 12%, 10%);
+$debug-button-background-hover: hsl(340, 82%, 52%);
+
+/*****************************************************************
+  -- #0.2a Main Layout
+  ===============================================================
+  Basic dungeon layout.
+*****************************************************************/
+
+canvas {
+  background: $black;
+  height: 100%;
+  width: 100%;
+}
+
+.dungeon-theatre {
+  padding: 75px 0px;
+
+  background: linear-gradient(to bottom, $background-gradient-start 0%, $background-gradient-end 100%), url("/static/img/backgrounds/luaria.png");
+  background-size: cover;
+
+  width: 100%;
+}
+
+.dungeon-client-wrapper {
+  background: $white;
+
+  margin: 0 auto;
+  position: relative;
+
+  width: 80%;
+  max-width: 1400px;
+
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dungeon-client-wrapper .notifications-container {
+  position: absolute;
+  padding: 10px 15px;
+  width: 100%;
+}
+
+// Specificity fight!
+div.main-body.dungeons-body {
+  flex-direction: column;
+  flex-shrink: 0;
+
+  padding: 0;
+  max-width: 100%;
+  width: 100%;
+}
+
+.main-body .main-body-content {
+  background: #fff;
+
+  padding: 25px;
+  margin: 25px auto;
+
+  width: 80%;
+  max-width: 1140px;
+}
+
+/*****************************************************************
+  -- #0.3a Debug Layout
+  ===============================================================
+  Debug section layout.
+*****************************************************************/
+
+.main-body .debug-container {
+  background: $debug-background;
+  padding: 0px;
+  margin: 25px auto;
+
+  width: 80%;
+  max-width: 1140px;
+}
+
+.dungeon-debug-tools {
+  display: flex;
+  width: 100%;
+
+  .debug-menu {
+    width: 8%;
+  }
+
+  .debug-section {
+    width: 92%;
+  }
+}
+
+/*****************************************************************
+  -- #0.3b Debug Styles
+  ===============================================================
+  Debug section styles.
+*****************************************************************/
+
+.dungeon-debug-tools {
+  font-family: "Open Sans";
+
+  .debug-menu ul {
+    background: $debug-menu-background;
+    padding: 0px;
+
+    height: 100%;
+    width: 100%;
+  }
+
+  .debug-menu ul li {
+    color: $green;
+    background: $black;
+
+    list-style-type: none;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-align: center;
+    text-transform: uppercase;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    padding: 8px 15px;
+    overflow: hidden;
+
+    min-height: 75px;
+    width: 100%;
+
+    transition: background-color 300ms ease;
+
+    &:hover {
+      cursor: pointer;
+      background: $debug-menu-hover;
+    }
+
+    &.active {
+      background: $debug-menu-active;
+      border-right: $debug-menu-active-border;
+    }
+
+    &.item-general .icon, &.item-editor .icon, &.item-summoner .icon {
+      background-size: cover;
+      display: block;
+
+      margin: 0 auto;
+
+      height: 45px;
+      width: 45px;
+    }
+
+    &.item-general .icon {
+      background-image: url("/static/img/dungeons/debug/menu_icon_general.png");
+    }
+
+    &.item-editor .icon {
+      background-image: url("/static/img/dungeons/debug/menu_icon_editor.png");
+    }
+
+    &.item-summoner .icon {
+      background-image: url("/static/img/dungeons/debug/menu_icon_summoner.png");
+    }
+  }
+}
+
+.debug-section {
+  h4 {
+    color: #fff;
+
+    font-weight: bold;
+    font-size: 2.4rem;
+    line-height: 2.4em;
+    text-align: center;
+
+    margin: 0;
+    padding: 0;
+
+    border-bottom: none;
+  }
+}
+
+/*****************************************************************
+  -- #0.3c Debug Section.General
+  ===============================================================
+  Styles for the Section.General debug section.
+*****************************************************************/
+
+.debug-section .section-general {
+  display: flex;
+
+  .general-actions {
+    width: 30%;
+  }
+
+  .general-options {
+    width: 70%;
+  }
+}
+
+.debug-section .section-general .general-actions {
+  ul {
+    display: block;
+    padding: 0;
+    width: 100%;
+  }
+
+  ul li {
+    display: block;
+    list-style-type: none;
+    width: 100%;
+  }
+
+  ul li button {
+    color: $debug-button-color;
+    background: $debug-button-background;
+    border-radius: 0;
+
+    padding: 10px 30px;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+
+    font-weight: bold;
+    letter-spacing: 2px;
+
+    width: 100%;
+
+    transition: background-color 200ms ease;
+
+    &:hover {
+      color: $debug-button-color-hover;
+
+      background: $debug-button-background-hover;
+    }
+  }
+}
+
+.debug-section .section-general .general-options {
+  ul {
+    display: flex;
+  }
+
+  ul li {
+    list-style-type: none;
+    width: 100%;
+  }
+
+  ul li input[type='checkbox'] {
+    position: absolute;
+    left: -9999px;
+  }
+
+  ul li input[type='checkbox'] + label {
+    color: #fff;
+    font-weight: bold;
+  }
+
+  ul li input[type='checkbox'] + label .fake-checkbox {
+    background: $fake-checkbox-unchecked;
+    display: block;
+
+    border-radius: 4px;
+
+    height: 35px;
+    width: 35px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  ul li input[type='checkbox']:checked + label .fake-checkbox {
+    background: $fake-checkbox-checked;
+  }
+
+  ul li input[type='checkbox'] + label .fake-checkbox:after {
+    display: block;
+    content: "×";
+
+    font-size: 3.2em;
+    text-align: center;
+
+    position: relative;
+    top: 0.3rem;
+  }
+
+  ul li input[type='checkbox']:checked + label .fake-checkbox:after {
+    display: block;
+    content: "✔";
+
+    font-size: 2em;
+    text-align: center;
+
+    position: relative;
+    top: 0.5rem;
+  }
+}
+
+/*****************************************************************
+  -- #0.3d Debug Section.Editor
+  ===============================================================
+  Styles for the Section.Editor debug section.
+*****************************************************************/
+
+.debug-section .section-editor {
+  display: flex;
+
+  .editor-select {
+    width: 30%;
+  }
+
+  .editor-edit {
+    width: 70%;
+  }
+}
+
+.debug-section .section-editor .editor-edit {
+  .ace_gutter {
+    padding-top: 12px;
+  }
+
+  .ace_content {
+    padding-top: 12px;
+    padding-left: 12px;
+  }
+}
+
+.debug-section .section-editor .editor-select {
+  button {
+    border-radius: 2px;
+    margin: 5px 10px;
+  }
+
+  ul {
+    display: block;
+
+    padding: 0;
+    margin-top: 15px;
+
+    width: 100%;
+  }
+
+  ul li {
+    display: block;
+    list-style-type: none;
+    width: 100%;
+  }
+
+  ul li button {
+    color: $debug-button-color;
+    background: $debug-button-background;
+    border-radius: 0;
+
+    padding: 10px 30px;
+    margin: 0;
+
+    width: 100%;
+
+    transition: background-color 200ms ease;
+
+    &:hover {
+      color: $debug-button-color-hover;
+
+      background: $debug-button-background-hover;
+    }
+  }
+}
+
+/*****************************************************************
+  -- #0.3e Debug Section.Summoner
+  ===============================================================
+  Styles for the Section.Summoner debug section.
+*****************************************************************/
+
+.debug-section .section-summoner {
+  display: flex;
+  flex-direction: column;
+
+  .summoner-search {
+    display: flex;
+  }
+
+  .summoner-select {
+    display: flex;
+
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+.debug-section .section-summoner {
+  height: 100%;
+
+  .summoner-search {
+    background: $debug-search-section-background;
+    padding: 12px 15px;
+
+    border-bottom: 1px solid $debug-search-section-border;
+
+    .hover-item {
+      color: #fff;
+      font-size: 1.6rem;
+      font-style: italic;
+
+      padding-left: 25px;
+
+      width: 70%;
+    }
+
+    .search-text {
+      color: $debug-search-text;
+
+      font-size: 1.2em;
+      text-align: right;
+
+      padding-right: 25px;
+
+      width: 15%;
+
+      transition: color 300ms ease;
+    }
+
+    .search-text.active {
+      color: $white;
+    }
+
+    input {
+      background: $debug-search-background;
+
+      border: none;
+      border-radius: 2px;
+
+      width: 15%;
+
+      transition: color 300ms ease, background-color 200ms ease;
+    }
+
+    input:active, input:focus {
+      color: $black;
+      background: $white;
+    }
+  }
+
+  .summoner-select {
+    cursor: url('/static/img/dungeons/debug/master_hand_idle.png') 18 30, auto;
+    height: 100%;
+
+    ul li {
+      list-style-type: none;
+      padding: 5px;
+    }
+
+    ul li .image-container {
+      width: 35px;
+      height: 35px;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    ul li .image-container:hover {
+      cursor: url('/static/img/dungeons/debug/master_hand_grab.png') 23 28, auto;
+    }
+
+    .select-entities {
+      width: 50%;
+    }
+
+    .select-tiles {
+      width: 50%;
+    }
+  }
+}
