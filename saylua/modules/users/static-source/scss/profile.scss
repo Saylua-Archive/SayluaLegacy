@@ -33,5 +33,11 @@
 #profile-body {
   overflow: auto;
   min-height: 100%;
-  padding: 10px;
+  padding: 1em .8rem;
+}
+
+.profile-navigation {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

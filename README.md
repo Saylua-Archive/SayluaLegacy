@@ -40,7 +40,7 @@ If you are on Windows, it is heavily suggested you use Vagrant.
       `pip install -r requirements.txt -t lib`
 
 
-9. Install NodeJS dependencies.
+9. Install JavaScript dependencies.
 
       `npm install && npm install -g gulp eslint eslint-plugin-inferno mocha webpack`
 

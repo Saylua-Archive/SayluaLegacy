@@ -33,10 +33,10 @@ import wrappers
 # Populate app with blueprints
 enabled_modules = [
     'admin',
+    'adventure',
     'arcade',
     'avatar',
     'commerce',
-    'explore',
     'forums',
     'home',
     'items',

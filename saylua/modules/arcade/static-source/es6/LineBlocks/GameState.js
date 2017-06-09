@@ -3,7 +3,7 @@ import BaseModel from "Models/BaseModel";
 import Matrix from "./Matrix";
 
 import cloneDeep from "lodash.clonedeep";
-import "whatwg-fetch";
+import { slFetch } from "saylua-fetch";
 
 const GAME_ID = 0;
 const LB_FPS = 60;
@@ -98,7 +98,7 @@ export default class GameState extends BaseModel {
 
     let game = this;
 
-    fetch('/api/arcade/score/' + GAME_ID + '/', {
+    slFetch('/api/arcade/score/' + GAME_ID + '/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -119,7 +119,6 @@ export default class GameState extends BaseModel {
       // TODO: Actually use the response. Retry this on failure.
       game.scoreSent = true;
       game.triggerUpdate();
-      //console.log(json);
     });
 
     this.triggerUpdate();
