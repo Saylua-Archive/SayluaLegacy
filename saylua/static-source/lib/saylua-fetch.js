@@ -15,5 +15,5 @@ export function slFetch (url, request) {
     }
   }
 
-  return fetch(url, request)
+  return fetch(url, request);
 }
