@@ -1,3 +1,5 @@
+{% from "_macros/user_link.html" import user_link %}
+
 {% extends "layout.html" %}
 {% set page_title = "Forums" %}
 
@@ -47,12 +49,11 @@
         {% set last_post = board.latest_post() %}
         {% if last_post is not none %}
         {% if last_post.author.companion %}
-        <img src="{{ last_post.author.companion.image() }}" />
+        <img src="{{ last_post.author.companion.image() }}" alt="last_post.author.companion.name" />
         {% endif %}
         <p>
           <a href="{{ last_post.url() }}">{{ last_post.thread.title }}
-          </a> by <a href="{{ last_post.author.url() }}">
-            {{ last_post.author.name }}</a>
+          </a> by {{ user_link(last_post.author) }}
           <span class="line">({{ last_post.date_created|relative_time }})</span>
         </p>
         {% endif %}

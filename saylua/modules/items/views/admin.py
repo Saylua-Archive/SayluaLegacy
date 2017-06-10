@@ -3,10 +3,10 @@ from saylua import db
 from saylua.utils import get_from_request
 from saylua.wrappers import admin_access_required
 
-from .models.db import Item
+from ..models.db import Item
+from ..forms import ItemUploadForm
 
 from flask import render_template, redirect, url_for, flash, request
-from forms import ItemUploadForm
 
 
 @admin_access_required()
