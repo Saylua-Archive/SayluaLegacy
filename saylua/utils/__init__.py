@@ -30,7 +30,7 @@ def pluralize(count, singular_noun, plural_noun=None):
     return str(count) + ' ' + plural_noun
 
 
-def articlize(singular_noun):
+def add_article(singular_noun):
     vowels = ("a", "e", "i", "o", "u")
     if singular_noun.startswith(vowels):
         return "an " + singular_noun
@@ -75,3 +75,10 @@ def canonize(name):
     # Remove trailing characters from punctuation or elsewhere.
     name = name.strip('_-')
     return name.lower()
+
+
+def go_up(n, path):
+    if n <= 0:
+        return path
+    else:
+        return go_up(n - 1, os.path.dirname(path))
