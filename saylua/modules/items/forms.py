@@ -7,10 +7,11 @@ class ItemUploadForm(FlaskForm):
     name = SlField('Item Name', [
         sl_validators.Required(),
         sl_validators.NotBlank()])
-    image = SlFileField('Image File', [
+    canon_name = SlField('Canon Name', [
         sl_validators.Required(),
-        sl_validators.EndsWith('.png', message='File type must be a PNG.')
-    ])
+        sl_validators.CanonName(),
+        sl_validators.NotBlank()])
+    image = SlFileField('Image File', [])
     description = SlTextAreaField('Description', [
         sl_validators.Required(),
         sl_validators.NotBlank()])
