@@ -1,2 +1,29 @@
 @import 'assets/variables';
 @import 'assets/transitions';
+
+
+.item-grid {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+  .item-grid-element {
+    @include fast-color-trans;
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    padding: 1em .8rem;
+
+    align-items: center;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+
+    &:hover {
+      background-color: $mainSoftestColor;
+    }
+  }
+}

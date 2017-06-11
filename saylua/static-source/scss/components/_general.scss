@@ -22,28 +22,6 @@ p.error {
   color: $errorColor;
 }
 
-a.button {
-  display: block;
-  width: auto;
-}
-
-.subtle-button, a.subtle-button {
-  @include fast-color-trans;
-  line-height: 100%;
-  margin: 3px;
-  padding: 6px 10px;
-  cursor: pointer;
-  color: $accentColor;
-  border-radius: 15px;
-  background-color: $white;
-  border: 1px solid $accentColor;
-
-  &:hover {
-    background-color: $mainSofterColor;
-    text-decoration: underline;
-  }
-}
-
 .divider {
   width: 100%;
   margin-bottom: 1em;

@@ -3,10 +3,11 @@ from saylua import app, db
 from saylua.utils import get_from_request
 from saylua.wrappers import admin_access_required
 
-from .models.db import Item
+from ..models.db import Item, ItemCategory
+from ..forms import ItemUploadForm
 
 from flask import render_template, redirect, url_for, flash, request
-from forms import ItemUploadForm
+
 import cloudstorage as gcs
 
 
@@ -15,6 +16,11 @@ def admin_panel_items_add():
     form = ItemUploadForm(request.form)
     form.name.data = get_from_request(request, 'name')
     form.description.data = get_from_request(request, 'description')
+
+    categories = ItemCategory.get_categories()
+
+    form.category_id.choices = [(i, c) for (i, c) in enumerate(categories)]
+
     if form.validate_on_submit():
         item = Item()
         form.populate_obj(item)

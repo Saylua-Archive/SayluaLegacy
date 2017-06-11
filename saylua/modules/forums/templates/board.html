@@ -1,4 +1,6 @@
 {% from "_macros/forms.html" import form_row %}
+{% from "_macros/user_link.html" import user_link %}
+
 {% extends "layout.html" %}
 {% set page_title = board.title %}
 
@@ -53,8 +55,7 @@
         {{ thread.title }}
       </a>
       <small>
-        Started by <a href="{{ thread.author.url() }}">
-          {{ thread.author.name }}</a>
+        Started by {{ user_link(thread.author) }}
         <span class="line">({{ thread.date_created|relative_time }})</span>
       </small>
     </div>
@@ -65,11 +66,10 @@
       {% set last_post = thread.latest_post() %}
       {% if last_post is not none %}
       {% if last_post.author.companion %}
-      <img src="{{ last_post.author.companion.image() }}" />
+      <img src="{{ last_post.author.companion.image() }}" alt="{{ last_post.author.companion.name }}" />
       {% endif %}
       <p>
-        by <a href="/user/{{ last_post.author.name }}">
-          {{ last_post.author.name }}</a>
+        by {{ user_link(last_post.author) }}
         <span class="line">({{ last_post.date_created|relative_time }})</span>
       </p>
       {% endif %}

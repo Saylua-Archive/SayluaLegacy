@@ -5,7 +5,6 @@ import Matrix from "./Matrix";
 import cloneDeep from "lodash.clonedeep";
 import { slFetch } from "saylua-fetch";
 
-const GAME_ID = 0;
 const LB_FPS = 60;
 const LB_MIN_TIMEOUT = 10;
 const LB_PIECES = [[0, 1, 0, 0, // i
@@ -50,6 +49,7 @@ const LB_PIECES = [[0, 1, 0, 0, // i
 export default class GameState extends BaseModel {
   constructor() {
     super();
+    this.gameId = document.querySelector('meta[name="arcade-game-id"]').content;
   }
 
   clearGameState() {
@@ -98,7 +98,7 @@ export default class GameState extends BaseModel {
 
     let game = this;
 
-    slFetch('/api/arcade/score/' + GAME_ID + '/', {
+    slFetch('/api/arcade/score/' + this.gameId + '/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

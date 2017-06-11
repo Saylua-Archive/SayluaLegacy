@@ -1,7 +1,9 @@
+{% from "_macros/user_link.html" import user_link %}
+
 {% macro forum_post(post) -%}
 <div class="forum-post" id="post-{{ post.id }}">
   <div class="forum-post-info">
-    <a href="{{ post.author.url() }}">{{ post.author.name }}</a>
+    {{ user_link(post.author) }}
     Post Count: {{ post.author.post_count }}
     <div class="pet-avatar-view">
       <a href="{{ post.author.url() }}" class="avatar-view">

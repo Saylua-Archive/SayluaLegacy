@@ -7,12 +7,13 @@
   width: 100%;
   height: 40rem;
 
-  .room-background {
-    position: absolute;
+  .pet-room-background {
+    position: relative;
     width: 100%;
     height: 100%;
-    background-size: cover;
+    background-repeat: no-repeat;
     background-position: bottom;
+    background-size: cover;
     box-shadow: 8rem 8rem 12rem #fff inset, -8rem -8rem 12rem #fff inset;
   }
 
@@ -27,7 +28,7 @@
   .pet {
     position: absolute;
     z-index: 10;
-    top: 6rem;
+    top: 5.8rem;
     left: 50%;
     margin-left: -16rem;
   }
@@ -38,7 +39,7 @@
     content: '';
     position: absolute;
     z-index: -1;
-    top: 42%;
+    top: 40%;
     left: 5%;
     display: block;
     width: 90%;
@@ -48,14 +49,16 @@
   }
 
   .mini-small::after {
+    top: 45%;
     height: 35%;
     box-shadow: 0 3rem 1rem -1rem rgba(0,0,0,0.4);
   }
 }
 
 .pet-actions {
-  padding: 0.5em 0.4rem;
   display: flex;
+  padding: 0.5em 0.4rem;
+
   justify-content: center;
 }
 
@@ -64,8 +67,8 @@
   flex-direction: row;
 
   align-items: flex-start;
-  justify-content: center;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .pet-profile-column {
@@ -90,4 +93,10 @@
   margin-bottom: 1em;
   padding: 0.5em 1.6rem;
   border: $neutralDarkColor 1px solid;
+}
+
+.pet-favorite-things {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }

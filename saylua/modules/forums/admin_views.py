@@ -42,6 +42,7 @@ def manage_boards():
     form = ForumBoardForm(request.form)
     categories = BoardCategory.get_categories()
     form.category_id.choices = [(c.id, c.title) for c in categories]
+
     if form.validate_on_submit():
         new_board = Board()
         form.populate_obj(new_board)

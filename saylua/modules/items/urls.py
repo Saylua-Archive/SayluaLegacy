@@ -12,5 +12,5 @@ urlpatterns = [
     url('/inventory/<category>/', view_func=views.items.items_inventory, name='inventory'),
     url('/inventory/', view_func=views.items.items_inventory, name='inventory'),
     url('/items/', view_func=views.items.items_view_all, name='view_all'),
-    url('/items/<url_name>', view_func=views.items.items_view_single, name='view_single')
+    url('/item/<canon_name>/', view_func=views.items.items_view_single, name='view_single')
 ]

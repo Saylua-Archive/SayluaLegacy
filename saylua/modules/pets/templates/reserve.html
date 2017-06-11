@@ -8,13 +8,21 @@
 <div>{{ cute_text }}</div>
 <div class="reserve">
   <img src="{{ adoptee.image() }}"></img>
-  <img class="reserve-npc" src="/static/img/characters/vera-everly.png" />
-<form method="post">
-  <input type="hidden" name="soul_name" value="{{ adoptee.soul_name }}">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-  <button>
-    Adopt {{ adoptee.name }}
-  </button>
-</form>
+  <div class="reserve-npc npc-bust">
+    <img src="/static/img/characters/vera-everly.png" />
+  </div>
+  <form method="post">
+    <input type="hidden" name="soul_name" value="{{ adoptee.soul_name }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <button>
+      Adopt {{ adoptee.name }}
+    </button>
+  </form>
+  <a href="{{ adoptee.url() }}" class="subtle-button">
+    Tell me about {{ adoptee.name }}
+  </a>
+  <a href="/reserve/" class="subtle-button">
+    Another one, Vera?
+  </a>
 </div>
 {% endblock %}

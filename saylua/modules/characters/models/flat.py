@@ -1,0 +1,1 @@
+CharacterList = {'vera'}

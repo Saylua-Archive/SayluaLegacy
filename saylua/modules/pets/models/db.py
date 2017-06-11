@@ -1,8 +1,10 @@
 from saylua import app, db
 from ..soul_names import soul_name
-import os
+
+from saylua.modules.items.models.db import Item
 from saylua.utils import get_static_version_id, is_devserver, go_up
 from flask import url_for
+import os
 
 
 # Pets are divided into species and species are divided into variations
@@ -32,8 +34,11 @@ class Pet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     soul_name = db.Column(db.String(80), unique=True)
 
-    owner_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    owner = db.relationship("User", foreign_keys=[owner_id], back_populates="pets")
+    guardian_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    guardian = db.relationship("User", foreign_keys=[guardian_id], back_populates="pets")
+
+    favorites = db.relationship("Item", secondary="pet_favorites")
+
     # Only set if the pet is a variation
     coat_id = db.Column(db.Integer, db.ForeignKey("species_coats.id"))
     coat = db.relationship("SpeciesCoat")
@@ -52,6 +57,13 @@ class Pet(db.Model):
     # If either of these is set to a number other than 0, the pet is for sale
     ss_price = db.Column(db.Integer, default=0)
     cc_price = db.Column(db.Integer, default=0)
+
+    def __init__(self, *args, **kwargs):
+        super(Pet, self).__init__(*args, **kwargs)
+
+        # Populate pet favorites.
+        if not self.favorites:
+            self.favorites = db.session.query(Item).order_by(db.func.rand()).limit(4).all()
 
     def image(self):
         if is_devserver():
@@ -77,3 +89,15 @@ class Pet(db.Model):
             new_name = soul_name(min_length)
             found = db.session.query(cls).filter(cls.soul_name == new_name).one_or_none()
         return new_name
+
+
+class PetFavorite(db.Model):
+    __tablename__ = "pet_favorites"
+
+    pet_id = db.Column(db.Integer, db.ForeignKey("pets.id"), primary_key=True)
+    item_id = db.Column(db.Integer, db.ForeignKey("items.id"), primary_key=True)
+
+    pet = db.relationship("Pet")
+    item = db.relationship("Item")
+
+    discovered = db.Column(db.Boolean, default=False)
