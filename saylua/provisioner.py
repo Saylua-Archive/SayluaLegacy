@@ -2,10 +2,10 @@ from saylua import app, db
 from saylua.utils import is_devserver, canonize
 from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, ForumPost
 from saylua.modules.users.models.db import User, Title
-from saylua.modules.items.models.db import Item, InventoryItem
+from saylua.modules.items.models.db import Item, InventoryItem, ItemCategory
 from saylua.modules.pets.models.db import Pet, Species, SpeciesCoat
 from saylua.modules.pets.soul_names import soul_name
-from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
+from saylua.modules.adventure.dungeons.provision import provision_dungeon_schema
 
 import os
 
@@ -45,23 +45,29 @@ def generate_items():
     subpath = 'img' + os.sep + 'items' + os.sep
     path = os.path.join(app.static_folder, subpath)
     admin = db.session.query(User).filter(User.active_username == 'admin').one()
-    for img in os.listdir(path):
-        item_name, ext = os.path.splitext(img)
-        if ext.lower() == '.png':
-            item = Item(
-                name=item_name,
-                canon_name=item_name,
-                description='A lovely little ' + item_name + ' for you to much on,'
-            )
 
-            yield item
+    for category_name in os.listdir(path):
+        category_path = path + category_name + os.sep
+        if os.path.isdir(category_path):
+            category_id = ItemCategory(category_name)
+            for img in os.listdir(category_path):
+                item_name, ext = os.path.splitext(img)
+                if ext.lower() == '.png':
+                    item = Item(
+                        name=item_name,
+                        canon_name=item_name,
+                        category_id=category_id,
+                        description='A lovely little ' + item_name + ' for you to munch on.'
+                    )
 
-            # Give admin lots of items.
-            yield InventoryItem(
-                user=admin,
-                item=item,
-                count=99
-            )
+                    yield item
+
+                    # Give admin lots of items.
+                    yield InventoryItem(
+                        user=admin,
+                        item=item,
+                        count=99
+                    )
 
 
 def generate_pets():

@@ -34,7 +34,7 @@ def inject_random_image():
     return dict(random_pet_image=partial(random_image, 'pets'),
         random_item_image=partial(random_image, 'items'),
         random_character_image=partial(random_image, 'characters'),
-        random_mini_image=partial(random_image, 'minis'),
+        random_mini_image=partial(random_image, 'items/minis'),
         random_background_image=partial(random_image, 'backgrounds'),
         random_icon_image=partial(random_image, 'icons'))
 

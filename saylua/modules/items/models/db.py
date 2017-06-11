@@ -2,6 +2,15 @@ from saylua import db
 from saylua.utils import canonize
 
 
+# Enum type thing, raises a ValueError if not found
+def ItemCategory(category):
+    categories = ["food", "gifts", "materials", "minis", "clothes"]
+    try:
+        return categories[category]
+    except TypeError:
+        return categories.index(category)
+
+
 class Item(db.Model):
     __tablename__ = "items"
 
@@ -10,6 +19,8 @@ class Item(db.Model):
     name = db.Column(db.String(256), unique=True)
     canon_name = db.Column(db.String(256), unique=True)
     description = db.Column(db.String(1024))
+
+    category_id = db.Column(db.Integer)
 
     @classmethod
     def make_canon_name(cls, name):
@@ -23,7 +34,7 @@ class Item(db.Model):
         return '/item/' + self.canon_name
 
     def image_url(self):
-        return '/static/img/items/' + self.canon_name + '.png'
+        return '/static/img/items/' + ItemCategory(self.category_id) + '/' + self.canon_name + '.png'
 
     def grant(self, user_id, count):
         inventory_entry = InventoryItem.by_user_item(user_id, self.id)
