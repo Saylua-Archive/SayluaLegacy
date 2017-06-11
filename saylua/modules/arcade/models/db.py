@@ -3,7 +3,7 @@ from saylua import db
 
 # Enum type thing, raises a ValueError if not found
 def Game(game):
-    games = ["LINE_BLOCKS"]
+    games = ["blocks"]
     try:
         return games[game]
     except TypeError:
@@ -15,6 +15,8 @@ class Highscore(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship("User")
+
     game_log_id = db.Column(db.Integer, db.ForeignKey('gamelogs.id'))
     game_id = db.Column(db.Integer, nullable=False)
     score = db.Column(db.Integer)
@@ -31,6 +33,8 @@ class GameLog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship("User")
+
     game_id = db.Column(db.Integer, nullable=False)
     score = db.Column(db.Integer)
     time = db.Column(db.DateTime, server_default=db.func.now())

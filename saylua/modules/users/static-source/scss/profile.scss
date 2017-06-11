@@ -5,25 +5,25 @@
   box-sizing: border-box;
   width: 280px;
   padding: 8px;
-}
 
-#profile-column fieldset {
-  box-sizing: border-box;
-  width: 100%;
-  border: $neutralDarkColor 1px solid;
-}
+  fieldset {
+    box-sizing: border-box;
+    width: 100%;
+    border: $neutralDarkColor 1px solid;
 
-#profile-column fieldset table {
-  font-size: 0.9em;
-  margin: auto;
-  word-wrap: break-word;
-}
+    table {
+      font-size: 0.9em;
+      margin: auto;
+      word-wrap: break-word;
 
-#profile-column fieldset table th {
-  font-weight: bold;
-  width: 100px;
-  text-align: center;
-  background-color: transparent;
+      th {
+        font-weight: bold;
+        width: 100px;
+        text-align: center;
+        background-color: transparent;
+      }
+    }
+  }
 }
 
 #profile-container {

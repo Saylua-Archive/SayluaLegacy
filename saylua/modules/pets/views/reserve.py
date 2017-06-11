@@ -9,7 +9,7 @@ import random
 
 
 def pet_reserve():
-    new_adoptee = Pet.query.filter(Pet.owner_id == None).order_by(db.func.random()).first() # noqa
+    new_adoptee = Pet.query.filter(Pet.guardian_id == None).order_by(db.func.random()).first() # noqa
     if new_adoptee is None:
         return render_template("reserve_empty.html")
     cute_texts = (["This {} really likes you!".format(random.choice(corpus.little_pet)),
@@ -24,7 +24,7 @@ def pet_reserve_post():
     adopter = g.user
     soul_name = request.form.get('soul_name')
     adoptee = db.session.query(Pet).filter(Pet.soul_name == soul_name).one_or_none()
-    youngest = (Pet.query.filter(Pet.owner_id == g.user.id)
+    youngest = (Pet.query.filter(Pet.guardian_id == g.user.id)
             .order_by(Pet.date_bonded.desc()).first())
     if youngest and (datetime.datetime.now() - youngest.date_bonded).days < 1:
         wait = (24 - (datetime.datetime.now() - youngest.date_bonded).seconds / 3600)
@@ -39,10 +39,10 @@ def pet_reserve_post():
             .format(youngest.name, wait))
     elif adoptee is None:
         flash("Sorry, I couldn't find a pet with that soul name.")
-    elif adoptee.owner_id is not None:
+    elif adoptee.guardian_id is not None:
         flash("I'm afraid {} already has a companion.".format(adoptee.name))
     else:
-        adoptee.owner_id = adopter.id
+        adoptee.guardian_id = adopter.id
         adoptee.date_bonded = db.func.now()
         db.session.add(adoptee)
         if adopter.companion is None:

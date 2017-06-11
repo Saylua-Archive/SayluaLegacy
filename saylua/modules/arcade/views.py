@@ -8,8 +8,9 @@ def games_main():
 
 
 def games_blocks():
-    highscores = GameLog.get_highscores(Game("LINE_BLOCKS"), 10)
-    return render_template("blocks.html", highscores=highscores)
+    game_id = Game("blocks")
+    highscores = GameLog.get_highscores(game_id, 10)
+    return render_template("blocks.html", game_id=game_id, highscores=highscores)
 
 
 def games_space():

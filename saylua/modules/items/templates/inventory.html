@@ -5,19 +5,19 @@
 {% endblock %}
 {% block body %}
 <h1>My Inventory</h1>
-<div class="full">
+<div class="center">
   {{ pagination.render() }}
 </div>
-<div class="inventory-container">
+<div class="item-grid">
   {% for entry in pagination.items %}
-    <div class="inventory-item">
-      <img src="{{ entry.item.image_url() }}" class="item">
-      <span class="full">{{ entry.item.name }}</span>
-      <small class="full">Count: {{ entry.count }}</small>
+    <div class="item-grid-element">
+      <img src="{{ entry.item.image_url() }}" class="item" alt="{{ entry.item.name }}" />
+      <span>{{ entry.item.name }}</span>
+      <small>Count: {{ entry.count }}</small>
     </div>
   {% endfor %}
 </div>
-<div class="full">
+<div class="center">
   {{ pagination.render() }}
 </div>
 {% endblock %}

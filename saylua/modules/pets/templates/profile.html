@@ -3,11 +3,16 @@
 {% set page_title = "Pet Profile" %}
 {% block header_scripts %}
 <link rel="stylesheet" href="{{ include_static('css/pets.min.css') }}">
+<style>
+.pet-room-background {
+   background-image: url('{{ random_background_image() }}');
+}
+</style>
 {% endblock %}
 {% block body %}
 <h1>{{ pet.name }}'s Room</h1>
 <div id="pet-room">
-  <div class="room-background" style="background-image: url('{{ random_background_image() }}')"></div>
+  <div class="pet-room-background"></div>
   <div class="pet" id="pet-image-container">
     <img src="{{ pet.image() }}">
   </div>
@@ -15,7 +20,7 @@
     <img src="{{ random_mini_image() }}">
   </div>
 </div>
-{% if g.user and pet.owner_id == g.user.id %}
+{% if g.user and pet.guardian_id == g.user.id %}
 <div class="pet-actions">
   <form id="accompany" action="/accompany/{{ pet.soul_name }}/" method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -33,7 +38,7 @@
     Edit Profile
   </a>
 </div>
-{% elif pet.owner_id is none %}
+{% elif pet.guardian_id is none %}
 <div class="pet-actions">
   <form action="/reserve/" method="post">
     <input type="hidden" name="soul_name" value="{{ pet.soul_name }}">
@@ -58,8 +63,8 @@
       <h2>{{ pet.name }}'s Stats</h2>
       <table>
         <tr>
-          <td>Owner</td>
-          <td> {{ user_link(pet.owner) }} </td>
+          <td>Guardian</td>
+          <td> {{ user_link(pet.guardian) }} </td>
         </tr>
         <tr>
           <td>{{ pet.name }}'s ID</td>
@@ -79,10 +84,11 @@
   <div class="pet-profile-column">
     <div class="pet-profile-box">
       <h2>{{ pet.name }}'s Favorite Things</h2>
-      <img src="{{ random_item_image() }}" style="float: left;">
-      <img src="{{ random_item_image() }}" style="float: left;">
-      <img src="{{ random_item_image() }}" style="float: left;">
-      <img src="{{ random_item_image() }}" style="float: left;">
+      <div class="pet-favorite-things">
+        {% for favorite in pet.favorites %}
+        <img src="{{ favorite.image_url() }}" class="item" alt="{{ favorite.name }}" title="{{ favorite.name }}" aria-label="{{ favorite.name }}" />
+        {% endfor %}
+      </div>
     </div>
     <div class="pet-profile-box">
       <h2>{{ pet.name }}'s Mini</h2>

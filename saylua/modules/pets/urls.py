@@ -2,6 +2,8 @@ from saylua.routing import url
 from . import views
 
 urlpatterns = [
+    url('/pets/', view_func=views.reference.species_guide, name="species"),
+
     # Pet profiles and actions.
     url('/pet/<name>/', view_func=views.general.pet_profile, name="profile", methods=['GET', 'POST']),
     url('/edit_pet/<name>/', view_func=views.general.edit_pet, name="edit_pet", methods=['GET', 'POST']),
