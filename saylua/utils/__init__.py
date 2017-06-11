@@ -30,6 +30,14 @@ def pluralize(count, singular_noun, plural_noun=None):
     return str(count) + ' ' + plural_noun
 
 
+def add_article(singular_noun):
+    vowels = ("a", "e", "i", "o", "u")
+    if singular_noun.startswith(vowels):
+        return "an " + singular_noun
+    else:
+        return "a " + singular_noun
+
+
 def saylua_time(time):
     from_zone = tz.gettz('UTC')
     to_zone = tz.gettz('America/New_York')
@@ -67,3 +75,10 @@ def canonize(name):
     # Remove trailing characters from punctuation or elsewhere.
     name = name.strip('_-')
     return name.lower()
+
+
+def go_up(n, path):
+    if n <= 0:
+        return path
+    else:
+        return go_up(n - 1, os.path.dirname(path))

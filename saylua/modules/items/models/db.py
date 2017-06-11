@@ -1,14 +1,27 @@
-from saylua import db
-from saylua.utils import canonize
+from saylua import app, db
+from saylua.utils import canonize, is_devserver, get_static_version_id, go_up
+from flask import url_for
+import os
 
 
-# Enum type thing, raises a ValueError if not found
-def ItemCategory(category):
+class ItemCategory:
     categories = ["food", "gifts", "materials", "minis", "clothes"]
-    try:
-        return categories[category]
-    except TypeError:
-        return categories.index(category)
+
+    def __init__(self, category):
+        if isinstance(category, basestring):
+            self.id = ItemCategory.categories.index(category)
+        else:
+            self.id = category
+
+    def __eq__(self, other):
+        return other == self.id or other == self.name()
+
+    def name(self):
+        return ItemCategory.categories[self.id]
+
+    @classmethod
+    def get_categories(cls):
+        return cls.categories
 
 
 class Item(db.Model):
@@ -34,7 +47,15 @@ class Item(db.Model):
         return '/item/' + self.canon_name
 
     def image_url(self):
-        return '/static/img/items/' + ItemCategory(self.category_id) + '/' + self.canon_name + '.png'
+        if is_devserver():
+            category_name = ItemCategory(self.category_id).name()
+            subpath = ("img" + os.sep + "items" + os.sep + category_name +
+                os.sep + self.canon_name + ".png")
+            image_path = (os.path.join(go_up(4, (__file__)), "static", subpath))
+            if os.path.isfile(image_path):
+                return url_for("static", filename=subpath) + "?v=" + str(get_static_version_id())
+        return (app.config['IMAGE_BUCKET_ROOT'] + "/items/" + self.canon_name +
+            ".png?v=" + str(get_static_version_id()))
 
     def grant(self, user_id, count):
         inventory_entry = InventoryItem.by_user_item(user_id, self.id)

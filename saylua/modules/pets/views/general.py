@@ -70,3 +70,7 @@ def pet_abandon():
         db.session.add(abandonee)
         db.session.commit()
     return redirect('/pet/' + abandonee.soul_name, code=302)
+
+
+def species_guide():
+    return render_template('species_guide.html')

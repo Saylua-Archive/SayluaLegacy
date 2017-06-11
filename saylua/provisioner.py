@@ -49,7 +49,7 @@ def generate_items():
     for category_name in os.listdir(path):
         category_path = path + category_name + os.sep
         if os.path.isdir(category_path):
-            category_id = ItemCategory(category_name)
+            category_id = ItemCategory(category_name).id
             for img in os.listdir(category_path):
                 item_name, ext = os.path.splitext(img)
                 if ext.lower() == '.png':

@@ -1,8 +1,8 @@
-from saylua import db
+from saylua import app, db
 from ..soul_names import soul_name
-from saylua.utils import get_static_version_id
-from saylua.modules.items.models.db import Item
 
+from saylua.modules.items.models.db import Item
+from saylua.utils import get_static_version_id, is_devserver, go_up
 from flask import url_for
 import os
 
@@ -49,9 +49,9 @@ class Pet(db.Model):
     facing_right = db.Column(db.Boolean, default=True)
 
     # Personal profile information for the pet
-    name = db.Column(db.String(80), default='')
-    description = db.Column(db.Text, default='')
-    pronouns = db.Column(db.String(80), default='They/them')
+    name = db.Column(db.String(80), default="")
+    description = db.Column(db.Text, default="")
+    pronouns = db.Column(db.String(80), default="They/them")
     date_bonded = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
 
     # If either of these is set to a number other than 0, the pet is for sale
@@ -66,9 +66,14 @@ class Pet(db.Model):
             self.favorites = db.session.query(Item).order_by(db.func.rand()).limit(4).all()
 
     def image(self):
-        subpath = ("img" + os.sep + "pets" + os.sep + self.species_name + os.sep + self.coat.name +
+        if is_devserver():
+            subpath = ("img" + os.sep + "pets" + os.sep + self.species_name + os.sep + self.coat.name +
             ".png")
-        return url_for("static", filename=subpath) + "?v=" + str(get_static_version_id())
+            image_path = (os.path.join(go_up(4, (__file__)), "static", subpath))
+            if os.path.isfile(image_path):
+                return url_for("static", filename=subpath) + "?v=" + str(get_static_version_id())
+        return (app.config['IMAGE_BUCKET_ROOT'] + "/pets/" + self.species_name + "/" +
+            self.coat.name + ".png?v=" + str(get_static_version_id()))
 
     def url(self):
         return '/pet/' + self.soul_name
