@@ -66,7 +66,7 @@
       {% set last_post = thread.latest_post() %}
       {% if last_post is not none %}
       {% if last_post.author.companion %}
-      <img src="{{ last_post.author.companion.image() }}" alt="{{ last_post.author.companion.name }}" />
+      <img src="{{ last_post.author.companion.image_url() }}" alt="{{ last_post.author.companion.name }}" />
       {% endif %}
       <p>
         by {{ user_link(last_post.author) }}

@@ -17,7 +17,9 @@ class ItemCategory:
         return other == self.id or other == self.name()
 
     def name(self):
-        return ItemCategory.categories[self.id]
+        if self.id >= 0 and self.id < len(ItemCategory.categories):
+            return ItemCategory.categories[self.id]
+        return ''
 
     @classmethod
     def get_categories(cls):
@@ -35,20 +37,12 @@ class Item(db.Model):
 
     category_id = db.Column(db.Integer)
 
-    @classmethod
-    def make_canon_name(cls, name):
-        return canonize(name)
-
-    @classmethod
-    def by_canon_name(cls, name):
-        return db.session.query(cls).filter(cls.canon_name == name.lower()).one_or_none()
-
     def url(self):
         return '/item/' + self.canon_name
 
     def image_url(self):
         if is_devserver():
-            category_name = ItemCategory(self.category_id).name()
+            category_name = self.category_name()
             subpath = ("img" + os.sep + "items" + os.sep + category_name +
                 os.sep + self.canon_name + ".png")
             image_path = (os.path.join(go_up(4, (__file__)), "static", subpath))
@@ -57,12 +51,23 @@ class Item(db.Model):
         return (app.config['IMAGE_BUCKET_ROOT'] + "/items/" + self.canon_name +
             ".png?v=" + str(get_static_version_id()))
 
+    def category_name(self):
+        return ItemCategory(self.category_id).name()
+
     def grant(self, user_id, count):
         inventory_entry = InventoryItem.by_user_item(user_id, self.id)
         if not inventory_entry:
             inventory_entry = InventoryItem(user_id=user_id, item_id=self.id)
         inventory_entry.count += count
         inventory_entry.put()
+
+    @classmethod
+    def make_canon_name(cls, name):
+        return canonize(name)
+
+    @classmethod
+    def by_canon_name(cls, name):
+        return db.session.query(cls).filter(cls.canon_name == name.lower()).one_or_none()
 
 
 class InventoryItem(db.Model):

@@ -7,7 +7,7 @@
   </div>
   {% if user.companion %}
   <a href="{{ user.companion.url() }}" class="active-pet-view">
-    <img src="{{ user.companion.image() }}" class="active-pet-image" alt="active companion" title="{{ user.companion.name }}" aria-label="{{ user.companion.name }}" />
+    <img src="{{ user.companion.image_url() }}" class="active-pet-image" alt="active companion" title="{{ user.companion.name }}" aria-label="{{ user.companion.name }}" />
   </a>
   {% endif %}
 </div>

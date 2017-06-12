@@ -84,10 +84,19 @@ p, pre {
   padding: 0;
 }
 
+table {
+  td, th {
+    padding: 0.25em 0.8rem;
+  }
+}
+
 a, a:active, a:visited, button.link-button, button.link-button:active {
   text-decoration: none;
   color: $accentColor;
 }
+
+
+/* Make buttons look like HTML links. */
 
 button.link-button, button.link-button:hover {
   margin: 0;

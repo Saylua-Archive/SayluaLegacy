@@ -57,7 +57,8 @@
 
 .pet-actions {
   display: flex;
-  padding: 0.5em 0.4rem;
+  margin-bottom: 1em;
+  padding: 0.5em 0.8rem;
 
   justify-content: center;
 }
@@ -98,5 +99,6 @@
 .pet-favorite-things {
   display: flex;
   flex-direction: row;
+
   flex-wrap: wrap;
 }

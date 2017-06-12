@@ -8,9 +8,9 @@
 <div class="center">
   {{ pagination.render() }}
 </div>
-<div class="item-grid">
+<div class="grid-container">
 {% for item in pagination.items %}
-  <a href="{{ item.url() }}" class="item-grid-element">
+  <a href="{{ item.url() }}" class="grid-element">
     <img src="{{ item.image_url() }}" class="item" />
     {{ item.name }}
   </a>

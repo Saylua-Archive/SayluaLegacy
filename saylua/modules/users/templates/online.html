@@ -3,16 +3,20 @@
 {% set page_title = "Users Online" %}
 {% block body %}
 <h1>Users Online</h1>
-<div class="users-online-container">
+{% if users_online %}
+<div class="grid-container">
   {% for user in users_online %}
+  <div class="grid-element">
     {{ user_link(user) }}
-  {% else %}
-    <p class="center">
-      No one is online!
-    </p>
-    <p class="center">
-      <a href="/">Go back home?</a>
-    </p>
+  </div>
   {% endfor %}
 </div>
+{% else %}
+<p class="center">
+  No one is online!
+</p>
+<p class="center">
+  <a href="/">Go back home?</a>
+</p>
+{% endif %}
 {% endblock %}
