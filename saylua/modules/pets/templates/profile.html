@@ -1,4 +1,5 @@
 {% from "_macros/user_link.html" import user_link %}
+{% from "_macros/npc.html" import npc_interaction %}
 {% extends "layout.html" %}
 {% set page_title = "Pet Profile" %}
 {% block header_scripts %}
@@ -11,6 +12,7 @@
 {% endblock %}
 {% block body %}
 <h1>{{ pet.name }}'s Room</h1>
+{{ npc_interaction(text="Hello there!", title="Test Interaction", bust=None, image=None, choices=["yes", "no"]) }}
 <div id="pet-room">
   <div class="pet-room-background"></div>
   <div class="pet" id="pet-image-container">

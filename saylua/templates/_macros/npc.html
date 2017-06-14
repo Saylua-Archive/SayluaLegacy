@@ -1,0 +1,11 @@
+{% macro npc_interaction(text=None, title=None, bust=None, image=None, choices=None) -%}
+  {% if text is not none and choices is not none %}
+    <h2>{{ title }}</h2>
+    <img class="npc-bust" src="{{ bust }}">
+    <img class="npc-show-image" src="{{ image }}">
+    <div>{{ text }}</div>
+    {% for choice in choices %}
+      <div class="npc-choice">{{ choice }}</div>
+    {% endfor %}
+  {% endif %}
+{%- endmacro %}
