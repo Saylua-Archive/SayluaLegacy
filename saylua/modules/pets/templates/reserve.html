@@ -1,10 +1,15 @@
 {% extends "layout.html" %}
+{% from "_macros/npc.html" import npc_interaction %}
 {% set page_title = "Pet Reserve" %}
 {% block header_scripts %}
 <link rel="stylesheet" href="{{ include_static('css/pets.min.css') }}">
 {% endblock %}
 {% block body %}
 <h1>The Pet Reserve</h1>
+{{ npc_interaction(text=adoptee.image(),
+  bust="/static/img/characters/vera-everly.png",
+  image="adoptee.image()",
+  choices=["yes", "no"]) }}
 <div>{{ cute_text }}</div>
 <div class="reserve">
   <img src="{{ adoptee.image() }}"></img>
