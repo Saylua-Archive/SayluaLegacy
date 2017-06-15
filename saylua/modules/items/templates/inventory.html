@@ -11,7 +11,8 @@
 <div class="grid-container">
   {% for entry in pagination.items %}
     <div class="grid-element">
-      <img src="{{ entry.item.image_url() }}" class="item" alt="{{ entry.item.name }}" />
+      <img src="{{ entry.item.image_url() }}" class="item" alt="{{ entry.item.name }}"
+        title="{{ entry.item.name }}" aria-label="{{ entry.item.name }}" />
       <span>{{ entry.item.name }}</span>
       <small>Count: {{ entry.count }}</small>
     </div>
@@ -20,4 +21,10 @@
 <div class="center">
   {{ pagination.render() }}
 </div>
+
+<div id="inventory-modal"></div>
+{% endblock %}
+
+{% block footer_scripts %}
+<script src="{{ include_static('js/Inventory.min.js') }}"></script>
 {% endblock %}

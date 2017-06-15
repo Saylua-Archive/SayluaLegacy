@@ -6,11 +6,19 @@
   top: 0;
   left: 0;
   display: block;
+  visibility: visible;
   overflow: auto;
   width: 100%;
   height: 100%;
   cursor: pointer;
   background-color: hsla(0,0,0,0.4);
+
+  &.closed {
+    top: -9999;
+    left: -9999;
+    display: none;
+    visibility: hidden;
+  }
 }
 
 .modal {
