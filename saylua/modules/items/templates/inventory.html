@@ -11,18 +11,20 @@
 <div class="grid-container">
   {% for entry in pagination.items %}
     <div class="grid-element">
-      <img src="{{ entry.item.image_url() }}" class="item" alt="{{ entry.item.name }}"
-        title="{{ entry.item.name }}" aria-label="{{ entry.item.name }}" />
-      <span>{{ entry.item.name }}</span>
+      <a href="javascript:void(0)" class="item-link" data-item="{{ entry.json() }}">
+        <img src="{{ entry.item.image_url() }}" class="item" alt="{{ entry.item.name }}"
+          title="{{ entry.item.name }}" aria-label="{{ entry.item.name }}" />
+        <span>{{ entry.item.name }}</span>
+      </a>
       <small>Count: {{ entry.count }}</small>
     </div>
+
+    <div id="inventory-modal"></div>
   {% endfor %}
 </div>
 <div class="center">
   {{ pagination.render() }}
 </div>
-
-<div id="inventory-modal"></div>
 {% endblock %}
 
 {% block footer_scripts %}

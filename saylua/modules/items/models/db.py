@@ -1,11 +1,13 @@
 from saylua import app, db
 from saylua.utils import canonize, is_devserver, get_static_version_id, go_up
 from flask import url_for
+
 import os
+import json
 
 
 class ItemCategory:
-    categories = ["food", "gifts", "materials", "minis", "clothes"]
+    categories = ["food", "toys", "gifts", "materials", "minis", "clothes"]
 
     def __init__(self, category):
         if isinstance(category, basestring):
@@ -20,6 +22,10 @@ class ItemCategory:
         if self.id >= 0 and self.id < len(ItemCategory.categories):
             return ItemCategory.categories[self.id]
         return ''
+
+    def actions(self):
+        actions = ['sell', 'send', 'toss']
+        return actions
 
     @classmethod
     def get_categories(cls):
@@ -51,8 +57,14 @@ class Item(db.Model):
         return (app.config['IMAGE_BUCKET_ROOT'] + "/items/" + self.canon_name +
             ".png?v=" + str(get_static_version_id()))
 
+    def category(self):
+        return ItemCategory(self.category_id)
+
     def category_name(self):
-        return ItemCategory(self.category_id).name()
+        return self.category().name()
+
+    def actions(self):
+        return self.category().actions()
 
     def grant(self, user_id, count):
         inventory_entry = InventoryItem.by_user_item(user_id, self.id)
@@ -81,3 +93,13 @@ class InventoryItem(db.Model):
     item = db.relationship("Item")
 
     count = db.Column(db.Integer, default=0)
+
+    def json(self):
+        data = {
+            'name': self.item.name,
+            'category': self.item.category_name(),
+            'description': self.item.description,
+            'count': self.count,
+            'actions': self.item.actions(),
+        }
+        return json.dumps(data)
