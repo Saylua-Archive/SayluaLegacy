@@ -5,6 +5,9 @@
       <img class="npc-show-image" src="{{ image }}">
       <div>{{ text }}</div>
       {% for choice in choices %}
+        <button>
+          {{ choice }}
+        </button>
         <div class="npc-choice">{{ choice }}</div>
       {% endfor %}
     </div>
