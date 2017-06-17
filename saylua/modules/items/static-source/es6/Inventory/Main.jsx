@@ -1,8 +1,11 @@
 import Inferno from "inferno";
 
-import ItemModal from "./ItemModal";
+import Inventory from "./Inventory";
+import InventoryModel from "./InventoryModel";
+
+let model = new InventoryModel();
 
 Inferno.render(
-  <ItemModal itemName="fruit" itemImage="image" closed={ false } />,
-  document.getElementById("inventory-modal")
+  <Inventory model={ model } />,
+  document.getElementById("inventory-mount")
 );

@@ -101,6 +101,7 @@ class InventoryItem(db.Model):
             'description': self.item.description,
             'count': self.count,
             'actions': self.item.actions(),
+            'image_url': self.item.image_url(),
         }
         return data
 
