@@ -94,7 +94,7 @@ class InventoryItem(db.Model):
 
     count = db.Column(db.Integer, default=0)
 
-    def json(self):
+    def to_dict(self):
         data = {
             'name': self.item.name,
             'category': self.item.category_name(),
@@ -102,4 +102,7 @@ class InventoryItem(db.Model):
             'count': self.count,
             'actions': self.item.actions(),
         }
-        return json.dumps(data)
+        return data
+
+    def __repr__(self):
+        return json.dumps(self.to_dict())

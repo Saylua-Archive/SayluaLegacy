@@ -12,5 +12,9 @@ urlpatterns = [
     url('/inventory/<category>/', view_func=views.items.items_inventory, name='inventory'),
     url('/inventory/', view_func=views.items.items_inventory, name='inventory'),
     url('/items/', view_func=views.items.items_view_all, name='view_all'),
-    url('/item/<canon_name>/', view_func=views.items.items_view_single, name='view_single')
+    url('/item/<canon_name>/', view_func=views.items.items_view_single, name='view_single'),
+
+    # Item APIS
+    url('/api/inventory/<int:category_id>/<int:page>/',
+        view_func=views.api.api_inventory, name='api_inventory')
 ]

@@ -3,7 +3,7 @@ from flask import Markup, request, render_template
 
 class Pagination:
     def __init__(self, per_page=10, query=None, current_page=None,
-            url_base="?page=", url_end=""):
+            url_base="?page=", url_end="", page_count=10):
         if current_page is None:
             try:
                 current_page = int(request.args.get('page', 1))
@@ -19,8 +19,7 @@ class Pagination:
             self.item_count = query.count()
             self.page_count = (per_page + self.item_count - 1) // per_page
         else:
-            # Use placeholder if there's no query.
-            self.page_count = 10
+            self.page_count = page_count
 
     def render(self):
         return Markup(render_template("pagination.html", current_page=self.current_page,
