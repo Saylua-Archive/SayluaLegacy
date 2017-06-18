@@ -1,11 +1,17 @@
-.interaction-npc {
-  float: left;
-}
-
 .npc-interaction {
+  display: flex;
   text-align: center;
+
+  align-items: center;
+  flex-flow: row wrap;
+  justify-content: center;
 }
 
 .npc-interaction button {
   margin: auto;
+}
+
+.npc-text {
+  flex: 0 0 100%;
+  margin: 20px;
 }
