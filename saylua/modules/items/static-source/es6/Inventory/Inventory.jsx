@@ -1,6 +1,8 @@
 import Inferno from "inferno";
 import Component from "inferno-component";
 
+import ItemModal from "./ItemModal";
+
 export default class Inventory extends Component {
   constructor(props) {
     super(props);
@@ -27,6 +29,11 @@ export default class Inventory extends Component {
       );
     });
     let pagination = <div className="pagination"></div>;
+    let itemModal = null;
+    let item = model.getItem();
+    if (item) {
+      itemModal = <ItemModal item={ item } />
+    }
     return (
       <div>
         <div className="inventory-categories">
@@ -40,6 +47,7 @@ export default class Inventory extends Component {
         <div className="center">
           { pagination }
         </div>
+        { itemModal }
       </div>
     );
   }

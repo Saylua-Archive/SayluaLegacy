@@ -18,19 +18,17 @@ export default class ItemModal extends Component {
   }
 
   render() {
-    let itemName = this.props.itemName;
-    let itemImage = this.props.itemImage;
-    let itemDescription = this.props.itemDescription;
+    let item = this.props.item;
     let closedClass = this.state.closed ? ' closed' : '';
     return (
-      <div className={ "modal-overlay" + closedClass } onClick={ this.close() }>
+      <div className={ "modal-overlay" + closedClass } onClick={ this.close.bind(this) }>
         <div className="modal">
-          <div className="close" onClick={ this.close() }>
+          <div className="close" onClick={ this.close.bind(this) }>
             &times;
           </div>
-          <img src={ itemImage } className="item" alt={ itemName }
-            title={ itemName } aria-label={ itemName } />
-          { itemDescription }
+          <img src={ item.image_url } className="item" alt={ item.name }
+            title={ item.name } aria-label={ item.name } />
+          { item.description }
         </div>
       </div>
     );

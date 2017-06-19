@@ -31,18 +31,23 @@ export default class InventoryModel extends BaseModel {
     });
   }
 
+  getItem() {
+    if (this.index < 0 || this.index >= this.items.length) return null;
+    return this.items[this.index];
+  }
+
   setIndex(index) {
-    self.index = index;
+    this.index = index;
     this.triggerUpdate();
   }
 
   setCategory(category_id) {
-    self.category_id = category_id;
+    this.category_id = category_id;
     this.fetchData();
   }
 
   setCurrentPage(current_page) {
-    self.current_page = current_page;
+    this.current_page = current_page;
     this.fetchData();
   }
 }

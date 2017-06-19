@@ -90,15 +90,13 @@ table {
   }
 }
 
-a, a:active, a:visited, button.link-button, button.link-button:active {
+a, a:active, a:visited,
+button.link-button,
+button.link-button:active,
+button.link-button:hover,
+.link {
   text-decoration: none;
   color: $accentColor;
-}
-
-
-/* Make buttons look like HTML links. */
-
-button.link-button, button.link-button:hover {
   margin: 0;
   padding: 0;
   cursor: pointer;
@@ -106,6 +104,6 @@ button.link-button, button.link-button:hover {
   background: none;
 }
 
-a:hover, button.link-button:hover {
+a:hover, button.link-button:hover, .link:hover {
   text-decoration: underline;
 }
