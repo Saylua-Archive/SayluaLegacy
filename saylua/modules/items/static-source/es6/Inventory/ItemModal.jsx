@@ -20,10 +20,14 @@ export default class ItemModal extends Component {
   render() {
     let item = this.props.item;
     let closedClass = this.state.closed ? ' closed' : '';
+    let onClose = this.props.onClose;
+    if (!onClose) {
+      onClose = this.close.bind(this);
+    }
     return (
-      <div className={ "modal-overlay" + closedClass } onClick={ this.close.bind(this) }>
+      <div className={ "modal-overlay" + closedClass } onClick={ onClose }>
         <div className="modal">
-          <div className="close" onClick={ this.close.bind(this) }>
+          <div className="close" onClick={ onClose }>
             &times;
           </div>
           <img src={ item.image_url } className="item" alt={ item.name }
