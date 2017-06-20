@@ -12,7 +12,7 @@
   <div class="npc-bust">
     <img src="{{ adoptee.image() }}"/>
   </div>
-  <div class="npc-text">{{ cute_text }}</div>
+  <div class="speech-bubble">{{ cute_text }}</div>
   <form method="post">
     <input type="hidden" name="soul_name" value="{{ adoptee.soul_name }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
