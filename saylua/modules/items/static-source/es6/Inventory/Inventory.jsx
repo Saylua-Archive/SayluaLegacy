@@ -2,6 +2,7 @@ import Inferno from "inferno";
 import Component from "inferno-component";
 
 import ItemModal from "./ItemModal";
+import Pagination from "./Pagination";
 
 export default class Inventory extends Component {
   constructor(props) {
@@ -28,7 +29,8 @@ export default class Inventory extends Component {
         </div>
       );
     });
-    let pagination = <div className="pagination"></div>;
+    let pagination = <Pagination className="center" currentPage={ model.currentPage }
+        pageCount={ model.pageCount } onPageChange={ model.setCurrentPage.bind(model) } />;
     let itemModal = null;
     let item = model.getItem();
     if (item) {
@@ -41,15 +43,11 @@ export default class Inventory extends Component {
       <div>
         <div className="inventory-categories">
         </div>
-        <div className="center">
-          { pagination }
-        </div>
+        { pagination }
         <div class="grid-container">
           { items }
         </div>
-        <div className="center">
-          { pagination }
-        </div>
+        { pagination }
         { itemModal }
       </div>
     );

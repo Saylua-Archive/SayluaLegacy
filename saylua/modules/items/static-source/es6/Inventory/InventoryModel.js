@@ -4,20 +4,21 @@ import { slFetch } from "saylua-fetch";
 
 
 export default class InventoryModel extends BaseModel {
-  constructor(category_id=0, current_page=1) {
+  constructor(categoryId=0, currentPage=1) {
     super();
 
-    this.category_id = category_id;
-    this.current_page = current_page;
+    this.categoryId = categoryId;
+    this.currentPage = currentPage;
     this.items = [];
     this.index = -1;
+    this.pageCount = 1;
 
     this.fetchData();
   }
 
   fetchData() {
     let model = this;
-    slFetch('/api/inventory/' + this.category_id + '/' + this.current_page + '/', {
+    slFetch('/api/inventory/' + this.categoryId + '/' + this.currentPage + '/', {
       credentials: 'include'
     }).then((response) => {
       if (response.ok) {
@@ -26,7 +27,7 @@ export default class InventoryModel extends BaseModel {
       console.error('Fetching inventory failed!');
     }).then((json) => {
       model.items = json.items;
-      model.pages = json.pages;
+      model.pageCount = json.pages;
       model.triggerUpdate();
     });
   }
@@ -41,13 +42,13 @@ export default class InventoryModel extends BaseModel {
     this.triggerUpdate();
   }
 
-  setCategory(category_id) {
-    this.category_id = category_id;
+  setCategory(categoryId) {
+    this.categoryId = categoryId;
     this.fetchData();
   }
 
-  setCurrentPage(current_page) {
-    this.current_page = current_page;
+  setCurrentPage(currentPage) {
+    this.currentPage = currentPage;
     this.fetchData();
   }
 }
