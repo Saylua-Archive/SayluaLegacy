@@ -13,11 +13,13 @@
 
 .speech-bubble {
     position:relative;
-    width: 320px;
+    width: 70%;
     padding: 10px;
-    margin: 3em;
+    margin-left: 15%;
+    margin-right: 15%;
     border-radius: 10px;
     border: 10px solid rgba(0,0,0,0.095);
+    flex-grow: 1
 }
 
 .speech-bubble:before,
