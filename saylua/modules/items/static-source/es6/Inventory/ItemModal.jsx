@@ -1,6 +1,9 @@
 import Inferno from "inferno";
 import Component from "inferno-component";
 
+import {formatNumber} from 'Utils';
+
+
 export default class ItemModal extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +39,8 @@ export default class ItemModal extends Component {
           </div>
           <img src={ item.image_url } className="item" alt={ item.name }
             title={ item.name } aria-label={ item.name } />
-          <p className="center">Count: { item.count }</p>
+          <p className="center">Count: { formatNumber(item.count) }</p>
+          <p className="center">Autosale Price: { formatNumber(item.price) } Cloud Coins</p>
           <p className="center">{ item.description }</p>
         </div>
       </div>

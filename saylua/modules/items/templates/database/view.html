@@ -21,6 +21,10 @@
       <td>{{ item.category_name().title() }}</td>
     </tr>
     <tr>
+      <th>Buyback Price</th>
+      <td>{{ item.buyback_price|pluralize('Cloud Coin') }}</td>
+    </tr>
+    <tr>
       <td colspan="2">{{ item.description }}</td>
     </tr>
   </table>

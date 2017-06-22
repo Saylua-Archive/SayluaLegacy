@@ -40,6 +40,7 @@ class Item(db.Model):
     name = db.Column(db.String(256), unique=True)
     canon_name = db.Column(db.String(256), unique=True)
     description = db.Column(db.String(1024))
+    buyback_price = db.Column(db.Integer)
 
     category_id = db.Column(db.Integer)
 
@@ -102,6 +103,7 @@ class InventoryItem(db.Model):
             'count': self.count,
             'actions': self.item.actions(),
             'image_url': self.item.image_url(),
+            'price': self.item.buyback_price,
         }
         return data
 

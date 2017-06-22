@@ -61,7 +61,7 @@ export default class Pagination extends Component {
     let endPages = [];
 
     if (startPageRange > 1) {
-      startPages.push(<span className="link" onClick={ this.setPage.bind(1) }>1</span>);
+      startPages.push(<span className="link" onClick={ this.setPage.bind(this, 1) }>1</span>);
       startPages.push(<span>...</span>);
     }
 
@@ -69,16 +69,16 @@ export default class Pagination extends Component {
       if (i == currentPage) {
         mainPages.push(<span class="active">{ i }</span>);
       } else {
-        mainPages.push(<span className="link" onClick={ this.setPage.bind(i) }>{ i }</span>);
+        mainPages.push(<span className="link" onClick={ this.setPage.bind(this, i) }>{ i }</span>);
       }
     }
 
     if (endPageRange < pageCount) {
-      endPages.push(<span className="link" onClick={ this.setPage.bind(pageCount) }>{ pageCount }</span>);
       endPages.push(<span>...</span>);
+      endPages.push(<span className="link" onClick={ this.setPage.bind(this, pageCount) }>{ pageCount }</span>);
     }
     return (
-      <div className="pagination">
+      <div className="pagination center">
         { prevButton }
         { startPages }
         { mainPages }

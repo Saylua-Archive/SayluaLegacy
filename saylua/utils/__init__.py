@@ -22,12 +22,16 @@ def get_static_version_id():
     return version
 
 
+def format_number(n):
+    return "{:,}".format(n)
+
+
 def pluralize(count, singular_noun, plural_noun=None):
     if not plural_noun:
         plural_noun = singular_noun + 's'
     if count == 1:
-        return str(count) + ' ' + singular_noun
-    return str(count) + ' ' + plural_noun
+        return format_number(count) + ' ' + singular_noun
+    return format_number(count) + ' ' + plural_noun
 
 
 def add_article(singular_noun):

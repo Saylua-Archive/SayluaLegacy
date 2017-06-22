@@ -4,6 +4,8 @@ import Component from "inferno-component";
 import ItemModal from "./ItemModal";
 import Pagination from "./Pagination";
 
+import {formatNumber} from 'Utils';
+
 export default class Inventory extends Component {
   constructor(props) {
     super(props);
@@ -25,12 +27,12 @@ export default class Inventory extends Component {
               title={ item.name } aria-label={ item.name } />
             <span>{ item.name }</span>
           </span>
-          <small>Count: { item.count }</small>
+          <small>Count: { formatNumber(item.count) }</small>
         </div>
       );
     });
-    let pagination = <Pagination className="center" currentPage={ model.currentPage }
-        pageCount={ model.pageCount } onPageChange={ model.setCurrentPage.bind(model) } />;
+    let pagination = <Pagination currentPage={ model.currentPage }
+        pageCount={ model.pageCount + 10 } onPageChange={ model.setCurrentPage.bind(model) } />;
     let itemModal = null;
     let item = model.getItem();
     if (item) {
