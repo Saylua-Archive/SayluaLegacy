@@ -10,6 +10,20 @@ export default class Inventory extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+
+    window.addEventListener('keydown', (e) => {
+      e = e || window.event;
+      let model = this.props.model;
+      if (!model.getItem()) return;
+      if (e.keyCode == '37') {
+        // left arrow
+        model.prevItem();
+      }
+      else if (e.keyCode == '39') {
+        // right arrow
+        model.nextItem();
+      }
+    });
   }
 
   componentWillMount() {
@@ -20,8 +34,12 @@ export default class Inventory extends Component {
   render() {
     let model = this.props.model;
     let items = model.items.map(function(item, i) {
+      let gridClass = "grid-element";
+      if (i == model.index) {
+        gridClass += " selected";
+      }
       return (
-        <div class="grid-element">
+        <div class={ gridClass }>
           <span class="link" onclick={ model.setIndex.bind(model, i) }>
             <img src={ item.image_url } className="item" alt={ item.name }
               title={ item.name } aria-label={ item.name } />

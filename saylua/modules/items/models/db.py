@@ -7,11 +7,11 @@ import json
 
 
 class ItemCategory:
-    categories = ["food", "toys", "gifts", "materials", "minis", "clothes"]
+    categories = ["treats", "toys", "gifts", "materials", "minis", "clothes"]
 
     def __init__(self, category):
         if isinstance(category, basestring):
-            self.id = ItemCategory.categories.index(category)
+            self.id = ItemCategory.categories.index(category) + 1
         else:
             self.id = category
 
@@ -19,17 +19,25 @@ class ItemCategory:
         return other == self.id or other == self.name()
 
     def name(self):
-        if self.id >= 0 and self.id < len(ItemCategory.categories):
-            return ItemCategory.categories[self.id]
+        if self.id > 0 and self.id < len(ItemCategory.categories):
+            return ItemCategory.categories[self.id - 1]
         return ''
 
     def actions(self):
         actions = ['sell', 'send', 'toss']
         return actions
 
+    def to_dict(self):
+        data = {
+            'name': self.name(),
+            'id': self.id,
+            'actions': self.actions(),
+        }
+        return data
+
     @classmethod
-    def get_categories(cls):
-        return cls.categories
+    def all(cls):
+        return [cls(c) for c in cls.categories]
 
 
 class Item(db.Model):

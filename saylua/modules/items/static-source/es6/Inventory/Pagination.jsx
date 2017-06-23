@@ -78,7 +78,7 @@ export default class Pagination extends Component {
       endPages.push(<span className="link" onClick={ this.setPage.bind(this, pageCount) }>{ pageCount }</span>);
     }
     return (
-      <div className="pagination center">
+      <div className="pagination">
         { prevButton }
         { startPages }
         { mainPages }

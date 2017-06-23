@@ -42,6 +42,14 @@ export default class InventoryModel extends BaseModel {
     this.triggerUpdate();
   }
 
+  prevItem() {
+    this.setIndex((this.index - 1 + this.items.length) % this.items.length);
+  }
+
+  nextItem() {
+    this.setIndex((this.index + 1) % this.items.length);
+  }
+
   setCategory(categoryId) {
     this.categoryId = categoryId;
     this.fetchData();
