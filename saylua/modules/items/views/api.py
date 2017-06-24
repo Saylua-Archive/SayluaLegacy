@@ -21,8 +21,11 @@ def api_inventory(category_id, page):
     pagination = Pagination(per_page=ITEMS_PER_PAGE, query=inventory_query,
         current_page=page)
 
-    return json.dumps({'items': [i.to_dict() for i in pagination.items],
-        'pages': pagination.page_count, 'categories': [i.to_dict() for i in ItemCategory.all()]})
+    return json.dumps({
+        'items': [i.to_dict() for i in pagination.items],
+        'page_count': pagination.page_count,
+        'categories': [i.to_dict() for i in ItemCategory.all()]
+    })
 
 
 @api_login_required()

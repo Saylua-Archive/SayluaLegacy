@@ -4,23 +4,17 @@ import Component from "inferno-component";
 export default class Pagination extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      'currentPage': this.props.currentPage || 1,
-      'pageBuffer': this.props.pageBuffer || 2,
-      'pageCount': this.props.pageCount || 1,
-      'onPageChange': this.props.onPageChange,
-    };
   }
 
   setPage(number) {
-    this.state.currentPage = number;
-    this.state.onPageChange(number);
+    this.props.currentPage = number;
+    this.props.onPageChange(number);
   }
 
   render() {
-    let currentPage = this.state.currentPage;
-    let pageCount = this.state.pageCount;
-    let pageBuffer = this.state.pageBuffer;
+    let currentPage = this.props.currentPage || 1;
+    let pageCount = this.props.pageCount || 1;
+    let pageBuffer = this.props.pageBuffer || 2;
 
     let prevButton = <span>&#8592; Prev</span>;
     if (currentPage > 1) {

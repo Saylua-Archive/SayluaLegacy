@@ -33,14 +33,21 @@ export default class Inventory extends Component {
 
   render() {
     let model = this.props.model;
+    let categories = model.categories.map(function(category) {
+      return (
+        <a className="subtle-button" onClick={ model.setCategory.bind(model, category.id) }>
+          { category.name }
+        </a>
+      );
+    });
     let items = model.items.map(function(item, i) {
       let gridClass = "grid-element";
       if (i == model.index) {
         gridClass += " selected";
       }
       return (
-        <div class={ gridClass }>
-          <span class="link" onclick={ model.setIndex.bind(model, i) }>
+        <div className={ gridClass }>
+          <span className="link" onclick={ model.setIndex.bind(model, i) }>
             <img src={ item.image_url } className="item" alt={ item.name }
               title={ item.name } aria-label={ item.name } />
             <span>{ item.name }</span>
@@ -50,7 +57,7 @@ export default class Inventory extends Component {
       );
     });
     let pagination = <Pagination currentPage={ model.currentPage }
-        pageCount={ model.pageCount + 10 } onPageChange={ model.setCurrentPage.bind(model) } />;
+        pageCount={ model.pageCount } onPageChange={ model.setCurrentPage.bind(model) } />;
     let itemModal = null;
     let item = model.getItem();
     if (item) {
@@ -61,7 +68,8 @@ export default class Inventory extends Component {
     }
     return (
       <div>
-        <div className="inventory-categories">
+        <div className="inventory-categories center">
+          { categories }
         </div>
         { pagination }
         <div class="grid-container">

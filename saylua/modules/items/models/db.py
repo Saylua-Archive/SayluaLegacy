@@ -7,11 +7,11 @@ import json
 
 
 class ItemCategory:
-    categories = ["treats", "toys", "gifts", "materials", "minis", "clothes"]
+    categories = ["all", "treats", "toys", "gifts", "materials", "minis", "clothes"]
 
     def __init__(self, category):
         if isinstance(category, basestring):
-            self.id = ItemCategory.categories.index(category) + 1
+            self.id = ItemCategory.categories.index(category)
         else:
             self.id = category
 
@@ -19,19 +19,14 @@ class ItemCategory:
         return other == self.id or other == self.name()
 
     def name(self):
-        if self.id > 0 and self.id < len(ItemCategory.categories):
-            return ItemCategory.categories[self.id - 1]
+        if self.id >= 0 and self.id < len(ItemCategory.categories):
+            return ItemCategory.categories[self.id]
         return ''
-
-    def actions(self):
-        actions = ['sell', 'send', 'toss']
-        return actions
 
     def to_dict(self):
         data = {
             'name': self.name(),
             'id': self.id,
-            'actions': self.actions(),
         }
         return data
 
@@ -72,9 +67,6 @@ class Item(db.Model):
     def category_name(self):
         return self.category().name()
 
-    def actions(self):
-        return self.category().actions()
-
     def grant(self, user_id, count):
         inventory_entry = InventoryItem.by_user_item(user_id, self.id)
         if not inventory_entry:
@@ -109,7 +101,6 @@ class InventoryItem(db.Model):
             'category': self.item.category_name(),
             'description': self.item.description,
             'count': self.count,
-            'actions': self.item.actions(),
             'image_url': self.item.image_url(),
             'price': self.item.buyback_price,
         }

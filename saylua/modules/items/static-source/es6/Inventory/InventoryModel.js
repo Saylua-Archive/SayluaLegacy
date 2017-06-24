@@ -12,6 +12,7 @@ export default class InventoryModel extends BaseModel {
     this.items = [];
     this.index = -1;
     this.pageCount = 1;
+    this.categories = [];
 
     this.fetchData();
   }
@@ -27,7 +28,8 @@ export default class InventoryModel extends BaseModel {
       console.error('Fetching inventory failed!');
     }).then((json) => {
       model.items = json.items;
-      model.pageCount = json.pages;
+      model.pageCount = json.page_count;
+      model.categories = json.categories;
       model.triggerUpdate();
     });
   }
@@ -52,6 +54,7 @@ export default class InventoryModel extends BaseModel {
 
   setCategory(categoryId) {
     this.categoryId = categoryId;
+    this.currentPage = 1;
     this.fetchData();
   }
 

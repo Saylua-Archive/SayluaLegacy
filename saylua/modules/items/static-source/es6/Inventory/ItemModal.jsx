@@ -7,13 +7,10 @@ import {formatNumber} from 'Utils';
 export default class ItemModal extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      closed: this.props.closed
-    };
   }
 
   close() {
-    this.setState({closed: true});
+    this.props.closed = true;
 
     let onClose = this.props.onClose;
     if (onClose) {
@@ -22,12 +19,12 @@ export default class ItemModal extends Component {
   }
 
   open() {
-    this.setState({closed: false});
+    this.props.closed = false;
   }
 
   render() {
     let item = this.props.item;
-    let closedClass = this.state.closed ? ' closed' : '';
+    let closedClass = this.props.closed ? ' closed' : '';
     let closeFunction = this.close.bind(this);
     // Make sure not to close when you click on children of the overlay.
     let stopPropagation = (e) => {
