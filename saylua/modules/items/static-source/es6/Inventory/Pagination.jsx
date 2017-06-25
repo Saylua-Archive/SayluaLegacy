@@ -16,23 +16,29 @@ export default class Pagination extends Component {
     let pageCount = this.props.pageCount || 1;
     let pageBuffer = this.props.pageBuffer || 2;
 
-    let prevButton = <span>&#8592; Prev</span>;
+    let prevClass = "previous-link";
+    let prevOnClick = null;
     if (currentPage > 1) {
-      prevButton = (
-        <span className="link" onClick={ this.setPage.bind(this, currentPage - 1) }>
-          &#8592; Prev
-        </span>
-      );
+      prevClass += " link";
+      prevOnClick = this.setPage.bind(this, currentPage - 1);
     }
+    let prevButton = (
+      <span className={ prevClass } onClick={ prevOnClick }>
+        &#8592; Prev
+      </span>
+    );
 
-    let nextButton = <span>Next &#8594;</span>;
+    let nextClass = "next-link";
+    let nextOnClick = null;
     if (currentPage < pageCount) {
-      nextButton = (
-        <span className="link" onClick={ this.setPage.bind(this, currentPage + 1) }>
-          Next &#8594;
-        </span>
-      );
+      nextClass += " link";
+      nextOnClick = this.setPage.bind(this, currentPage + 1);
     }
+    let nextButton = (
+      <span className={ nextClass } onClick={ nextOnClick }>
+        Next &#8594;
+      </span>
+    );
 
     let startPageRange = currentPage - pageBuffer;
     let endPageRange = currentPage + pageBuffer;
@@ -72,7 +78,7 @@ export default class Pagination extends Component {
       endPages.push(<span className="link" onClick={ this.setPage.bind(this, pageCount) }>{ pageCount }</span>);
     }
     return (
-      <div className="pagination">
+      <div className="pagination pagination-ajax">
         { prevButton }
         { startPages }
         { mainPages }

@@ -74,6 +74,12 @@ class Item(db.Model):
         inventory_entry.count += count
         inventory_entry.put()
 
+    def is_bondable(self):
+        return self.category().name() == "minis"
+
+    def is_wearable(self):
+        return self.category().name() == "clothes"
+
     @classmethod
     def make_canon_name(cls, name):
         return canonize(name)
@@ -102,7 +108,8 @@ class InventoryItem(db.Model):
             'description': self.item.description,
             'count': self.count,
             'image_url': self.item.image_url(),
-            'price': self.item.buyback_price,
+            'buyback_price': self.item.buyback_price,
+            'is_bondable': self.item.is_bondable(),
         }
         return data
 

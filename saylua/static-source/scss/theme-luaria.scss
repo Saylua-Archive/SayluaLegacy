@@ -1,0 +1,11 @@
+@import 'assets/variables';
+@import 'assets/variables-luaria';
+
+.theme-luaria {
+  @import 'main';
+
+  .banner {
+    background-image: url('/static/img/backgrounds/luaria.png');
+    background-position: 0 400px;
+  }
+}

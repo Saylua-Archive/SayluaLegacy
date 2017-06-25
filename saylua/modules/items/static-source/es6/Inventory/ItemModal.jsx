@@ -39,7 +39,7 @@ export default class ItemModal extends Component {
           <img src={ item.image_url } className="item" alt={ item.name }
             title={ item.name } aria-label={ item.name } />
           <p className="center">Count: { formatNumber(item.count) }</p>
-          <p className="center">Buyback Price: { formatNumber(item.price) } Cloud Coins</p>
+          <p className="center">Buyback Price: { formatNumber(item.buyback_price) } Cloud Coins</p>
           <p className="center">{ item.description }</p>
         </div>
       </div>

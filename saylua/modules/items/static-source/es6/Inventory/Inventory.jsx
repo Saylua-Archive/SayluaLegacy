@@ -33,6 +33,7 @@ export default class Inventory extends Component {
 
   render() {
     let model = this.props.model;
+
     let categories = model.categories.map(function(category) {
       return (
         <a className="subtle-button" onClick={ model.setCategory.bind(model, category.id) }>
@@ -40,7 +41,8 @@ export default class Inventory extends Component {
         </a>
       );
     });
-    let items = model.items.map(function(item, i) {
+
+    let body = model.items.map(function(item, i) {
       let gridClass = "grid-element";
       if (i == model.index) {
         gridClass += " selected";
@@ -56,6 +58,11 @@ export default class Inventory extends Component {
         </div>
       );
     });
+
+    if (!model.fetched) {
+      body = <div className="loader center"></div>;
+    }
+
     let pagination = <Pagination currentPage={ model.currentPage }
         pageCount={ model.pageCount } onPageChange={ model.setCurrentPage.bind(model) } />;
     let itemModal = null;
@@ -73,7 +80,7 @@ export default class Inventory extends Component {
         </div>
         { pagination }
         <div class="grid-container">
-          { items }
+          { body }
         </div>
         { pagination }
         { itemModal }

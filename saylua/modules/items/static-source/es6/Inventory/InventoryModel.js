@@ -14,10 +14,16 @@ export default class InventoryModel extends BaseModel {
     this.pageCount = 1;
     this.categories = [];
 
+    this.fetched = false;
+
     this.fetchData();
   }
 
   fetchData() {
+    this.index = -1;
+    this.fetched = false;
+    this.triggerUpdate();
+
     let model = this;
     slFetch('/api/inventory/' + this.categoryId + '/' + this.currentPage + '/', {
       credentials: 'include'
@@ -30,6 +36,8 @@ export default class InventoryModel extends BaseModel {
       model.items = json.items;
       model.pageCount = json.page_count;
       model.categories = json.categories;
+
+      model.fetched = true;
       model.triggerUpdate();
     });
   }
