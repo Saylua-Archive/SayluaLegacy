@@ -2,7 +2,7 @@ import Inferno from "inferno";
 import Component from "inferno-component";
 
 import ItemModal from "./ItemModal";
-import Pagination from "./Pagination";
+import Pagination from "Pagination";
 
 import {formatNumber} from 'Utils';
 
@@ -49,7 +49,7 @@ export default class Inventory extends Component {
       }
       return (
         <div className={ gridClass }>
-          <span className="link" onclick={ model.setIndex.bind(model, i) }>
+          <span className="link" onClick={ model.setIndex.bind(model, i) }>
             <img src={ item.image_url } className="item" alt={ item.name }
               title={ item.name } aria-label={ item.name } />
             <span>{ item.name }</span>
@@ -71,7 +71,7 @@ export default class Inventory extends Component {
       let onModalClose = () => {
         model.setIndex(-1);
       };
-      itemModal = <ItemModal item={ item } onClose={ onModalClose } />
+      itemModal = <ItemModal item={ item } onClose={ onModalClose } />;
     }
     return (
       <div>
@@ -79,7 +79,7 @@ export default class Inventory extends Component {
           { categories }
         </div>
         { pagination }
-        <div class="grid-container">
+        <div className="grid-container">
           { body }
         </div>
         { pagination }

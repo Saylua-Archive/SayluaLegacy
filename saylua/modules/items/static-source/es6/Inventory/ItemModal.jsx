@@ -29,7 +29,7 @@ export default class ItemModal extends Component {
     // Make sure not to close when you click on children of the overlay.
     let stopPropagation = (e) => {
       e.stopPropagation();
-    }
+    };
     return (
       <div className={ "modal-overlay" + closedClass } onClick={ closeFunction }>
         <div className="modal" onClick={ stopPropagation }>

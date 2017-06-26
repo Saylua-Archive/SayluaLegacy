@@ -31,7 +31,7 @@ export default class InventoryModel extends BaseModel {
       if (response.ok) {
         return response.json();
       }
-      console.error('Fetching inventory failed!');
+      throw 'Fetching inventory failed!';
     }).then((json) => {
       model.items = json.items;
       model.pageCount = json.page_count;
