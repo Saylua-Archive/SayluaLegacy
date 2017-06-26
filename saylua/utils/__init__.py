@@ -72,15 +72,24 @@ def get_from_request(request, key, form_key=None, args_key=None):
 
 # http://flask.pocoo.org/snippets/62/
 def is_safe_url(target):
+    if not target:
+        return False
     ref_url = urlparse(request.host_url)
     test_url = urlparse(urljoin(request.host_url, target))
     return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
 
 
-def redirect_to_referer(default_endpoint):
+def get_redirect_target():
+    for target in request.form.get('next'), request.values.get('next'), request.referrer:
+        if is_safe_url(target):
+            return target
+    return ''
+
+
+def redirect_to_referer(endpoint='general.home', **values):
     if is_safe_url(request.referrer):
         return redirect(request.referrer)
-    return redirect(url_for(default_endpoint))
+    return redirect(url_for(endpoint, **values))
 
 
 def random_token(length=32):

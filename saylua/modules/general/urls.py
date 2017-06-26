@@ -2,7 +2,7 @@ from saylua.routing import url
 from . import views
 
 urlpatterns = [
-    url('/', view_func=views.main.home, name='main', methods=['GET']),
+    url('/', view_func=views.main.home, name='home', methods=['GET']),
     url('/landing/', view_func=views.main.landing, name='landing', methods=['GET']),
     url('/banned/', view_func=views.main.banned, name='banned', methods=['GET']),
 
