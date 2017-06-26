@@ -1,5 +1,3 @@
-@import '../assets/transitions';
-
 * {
   box-sizing: border-box;
 }
@@ -90,16 +88,16 @@ table {
   }
 }
 
-a, a:active, a:visited,
+a, a:visited,
 button.link-button,
-button.link-button:active,
 button.link-button:hover,
 .link {
-  text-decoration: none;
-  color: $accentColor;
+  display: inline;
   margin: 0;
   padding: 0;
   cursor: pointer;
+  text-decoration: none;
+  color: $accentColor;
   border: none;
   background: none;
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="{% if use_admin_theme %}theme-admin{% else %}{{ theme_class }}{% endif %}{% if fullscreen %} hide-sidebar{% endif %}">
 <head>
   <meta charset="utf-8">
   <title>
@@ -27,7 +27,7 @@
   <![endif]-->
 </head>
 
-<body class="theme-luaria {% if use_admin_theme %}theme-admin{% endif %} {% if fullscreen %} hide-sidebar{% endif %}">
+<body>
 <div id="banner" class="banner">
   <a id="logo" href="/" class="logo"><img id="logo-image" src="/static/img/logo.png" alt="Saylua" title="Saylua" /></a>
 </div>
@@ -124,9 +124,19 @@
         </a>
       </span>
     </p>
-    <p>
-      <i class="fa fa-clock-o" aria-hidden="true"></i> <span id="site-time">{{saylua_time|show_time}}</span>
-    </p>
+    <form method="post" action="{{ url_for('general.change_theme') }}">
+      <i class="fa fa-clock-o" aria-hidden="true"></i>
+      <span id="site-time">{{ saylua_time|show_time }}</span>
+      &bull;
+      <button class="link-button" name="theme_id" value="0">
+        <i class="fa fa-fw fa-sun-o" aria-hidden="true"></i>
+      </button>
+      &bull;
+      <button class="link-button" name="theme_id" value="1">
+        <i class="fa fa-fw fa-moon-o" aria-hidden="true"></i>
+      </button>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    </form>
     <p>
       &copy; 2016 <a href="/">Saylua</a>
     </p>

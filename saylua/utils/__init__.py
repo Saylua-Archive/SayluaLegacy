@@ -1,4 +1,6 @@
 from dateutil import tz
+from urlparse import urlparse, urljoin
+from flask import request, redirect, url_for
 
 import time
 import re
@@ -66,6 +68,19 @@ def get_from_request(request, key, form_key=None, args_key=None):
     elif request.args.get(args_key):
         result = request.args.get(args_key)
     return result
+
+
+# http://flask.pocoo.org/snippets/62/
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
+
+
+def redirect_to_referer(default_endpoint):
+    if is_safe_url(request.referrer):
+        return redirect(request.referrer)
+    return redirect(url_for(default_endpoint))
 
 
 def random_token(length=32):

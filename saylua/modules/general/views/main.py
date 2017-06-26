@@ -1,6 +1,9 @@
-from flask import render_template, redirect, g, abort
+from flask import render_template, redirect, g, abort, make_response, request
 
-from saylua.utils import is_devserver
+from saylua import app, db
+from saylua.utils import is_devserver, redirect_to_referer
+
+import datetime
 
 
 def home():
@@ -25,7 +28,23 @@ def view_page(template):
         abort(404)
 
 
+def change_theme():
+    try:
+        theme_id = int(request.form.get('theme_id'))
+    except:
+        abort(400)
+    response = make_response(redirect_to_referer('general.home'))
+    if not g.logged_in:
+        expires = datetime.datetime.utcnow()
+        expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
+        response.set_cookie("theme_id", str(theme_id), expires=expires)
+    else:
+        g.user.theme_id = theme_id
+        db.session.commit()
+    return response
+
+
 def banned():
     if not (g.logged_in and g.user.is_banned()):
-        return render_template("404.html"), 404
+        abort(404)
     return render_template("banned.html")

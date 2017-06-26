@@ -20,7 +20,7 @@ def user_profile(username):
 
     # User not found
     if user is None:
-        return render_template('notfound.html')
+        return render_template('notfound.html'), 404
 
     # Redirect the URL if this is not the main username for the user
     if user.name.lower() != username:

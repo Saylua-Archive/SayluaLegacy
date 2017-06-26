@@ -4,8 +4,12 @@
 .theme-luaria {
   @import 'main';
 
+  .sidebar, footer {
+    color: $white;
+  }
+
   .banner {
     background-image: url('/static/img/backgrounds/luaria.png');
-    background-position: 0 400px;
+    background-position: 0 40%;
   }
 }

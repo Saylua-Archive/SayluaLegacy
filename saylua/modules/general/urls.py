@@ -9,5 +9,7 @@ urlpatterns = [
     url('/news/', view_func=views.news.newspaper, name='news', methods=['GET']),
     url('/news/puzzle/', view_func=views.news.puzzle, name='puzzle', methods=['GET']),
 
-    url('/page/<template>/', view_func=views.main.view_page, name='view_page')
+    url('/page/<template>/', view_func=views.main.view_page, name='view_page'),
+
+    url('/theme/change/', view_func=views.main.change_theme, name='change_theme', methods=['POST'])
 ]
