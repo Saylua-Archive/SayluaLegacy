@@ -5,7 +5,8 @@ from saylua.wrappers import login_required
 
 from ..forms.login import LoginForm, login_check
 
-from flask import render_template, redirect, make_response, request, flash, g
+from flask import (render_template, make_response, request, redirect, flash,
+    g, url_for, abort)
 
 import datetime
 
@@ -40,7 +41,7 @@ def login():
         db.session.commit()
 
         # Generate a matching cookie and redirect.
-        resp = make_response(redirect('/'))
+        resp = make_response(form.redirect())
         resp.set_cookie("session_id", new_session.id, expires=expires)
         resp.set_cookie("user_id", str(found_id), expires=expires)
 
@@ -60,13 +61,13 @@ def logout():
 
     # Make sure people can't log each other out
     if not session or session.user_id != g.user.id:
-        return render_template("403.html"), 403
+        abort(403)
 
     if session:
         db.session.delete(session)
         db.session.commit()
 
-    resp = make_response(redirect('/'))
+    resp = make_response(redirect(url_for('general.home')))
     resp.set_cookie('session_id', '', expires=0)
     flash("Bye bye! We hope to see you again soon.")
     return resp

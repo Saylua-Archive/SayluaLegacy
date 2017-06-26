@@ -5,6 +5,8 @@ MAIN_URL_ROOT = 'https://saylua.com'
 IMAGE_BUCKET_ROOT = 'https://storage.cloud.google.com/saylua-images'
 IMAGE_BUCKET_NAME = '/saylua-images'
 
+THEME_CLASSES = ['theme-sayleus', 'theme-luaria']
+
 # Form fields
 MIN_USERNAME_LENGTH = 3
 MAX_USERNAME_LENGTH = 15

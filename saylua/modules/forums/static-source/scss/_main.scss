@@ -1,5 +1,8 @@
-@import 'assets/variables';
 @import 'assets/transitions';
+
+@import 'board';
+@import 'shared';
+@import 'thread';
 
 .forum-main-header {
   line-height: 100%;

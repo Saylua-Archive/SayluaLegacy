@@ -4,7 +4,7 @@ from saylua.modules.messages.models.db import ConversationHandle
 from saylua.modules.messages.models.db import Notification
 from saylua.utils import get_static_version_id, truncate
 
-from flask import g, url_for
+from flask import g, url_for, request
 from saylua import db
 
 from functools import partial
@@ -62,6 +62,22 @@ def inject_truncate():
 @app.context_processor
 def inject_version_id():
     return dict(version_id=get_static_version_id())
+
+
+@app.context_processor
+def inject_theme_class():
+    themes = app.config.get('THEME_CLASSES')
+    if g.logged_in:
+        theme_id = g.user.theme_id
+    else:
+        try:
+            theme_id = int(request.cookies.get("theme_id"))
+        except:
+            return {}
+    theme_id = max(0, theme_id)
+    theme_id = min(len(themes) - 1, theme_id)
+    theme_class = themes[theme_id]
+    return dict(theme_class=theme_class)
 
 
 @app.context_processor

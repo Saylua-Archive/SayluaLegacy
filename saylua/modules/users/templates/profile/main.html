@@ -71,14 +71,16 @@
     </div>
     {% endif %}
     <h3>{{ viewed_user.name }}'s Pets</h3>
-    {% for pet in pets %}
-    <div style="width:20%; float:left">
-      <a href="{{ pet.url() }}" class="pet">
-        <img src="{{ pet.image() }}">
-        <div>{{ pet.name }}</div>
-      </a>
+    <div class="grid-container">
+      {% for pet in pets %}
+      <div class="grid-element-big">
+        <a href="{{ pet.url() }}" class="pet">
+          <img src="{{ pet.image_url() }}">
+          <div>{{ pet.name }}</div>
+        </a>
+      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
   </div>
 </div>
 {% endblock %}

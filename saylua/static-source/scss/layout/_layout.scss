@@ -3,7 +3,7 @@
 
 @import 'assets/sizes';
 
-@import 'entities/main';
+@import 'entities';
 @import 'navbar';
 @import 'notifications';
 
@@ -14,9 +14,8 @@
   padding: 1.8rem;
   text-align: center;
   color: $white;
-  background: $mainSofterColor url('/static/img/backgrounds/sayleus.png');
+  background-color: $mainSofterColor;
   background-size: cover;
-  background-position: 0 200px;
 
   flex-shrink: 0;
 
@@ -185,18 +184,20 @@ footer {
 
     flex-grow: 1;
     flex-shrink: 1;
-  }
 
-  .social-icons {
-    a {
+    i {
       @include slow-color-trans;
       font-size: 2rem;
-    }
 
-    a:hover {
-      text-decoration: none;
-      color: $mainColor;
+      &:hover {
+        text-decoration: none;
+        color: $mainColor;
+      }
     }
+  }
+
+  .social-icons a:hover {
+    text-decoration: none;
   }
 }
 
@@ -236,8 +237,8 @@ footer {
         position: relative;
         display: block;
         width: 50%;
-        padding: 0;
         margin: 0;
+        padding: 0;
 
         flex-grow: 0;
         flex-shrink: 0;

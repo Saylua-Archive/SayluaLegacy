@@ -40,9 +40,7 @@
   </form>
 </div>
 
-<div class="pagination center">
-  {{ pagination.render() }}
-</div>
+{{ pagination.render() }}
 
 <div class="forum-posts-container">
   {% for post in pagination.items %}
@@ -50,9 +48,7 @@
   {% endfor %}
 </div>
 
-<div class="center">
 {{ pagination.render() }}
-</div>
 
 <form method="post" class="validated-form" id="write-forum-reply">
   <h2>

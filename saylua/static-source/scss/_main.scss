@@ -2,6 +2,8 @@
 
 @import 'components/alternating-table';
 @import 'components/general';
+@import 'components/grid-view';
+@import 'components/modal';
 @import 'components/pagination';
 @import 'components/section-sidebar';
 
@@ -9,3 +11,5 @@
 @import 'components/forms/button';
 @import 'components/forms/checkbox';
 @import 'components/forms/table';
+
+@import 'utilities';

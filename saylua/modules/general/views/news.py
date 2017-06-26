@@ -1,32 +1,12 @@
-from flask import render_template, redirect, g
+from flask import render_template
 
 from saylua import db, app
-from saylua.utils import is_devserver
 from saylua.modules.forums.models.db import ForumThread, Board
 
 import random
 
 
-def home():
-    try:
-        if is_devserver() or g.user:
-            return redirect('/news/', code=302)
-        return landing()
-    except AttributeError:
-        return landing()
-
-
-def landing():
-    return render_template("landing.html")
-
-
-def banned():
-    if not (g.logged_in and g.user.is_banned()):
-        return render_template("404.html"), 404
-    return render_template("banned.html")
-
-
-def news():
+def newspaper():
     news_canon_name = app.config.get('NEWS_BOARD_CANON_NAME')
     threads = db.session.query(ForumThread).join(ForumThread.board).filter(
         Board.canon_name == news_canon_name).order_by(

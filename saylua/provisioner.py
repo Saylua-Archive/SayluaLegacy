@@ -8,6 +8,7 @@ from saylua.modules.pets.soul_names import soul_name
 from saylua.modules.adventure.dungeons.provision import provision_dungeon_schema
 
 import os
+import random
 
 
 # To run this import setup in the interactive console and run it as such
@@ -57,7 +58,8 @@ def generate_items():
                         name=item_name,
                         canon_name=item_name,
                         category_id=category_id,
-                        description='A lovely little ' + item_name + ' for you to munch on.'
+                        description='A lovely little ' + item_name + ' for you to munch on.',
+                        buyback_price=random.randint(1, 10000)
                     )
 
                     yield item
