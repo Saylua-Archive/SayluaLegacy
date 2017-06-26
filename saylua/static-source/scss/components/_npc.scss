@@ -45,10 +45,10 @@
 .triangle-border {
   position:relative;
   width: 70%;
-  padding:15px;
+  padding: 15px;
   margin-left: 15%;
   margin-right: 15%;
-  border:5px solid #5a8f00;
+  border:5px solid $mainSoftColor;
   color:#333;
   background:#fff;
   /* css3 */
@@ -62,7 +62,7 @@
   left:40px; /* controls horizontal position */
   border-width:20px 20px 0;
   border-style:solid;
-  border-color:#5a8f00 transparent;
+  border-color:$mainSoftColor transparent;
   /* reduce the damage in FF3.0 */
   display:block;
   width:0;
@@ -80,4 +80,14 @@
   /* reduce the damage in FF3.0 */
   display:block;
   width:0;
+}
+
+@media (max-width: 734px), (min-width: 801px) and  (max-width: 1050px){
+  .triangle-border:before {
+    left: 50%; /* controls horizontal position */
+  }
+
+  .triangle-border:after {
+    left: calc(50% + 7px); /* value = (:before left) + (:before border-left) - (:after border-left) */
+  }
 }
