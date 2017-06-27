@@ -1,13 +1,14 @@
 from saylua import app
+
 from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import RecaptchaField, Recaptcha
-from saylua.utils.form import sl_validators, UserCheck
+from saylua.utils.form import sl_validators, UserCheck, RedirectForm
 from saylua.utils.form.fields import SlField, SlPasswordField
 
 login_check = UserCheck()
 
 
-class LoginForm(FlaskForm):
+class LoginForm(RedirectForm):
     username_or_email = SlField('Username/Email', [
         sl_validators.Required(),
         sl_validators.UsernameOrEmail(),

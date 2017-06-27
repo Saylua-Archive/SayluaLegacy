@@ -1,7 +1,6 @@
-@import '../assets/variables';
-
 a,
-.theme-admin a {
+.theme-admin a,
+.theme-luaria a {
   &.title-banned {
     text-decoration: line-through;
   }

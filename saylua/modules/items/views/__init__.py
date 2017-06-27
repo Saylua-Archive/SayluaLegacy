@@ -1,2 +1,2 @@
 # flake8: noqa
-from . import admin, items
+from . import admin, api, items

@@ -49,7 +49,7 @@
         {% set last_post = board.latest_post() %}
         {% if last_post is not none %}
         {% if last_post.author.companion %}
-        <img src="{{ last_post.author.companion.image() }}" alt="last_post.author.companion.name" />
+        <img src="{{ last_post.author.companion.image_url() }}" alt="last_post.author.companion.name" />
         {% endif %}
         <p>
           <a href="{{ last_post.url() }}">{{ last_post.thread.title }}

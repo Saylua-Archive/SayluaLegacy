@@ -14,7 +14,7 @@
 <div id="pet-room">
   <div class="pet-room-background"></div>
   <div class="pet" id="pet-image-container">
-    <img src="{{ pet.image() }}">
+    <img src="{{ pet.image_url() }}">
   </div>
   <div class="mini-small">
     <img src="{{ random_mini_image() }}">
@@ -54,6 +54,9 @@
 <div class="pet-profile-column pet-profile-column-full">
   <div class="pet-profile-box">
     <h2>{{ pet.name }}'s Description</h2>
+    {% if not pet.description %}
+    <em>{{ pet.name }} doesn't have a description yet. </em>
+    {% endif %}
     {{ pet.description|markdown }}
   </div>
 </div>

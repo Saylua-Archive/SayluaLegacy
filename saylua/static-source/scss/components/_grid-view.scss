@@ -1,8 +1,6 @@
-@import 'assets/variables';
-@import 'assets/transitions';
+@import '../assets/transitions';
 
-
-.item-grid {
+.grid-container {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -10,12 +8,13 @@
   align-items: flex-start;
   flex-wrap: wrap;
 
-  .item-grid-element {
+  .grid-element,
+  .grid-element-big {
     @include fast-color-trans;
     display: flex;
     flex-direction: column;
-    width: 20%;
-    padding: 1em .8rem;
+    padding: 1em 1.6rem;
+    text-align: center;
 
     align-items: center;
     flex-grow: 0;
@@ -25,5 +24,17 @@
     &:hover {
       background-color: $mainSoftestColor;
     }
+
+    &.selected {
+      background-color: $accentSoftColor;
+    }
+  }
+
+  .grid-element {
+    width: 20%;
+  }
+
+  .grid-element-big {
+    width: 25%;
   }
 }

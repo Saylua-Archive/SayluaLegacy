@@ -1,5 +1,5 @@
 from saylua import app
-from saylua.utils import pluralize, saylua_time
+from saylua.utils import pluralize, format_number, saylua_time
 
 from flask import Markup
 from markdown import Markdown
@@ -21,10 +21,9 @@ def saylua_pluralize(count, singular_noun, plural_noun=None):
     return pluralize(count, singular_noun, plural_noun)
 
 
-# Convert key to urlsafe string
-@app.template_filter('make_urlsafe')
-def saylua_make_urlsafe(key):
-    return key.urlsafe()
+@app.template_filter('format_number')
+def saylua_format_number(n):
+    return format_number(n)
 
 
 # Time filters

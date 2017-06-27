@@ -2,29 +2,61 @@
 
 {% extends "layout.html" %}
 {% set page_title = "Search Results" %}
+{% block header_scripts %}
+<link rel="stylesheet" type="text/css" href="{{ include_static('css/search.min.css') }}" />
+{% endblock %}
 {% block body %}
 <h1>Search Saylua{{ ": {}".format(query) if query }}</h1>
-<form method="get">
-  <div class="center">
-    <input name="q" class="half" type="text" value="{{query}}" placeholder="Search Saylua">
-    <input type="submit" value="Search">
-  </div>
+<form method="get" class="center">
+  <input name="q" type="text" value="{{ query }}" placeholder="Search Saylua" />
+  <input type="submit" value="Search" />
 </form>
 
 {% if query %}
   <h3>Users Found</h3>
-  {% for username in usernames %}
-  {{ user_link(username.user) }}
-  {% endfor %}
+  <div class="grid-container">
+    {% for username in usernames %}
+      <div class="grid-element">
+        {{ user_link(username.user) }}
+
+        {% if username.user.name != username.name %}
+        <p class="small">
+          Matched old username: <a href="{{ username.user.url() }}">{{ username.name }}</a>
+        </p>
+        {% endif %}
+      </div>
+    {% else %}
+    No users were found with a username matching '{{ query }}'
+    {% endfor %}
+  </div>
 
   <h3>Items Found</h3>
-  {% for item in items %}
-  <a href="{{ item.url() }}">
-    {{ item.name }}
-  </a>
-  {% endfor %}
+  <div class="grid-container">
+    {% for item in items %}
+    <div class="grid-element">
+      <a href="{{ item.url() }}">
+        <img class="item" src="{{ item.image_url() }}" alt="{{ item.name }}" title="{{ item.name }}" aria-label="{{ item.name }}" />
+        {{ item.name }}
+      </a>
+    </div>
+    {% else %}
+    No items were found with a name matching '{{ query }}'
+    {% endfor %}
+  </div>
 
   <h3>Pets Found</h3>
+  <div class="grid-container">
+    {% for pet in pets %}
+    <div class="grid-element">
+      <a href="{{ pet.url() }}">
+        <img class="pet" src="{{ pet.image_url() }}" alt="{{ pet.name }}" title="{{ pet.name }}" aria-label="{{ pet.name}}" />
+        {{ pet.name }}
+      </a>
+    </div>
+    {% else %}
+    No pets were found with a name matching '{{ query }}'
+    {% endfor %}
+  </div>
 {% endif %}
 
 {% endblock %}

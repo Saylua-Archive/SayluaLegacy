@@ -1,4 +1,4 @@
-from flask import render_template, g, redirect, request, flash
+from flask import render_template, g, redirect, request, flash, abort
 from saylua import db
 from saylua.wrappers import login_required
 from ..forms import PetEditForm
@@ -9,7 +9,7 @@ from ..models.db import Pet
 def pet_profile(name):
     pet = db.session.query(Pet).filter(Pet.soul_name == name).one_or_none()
     if pet is None:
-        return render_template('404.html'), 404
+        abort(404)
     return render_template("profile.html", pet=pet)
 
 
@@ -17,7 +17,7 @@ def pet_profile(name):
 def edit_pet(name):
     pet = db.session.query(Pet).filter(Pet.soul_name == name).one_or_none()
     if pet is None:
-        return render_template('404.html'), 404
+        abort(404)
     if pet.guardian_id != g.user.id:
         flash("You can't edit {}'s profile!".format(pet.name))
         return redirect('/pet/' + pet.soul_name, code=302)

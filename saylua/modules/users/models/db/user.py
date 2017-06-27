@@ -74,6 +74,7 @@ class User(db.Model):
     status = db.Column(db.String(15), default="")
 
     # Settings
+    theme_id = db.Column(db.Integer, default=0)
     notified_on_pings = db.Column(db.Boolean, default=True)
     autosubscribe_threads = db.Column(db.Boolean, default=True)
     autosubscribe_posts = db.Column(db.Boolean, default=False)

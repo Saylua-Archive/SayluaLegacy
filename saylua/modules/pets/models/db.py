@@ -65,7 +65,7 @@ class Pet(db.Model):
         if not self.favorites:
             self.favorites = db.session.query(Item).order_by(db.func.rand()).limit(4).all()
 
-    def image(self):
+    def image_url(self):
         if is_devserver():
             subpath = ("img" + os.sep + "pets" + os.sep + self.species_name + os.sep + self.coat.name +
             ".png")

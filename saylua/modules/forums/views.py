@@ -1,4 +1,4 @@
-from flask import render_template, redirect, g, flash, request
+from flask import render_template, redirect, g, flash, request, abort
 
 from saylua import db, app
 
@@ -19,7 +19,7 @@ def forums_board(canon_name):
     board = Board.by_canon_name(canon_name)
 
     if not board:
-        return render_template('404.html'), 404
+        abort(404)
 
     form = ForumThreadForm(request.form)
 
@@ -63,14 +63,14 @@ def forums_thread(thread, page=1):
     try:
         thread_id = int(thread.split('-', 1)[0])
     except:
-        return render_template('404.html'), 404
+        abort(404)
 
     form = ForumPostForm(request.form)
 
     thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one_or_none()
 
     if not thread:
-        return render_template('404.html'), 404
+        abort(404)
 
     if request.method == 'POST' and not thread.can_post(g.user):
         flash("You do not have permission to reply to forum threads.", 'error')
@@ -115,7 +115,7 @@ def forums_thread_move(thread_id):
     thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one_or_none()
 
     if not thread:
-        return render_template('404.html'), 404
+        abort(404)
 
     if 'move' in request.form:
         destination = int(request.form.get('destination'))
@@ -129,7 +129,7 @@ def forums_thread_move(thread_id):
 def forums_thread_pin(thread_id):
     thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one_or_none()
     if not thread:
-        return render_template('404.html'), 404
+        abort(404)
 
     if 'pin' in request.form:
         thread.is_pinned = True
@@ -149,7 +149,7 @@ def forums_thread_pin(thread_id):
 def forums_thread_lock(thread_id):
     thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one_or_none()
     if not thread:
-        return render_template('404.html'), 404
+        abort(404)
 
     if 'lock' in request.form:
         thread.is_locked = True
@@ -169,7 +169,7 @@ def forums_thread_lock(thread_id):
 def forums_thread_subscribe(thread_id):
     thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one_or_none()
     if not thread:
-        return render_template('404.html'), 404
+        abort(404)
 
     subscription = thread.subscription(g.user)
     if 'subscribe' in request.form:
@@ -196,7 +196,7 @@ def forums_thread_subscribe(thread_id):
 def forums_post_edit(post_id):
     post = db.session.query(ForumPost).get(post_id)
     if not post:
-        return render_template('404.html'), 404
+        abort(404)
 
     if not post.can_edit(g.user):
         flash('You do not have permission to edit this post.', 'error')
