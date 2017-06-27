@@ -74,10 +74,14 @@ class User(db.Model):
     status = db.Column(db.String(15), default="")
 
     # Settings
+    side_id = db.Column(db.Integer, default=0)
     theme_id = db.Column(db.Integer, default=0)
     notified_on_pings = db.Column(db.Boolean, default=True)
     autosubscribe_threads = db.Column(db.Boolean, default=True)
     autosubscribe_posts = db.Column(db.Boolean, default=False)
+
+    # Story state
+    story_stage = db.Column(db.String(100), default="")
 
     def __repr__(self):
         return '<User %r>' % self.name

@@ -74,7 +74,7 @@
     <div class="grid-container">
       {% for pet in pets %}
       <div class="grid-element-big">
-        <a href="{{ pet.url() }}" class="pet">
+        <a href="{{ pet.url() }}">
           <img src="{{ pet.image_url() }}">
           <div>{{ pet.name }}</div>
         </a>
