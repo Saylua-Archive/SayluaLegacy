@@ -9,75 +9,68 @@
 
 .npc-interaction form {
   width: 100%;
-}
-
-.npc-interaction button {
-  margin: auto;
-  width: 70%;
-  color: $accentColor;
-  border: 1px solid $accentColor;
-  background-color: $white;
-
-  &:hover {
-    text-decoration: none;
-    background-color: $mainSofterColor;
-  }
+  margin-top: 20px;
 }
 
 .dialogue-choice {
-  margin: auto;
+  font-size: 1em;
+  line-height: 150%;
   width: 70%;
+  margin-bottom: 8px;
+  padding: 0.25em 1.6rem;
   color: $accentColor;
   border: 1px solid $accentColor;
+  border-radius: 15px;
   background-color: $white;
 
   &:hover {
     text-decoration: none;
+    border: 1px solid $mainColor;
     background-color: $mainSofterColor;
   }
 }
 
 .triangle-border {
-  position:relative;
+  position: relative;
   width: 70%;
-  padding: 15px;
-  margin-left: 15%;
   margin-right: 15%;
-  border:5px solid $mainSoftColor;
-  color:#333;
-  background:#fff;
+  margin-left: 15%;
+  padding: 15px;
+  color: #333;
+  border: 5px solid $mainSoftColor;
   /* css3 */
-  border-radius:10px;
+  border-radius: 10px;
+  background: #fff;
 }
 
 .triangle-border:before {
-  content:"";
-  position:absolute;
-  bottom:-20px; /* value = - border-top-width - border-bottom-width */
-  left:40px; /* controls horizontal position */
-  border-width:20px 20px 0;
-  border-style:solid;
-  border-color:$mainSoftColor transparent;
+  content: '';
+  position: absolute;
+  bottom: -20px; /* value = - border-top-width - border-bottom-width */
+  left: 40px; /* controls horizontal position */
   /* reduce the damage in FF3.0 */
-  display:block;
-  width:0;
+  display: block;
+  width: 0;
+  border-width: 20px 20px 0;
+  border-style: solid;
+  border-color: $mainSoftColor transparent;
 }
 
 /* creates the smaller  triangle */
 .triangle-border:after {
-  content:"";
-  position:absolute;
-  bottom:-13px; /* value = - border-top-width - border-bottom-width */
-  left:47px; /* value = (:before left) + (:before border-left) - (:after border-left) */
-  border-width:13px 13px 0;
-  border-style:solid;
-  border-color:#fff transparent;
+  content: '';
+  position: absolute;
+  bottom: -13px; /* value = - border-top-width - border-bottom-width */
+  left: 47px; /* value = (:before left) + (:before border-left) - (:after border-left) */
   /* reduce the damage in FF3.0 */
-  display:block;
-  width:0;
+  display: block;
+  width: 0;
+  border-width: 13px 13px 0;
+  border-style: solid;
+  border-color: #fff transparent;
 }
 
-@media (max-width: 734px), (min-width: 801px) and  (max-width: 1050px){
+@media (max-width: 734px), (min-width: 801px) and  (max-width: 1040px) {
   .triangle-border:before {
     left: 50%; /* controls horizontal position */
   }
