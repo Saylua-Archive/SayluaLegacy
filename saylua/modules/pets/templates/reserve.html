@@ -16,14 +16,14 @@
   <form method="post">
     <input type="hidden" name="soul_name" value="{{ adoptee.soul_name }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <button>
+    <button class="dialogue-choice">
       Adopt {{ adoptee.name }}
     </button>
   </form>
-  <a href="{{ adoptee.url() }}" class="subtle-button" target="_blank">
+  <a href="{{ adoptee.url() }}" class="dialogue-choice" target="_blank">
     Tell me about {{ adoptee.name }}
   </a>
-  <a href="/reserve/" class="subtle-button">
+  <a href="/reserve/" class="dialogue-choice">
     Another one, Vera?
   </a>
 </div>
