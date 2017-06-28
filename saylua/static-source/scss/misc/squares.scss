@@ -1,0 +1,35 @@
+// Standard sizes for different squares used on the site.
+
+@mixin square($size) {
+  display: block;
+  width: $size;
+  max-width: 100%;
+  max-height: $size;
+  margin: auto;
+  text-align: center;
+}
+
+.pet {
+  @include square(32rem);
+}
+
+.mini {
+  @include square(16rem);
+}
+
+.mini-small {
+  @include square(12rem);
+}
+
+.item {
+  @include square(8rem);
+}
+
+.item-big {
+  @include square(16rem);
+}
+
+.npc-bust {
+  @include square(40rem);
+  overflow-y: hidden;
+}

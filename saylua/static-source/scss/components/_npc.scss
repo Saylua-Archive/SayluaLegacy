@@ -30,20 +30,20 @@
   }
 }
 
-.triangle-border {
+.speech-bubble {
   position: relative;
   width: 70%;
   margin-right: 15%;
   margin-left: 15%;
   padding: 15px;
   color: #333;
-  border: 5px solid $mainSoftColor;
+  border: 5px solid $mainSofterColor;
   /* css3 */
   border-radius: 10px;
-  background: #fff;
+  background: $mainSoftestColor;
 }
 
-.triangle-border:before {
+.speech-bubble:before {
   content: '';
   position: absolute;
   bottom: -20px; /* value = - border-top-width - border-bottom-width */
@@ -53,11 +53,11 @@
   width: 0;
   border-width: 20px 20px 0;
   border-style: solid;
-  border-color: $mainSoftColor transparent;
+  border-color: $mainSofterColor transparent;
 }
 
 /* creates the smaller  triangle */
-.triangle-border:after {
+.speech-bubble:after {
   content: '';
   position: absolute;
   bottom: -13px; /* value = - border-top-width - border-bottom-width */
@@ -67,15 +67,15 @@
   width: 0;
   border-width: 13px 13px 0;
   border-style: solid;
-  border-color: #fff transparent;
+  border-color: $mainSoftestColor transparent;
 }
 
 @media (max-width: 734px), (min-width: 801px) and  (max-width: 1040px) {
-  .triangle-border:before {
+  .speech-bubble:before {
     left: 50%; /* controls horizontal position */
   }
 
-  .triangle-border:after {
+  .speech-bubble:after {
     left: calc(50% + 7px); /* value = (:before left) + (:before border-left) - (:after border-left) */
   }
 }

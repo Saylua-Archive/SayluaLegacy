@@ -6,12 +6,12 @@
 {% block body %}
 <h1>The Pet Reserve</h1>
 <div class="npc-interaction">
-  <div class="triangle-border">{{ cute_text }}</div>
+  <div class="speech-bubble">{{ cute_text }}</div>
   <div class="npc-bust">
     <img src="/static/img/characters/vera-everly.png"/>
   </div>
   <div class="npc-bust">
-    <img src="{{ adoptee.image() }}"/>
+    <img src="{{ adoptee.image_url() }}"/>
   </div>
   <form method="post">
     <input type="hidden" name="soul_name" value="{{ adoptee.soul_name }}">
