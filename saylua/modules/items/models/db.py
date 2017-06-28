@@ -1,5 +1,5 @@
 from saylua import app, db
-from saylua.utils import canonize, is_devserver, get_static_version_id, go_up
+from saylua.utils import canonize, is_devserver, get_static_version_id, go_up_path
 from flask import url_for
 
 import os
@@ -55,7 +55,7 @@ class Item(db.Model):
             category_name = self.category_name()
             subpath = ("img" + os.sep + "items" + os.sep + category_name +
                 os.sep + self.canon_name + ".png")
-            image_path = (os.path.join(go_up(4, (__file__)), "static", subpath))
+            image_path = (os.path.join(go_up_path(4, (__file__)), "static", subpath))
             if os.path.isfile(image_path):
                 return url_for("static", filename=subpath) + "?v=" + str(get_static_version_id())
         return (app.config['IMAGE_BUCKET_ROOT'] + "/items/" + self.canon_name +

@@ -27,9 +27,16 @@ def pet_reserve_post():
     youngest = (Pet.query.filter(Pet.guardian_id == g.user.id)
             .order_by(Pet.date_bonded.desc()).first())
     if youngest and (datetime.datetime.now() - youngest.date_bonded).days < 1:
-        flash(("I'm afraid I can't let you adopt adopt a new companion today, " +
-            "you should focus on making sure {} is settling into their new home.")
-            .format(youngest.name))
+        wait = (24 - (datetime.datetime.now() - youngest.date_bonded).seconds / 3600)
+        if wait > 20:
+            wait = "a day or so"
+        elif wait > 1:
+            wait = "another {} hours".format(wait)
+        else:
+            wait = "another hour"
+        flash(("I'm afraid I can't let you adopt a new companion yet. Try giving {} " +
+            "{} to settle in to their new home.")
+            .format(youngest.name, wait))
     elif adoptee is None:
         flash("Sorry, I couldn't find a pet with that soul name.")
     elif adoptee.guardian_id is not None:

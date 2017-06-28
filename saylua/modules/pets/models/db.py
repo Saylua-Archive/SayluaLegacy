@@ -2,7 +2,7 @@ from saylua import app, db
 from ..soul_names import soul_name
 
 from saylua.modules.items.models.db import Item
-from saylua.utils import get_static_version_id, is_devserver, go_up
+from saylua.utils import get_static_version_id, is_devserver, go_up_path
 from flask import url_for
 import os
 
@@ -69,7 +69,7 @@ class Pet(db.Model):
         if is_devserver():
             subpath = ("img" + os.sep + "pets" + os.sep + self.species_name + os.sep + self.coat.name +
             ".png")
-            image_path = (os.path.join(go_up(4, (__file__)), "static", subpath))
+            image_path = (os.path.join(go_up_path(4, (__file__)), "static", subpath))
             if os.path.isfile(image_path):
                 return url_for("static", filename=subpath) + "?v=" + str(get_static_version_id())
         return (app.config['IMAGE_BUCKET_ROOT'] + "/pets/" + self.species_name + "/" +
