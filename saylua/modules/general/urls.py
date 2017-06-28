@@ -11,5 +11,9 @@ urlpatterns = [
 
     url('/page/<template>/', view_func=views.main.view_page, name='view_page'),
 
-    url('/theme/change/', view_func=views.main.change_theme, name='change_theme', methods=['POST'])
+    url('/theme/change/', view_func=views.main.change_theme, name='change_theme', methods=['POST']),
+
+    url('/intro/side/', view_func=views.main.intro_side, name='intro_side', methods=['GET', 'POST']),
+    url('/intro/companion/', view_func=views.main.intro_companion, name='intro_companion', methods=['GET', 'POST']),
+    url('/intro/avatar/', view_func=views.main.intro_avatar, name='intro_avatar', methods=['GET', 'POST'])
 ]

@@ -9,7 +9,9 @@
   flex-wrap: wrap;
 
   .grid-element,
-  .grid-element-big {
+  .grid-element-big,
+  .grid-element-half,
+  .grid-element-third {
     @include fast-color-trans;
     display: flex;
     flex-direction: column;
@@ -36,5 +38,16 @@
 
   .grid-element-big {
     width: 25%;
+  }
+
+  .grid-element-third {
+    width: 33%;
+    &:nth-child(3n + 1) {
+      width: 34%;
+    }
+  }
+
+  .grid-element-half {
+    width: 50%;
   }
 }

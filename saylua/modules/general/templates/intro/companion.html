@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% set page_title = "Your Companion" %}
+{% set fullscreen = True %}
+
+{% block body %}
+<h1>Your Companion</h1>
+<p>
+  Your adventure into {{ g.user.side_name() }} will be an exciting one full of
+  discovery and challenges. Of course, you won't be going alone. Few in the
+  world of Saylua adventure far without a companion at their side.
+</p>
+<p>
+  The planet of Saylua is home to many creatures. And in time, you
+  will come to meet a large variety of them. But your story began with just one
+  companion who stood by your side as you ventured into {{ g.user.side_name() }}.
+</p>
+<h3>
+  So, who is your companion?
+</h3>
+<div class="grid-container">
+  <div class="grid-element-third">
+    <img src="{{ include_static('img/pets/arko/common.png') }}" />
+  </div>
+  <div class="grid-element-third">
+    <img src="{{ include_static('img/pets/nylik/common.png') }}" />
+  </div>
+  <div class="grid-element-third">
+    <img src="{{ include_static('img/pets/chirling/common.png') }}" />
+  </div>
+</div>
+{% endblock %}
