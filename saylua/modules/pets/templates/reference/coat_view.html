@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% set page_title = "Viewing Species" %}
+{% block header_scripts %}
+<link rel="stylesheet" href="{{ include_static('css/pets.min.css') }}">
+{% endblock %}
+{% block body %}
+<h1>Viewing Coat: {{ coat.name }}</h1>
+
+<p class="center">
+  <a href="/coats/">
+    &leftarrow; Back to Coat Guide
+  </a>
+</p>
+
+<div class="data-card">
+  <img src="{{ coat.image_url() }}" alt="{{ coat.name }}" title="{{ coat.name }}"
+    aria-label="{{ coat.name }}" class="data-card-image pet" />
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <td>{{ coat.name }}</td>
+    </tr>
+    <tr>
+      <th>Species</th>
+      <td><a href="{{ coat.species.url() }}">{{ coat.species_name }}</a></td>
+    </tr>
+    <tr>
+      <th>Coat Type</th>
+      <td><a href="/coats/{{ coat.coat_canon_name }}/">{{ coat.coat_name }}</a></td>
+    </tr>
+    <tr>
+      <th>Date Discovered</th>
+      <td>
+        {{ coat.date_discovered|show_date }}
+      </td>
+    </tr>
+    <tr>
+      <th>PSD</th>
+      <td>
+        Download PSD
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        {{ coat.description }}
+      </td>
+    </tr>
+  </table>
+</div>
+
+{% endblock %}

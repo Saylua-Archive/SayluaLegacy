@@ -1,13 +1,16 @@
 // Standard sizes for different squares used on the site.
 
 @mixin square($size) {
-  display: block;
+  display: flex;
   width: $size;
   max-width: 100%;
   height: $size;
   max-height: $size;
   margin: auto;
   text-align: center;
+
+  align-items: center;
+  justify-content: center;
 }
 
 .pet {

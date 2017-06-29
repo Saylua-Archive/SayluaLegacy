@@ -17,9 +17,12 @@ def admin_panel_items_add():
     form.name.data = get_from_request(request, 'name')
     form.description.data = get_from_request(request, 'description')
 
-    categories = ItemCategory.get_categories()
+    categories = ItemCategory.all()
 
-    form.category_id.choices = [(i, c) for (i, c) in enumerate(categories)]
+    choices = []
+    for i in range(1, len(categories)):
+        choices.append((i, categories[i].name()))
+    form.category_id.choices = choices
 
     if form.validate_on_submit():
         item = Item()

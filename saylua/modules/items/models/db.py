@@ -47,6 +47,11 @@ class Item(db.Model):
 
     category_id = db.Column(db.Integer)
 
+    def __init__(self, *args, **kwargs):
+        super(Item, self).__init__(*args, **kwargs)
+        if not self.canon_name:
+            self.canon_name = canonize(self.name)
+
     def url(self):
         return '/item/' + self.canon_name
 

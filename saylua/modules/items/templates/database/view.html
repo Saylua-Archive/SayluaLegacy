@@ -7,8 +7,8 @@
 
 {% block body %}
 <h1>Item Database: {{ item.name }}</h1>
-<div class="item-view-container">
-  <div class="item-big">
+<div class="data-card">
+  <div class="item-big data-card-image">
     <img src="{{ item.image_url() }}" alt="{{ item.name }}" title="{{ item.name }}" />
   </div>
   <table>

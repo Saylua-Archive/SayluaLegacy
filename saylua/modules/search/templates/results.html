@@ -44,12 +44,12 @@
     {% endfor %}
   </div>
 
-  <h3>Pets Found</h3>
+  <h3>Companions Found</h3>
   <div class="grid-container">
     {% for pet in pets %}
     <div class="grid-element">
       <a href="{{ pet.url() }}">
-        <img class="pet" src="{{ pet.image_url() }}" alt="{{ pet.name }}" title="{{ pet.name }}" aria-label="{{ pet.name}}" />
+        <img src="{{ pet.image_url() }}" alt="{{ pet.name }}" title="{{ pet.name }}" aria-label="{{ pet.name}}" />
         {{ pet.name }}
       </a>
     </div>

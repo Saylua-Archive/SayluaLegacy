@@ -70,8 +70,20 @@
           <td> {{ user_link(pet.guardian) }} </td>
         </tr>
         <tr>
+          <td>Name</td>
+          <td>{{ pet.name }}</td>
+        </tr>
+        <tr>
           <td>{{ pet.name }}'s ID</td>
           <td>{{ pet.soul_name }}</td>
+        </tr>
+        <tr>
+          <td>Species</td>
+          <td><a href="{{ pet.species.url() }}">{{ pet.species.name }}</a></td>
+        </tr>
+        <tr>
+          <td>Coat</td>
+          <td><a href="{{ pet.coat.url() }}">{{ pet.coat.coat_name }}</a></td>
         </tr>
         <tr>
           <td>Bonding Day</td>
