@@ -33,6 +33,12 @@
 button.dialogue-choice {
   background-color: $accentColor;
   color: $white;
+
+  &:hover {
+    text-decoration: none;
+    border: 1px solid $mainColor;
+    background-color: $mainColor;
+  }
 }
 
 .speech-bubble {

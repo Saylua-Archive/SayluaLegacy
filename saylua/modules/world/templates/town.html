@@ -11,6 +11,27 @@
 
 <button>Sure, give me the stuff.</button>
 
+<div class="npc-interaction">
+  <div class="speech-bubble">Hey, you... want some items? They're <em>free</em>.</div>
+  <div class="npc-bust">
+    <img src="/static/img/characters/rufus-scippio.png"/>
+  </div>
+  <img src=""/>
+  <form method="post">
+    <input type="hidden" name="soul_name" value="">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <button class="dialogue-choice">
+      Sure, give me the stuff.
+    </button>
+  </form>
+  <a href="" class="dialogue-choice" target="_blank">
+    Tell me about
+  </a>
+  <a href="/reserve/" class="dialogue-choice">
+    Another one, Vera?
+  </a>
+</div>
+
 <p>
   Estanya City. A place where Luarians and Sayleans alike gather to meet and trade.
 </p>
