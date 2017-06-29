@@ -105,8 +105,8 @@ def canonize(name):
     return name.lower()
 
 
-def go_up(n, path):
+def go_up_path(n, path):
     if n <= 0:
         return path
     else:
-        return go_up(n - 1, os.path.dirname(path))
+        return go_up_path(n - 1, os.path.dirname(path))

@@ -1,0 +1,86 @@
+.npc-interaction {
+  display: flex;
+  text-align: center;
+
+  align-items: center;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.npc-interaction img {
+  align-self: flex-end;
+}
+
+.dialogue-choice {
+  font-size: 1em;
+  line-height: 150%;
+  margin-bottom: 0.5rem;
+  margin-top: 1.25rem;
+  margin-right: .5rem;
+  padding: 0.25em 1.6rem;
+  color: $accentColor;
+  border: 1px solid $accentColor;
+  border-radius: 15px;
+  background-color: $white;
+
+  &:hover {
+    text-decoration: none;
+    border: 1px solid $mainColor;
+    background-color: $mainSofterColor;
+  }
+}
+
+button.dialogue-choice {
+  background-color: $accentColor;
+  color: $white;
+}
+
+.speech-bubble {
+  position: relative;
+  width: 70%;
+  margin-right: 15%;
+  margin-left: 15%;
+  padding: 1rem;
+  color: #333;
+  border: 5px solid $mainSofterColor;
+  /* css3 */
+  border-radius: 10px;
+  background: $mainSoftestColor;
+}
+
+.speech-bubble:before {
+  content: '';
+  position: absolute;
+  bottom: -20px; /* value = - border-top-width - border-bottom-width */
+  left: 40px; /* controls horizontal position */
+  /* reduce the damage in FF3.0 */
+  display: block;
+  width: 0;
+  border-width: 20px 20px 0;
+  border-style: solid;
+  border-color: $mainSofterColor transparent;
+}
+
+/* creates the smaller  triangle */
+.speech-bubble:after {
+  content: '';
+  position: absolute;
+  bottom: -13px; /* value = - border-top-width - border-bottom-width */
+  left: 47px; /* value = (:before left) + (:before border-left) - (:after border-left) */
+  /* reduce the damage in FF3.0 */
+  display: block;
+  width: 0;
+  border-width: 13px 13px 0;
+  border-style: solid;
+  border-color: $mainSoftestColor transparent;
+}
+
+@media (max-width: 734px), (min-width: 801px) and  (max-width: 1040px) {
+  .speech-bubble:before {
+    left: 50%; /* controls horizontal position */
+  }
+
+  .speech-bubble:after {
+    left: calc(50% + 7px); /* value = (:before left) + (:before border-left) - (:after border-left) */
+  }
+}

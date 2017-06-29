@@ -2,7 +2,9 @@ from saylua import app, db
 from ..soul_names import soul_name
 
 from saylua.modules.items.models.db import Item
+
 from saylua.utils import get_static_version_id, is_devserver, go_up, canonize
+
 from flask import url_for
 import os
 
