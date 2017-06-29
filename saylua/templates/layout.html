@@ -40,34 +40,7 @@
 <div id="main-body" class="main-body">
   {% include "sidebar.html" %}
   <div id="main-body-column" class="main-body-column">
-    <div id="notifications-container" class="notifications-container">
-      {% with flashed_messages = get_flashed_messages(with_categories=true) %}
-        {% if flashed_messages %}
-          {% for category, flashed_message in flashed_messages %}
-            {% if category == 'error' %}
-              {% set className = ' error' %}
-            {% endif %}
-            <div class="notification{{ className }}">{{ flashed_message }}
-              <a class="close-button" href="#" title="close">&#x00d7;</a>
-            </div>
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
-    </div>
-    {% if g.logged_in and not g.user.email_confirmed %}
-    <div class="notification notification-email-validation">
-      <p>
-        Confirm your email address to get access to more features on Saylua.
-        We've sent a confirmation email to <strong>{{ g.user.email }}</strong>.
-        <a href="/settings/email/">Change Email Address?</a>
-      </p>
-
-      <form method="post" action="/register/email/">
-        <input type="submit" class="small" name="resend" value="Resend Confirmation?" />
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-      </form>
-    </div>
-    {% endif %}
+    {% include "notifications.html" %}
     <div id="main-body-content" class="main-body-content">
       {% block body %}{% endblock %}
     </div>

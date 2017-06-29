@@ -84,7 +84,7 @@ def generate_pets():
                 coat_name, ext = os.path.splitext(img_name)
                 if ext.lower() == '.png':
                     new_coat = SpeciesCoat(
-                        name=coat_name,
+                        coat_name=coat_name,
                         species_name=species_name,
                         description=("A beautiful " + species_name))
                     yield new_coat

@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% set page_title = "Coat Guide" %}
+{% block header_scripts %}
+<link rel="stylesheet" href="{{ include_static('css/pets.min.css') }}">
+{% endblock %}
+{% block body %}
+<h1>The Coat Guide</h1>
+
+<p>
+  The species of Saylua come in a vairety of different coats. We document
+  those coats here.
+</p>
+
+<div class="grid-container">
+{% for coat in coats %}
+  <a href="{{ coat.url() }}" class="grid-element-big">
+    <img src="{{ coat.image_url() }}" alt="{{ coat.name }}" title="{{ coat.name }}"
+      aria-label="{{ coat.name }}" />
+
+    {{ coat.name }}
+  </a>
+{% endfor %}
+</div>
+{% endblock %}
