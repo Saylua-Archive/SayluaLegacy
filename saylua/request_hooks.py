@@ -8,7 +8,7 @@ import datetime
 @app.before_request
 def load_user():
     # Make sure not to run function for static files
-    if request.script_root == '/static':
+    if request.url_rule and '/static/' in request.url_rule.rule:
         return
 
     # Load user
@@ -44,4 +44,4 @@ def load_user():
 
     g.logged_in = False
     g.user = None
-    return None
+    return
