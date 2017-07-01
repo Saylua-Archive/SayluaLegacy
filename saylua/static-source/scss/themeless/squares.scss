@@ -21,6 +21,10 @@
   @include square(32rem);
 }
 
+.pet-small {
+  @include square(16rem);
+}
+
 .mini {
   @include square(16rem);
 }
