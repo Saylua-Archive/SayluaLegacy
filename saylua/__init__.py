@@ -25,7 +25,7 @@ db = SQLAlchemy(app)
 csrf = CSRFProtect(app)
 
 import context_processors
-import g_globals
+import request_hooks
 import routing
 import template_filters
 import wrappers

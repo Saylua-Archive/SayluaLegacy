@@ -19,6 +19,14 @@
     display: none;
     visibility: hidden;
   }
+
+  &.closed:target,
+  &:target {
+    top: 0;
+    left: 0;
+    display: block;
+    visibility: visible;
+  }
 }
 
 .modal {
@@ -26,13 +34,14 @@
   width: auto;
   min-width: 30%;
   max-width: 60rem;
-  margin: 10% auto;
+  margin: 7% auto;
   padding: 2em 1.6rem;
   cursor: default;
   border-radius: 10px;
   background: $white;
 
-  .close {
+  .close,
+  a.close {
     @include fast-color-trans;
     font-size: 3rem;
     position: absolute;
@@ -41,9 +50,11 @@
     padding: 0.4rem;
     cursor: pointer;
     color: #444;
+    text-decoration: none;
 
     &:hover {
       color: $accentColor;
+      text-decoration: none;
     }
   }
 

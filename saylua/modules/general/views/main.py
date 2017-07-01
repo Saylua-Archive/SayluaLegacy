@@ -2,6 +2,7 @@ from flask import render_template, redirect, g, abort, make_response, request
 
 from saylua import app, db
 from saylua.utils import is_devserver, redirect_to_referer
+from saylua.wrappers import login_required
 
 import datetime
 
@@ -48,3 +49,18 @@ def banned():
     if not (g.logged_in and g.user.is_banned()):
         abort(404)
     return render_template("banned.html")
+
+
+@login_required()
+def intro_side():
+    return render_template("intro/side.html")
+
+
+@login_required()
+def intro_companion():
+    return render_template("intro/companion.html")
+
+
+@login_required()
+def intro_avatar():
+    return render_template("intro/avatar.html", starter_genus="Chirling")

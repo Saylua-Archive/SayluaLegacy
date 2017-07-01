@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% set page_title = "Your Avatar" %}
+{% set fullscreen = True %}
+{% set hide_reminders = True %}
+
+{% block body %}
+<h1>And Finally, the Fashion</h1>
+<p>
+  {{ g.user.side_name() }} calls you! With your trusty {{ starter_genus }} by
+  your side, you're ready to go! Except... You'll want to make sure you make a
+  great first impression on your neighbors.
+</p>
+<h3>
+  How will you present yourself?
+</h3>
+{% endblock %}

@@ -74,10 +74,14 @@ class User(db.Model):
     status = db.Column(db.String(15), default="")
 
     # Settings
+    side_id = db.Column(db.Integer, default=0)
     theme_id = db.Column(db.Integer, default=0)
     notified_on_pings = db.Column(db.Boolean, default=True)
     autosubscribe_threads = db.Column(db.Boolean, default=True)
     autosubscribe_posts = db.Column(db.Boolean, default=False)
+
+    # Used to track linear progress. ie: 0-5 are levels of the tutorial.
+    story_level = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return '<User %r>' % self.name
@@ -109,6 +113,13 @@ class User(db.Model):
         elif self.title:
             return self.title.css_class()
         return 'title-user'
+
+    def side_name(self):
+        if self.side_id == 0:
+            return 'Sayleus'
+        elif self.side_id == 1:
+            return 'Luaria'
+        return None
 
     def is_banned(self):
         ban = self.ban

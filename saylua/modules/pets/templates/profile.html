@@ -14,10 +14,10 @@
 <div id="pet-room">
   <div class="pet-room-background"></div>
   <div class="pet" id="pet-image-container">
-    <img src="{{ pet.image_url() }}">
+    <img src="{{ pet.image_url() }}" />
   </div>
   <div class="mini-small">
-    <img src="{{ random_mini_image() }}">
+    <img src="{{ random_mini_image() }}" />
   </div>
 </div>
 {% if g.user and pet.guardian_id == g.user.id %}
@@ -70,8 +70,20 @@
           <td> {{ user_link(pet.guardian) }} </td>
         </tr>
         <tr>
+          <td>Name</td>
+          <td>{{ pet.name }}</td>
+        </tr>
+        <tr>
           <td>Soul Name</td>
           <td>{{ pet.soul_name }}</td>
+        </tr>
+        <tr>
+          <td>Species</td>
+          <td><a href="{{ pet.species.url() }}">{{ pet.species.name }}</a></td>
+        </tr>
+        <tr>
+          <td>Coat</td>
+          <td><a href="{{ pet.coat.url() }}">{{ pet.coat.coat_name }}</a></td>
         </tr>
         <tr>
           <td>Bonding Day</td>
