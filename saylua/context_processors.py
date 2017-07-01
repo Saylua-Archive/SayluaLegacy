@@ -36,6 +36,7 @@ def inject_random_image():
         random_character_image=partial(random_image, 'characters'),
         random_mini_image=partial(random_image, 'items/minis'),
         random_background_image=partial(random_image, 'backgrounds'),
+        random_portrait_image=partial(random_image, 'portraits'),
         random_icon_image=partial(random_image, 'icons'))
 
 

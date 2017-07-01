@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% set page_title = "Pick Your Side" %}
 {% set fullscreen = True %}
+{% set hide_reminders = True %}
 
 {% block body %}
 <h1>Starting Your Journey</h1>
@@ -18,16 +19,37 @@
 </h3>
 <div class="grid-container">
   <div class="grid-element-half">
-    <img src="{{ include_static('img/backgrounds/sayleus.png') }}" />
-    Sayleus, the light side
+    <a href="#sayleus">
+      <img src="{{ include_static('img/backgrounds/sayleus.png') }}" />
+      Sayleus, the light side
+    </a>
   </div>
   <div class="grid-element-half">
-    <img src="{{ include_static('img/backgrounds/luaria.png') }}" />
-    Luaria, the dark side
+    <a href="#luaria">
+      <img src="{{ include_static('img/backgrounds/luaria.png') }}" />
+      Luaria, the dark side
+    </a>
   </div>
 </div>
 <p>
   Of course, you shouldn't worry too much if you regret your decision down the
   road. It will always be possible for you to move again.
 </p>
+
+<div id="sayleus" class="modal-overlay closed">
+  <div class="modal">
+    <h3>Move to the Light Side?</h3>
+    <img src="{{ include_static('img/backgrounds/sayleus.png') }}" />
+    <p>
+      In Sayleus, vivid meadows often transition into deep woods where the light
+      shines brightly through the trees. The light side is home to many large,
+      thriving plants and elegant creatures.
+    </p>
+    <p>
+      Of course, being constantly hit by the sun's rays isn't always cheery. On
+      the further ends of Sayleus, there are vast deserts where humans and
+      creatures alike struggle to survive in the harsh heat of the light.
+    </p>
+  </div>
+</div>
 {% endblock %}

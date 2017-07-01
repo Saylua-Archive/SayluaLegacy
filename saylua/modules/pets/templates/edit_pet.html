@@ -28,12 +28,32 @@
 </form>
 
 <h2>Other Actions</h2>
-<form id="abandon" action="/abandon/" method="post">
-  <input type="hidden" name="abandonee" value="{{ pet.id }}">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-  <button class="link-button">
-    Abandon {{ pet.name }}
-  </button>
-</form>
+
+<a href="#abandon">Abandon {{ pet.name }}</a>
+
+<div id="abandon" class="modal-overlay closed">
+  <div class="modal">
+    <a href="#" class="close">&times;</a>
+    <h2>Are you sure you want to abandon {{ pet.name }}?</h2>
+    <div class="center">
+      <img src="{{ pet.image_url() }}" class="pet-small" />
+      <p>
+        If you abandon {{ pet.name }}, they will be sent to the reserve under
+        Vera's care. They'll still be around, but you may never be able to
+        adopt them again.
+      </p>
+      <form id="abandon" action="/abandon/" method="post">
+        <input type="hidden" name="abandonee" value="{{ pet.id }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <button>
+          Yes, I want to abandon {{ pet.name }}
+        </button>
+        <a href="#" class="link-button subtle-button">
+          No, I've changed my mind.
+        </a>
+      </form>
+    </div>
+  </div>
+</div>
 
 {% endblock %}

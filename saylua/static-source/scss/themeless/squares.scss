@@ -11,10 +11,18 @@
 
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 500px) {
+    height: auto;
+  }
 }
 
 .pet {
   @include square(32rem);
+}
+
+.pet-small {
+  @include square(16rem);
 }
 
 .mini {
@@ -31,6 +39,11 @@
 
 .item-big {
   @include square(16rem);
+}
+
+.portrait {
+  @include square(10rem);
+  overflow-y: hidden;
 }
 
 .npc-bust {

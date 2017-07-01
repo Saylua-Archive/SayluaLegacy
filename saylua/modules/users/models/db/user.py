@@ -105,9 +105,6 @@ class User(db.Model):
     def url(self):
         return "/user/" + self.name.lower() + "/"
 
-    def prompt_email_confirmation(self):
-        return self.story_level > 2 and not self.email_confirmed
-
     def title_class(self):
         if self.is_banned():
             return 'title-banned'
