@@ -2,21 +2,12 @@
 {% set page_title = "Estanya City Town Square" %}
 {% block body %}
 <h1>Estanya City Town Square</h1>
-<div class="npc-bust">
-  <img src="/static/img/characters/rufus-scippio.png" />
-</div>
-<p>
-  Hey, you... want some items? They're <em>free</em>.
-</p>
-
-<button>Sure, give me the stuff.</button>
-
 <div class="npc-interaction">
   <div class="speech-bubble">Hey, you... want some items? They're <em>free</em>.</div>
   <div class="npc-bust">
     <img src="/static/img/characters/rufus-scippio.png"/>
   </div>
-  <img src=""/>
+  <div class="line-break">
   <form method="post">
     <input type="hidden" name="soul_name" value="">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -24,7 +15,7 @@
       Sure, give me the stuff.
     </button>
   </form>
-  <a href="/town/" class="dialogue-choice" target="_blank">
+  <a href="/town/" class="dialogue-choice" target="_blank" rel="noopener">
     Tell me about them.
   </a>
   <a href="/town/" class="dialogue-choice">

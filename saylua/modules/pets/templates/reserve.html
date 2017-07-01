@@ -11,6 +11,7 @@
     <img src="/static/img/characters/vera-everly.png"/>
   </div>
   <img src="{{ adoptee.image_url() }}"/>
+  <div class="line-break"></div>
   <form method="post">
     <input type="hidden" name="soul_name" value="{{ adoptee.soul_name }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -18,7 +19,7 @@
       Adopt {{ adoptee.name }}
     </button>
   </form>
-  <a href="{{ adoptee.url() }}" class="dialogue-choice" target="_blank">
+  <a href="{{ adoptee.url() }}" class="dialogue-choice" target="_blank" rel="noopener">
     Tell me about {{ adoptee.name }}
   </a>
   <a href="/reserve/" class="dialogue-choice">

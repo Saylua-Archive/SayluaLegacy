@@ -30,6 +30,10 @@
   }
 }
 
+.line-break {
+  width: 100%;
+}
+
 button.dialogue-choice {
   background-color: $accentColor;
   color: $white;
@@ -54,7 +58,7 @@ button.dialogue-choice {
   background: $mainSoftestColor;
 }
 
-.speech-bubble:before {
+.speech-bubble2:before {
   content: '';
   position: absolute;
   bottom: -20px; /* value = - border-top-width - border-bottom-width */
@@ -68,7 +72,7 @@ button.dialogue-choice {
 }
 
 /* creates the smaller  triangle */
-.speech-bubble:after {
+.speech-bubble2:after {
   content: '';
   position: absolute;
   bottom: -13px; /* value = - border-top-width - border-bottom-width */
@@ -79,6 +83,38 @@ button.dialogue-choice {
   border-width: 13px 13px 0;
   border-style: solid;
   border-color: $mainSoftestColor transparent;
+}
+
+/* creates the wider right-angled triangle */
+.speech-bubble:before {
+  content:"";
+  position:absolute;
+  bottom:-20px; /* value = - border-top-width - border-bottom-width */
+  left:60px; /* controls horizontal position */
+  border:0;
+  border-right-width:30px; /* vary this value to change the angle of the vertex */
+  border-bottom-width:20px; /* vary this value to change the height of the triangle. must be equal to the corresponding value in :after */
+  border-style:solid;
+  border-color:transparent $mainSofterColor;
+  /* reduce the damage in FF3.0 */
+  display:block;
+  width:0;
+}
+
+/* creates the narrower right-angled triangle */
+.speech-bubble:after {
+  content:"";
+  position:absolute;
+  bottom:-20px; /* value = - border-top-width - border-bottom-width */
+  left:80px; /* value = (:before's left) + (:before's border-right/left-width)  - (:after's border-right/left-width) */
+  border:0;
+  border-right-width:10px; /* vary this value to change the angle of the vertex */
+  border-bottom-width:20px; /* vary this value to change the height of the triangle. must be equal to the corresponding value in :before */
+  border-style:solid;
+  border-color:transparent $white;
+  /* reduce the damage in FF3.0 */
+  display:block;
+  width:0;
 }
 
 @media (max-width: 734px), (min-width: 801px) and  (max-width: 1040px) {
