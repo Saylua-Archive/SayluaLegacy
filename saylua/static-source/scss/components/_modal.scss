@@ -19,6 +19,14 @@
     display: none;
     visibility: hidden;
   }
+
+  &.closed:target,
+  &:target {
+    top: 0;
+    left: 0;
+    display: block;
+    visibility: visible;
+  }
 }
 
 .modal {

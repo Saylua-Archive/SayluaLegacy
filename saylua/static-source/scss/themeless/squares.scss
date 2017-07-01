@@ -37,6 +37,11 @@
   @include square(16rem);
 }
 
+.portrait {
+  @include square(10rem);
+  overflow-y: hidden;
+}
+
 .npc-bust {
   @include square(40rem);
   overflow-y: hidden;

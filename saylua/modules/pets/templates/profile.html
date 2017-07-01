@@ -14,10 +14,10 @@
 <div id="pet-room">
   <div class="pet-room-background"></div>
   <div class="pet" id="pet-image-container">
-    <img src="{{ pet.image_url() }}">
+    <img src="{{ pet.image_url() }}" />
   </div>
   <div class="mini-small">
-    <img src="{{ random_mini_image() }}">
+    <img src="{{ random_mini_image() }}" />
   </div>
 </div>
 {% if g.user and pet.guardian_id == g.user.id %}
