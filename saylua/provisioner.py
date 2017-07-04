@@ -85,15 +85,11 @@ def generate_pets():
                 if ext.lower() == '.png':
                     new_coat = SpeciesCoat(
                         coat_name=coat_name,
-                        species_name=species_name,
+                        species=new_species,
                         description=("A beautiful " + species_name))
                     yield new_coat
-                    soul_name = Pet.new_soul_name()
                     new_pet = Pet(
-                        soul_name=soul_name,
-                        coat_id=new_coat.id,
-                        species_name=species_name,
-                        name=soul_name.capitalize()
+                        coat_id=new_coat.id
                     )
                     yield new_pet
 

@@ -19,14 +19,19 @@
   So, who is your companion?
 </h3>
 <div class="grid-container">
+  {% for starter in starter_list %}
   <div class="grid-element-third">
-    <img src="{{ include_static('img/pets/arko/common.png') }}" />
+    <img src="{{ starter.image_url() }}" class="pet-small"/>
+    <p class="center">
+      {{ starter.species.name }}
+    </p>
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <button name="starter_choice" value="{{ starter.canon_name }}">
+        A loyal {{ starter.species.name }}!
+      </button>
+    </form>
   </div>
-  <div class="grid-element-third">
-    <img src="{{ include_static('img/pets/nylik/common.png') }}" />
-  </div>
-  <div class="grid-element-third">
-    <img src="{{ include_static('img/pets/chirling/common.png') }}" />
-  </div>
+  {% endfor %}
 </div>
 {% endblock %}
