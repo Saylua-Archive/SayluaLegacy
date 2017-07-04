@@ -14,8 +14,10 @@ class Species(db.Model):
 
     __tablename__ = "species"
 
-    name = db.Column(db.String(80), primary_key=True)
-    canon_name = db.Column(db.String(256), unique=True)
+    id = db.Column(db.Integer, primary_key=True)
+
+    name = db.Column(db.String(80), unique=True)
+    canon_name = db.Column(db.String(80), unique=True)
 
     description = db.Column(db.Text)
 
@@ -29,10 +31,10 @@ class Species(db.Model):
     @property
     def default_coat(self):
         coat = db.session.query(SpeciesCoat).filter(SpeciesCoat.coat_canon_name == 'common',
-            SpeciesCoat.species_name == self.name).one_or_none()
+            SpeciesCoat.species_id == self.id).one_or_none()
         if not coat:
             coat = db.session.query(SpeciesCoat).filter(
-                SpeciesCoat.species_name == self.name).limit(1).one_or_none()
+                SpeciesCoat.species_id == self.id).limit(1).one_or_none()
         return coat
 
     def url(self):
@@ -56,7 +58,7 @@ class SpeciesCoat(db.Model):
     coat_name = db.Column(db.String(80))
     coat_canon_name = db.Column(db.String(80))
 
-    species_name = db.Column(db.String(80), db.ForeignKey("species.name"))
+    species_id = db.Column(db.Integer, db.ForeignKey("species.id"))
     species = db.relationship("Species")
     description = db.Column(db.Text)
 
@@ -65,26 +67,26 @@ class SpeciesCoat(db.Model):
     def __init__(self, *args, **kwargs):
         super(SpeciesCoat, self).__init__(*args, **kwargs)
         if not self.canon_name:
-            self.canon_name = canonize(self.species_name) + '_' + canonize(self.coat_name)
+            self.canon_name = self.species.canon_name + '_' + canonize(self.coat_name)
 
         if not self.coat_canon_name:
             self.coat_canon_name = canonize(self.coat_name)
 
     @property
     def name(self):
-        return self.coat_name + ' ' + self.species_name
+        return self.coat_name + ' ' + self.species.name
 
     def url(self):
         return '/coat/' + self.coat_canon_name + '/' + self.species.canon_name + '/'
 
     def image_url(self):
         if is_devserver():
-            subpath = ("img" + os.sep + "pets" + os.sep + self.species_name + os.sep + self.coat_name +
+            subpath = ("img" + os.sep + "pets" + os.sep + self.species.canon_name + os.sep + self.coat_name +
             ".png")
             image_path = (os.path.join(go_up_path(4, (__file__)), "static", subpath))
             if os.path.isfile(image_path):
                 return url_for("static", filename=subpath) + "?v=" + str(get_static_version_id())
-        return (app.config['IMAGE_BUCKET_ROOT'] + "/pets/" + self.species_name + "/" +
+        return (app.config['IMAGE_BUCKET_ROOT'] + "/pets/" + self.species.canon_name + "/" +
             self.coat_name + ".png?v=" + str(get_static_version_id()))
 
     @classmethod
@@ -107,8 +109,6 @@ class Pet(db.Model):
     # Only set if the pet is a variation
     coat_id = db.Column(db.Integer, db.ForeignKey("species_coats.id"))
     coat = db.relationship("SpeciesCoat")
-    species_name = db.Column(db.String(80), db.ForeignKey("species.name"))
-    species = db.relationship("Species")
 
     # Which way is the pet's image facing
     facing_right = db.Column(db.Boolean, default=True)
@@ -129,6 +129,16 @@ class Pet(db.Model):
         # Populate pet favorites.
         if not self.favorites:
             self.favorites = db.session.query(Item).order_by(db.func.rand()).limit(4).all()
+
+        if not self.soul_name:
+            self.soul_name = Pet.new_soul_name()
+
+        if not self.name:
+            self.name = self.soul_name.capitalize()
+
+    @property
+    def species(self):
+        return self.coat.species
 
     def image_url(self):
         return self.coat.image_url()

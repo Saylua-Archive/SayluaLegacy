@@ -114,6 +114,15 @@ class User(db.Model):
             return self.title.css_class()
         return 'title-user'
 
+    def story_route(self):
+        if self.story_level == 0:
+            return 'general.intro_side'
+        elif self.story_level == 1:
+            return 'general.intro_companion'
+        elif self.story_level == 2:
+            return 'general.intro_avatar'
+        return None
+
     def side_name(self):
         if self.side_id == 0:
             return 'Sayleus'

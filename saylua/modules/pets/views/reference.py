@@ -12,7 +12,7 @@ def species_guide():
 def species_view(canon_name):
     species = Species.by_canon_name(canon_name)
     coats = db.session.query(SpeciesCoat).filter(
-        SpeciesCoat.species_name == species.name).order_by(
+        SpeciesCoat.species_id == species.id).order_by(
         SpeciesCoat.date_discovered.desc()).limit(10)
     return render_template('reference/species_view.html', species=species, coats=coats)
 
