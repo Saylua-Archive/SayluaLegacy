@@ -16,9 +16,11 @@
   <div class="pet" id="pet-image-container">
     <img src="{{ pet.image_url() }}" />
   </div>
+  {% if pet.mini %}
   <div class="mini-small">
-    <img src="{{ random_mini_image() }}" />
+    <img src="{{ pet.mini.image_url() }}" />
   </div>
+  {% endif %}
 </div>
 {% if g.user and pet.guardian_id == g.user.id %}
 <div class="pet-actions">
@@ -65,10 +67,12 @@
     <div class="pet-profile-box">
       <h2>{{ pet.name }}'s Stats</h2>
       <table>
+        {% if pet.guardian %}
         <tr>
           <td>Guardian</td>
           <td> {{ user_link(pet.guardian) }} </td>
         </tr>
+        {% endif %}
         <tr>
           <td>Name</td>
           <td>{{ pet.name }}</td>
@@ -85,10 +89,12 @@
           <td>Coat</td>
           <td><a href="{{ pet.coat.url() }}">{{ pet.coat.coat_name }}</a></td>
         </tr>
+        {% if pet.bonding_day %}
         <tr>
           <td>Bonding Day</td>
-          <td>{{ pet.date_bonded|show_date }}</td>
+          <td>{{ pet.bonding_day|show_date }}</td>
         </tr>
+        {% endif %}
         <tr>
           <td>Pronouns</td>
           <td>{{ pet.pronouns }}</td>
@@ -105,12 +111,15 @@
         {% endfor %}
       </div>
     </div>
+    {% if pet.mini %}
     <div class="pet-profile-box">
       <h2>{{ pet.name }}'s Mini</h2>
       <div class="mini">
-        <img src="{{ random_mini_image() }}">
+        <img src="{{ pet.mini.image_url() }}" />
+        <p class="center">{{ pet.mini_friendship.name }}</p>
       </div>
     </div>
+    {% endif %}
   </div>
 </div>
 

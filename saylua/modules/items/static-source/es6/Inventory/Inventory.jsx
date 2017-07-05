@@ -71,7 +71,8 @@ export default class Inventory extends Component {
       let onModalClose = () => {
         model.setIndex(-1);
       };
-      itemModal = <ItemModal item={ item } onClose={ onModalClose } />;
+      itemModal = <ItemModal item={ item } companion={ model.companion }
+          onClose={ onModalClose } />;
     }
     return (
       <div>

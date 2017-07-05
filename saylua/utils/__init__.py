@@ -28,6 +28,14 @@ def format_number(n):
     return "{:,}".format(n)
 
 
+def int_or_none(n):
+    try:
+        n = int(n)
+        return n
+    except:
+        return None
+
+
 def pluralize(count, singular_noun, plural_noun=None):
     if not plural_noun:
         plural_noun = singular_noun + 's'

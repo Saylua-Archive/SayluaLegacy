@@ -91,7 +91,7 @@ class User(db.Model):
         return self.active_username
 
     @name.setter
-    def setName(self, name):
+    def set_name(self, name):
         self.active_username = name
 
     @property

@@ -36,6 +36,7 @@ export default class InventoryModel extends BaseModel {
       model.items = json.items;
       model.pageCount = json.page_count;
       model.categories = json.categories;
+      model.companion = json.companion;
 
       model.fetched = true;
       model.triggerUpdate();

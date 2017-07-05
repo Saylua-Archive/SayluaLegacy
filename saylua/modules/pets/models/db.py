@@ -5,11 +5,13 @@ from saylua.modules.items.models.db import Item
 
 from saylua.utils import get_static_version_id, is_devserver, go_up_path, canonize
 
+from sqlalchemy.ext.hybrid import hybrid_property
+
 from flask import url_for
 import os
 
 
-# Pets are divided into species and species are divided into variations
+# Pets are divided into species and species are divided into variations.
 class Species(db.Model):
 
     __tablename__ = "species"
@@ -110,6 +112,10 @@ class Pet(db.Model):
     coat_id = db.Column(db.Integer, db.ForeignKey("species_coats.id"))
     coat = db.relationship("SpeciesCoat")
 
+    # The pet's current mini.
+    mini_id = db.Column(db.Integer, db.ForeignKey("items.id"))
+    mini = db.relationship("Item", foreign_keys=[mini_id])
+
     # Which way is the pet's image facing
     facing_right = db.Column(db.Boolean, default=True)
 
@@ -117,7 +123,7 @@ class Pet(db.Model):
     name = db.Column(db.String(80), default="")
     description = db.Column(db.Text, default="")
     pronouns = db.Column(db.String(80), default="They/them")
-    date_bonded = db.Column(db.DateTime, server_default=db.func.now())
+    date_created = db.Column(db.DateTime, server_default=db.func.now())
 
     # If either of these is set to a number other than 0, the pet is for sale
     ss_price = db.Column(db.Integer, default=0)
@@ -136,6 +142,27 @@ class Pet(db.Model):
         if not self.name:
             self.name = self.soul_name.capitalize()
 
+    @hybrid_property
+    def bonding_day(self):
+        if not self.friendship:
+            return None
+        return self.friendship.bonding_day
+
+    @bonding_day.setter
+    def set_bonding_day(self, date):
+        if not self.friendship:
+            return None
+        self.friendship.bonding_day = date
+        return self.friendship
+
+    @property
+    def friendship(self):
+        return db.session.query(PetFriendship).get((self.id, self.guardian_id))
+
+    @property
+    def mini_friendship(self):
+        return db.session.query(MiniFriendship).get((self.id, self.mini_id))
+
     @property
     def species(self):
         return self.coat.species
@@ -144,7 +171,16 @@ class Pet(db.Model):
         return self.coat.image_url()
 
     def url(self):
-        return '/pet/' + self.soul_name
+        return '/pet/' + self.soul_name + '/'
+
+    def to_dict(self):
+        data = {
+            'name': self.name,
+            'id': self.id,
+            'image_url': self.image_url(),
+            'url': self.url(),
+        }
+        return data
 
     # Generate a new unique soul name
     @classmethod
@@ -157,6 +193,46 @@ class Pet(db.Model):
             new_name = soul_name(min_length)
             found = db.session.query(cls).filter(cls.soul_name == new_name).one_or_none()
         return new_name
+
+
+class PetFriendship(db.Model):
+    """
+    A table that stores metadata on the relationship between users and their
+    pets. Note that even if a pet is transferred, it maintains "memory" of
+    their old user.
+    """
+    __tablename__ = "pet_friendships"
+
+    pet_id = db.Column(db.Integer, db.ForeignKey("pets.id"), primary_key=True)
+    guardian_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+
+    pet = db.relationship("Pet")
+    guardian = db.relationship("User")
+
+    bonding_day = db.Column(db.DateTime, server_default=db.func.now())
+    happiness = db.Column(db.Integer, default=0)
+
+
+class MiniFriendship(db.Model):
+    """
+    A relationship between a pet and their mini. Note that although a pet can
+    only have one mini equipped at a time, it keeps a memory of its past minis.
+    """
+    __tablename__ = "mini_friendships"
+
+    pet_id = db.Column(db.Integer, db.ForeignKey("pets.id"), primary_key=True)
+    mini_id = db.Column(db.Integer, db.ForeignKey("items.id"), primary_key=True)
+
+    pet = db.relationship("Pet")
+    mini = db.relationship("Item")
+
+    nickname = db.Column(db.String(80))
+
+    @property
+    def name(self):
+        if self.nickname:
+            return self.nickname
+        return self.mini.name
 
 
 class PetFavorite(db.Model):
