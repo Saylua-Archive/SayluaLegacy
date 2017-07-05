@@ -89,7 +89,7 @@ def generate_pets():
                         description=("A beautiful " + species_name))
                     yield new_coat
                     new_pet = Pet(
-                        coat_id=new_coat.id
+                        coat=new_coat
                     )
                     yield new_pet
 

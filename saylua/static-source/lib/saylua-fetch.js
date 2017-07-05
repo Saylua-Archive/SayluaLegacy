@@ -2,11 +2,9 @@ import 'whatwg-fetch';
 
 var token = null;
 
-export function slFetch (url, request) {
-  if (!token) {
-    token = document.querySelector('meta[name="csrf-token"]').content;
-  }
-
+export function slFetch(url, request) {
+  token = getCsrfToken();
+  
   if (request) {
     if (request.headers) {
       request.headers['X-CSRF-Token'] = token;
@@ -16,4 +14,11 @@ export function slFetch (url, request) {
   }
 
   return fetch(url, request);
+}
+
+export function getCsrfToken() {
+  if (!token) {
+    token = document.querySelector('meta[name="csrf-token"]').content;
+  }
+  return token;
 }

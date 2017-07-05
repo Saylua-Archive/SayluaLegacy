@@ -72,12 +72,8 @@ class Item(db.Model):
     def category_name(self):
         return self.category().name()
 
-    def grant(self, user_id, count):
-        inventory_entry = InventoryItem.by_user_item(user_id, self.id)
-        if not inventory_entry:
-            inventory_entry = InventoryItem(user_id=user_id, item_id=self.id)
-        inventory_entry.count += count
-        inventory_entry.put()
+    def give_items(self, user_id, count):
+        return InventoryItem.give_items(user_id, self.id, count)
 
     def is_bondable(self):
         return self.category().name() == "minis"
@@ -99,15 +95,16 @@ class InventoryItem(db.Model):
 
     # These two keys define the inventory item entry.
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    user = db.relationship("User")
-
     item_id = db.Column(db.Integer, db.ForeignKey('items.id'), primary_key=True)
+
+    user = db.relationship("User")
     item = db.relationship("Item")
 
     count = db.Column(db.Integer, default=0)
 
     def to_dict(self):
         data = {
+            'id': self.item.id,
             'name': self.item.name,
             'category': self.item.category_name(),
             'description': self.item.description,
@@ -120,3 +117,12 @@ class InventoryItem(db.Model):
 
     def __repr__(self):
         return json.dumps(self.to_dict())
+
+    @classmethod
+    def give_items(self, user_id, item_id, count):
+        inventory_entry = db.session.query(InventoryItem).get((user_id, item_id))
+        if not inventory_entry:
+            inventory_entry = InventoryItem(user_id=user_id, item_id=item_id)
+        inventory_entry.count += count
+
+        return inventory_entry

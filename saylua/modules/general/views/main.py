@@ -4,7 +4,7 @@ from flask import (render_template, redirect, g, abort, make_response,
 from saylua import app, db
 from saylua.utils import is_devserver, redirect_to_referer
 from saylua.wrappers import login_required
-from saylua.modules.pets.models.db import SpeciesCoat, Pet
+from saylua.modules.pets.models.db import SpeciesCoat, Pet, PetFriendship
 
 import datetime
 
@@ -112,7 +112,8 @@ def intro_avatar():
     starter = g.user.companion
     if not starter:
         starter = (Pet.query.filter(Pet.guardian_id == g.user.id)
-                .order_by(Pet.date_bonded.asc()).first())
+                .join(PetFriendship.bonding_day)
+                .order_by(PetFriendship.bonding_day.asc()).first())
     if request.method == 'POST':
         g.user.story_level = 3
         db.session.commit()
