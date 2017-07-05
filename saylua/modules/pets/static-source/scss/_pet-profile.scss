@@ -48,6 +48,17 @@
   align-items: flex-start;
   flex-wrap: wrap;
   justify-content: center;
+
+  table {
+    width: 100%;
+  }
+
+  h2 {
+    display: flex;
+
+    align-items: baseline;
+    justify-content: space-between;
+  }
 }
 
 .pet-profile-column {
@@ -79,4 +90,10 @@
   flex-direction: row;
 
   flex-wrap: wrap;
+}
+
+.mini-name {
+  font-size: 1.8rem;
+  line-height: 200%;
+  text-align: center;
 }

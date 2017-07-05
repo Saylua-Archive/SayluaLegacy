@@ -8,7 +8,8 @@ export const validatorList = {
   'notblank': {
     'error': '<field> cannot be only spaces.',
     'validator': function (input) {
-      return /\S/.test(input);
+      // Note that required covers an input being completely empty.
+      return /\S/.test(input) || !input;
     }
   },
   'min': {

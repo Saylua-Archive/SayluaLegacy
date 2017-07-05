@@ -3,8 +3,9 @@ from . import views
 
 urlpatterns = [
     # Pet profiles and actions.
-    url('/pet/<name>/', view_func=views.general.pet_profile, name="profile", methods=['GET', 'POST']),
-    url('/edit_pet/<name>/', view_func=views.general.edit_pet, name="edit_pet", methods=['GET', 'POST']),
+    url('/pet/<soul_name>/', view_func=views.general.pet_profile, name="profile", methods=['GET', 'POST']),
+    url('/edit_pet/<soul_name>/', view_func=views.general.edit_pet, name="edit_pet", methods=['GET', 'POST']),
+    url('/edit_mini/<soul_name>/', view_func=views.general.edit_mini, name="edit_mini", methods=['GET', 'POST']),
     url('/accompany/<soul_name>/', view_func=views.general.pet_accompany, name="accompany", methods=['POST']),
     url('/abandon/', view_func=views.general.pet_abandon, name="abandon", methods=['POST']),
 

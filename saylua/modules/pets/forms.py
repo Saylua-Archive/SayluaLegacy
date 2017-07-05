@@ -12,3 +12,12 @@ class PetEditForm(FlaskForm):
     description = SlTextAreaField('Description')
     pronouns = SlField('Pronouns', [
         sl_validators.Max(app.config['MAX_PET_NAME_LENGTH'])])
+
+
+class MiniEditForm(FlaskForm):
+    nickname = SlField('Nickname', [
+        sl_validators.NotBlank(),
+        sl_validators.Max(app.config['MAX_PET_NAME_LENGTH'])])
+    description = SlTextAreaField('Custom Description', [
+        sl_validators.Max(256)
+    ])

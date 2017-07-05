@@ -227,6 +227,7 @@ class MiniFriendship(db.Model):
     mini = db.relationship("Item")
 
     nickname = db.Column(db.String(80))
+    description = db.Column(db.String(512))
 
     @property
     def name(self):
