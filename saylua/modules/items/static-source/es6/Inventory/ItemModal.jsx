@@ -33,6 +33,11 @@ export default class ItemModal extends Component {
       e.stopPropagation();
     };
 
+    let buybackOptions = [];
+    for (let i = 1; i < item.count; i++) {
+      buybackOptions.push(<option value={ i }>Sell { i + " for " + i * item.buyback_price }</option>);
+    }
+
     return (
       <div className={ "modal-overlay" + closedClass } onClick={ closeFunction }>
         <div className="modal" onClick={ stopPropagation }>
@@ -49,6 +54,14 @@ export default class ItemModal extends Component {
             <input type="hidden" name="pet_id" value={ companion.id } />
             <input type="hidden" name="csrf_token" value={ getCsrfToken() }/>
             <button>{ "Bond with " + companion.name }</button>
+          </form>
+          <form method="post" action="/autosale/" className="center">
+            <select name="amount">
+              { buybackOptions }
+            </select>
+            <input type="hidden" name="item_id" value={ item.id } />
+            <input type="hidden" name="csrf_token" value={ getCsrfToken() }/>
+            <button>Sell</button>
           </form>
         </div>
       </div>
