@@ -25,8 +25,7 @@ def pet_reserve_post():
     adopter = g.user
     soul_name = request.form.get('soul_name')
     adoptee = db.session.query(Pet).filter(Pet.soul_name == soul_name).one_or_none()
-    youngest = (Pet.query.filter(Pet.guardian_id == g.user.id)
-            .join(PetFriendship.bonding_day)
+    youngest = (Pet.query.filter(Pet.guardian_id == g.user.id).join(PetFriendship)
             .order_by(PetFriendship.bonding_day.desc()).first())
     if youngest and (datetime.datetime.now() - youngest.bonding_day).days < 1:
         wait = (24 - (datetime.datetime.now() - youngest.bonding_day).seconds / 3600)
