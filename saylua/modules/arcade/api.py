@@ -1,3 +1,5 @@
+from saylua import db
+
 from saylua.wrappers import api_login_required
 from flask import g, request
 from models.db import Game, GameLog
@@ -22,5 +24,6 @@ def api_send_score(game_id):
             score = int_or_none(data.get('score')) or 0
             GameLog.record_score(g.user.id, game_id, score)
             g.user.cloud_coins += score
+            db.session.commit()
             return json.dumps(dict(cloud_coins=g.user.cloud_coins, star_shards=g.user.star_shards))
     return json.dumps(dict(error='Bad request.')), 400
