@@ -106,7 +106,7 @@ def random_token(length=32):
 
 
 def canonize(name):
-    name = re.sub(r'(\s|\W)+', '_', name)
+    name = re.sub(r'(\s|\W)+', '_', str(name))
 
     # Remove trailing characters from punctuation or elsewhere.
     name = name.strip('_-')
