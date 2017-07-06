@@ -9,7 +9,7 @@
   <div id="user-info-section" class="sidebar-section">
     <p>You are {{ user_link(g.user) }}</p>
     {% if g.user.companion %}
-    <p>Your companion is <a href="{{ g.user.companion.url() }}/">{{ g.user.companion.name }}</a></p>
+    <p>Your companion is <a href="{{ g.user.companion.url() }}">{{ g.user.companion.name }}</a></p>
     {% endif %}
     <p>
       <img src="/static/img/icons/weather_clouds.png">
