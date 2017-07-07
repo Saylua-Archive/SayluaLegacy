@@ -58,6 +58,15 @@
     }
   }
 
+  // Forms should be more dense when inside modals.
+  .form-table {
+    width: 100%;
+
+    textarea {
+      height: 100px;
+    }
+  }
+
   @media(max-width: 500px) {
     max-width: 95%;
   }

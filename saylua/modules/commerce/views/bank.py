@@ -1,3 +1,5 @@
+from saylua import db
+
 from saylua.modules.users.models.db import User, InvalidCurrencyException
 from saylua.utils import get_from_request
 from saylua.wrappers import login_required
@@ -22,11 +24,16 @@ def bank_transfer():
         cc = form.cloud_coins.data or 0
 
         if not ss and not cc:
-            flash('You must enter at least one currency to send. ', 'error')
+            flash('You must enter at least one currency to send.', 'error')
+        elif ss < 0 or cc < 0:
+            flash('You cannot send negative currency.', 'error')
         else:
             recipient = recipient_check.user
             try:
                 User.transfer_currency(g.user.id, recipient.id, cc, ss)
+                db.session.add(g.user)
+                db.session.add(recipient)
+                db.session.commit()
             except InvalidCurrencyException:
                 flash('You do not have enough funds to send the amount entered.', 'error')
             except:

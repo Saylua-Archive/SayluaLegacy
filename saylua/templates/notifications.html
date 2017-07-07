@@ -22,7 +22,7 @@
         to return.
       </p>
       <p>
-        <a href="/intro/side/">Pick which side you'll live on, so you can settle
+        <a href="{{ url_for('general.intro_side') }}">Pick which side you'll live on, so you can settle
           down into your new home</a>.
       </p>
     </div>
@@ -32,10 +32,11 @@
     <img src="{{ random_portrait_image() }}" class="portrait" />
     <div>
       <p>
-        Exploring Saylua alone can be dangerous.
+        Exploring Saylua alone can be dangerous. You should make sure to travel with a companion
+        by your side.
       </p>
       <p>
-        <a href="/intro/companion/">Bring your first companion with you.</a>
+        <a href="{{ url_for('general.intro_companion') }}">Bring your first companion with you.</a>
       </p>
     </div>
   </div>
@@ -48,7 +49,7 @@
         seems you're almost ready to get going!
       </p>
       <p>
-        <a href="/intro/avatar/">
+        <a href="{{ url_for('general.intro_avatar') }}">
           Except... Don't forget to dress for your adventures.
         </a>
       </p>

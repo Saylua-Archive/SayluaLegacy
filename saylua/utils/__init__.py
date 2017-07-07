@@ -28,6 +28,14 @@ def format_number(n):
     return "{:,}".format(n)
 
 
+def int_or_none(n):
+    try:
+        n = int(n)
+        return n
+    except:
+        return None
+
+
 def pluralize(count, singular_noun, plural_noun=None):
     if not plural_noun:
         plural_noun = singular_noun + 's'
@@ -98,7 +106,7 @@ def random_token(length=32):
 
 
 def canonize(name):
-    name = re.sub(r'(\s|\W)+', '_', name)
+    name = re.sub(r'(\s|\W)+', '_', str(name))
 
     # Remove trailing characters from punctuation or elsewhere.
     name = name.strip('_-')

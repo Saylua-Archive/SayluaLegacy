@@ -1,4 +1,6 @@
+{% from "_macros/forms.html" import form_row %}
 {% from "_macros/user_link.html" import user_link %}
+
 {% extends "layout.html" %}
 {% set page_title = "Pet Profile" %}
 {% block header_scripts %}
@@ -10,17 +12,20 @@
 </style>
 {% endblock %}
 {% block body %}
+{% set user_is_owner = g.user and pet.guardian_id == g.user.id  %}
 <h1>{{ pet.name }}'s Room</h1>
 <div id="pet-room">
   <div class="pet-room-background"></div>
   <div class="pet" id="pet-image-container">
     <img src="{{ pet.image_url() }}" />
   </div>
-  <div class="mini-small">
-    <img src="{{ random_mini_image() }}" />
-  </div>
+  {% if pet.mini %}
+  <a href="#mini" class="mini-small">
+    <img src="{{ pet.mini.image_url() }}" />
+  </a>
+  {% endif %}
 </div>
-{% if g.user and pet.guardian_id == g.user.id %}
+{% if user_is_owner %}
 <div class="pet-actions">
   <form id="accompany" action="/accompany/{{ pet.soul_name }}/" method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -65,10 +70,12 @@
     <div class="pet-profile-box">
       <h2>{{ pet.name }}'s Stats</h2>
       <table>
+        {% if pet.guardian %}
         <tr>
           <td>Guardian</td>
           <td> {{ user_link(pet.guardian) }} </td>
         </tr>
+        {% endif %}
         <tr>
           <td>Name</td>
           <td>{{ pet.name }}</td>
@@ -85,10 +92,12 @@
           <td>Coat</td>
           <td><a href="{{ pet.coat.url() }}">{{ pet.coat.coat_name }}</a></td>
         </tr>
+        {% if pet.bonding_day %}
         <tr>
           <td>Bonding Day</td>
-          <td>{{ pet.date_bonded|show_date }}</td>
+          <td>{{ pet.bonding_day|show_date }}</td>
         </tr>
+        {% endif %}
         <tr>
           <td>Pronouns</td>
           <td>{{ pet.pronouns }}</td>
@@ -105,15 +114,53 @@
         {% endfor %}
       </div>
     </div>
-    <div class="pet-profile-box">
-      <h2>{{ pet.name }}'s Mini</h2>
+    {% if pet.mini %}
+    <div class="pet-profile-box" id="mini">
+      <h2>
+        {{ pet.name }}'s Mini
+        {% if user_is_owner %}
+        <a href="#edit-mini" class="small">
+          <img src="/static/img/icons/pencil.png" alt="pencil" title="Edit" aria-label="Edit" />
+          Edit Mini
+        </a>
+        {% endif %}
+      </h2>
       <div class="mini">
-        <img src="{{ random_mini_image() }}">
+        <img src="{{ pet.mini.image_url() }}" />
       </div>
+      <p class="mini-name">
+        {{ pet.mini_friendship.name }}
+        the <a href="{{ pet.mini.url() }}">{{ pet.mini.name }}</a>
+      </p>
+      <p>
+        {{ pet.mini_friendship.description or pet.mini.description }}
+      </p>
     </div>
+    {% endif %}
   </div>
 </div>
 
+{% if user_is_owner and pet.mini %}
+<div id="edit-mini" class="modal-overlay closed">
+  <div class="modal">
+    <a href="#mini" class="close">&times;</a>
+    <h2>Edit {{ pet.name }}'s Mini</h2>
+    <form method="post" action="/edit_mini/{{ pet.soul_name}}/" class="center validated-form">
+      <table class="form-table">
+        {{ form_row(mini_form.nickname) }}
+        {{ form_row(mini_form.description) }}
+        <tr>
+          <td></td>
+          <td>
+            <input type="submit" name="submit" value="Save Changes" />
+          </td>
+        </tr>
+      </table>
+      {{ mini_form.csrf_token }}
+    </form>
+  </div>
+</div>
+{% endif %}
 {% endblock %}
 {% block footer_scripts %}
 <script src="{{ include_static('js/Dens.min.js') }}"></script>

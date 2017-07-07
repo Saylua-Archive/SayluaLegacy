@@ -91,7 +91,7 @@ class User(db.Model):
         return self.active_username
 
     @name.setter
-    def setName(self, name):
+    def set_name(self, name):
         self.active_username = name
 
     @property
@@ -113,6 +113,15 @@ class User(db.Model):
         elif self.title:
             return self.title.css_class()
         return 'title-user'
+
+    def story_route(self):
+        if self.story_level == 0:
+            return 'general.intro_side'
+        elif self.story_level == 1:
+            return 'general.intro_companion'
+        elif self.story_level == 2:
+            return 'general.intro_avatar'
+        return None
 
     def side_name(self):
         if self.side_id == 0:
@@ -154,6 +163,18 @@ class User(db.Model):
     def validate_email(self, key, address):
         return address.lower()
 
+    @validates('cloud_coins')
+    def validate_cloud_coins(self, key, cc):
+        if cc < 0:
+            raise InvalidCurrencyException("Currency cannot be negative!")
+        return cc
+
+    @validates('star_shards')
+    def validate_star_shards(self, key, ss):
+        if ss < 0:
+            raise InvalidCurrencyException("Currency cannot be negative!")
+        return ss
+
     @classmethod
     def by_username(cls, username):
         return (
@@ -178,18 +199,6 @@ class User(db.Model):
         return cls.hash_password(password, user.password_hash) == user.password_hash
 
     @classmethod
-    def update_currency(cls, user_id, cc=0, ss=0):
-        user = db.session.query(User).get(user_id)
-        user.star_shards += ss
-        user.cloud_coins += cc
-
-        # Throw exceptions if the currency amount is invalid
-        cls.except_if_currency_invalid(user)
-        db.session.add(user)
-        db.session.commit()
-        return [user.cloud_coins, user.star_shards]
-
-    @classmethod
     def transfer_currency(cls, from_id, to_id, cc=0, ss=0):
         from_user = db.session.query(User).get(from_id)
         to_user = db.session.query(User).get(to_id)
@@ -199,20 +208,6 @@ class User(db.Model):
         from_user.cloud_coins -= cc
         to_user.star_shards += ss
         to_user.cloud_coins += cc
-
-        # Throw exceptions if the currency amount is invalid
-        if cc < 0 or ss < 0:
-            raise InvalidCurrencyException('Transfers cannot be negative!')
-        cls.except_if_currency_invalid(from_user)
-        cls.except_if_currency_invalid(to_user)
-        db.session.add(from_user)
-        db.session.add(to_user)
-        db.session.commit()
-
-    @classmethod
-    def except_if_currency_invalid(cls, user):
-        if user.star_shards < 0 or user.cloud_coins < 0:
-            raise InvalidCurrencyException('Currency cannot be negative!')
 
     def __init__(self, username, *args, **kwargs):
         self.active_username = username

@@ -1,34 +1,51 @@
 from flask import render_template, g, redirect, request, flash, abort
 from saylua import db
 from saylua.wrappers import login_required
-from ..forms import PetEditForm
+from ..forms import PetEditForm, MiniEditForm
 
 from ..models.db import Pet
 
 
-def pet_profile(name):
-    pet = db.session.query(Pet).filter(Pet.soul_name == name).one_or_none()
+def pet_profile(soul_name):
+    pet = db.session.query(Pet).filter(Pet.soul_name == soul_name).one_or_none()
     if pet is None:
         abort(404)
-    return render_template("profile.html", pet=pet)
+    mini_form = MiniEditForm(request.form, obj=pet.mini_friendship)
+    return render_template("profile.html", pet=pet, mini_form=mini_form)
 
 
 @login_required()
-def edit_pet(name):
-    pet = db.session.query(Pet).filter(Pet.soul_name == name).one_or_none()
+def edit_pet(soul_name):
+    pet = db.session.query(Pet).filter(Pet.soul_name == soul_name).one_or_none()
     if pet is None:
         abort(404)
     if pet.guardian_id != g.user.id:
         flash("You can't edit {}'s profile!".format(pet.name))
-        return redirect('/pet/' + pet.soul_name, code=302)
+        return redirect(pet.url(), code=302)
     form = PetEditForm(request.form, obj=pet)
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            form.populate_obj(pet)
-            db.session.commit()
-            flash("Your settings have been saved.")
-        return redirect('/pet/' + pet.soul_name, code=302)
+    if form.validate_on_submit():
+        form.populate_obj(pet)
+        db.session.commit()
+        flash("Your settings have been saved.")
+        return redirect(pet.url(), code=302)
     return render_template("edit_pet.html", pet=pet, form=form)
+
+
+@login_required()
+def edit_mini(soul_name):
+    pet = db.session.query(Pet).filter(Pet.soul_name == soul_name).one_or_none()
+    if pet is None:
+        abort(404)
+    if pet.guardian_id != g.user.id:
+        flash("You can't edit {}'s mini!".format(pet.name))
+        return redirect(pet.url(), code=302)
+    form = MiniEditForm(request.form, obj=pet.mini_friendship)
+    if form.validate_on_submit():
+        form.populate_obj(pet.mini_friendship)
+        db.session.commit()
+        flash("The settings for you mini have been saved.")
+        return redirect(pet.url(), code=302)
+    return render_template('edit_mini.html', pet=pet, form=form)
 
 
 @login_required()

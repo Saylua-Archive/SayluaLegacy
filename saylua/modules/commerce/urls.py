@@ -11,5 +11,5 @@ urlpatterns = [
     url('/market/', view_func=views.market.market_main, name='market', methods=['GET', 'POST']),
 
     # Shop URLs
-    url('/shop/<name>/', view_func=views.shops.npc_shop_view, name='view_shop'),
+    url('/shop/<name>/', view_func=views.shops.npc_shop_view, name='view_shop', methods=['GET', 'POST']),
 ]

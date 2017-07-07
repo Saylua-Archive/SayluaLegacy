@@ -81,10 +81,10 @@ class NotNegative(AtLeast):
 class NotBlank(SayluaValidator):
     def __init__(self, message=None):
         self.message = message
-        self.defaultMessage = '<field> cannot be blank.'
+        self.defaultMessage = '<field> cannot be only spaces.'
 
     def validate(self, form, field):
-        return field.data and not field.data.isspace()
+        return not field.data.isspace()
 
     def clientValidatorName(self):
         return 'notblank'

@@ -17,6 +17,9 @@ urlpatterns = [
     # Item APIS
     url('/api/inventory/<int:category_id>/<int:page>/',
         view_func=views.api.api_inventory, name='api_inventory'),
-    url('/api/autosale/<int:item_id>/', view_func=views.api.api_autosale,
-        name='api_autosale', methods=['POST'])
+
+    url('/autosale/', view_func=views.actions.autosale,
+        name='autosale', methods=['POST']),
+    url('/mini/bond/', view_func=views.actions.bond_mini,
+        name='bond_mini', methods=['POST'])
 ]

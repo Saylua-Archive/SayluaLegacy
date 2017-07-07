@@ -28,24 +28,27 @@ def login():
     form = LoginForm(request.form)
 
     if form.validate_on_submit():
-        found = login_check.user
-        found_id = found.id
+        user = login_check.user
+        user_id = user.id
 
         # Add a session to the datastore
         expires = datetime.datetime.utcnow()
         expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
-        new_session = LoginSession(user_id=found_id, expires=expires)
+        new_session = LoginSession(user_id=user_id, expires=expires)
 
         # In case there is a session id collision, merge the session entries.
         db.session.merge(new_session)
         db.session.commit()
 
         # Generate a matching cookie and redirect.
-        resp = make_response(form.redirect())
-        resp.set_cookie("session_id", new_session.id, expires=expires)
-        resp.set_cookie("user_id", str(found_id), expires=expires)
+        redirect_path = form.redirect()
+        if user.story_route():
+            redirect_path = redirect(url_for(user.story_route()))
+        response = make_response(redirect_path)
+        response.set_cookie("session_id", new_session.id, expires=expires)
+        response.set_cookie("user_id", str(user_id), expires=expires)
 
-        return resp
+        return response
 
     return render_template('login/login.html', form=form)
 

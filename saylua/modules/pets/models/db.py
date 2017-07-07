@@ -5,17 +5,21 @@ from saylua.modules.items.models.db import Item
 
 from saylua.utils import get_static_version_id, is_devserver, go_up_path, canonize
 
+from sqlalchemy.ext.hybrid import hybrid_property
+
 from flask import url_for
 import os
 
 
-# Pets are divided into species and species are divided into variations
+# Pets are divided into species and species are divided into variations.
 class Species(db.Model):
 
     __tablename__ = "species"
 
-    name = db.Column(db.String(80), primary_key=True)
-    canon_name = db.Column(db.String(256), unique=True)
+    id = db.Column(db.Integer, primary_key=True)
+
+    name = db.Column(db.String(80), unique=True)
+    canon_name = db.Column(db.String(80), unique=True)
 
     description = db.Column(db.Text)
 
@@ -29,10 +33,10 @@ class Species(db.Model):
     @property
     def default_coat(self):
         coat = db.session.query(SpeciesCoat).filter(SpeciesCoat.coat_canon_name == 'common',
-            SpeciesCoat.species_name == self.name).one_or_none()
+            SpeciesCoat.species_id == self.id).one_or_none()
         if not coat:
             coat = db.session.query(SpeciesCoat).filter(
-                SpeciesCoat.species_name == self.name).limit(1).one_or_none()
+                SpeciesCoat.species_id == self.id).limit(1).one_or_none()
         return coat
 
     def url(self):
@@ -56,7 +60,7 @@ class SpeciesCoat(db.Model):
     coat_name = db.Column(db.String(80))
     coat_canon_name = db.Column(db.String(80))
 
-    species_name = db.Column(db.String(80), db.ForeignKey("species.name"))
+    species_id = db.Column(db.Integer, db.ForeignKey("species.id"))
     species = db.relationship("Species")
     description = db.Column(db.Text)
 
@@ -65,26 +69,26 @@ class SpeciesCoat(db.Model):
     def __init__(self, *args, **kwargs):
         super(SpeciesCoat, self).__init__(*args, **kwargs)
         if not self.canon_name:
-            self.canon_name = canonize(self.species_name) + '_' + canonize(self.coat_name)
+            self.canon_name = self.species.canon_name + '_' + canonize(self.coat_name)
 
         if not self.coat_canon_name:
             self.coat_canon_name = canonize(self.coat_name)
 
     @property
     def name(self):
-        return self.coat_name + ' ' + self.species_name
+        return self.coat_name + ' ' + self.species.name
 
     def url(self):
         return '/coat/' + self.coat_canon_name + '/' + self.species.canon_name + '/'
 
     def image_url(self):
         if is_devserver():
-            subpath = ("img" + os.sep + "pets" + os.sep + self.species_name + os.sep + self.coat_name +
+            subpath = ("img" + os.sep + "pets" + os.sep + self.species.canon_name + os.sep + self.coat_name +
             ".png")
             image_path = (os.path.join(go_up_path(4, (__file__)), "static", subpath))
             if os.path.isfile(image_path):
                 return url_for("static", filename=subpath) + "?v=" + str(get_static_version_id())
-        return (app.config['IMAGE_BUCKET_ROOT'] + "/pets/" + self.species_name + "/" +
+        return (app.config['IMAGE_BUCKET_ROOT'] + "/pets/" + self.species.canon_name + "/" +
             self.coat_name + ".png?v=" + str(get_static_version_id()))
 
     @classmethod
@@ -107,8 +111,10 @@ class Pet(db.Model):
     # Only set if the pet is a variation
     coat_id = db.Column(db.Integer, db.ForeignKey("species_coats.id"))
     coat = db.relationship("SpeciesCoat")
-    species_name = db.Column(db.String(80), db.ForeignKey("species.name"))
-    species = db.relationship("Species")
+
+    # The pet's current mini.
+    mini_id = db.Column(db.Integer, db.ForeignKey("items.id"))
+    mini = db.relationship("Item", foreign_keys=[mini_id])
 
     # Which way is the pet's image facing
     facing_right = db.Column(db.Boolean, default=True)
@@ -117,7 +123,7 @@ class Pet(db.Model):
     name = db.Column(db.String(80), default="")
     description = db.Column(db.Text, default="")
     pronouns = db.Column(db.String(80), default="They/them")
-    date_bonded = db.Column(db.DateTime, server_default=db.func.now())
+    date_created = db.Column(db.DateTime, server_default=db.func.now())
 
     # If either of these is set to a number other than 0, the pet is for sale
     ss_price = db.Column(db.Integer, default=0)
@@ -130,11 +136,51 @@ class Pet(db.Model):
         if not self.favorites:
             self.favorites = db.session.query(Item).order_by(db.func.rand()).limit(4).all()
 
+        if not self.soul_name:
+            self.soul_name = Pet.new_soul_name()
+
+        if not self.name:
+            self.name = self.soul_name.capitalize()
+
+    @hybrid_property
+    def bonding_day(self):
+        if not self.friendship:
+            return None
+        return self.friendship.bonding_day
+
+    @bonding_day.setter
+    def set_bonding_day(self, date):
+        if not self.friendship:
+            return None
+        self.friendship.bonding_day = date
+        return self.friendship
+
+    @property
+    def friendship(self):
+        return db.session.query(PetFriendship).get((self.id, self.guardian_id))
+
+    @property
+    def mini_friendship(self):
+        return db.session.query(MiniFriendship).get((self.id, self.mini_id))
+
+    @property
+    def species(self):
+        return self.coat.species
+
     def image_url(self):
         return self.coat.image_url()
 
     def url(self):
-        return '/pet/' + self.soul_name
+        return '/pet/' + self.soul_name + '/'
+
+    def to_dict(self):
+        data = {
+            'name': self.name,
+            'id': self.id,
+            'image_url': self.image_url(),
+            'url': self.url(),
+        }
+        return data
 
     # Generate a new unique soul name
     @classmethod
@@ -147,6 +193,47 @@ class Pet(db.Model):
             new_name = soul_name(min_length)
             found = db.session.query(cls).filter(cls.soul_name == new_name).one_or_none()
         return new_name
+
+
+class PetFriendship(db.Model):
+    """
+    A table that stores metadata on the relationship between users and their
+    pets. Note that even if a pet is transferred, it maintains "memory" of
+    their old user.
+    """
+    __tablename__ = "pet_friendships"
+
+    pet_id = db.Column(db.Integer, db.ForeignKey("pets.id"), primary_key=True)
+    guardian_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+
+    pet = db.relationship("Pet")
+    guardian = db.relationship("User")
+
+    bonding_day = db.Column(db.DateTime, server_default=db.func.now())
+    happiness = db.Column(db.Integer, default=0)
+
+
+class MiniFriendship(db.Model):
+    """
+    A relationship between a pet and their mini. Note that although a pet can
+    only have one mini equipped at a time, it keeps a memory of its past minis.
+    """
+    __tablename__ = "mini_friendships"
+
+    pet_id = db.Column(db.Integer, db.ForeignKey("pets.id"), primary_key=True)
+    mini_id = db.Column(db.Integer, db.ForeignKey("items.id"), primary_key=True)
+
+    pet = db.relationship("Pet")
+    mini = db.relationship("Item")
+
+    nickname = db.Column(db.String(80))
+    description = db.Column(db.String(512))
+
+    @property
+    def name(self):
+        if self.nickname:
+            return self.nickname
+        return self.mini.name
 
 
 class PetFavorite(db.Model):

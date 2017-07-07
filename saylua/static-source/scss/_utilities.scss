@@ -18,6 +18,16 @@ span.line {
   text-align: center;
 }
 
+.right {
+  float: right;
+  text-align: right;
+}
+
+.left {
+  float: left;
+  text-align: left;
+}
+
 .flipped {
   transform: scaleX(-1);
   filter: FlipH;

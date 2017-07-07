@@ -1,7 +1,8 @@
 from flask import render_template, g, redirect, request, flash
 from saylua import db
 from saylua.wrappers import login_required
-from ..models.db import Pet
+
+from ..models.db import Pet, PetFriendship
 from saylua.utils import corpus, add_article
 
 import datetime
@@ -24,10 +25,10 @@ def pet_reserve_post():
     adopter = g.user
     soul_name = request.form.get('soul_name')
     adoptee = db.session.query(Pet).filter(Pet.soul_name == soul_name).one_or_none()
-    youngest = (Pet.query.filter(Pet.guardian_id == g.user.id)
-            .order_by(Pet.date_bonded.desc()).first())
-    if youngest and (datetime.datetime.now() - youngest.date_bonded).days < 1:
-        wait = (24 - (datetime.datetime.now() - youngest.date_bonded).seconds / 3600)
+    youngest = (Pet.query.filter(Pet.guardian_id == g.user.id).join(PetFriendship)
+            .order_by(PetFriendship.bonding_day.desc()).first())
+    if youngest and (datetime.datetime.now() - youngest.bonding_day).days < 1:
+        wait = (24 - (datetime.datetime.now() - youngest.bonding_day).seconds / 3600)
         if wait > 20:
             wait = "a day or so"
         elif wait > 1:
@@ -43,7 +44,7 @@ def pet_reserve_post():
         flash("I'm afraid {} already has a companion.".format(adoptee.name))
     else:
         adoptee.guardian_id = adopter.id
-        adoptee.date_bonded = db.func.now()
+        adoptee.bonding_day = db.func.now()
         db.session.add(adoptee)
         if adopter.companion is None:
             adopter.companion = adoptee
