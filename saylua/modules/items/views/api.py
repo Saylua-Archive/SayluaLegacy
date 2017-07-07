@@ -17,7 +17,7 @@ ITEMS_PER_PAGE = 20
 def api_inventory(category_id, page):
     inventory_query = db.session.query(InventoryItem).join(Item,
         InventoryItem.item_id == Item.id).filter(
-        InventoryItem.user_id == g.user.id)
+        InventoryItem.user_id == g.user.id, InventoryItem.count > 0)
     if category_id:
         inventory_query = inventory_query.filter(Item.category_id == category_id)
     pagination = Pagination(per_page=ITEMS_PER_PAGE, query=inventory_query,

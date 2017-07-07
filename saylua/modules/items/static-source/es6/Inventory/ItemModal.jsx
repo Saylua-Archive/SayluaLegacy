@@ -34,7 +34,7 @@ export default class ItemModal extends Component {
     };
 
     let buybackOptions = [];
-    for (let i = 1; i < item.count; i++) {
+    for (let i = 1; i <= item.count; i++) {
       buybackOptions.push(<option value={ i }>Sell { i + " for " + i * item.buyback_price }</option>);
     }
 

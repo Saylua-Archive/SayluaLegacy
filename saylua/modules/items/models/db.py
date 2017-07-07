@@ -43,7 +43,7 @@ class Item(db.Model):
     name = db.Column(db.String(256), unique=True)
     canon_name = db.Column(db.String(256), unique=True)
     description = db.Column(db.String(1024))
-    buyback_price = db.Column(db.Integer)
+    buyback_price = db.Column(db.Integer, default=0)
 
     category_id = db.Column(db.Integer)
 
@@ -122,7 +122,8 @@ class InventoryItem(db.Model):
     def give_items(self, user_id, item_id, count):
         inventory_entry = db.session.query(InventoryItem).get((user_id, item_id))
         if not inventory_entry:
-            inventory_entry = InventoryItem(user_id=user_id, item_id=item_id)
-        inventory_entry.count += count
+            inventory_entry = InventoryItem(user_id=user_id, item_id=item_id, count=count)
+        else:
+            inventory_entry.count += count
 
         return inventory_entry
