@@ -40,6 +40,7 @@ enabled_modules = [
     'commerce',
     'forums',
     'general',
+    'house',
     'items',
     'messages',
     'museum',

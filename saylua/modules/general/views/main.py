@@ -9,7 +9,7 @@ from saylua.modules.pets.models.db import SpeciesCoat, Pet, PetFriendship
 import datetime
 
 
-STARTER_COMPANIONS = ['arko_common', 'chirling_common', 'nylik_common']
+STARTER_COMPANIONS = ['arko_common', 'chirling_common', 'xochi_common']
 
 
 def home():

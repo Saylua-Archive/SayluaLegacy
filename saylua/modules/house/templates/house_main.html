@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% set page_title = "Your House" %}
+{% set fullscreen = True %}
+{% block body %}
+
+<h1>Your Home in {{ g.user.side_name() }}</h1>
+
+
+<div class="npc-overlay">
+  <p>
+    Well, hello! I see you've just moved in.
+  </p>
+  <img src="{{ include_static('img/characters/vera-everly.png') }}" />
+</div>
+
+{% endblock %}
