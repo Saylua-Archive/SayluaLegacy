@@ -193,17 +193,22 @@ export const CoreReducer = (state, action) => {
 
       return { ...state, 'entityLayer': entities };
 
+    case 'DISABLE_MOVEMENT':
+
+      var newUIState = { ...state.UI, 'canMove': false };
+
+      return { ...state, 'UI': newUIState };
+
+    case 'ENABLE_MOVEMENT':
+
+      var newUIState = { ...state.UI, 'canMove': true };
+
+      return { ...state, 'UI': newUIState };
+
     case 'TOGGLE_MINIMAP':
 
       var showMinimap = !state.UI.showMinimap;
       var newUIState = { ...state.UI, showMinimap };
-
-      return { ...state, 'UI': newUIState };
-
-    case 'TOGGLE_MOVEMENT':
-
-      var canMove = !state.UI.canMove;
-      var newUIState = { ...state.UI, canMove };
 
       return { ...state, 'UI': newUIState };
 

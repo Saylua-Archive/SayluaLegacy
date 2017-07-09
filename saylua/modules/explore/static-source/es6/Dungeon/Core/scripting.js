@@ -20,14 +20,14 @@ const ENABLED_SPECIAL_VARIABLES = [
   '$entity_nearest',
   '$entity_nearest_@type',
   '$location',
+  '__attack',
   '__distance',
   '__isObstacle',
   '__log',
-  '__moveTo',
-  '__rand',
-  // Temporary
-  '__debugMove',
-  '__debugAttack'
+  '__move',
+  '__pathTo',
+  '__queueEvent',
+  '__rand'
 ];
 
 //const WORKERS_ENABLED = (window.Worker !== undefined);
@@ -254,6 +254,7 @@ export function interpretGameEvents(data) {
   return [newEntityLayer, newTileLayer];
 }
 
+
 function resolveSpecialVariable(id, specialVariable, meta) {
   let splitVar = specialVariable.split('_');
 
@@ -336,16 +337,16 @@ function resolveSpecialVariable(id, specialVariable, meta) {
     return nearestEntity;
   }
 
-  if (specialVariable === '__debugAttack') {
-    let debugAttack = (id, damage) => {
-      window.queue['attack'].push([id, damage]);
+  if (specialVariable === '__attack') {
+    let actorAttack = (id, args={}) => {
+      window.queue['actorAttack'].push([id, args]);
     };
 
-    return debugAttack;
+    return actorAttack;
   }
 
-  if (specialVariable === '__debugMove') {
-    let debugMove = (nodeGraph) => (id, oldPosition, newPosition) => {
+  if (specialVariable === '__move') {
+    let move = (nodeGraph, entityLayer) => (id, oldPosition, newPosition) => {
       // Add weight to our old location
       let oldNode = nodeGraph.grid[oldPosition.x][oldPosition.y];
 
@@ -360,11 +361,15 @@ function resolveSpecialVariable(id, specialVariable, meta) {
       let newWeight = Math.max(0, (newNode.weight - 1));
       newNode.weight = newWeight;
 
+      // Mark our actor as 'animated'.
+      let matchingEntity = entityLayer.filter((entity) => entity.id === id)[0];
+      matchingEntity.meta.animated = true;
+
       // Log move event to a global queue used for animation.
-      window.queue['move'].push([id, oldPosition, newPosition]);
+      window.queue['actorMove'].push([id, { oldPosition, newPosition }]);
     };
 
-    return debugMove(meta.nodeGraph);
+    return move(meta.nodeGraph, meta.entityLayer);
   }
 
   if (specialVariable === '__distance') {
@@ -401,7 +406,7 @@ function resolveSpecialVariable(id, specialVariable, meta) {
     return curry(meta.tileSet, meta.tileLayer, meta.mapWidth, OBSTRUCTIONS);
   }
 
-  if (specialVariable === '__moveTo') {
+  if (specialVariable === '__pathTo') {
     let curry = (nodeGraph) => (data) => {
       let start, end;
 
@@ -413,6 +418,14 @@ function resolveSpecialVariable(id, specialVariable, meta) {
     };
 
     return curry(meta.nodeGraph);
+  }
+
+  if (specialVariable === '__queueEvent') {
+    let queueEvent = (id, args={}, blocking=false) => {
+      window.queue['actorEvent'].push([id, { args, blocking }]);
+    };
+
+    return queueEvent;
   }
 
   if (specialVariable === '__rand') {

@@ -10,6 +10,8 @@ import * as GameRender from "./render";
 import * as GameInit from "./init";
 
 import { getScreenOffset } from "./logic";
+
+import SpriteManager from "./SpriteManager";
 import Engine from "./Engine";
 
 export const TILE_SIZE = 45;
@@ -49,11 +51,8 @@ export default class GameRenderer {
       }
     });
 
-    // Store the Animation Engine
-    this.engine = new Engine(store);
-
     // Initialize Pixi renderer
-    this.renderer = PIXI.autoDetectRenderer(renderWidth, renderHeight);
+    this.renderer = PIXI.autoDetectRenderer(renderWidth, renderHeight, undefined, false, true);
 
     // Create a stage for us to draw to.
     let stages = {
@@ -107,8 +106,7 @@ export default class GameRenderer {
     );
 
     let entitySprites = GameInit.generateEntitySprites(
-      this.gameState.entityLayer,
-      this.gameState.entitySet
+      this.gameState.entityLayer
     );
 
     let HUDSprites = GameInit.generateHUDSprites({
@@ -118,9 +116,15 @@ export default class GameRenderer {
       'mapWidth': this.gameState.mapWidth // Total map width
     });
 
+    // Initialize and store the Entity Sprite Manager
+    this.entityManager = new SpriteManager(store, stages.world.entities);
+    this.entityManager.addSprite(entitySprites);
+
+    // Initialize and store the Animation Engine
+    this.engine = new Engine(store, this.entityManager);
+
     let sprites = {
       "tiles": tileSprites,
-      "entities": entitySprites,
       "HUD": HUDSprites
     };
 
@@ -160,11 +164,6 @@ export default class GameRenderer {
       stages.world.tiles.addChild(sprite);
     });
 
-    // -- Append entity sprites to the world.entities stage.
-    sprites.entities.map((sprite) => {
-      stages.world.entities.addChild(sprite);
-    });
-
     // -- Append minimap sprites to the HUD.miniMap stage.
     sprites.HUD.miniMap.map((sprite) => {
       stages.HUD.miniMap.addChild(sprite);
@@ -196,42 +195,20 @@ export default class GameRenderer {
   /******************************** META FUNCTIONS ***********************************/
 
   cleanup() {
-    this.state.stages.world.entities.removeChildren();
-    this.state.sprites.entities = GameInit.generateEntitySprites(
-      this.state.dimensions[0],
-      this.state.dimensions[1],
-      this.gameState.entityLayer,
-      this.gameState.entitySet
-    );
-
-    this.state.sprites.entities.map((sprite) => {
-      this.state.stages.world.entities.addChild(sprite);
-    });
-  }
-
-
-  generateEntitySprite(entityID) {
-    // Sprite creator. This should be replaced with a real sprite management system at some point.
-    let sprite = GameRender.generateEntitySprite(this.state.dimensions, entityID);
-    let entitySprites = this.state.sprites.entities;
-    let entityStage = this.state.stages.world.entities;
-
-    entitySprites.push(sprite);
-    entityStage.addChild(sprite);
-
-    return sprite;
+    this.entityManager.cleanup();
+    this.entityManager.addSprite(this.gameState.entityLayer);
   }
 
 
   regenerateDungeon() {
     // Is there a generated dungeon queued to replace this one?
-    if (window.nextGameState !== undefined) {
+    if (window.specialEventQueue.nextGameState !== undefined) {
       this.store.dispatch({
         'type': "SET_GAME_STATE",
-        'state': window.nextGameState
+        'state': window.specialEventQueue.nextGameState
       });
 
-      window.nextGameState = undefined;
+      window.specialEventQueue.nextGameState = undefined;
 
       this.cleanup();
     }
@@ -244,7 +221,7 @@ export default class GameRenderer {
 
 
   test() {
-
+    console.log("Hello! I am the test!");
   }
 
 
@@ -289,8 +266,7 @@ export default class GameRenderer {
     GameRender.renderEntities(
       baseData,
       this.gameState.entityLayer,
-      this.state.sprites.entities,
-      this.generateEntitySprite.bind(this)
+      this.entityManager.children
     );
 
     // Render the minimap.
@@ -339,6 +315,16 @@ export default class GameRenderer {
     // Check to see if we must cleanup prior to rendering a new dungeon.
     if (this.gameState.UI.waitingOnDungeonRequest === true) {
       this.regenerateDungeon();
+    }
+
+    // Update sprites if necessary
+    if (window.specialEventQueue.summonEntity !== undefined) {
+      let newEntity = window.specialEventQueue.summonEntity;
+      let newSprite = this.entityManager.generateSprite(newEntity);
+
+      this.entityManager.push(newSprite);
+
+      window.specialEventQueue.summonEntity = undefined;
     }
 
     // Re-render the world if necessary.

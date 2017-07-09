@@ -57,6 +57,8 @@ export function placeSummon(summon, location, entityLayer, tileLayer, nodeGraph)
     nodeGraph.grid[location.x][location.y].weight = (isObstacle === true) ? 0 : 1;
 
   } else {
+    window.specialEventQueue.summonEntity = summon;
+
     entityLayer.push({
       "id": uuid(),
       "meta": {

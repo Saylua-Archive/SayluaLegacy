@@ -36,7 +36,7 @@ export const DebugReducer = (state, action) => {
 
     case 'DEBUG_REGENERATE_DUNGEON':
       getInitialGameState(true).then((initialState) => {
-        window.nextGameState = addAdditionalDebugParameters(initialState);
+        window.specialEventQueue.nextGameState = addAdditionalDebugParameters(initialState);
       });
 
       var newUIState = { ...state.UI, 'waitingOnDungeonRequest': true };

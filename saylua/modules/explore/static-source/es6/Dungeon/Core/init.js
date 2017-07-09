@@ -1,11 +1,12 @@
 /* eslint { no-unused-vars: 0 } */
-// init -> Required by Core/GameRenderer
+// init -> Required by Core/GameRenderer, Core/SpriteManager
 // --------------------------------------
 // Primal functions that generate initial game data.
 // Only run once.
 
 import * as Graphics from "./graphics";
 
+import { generateSprite } from "./SpriteManager";
 import { OBSTRUCTIONS } from "./logic";
 import { TILE_SIZE } from "./GameRenderer";
 
@@ -17,20 +18,11 @@ window.textures['null'] = PIXI.Texture.fromImage("/static/img/dungeons/tiles/tes
 
 /******************************** RENDERER INIT ***********************************/
 
-export function generateEntitySprites(entityLayer, entitySet) {
+export function generateEntitySprites(entityLayer) {
   let spriteLayer = [];
-  let spriteHeight = (TILE_SIZE * 0.8);
-  let spriteWidth = (TILE_SIZE * 0.8);
 
   for (let entity of entityLayer) {
-    let entityParent = entitySet[entity.parent];
-    let spriteTexture = Graphics.getTexture(entityParent.id);
-    let sprite = new PIXI.Sprite(spriteTexture);
-
-    sprite.visible = false;
-    sprite.height = spriteHeight;
-    sprite.width = spriteWidth;
-
+    let sprite = generateSprite(entity);
     spriteLayer.push(sprite);
   }
 
@@ -221,6 +213,11 @@ export function initializeEntityHP(entitySet, entityLayer) {
           candidate.meta.health = parent.meta.maxHP;
         }
       }
+    }
+
+    // FIXME: Decide if this should be an initialized as an arbitrary integer or if it should be derived from something.
+    if (key === 'entity_default_player') {
+      entityLayer[0].meta.health = 100;
     }
   }
 

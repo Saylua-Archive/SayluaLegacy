@@ -56,11 +56,6 @@ export function getScreenOffset(options, mapHeight, mapWidth, renderHeight, rend
     world_y = origin.y;
   }
 
-  // -- Translate from mouse location, if necessary.
-  if (options.type === "mouse") {
-    // I GIVE UP
-  }
-
   // We treat mouse coordinates separately, as there is no need for centering.
   // Zoom on the hovered point, keeping the underlying tile in-place on screen.
   if (options.type === "mouse") {
