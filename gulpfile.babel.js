@@ -129,9 +129,6 @@ gulp.task('watch-es', (callback) => {
   config['devtool'] = 'inline-source-map';
   config.watch = true;
 
-  console.log("PLUGINGSINGSINS");
-  console.log(config['plugins']);
-
   // Pre-configure compiler.
   let compiler = webpack(config);
 
