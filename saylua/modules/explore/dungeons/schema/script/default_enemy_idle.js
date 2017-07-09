@@ -5,9 +5,17 @@ var playerDistance = __distance(player.location, self.location);
 var withinAttackDistance = (playerDistance < 2);
 var playerNearby = (playerDistance < 6);
 
+const attack = () => {
+  // Clear the path and counter we use when idly roaming.
+  self.meta.roamProgress = 0;
+  self.meta.roamDistance = 0;
+  self.meta.roamPath = [];
 
-// Moves towards the player when close.
-if ((playerNearby === true) && (withinAttackDistance === false)) {
+  __attack(self.id, { 'target': player.id });
+};
+
+
+const engage = () => {
   // Increment counter
   self.meta.chaseDistance = self.meta.chaseDistance || 0;
 
@@ -16,10 +24,15 @@ if ((playerNearby === true) && (withinAttackDistance === false)) {
   self.meta.roamDistance = 0;
   self.meta.roamPath = [];
 
+  // Disengage when we've been chasing for too long.
+  if (self.meta.chaseDistance > 16) {
+    roam();
+  }
+
   // Returns an array of nodes to reach the player.
   // We only need the first one.
   if (self.meta.chaseDistance % 2 == 0) {
-    var newLocation = __moveTo({
+    var newLocation = __pathTo({
       'location': self.location,
       'target': player.location
     });
@@ -36,27 +49,15 @@ if ((playerNearby === true) && (withinAttackDistance === false)) {
 
       // This will weight the old location, and unweight the new location, in addition
       // to adding it to an animation queue.
-      __debugMove($this.id, oldPosition, self.location);
+      __move(self.id, oldPosition, self.location);
     }
   }
 
   self.meta.chaseDistance = self.meta.chaseDistance + 1;
+};
 
-}
 
-// Attack the player when VERY close.
-else if ((playerNearby === true) && (withinAttackDistance === true)) {
-  // Clear the path and counter we use when idly roaming.
-  self.meta.roamProgress = 0;
-  self.meta.roamDistance = 0;
-  self.meta.roamPath = [];
-
-  var damage = __rand(4, 7);
-  __debugAttack($this.id, damage);
-}
-
-// Roam around otherwise.
-else {
+const roam = () => {
   //__log(`${self.id} - Moving randomly.`);
   self.meta.chaseDistance = 0;
 
@@ -92,7 +93,7 @@ else {
 
     self.meta.targetLocation = targetLocation;
 
-    self.meta.roamPath = __moveTo({
+    self.meta.roamPath = __pathTo({
       'location': self.location,
       'target': targetLocation
     });
@@ -106,4 +107,16 @@ else {
     self.location.x = newLocation.x;
     self.location.y = newLocation.y;
   }
+};
+
+
+if ((playerNearby === true) && (withinAttackDistance === false)) {
+  // Moves towards the player when close.
+  engage();
+} else if ((playerNearby === true) && (withinAttackDistance === true)) {
+  // Attack the player when VERY close.
+  attack();
+} else {
+  // Roam around otherwise.
+  roam();
 }

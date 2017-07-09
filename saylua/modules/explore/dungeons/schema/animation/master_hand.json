@@ -1,24 +1,28 @@
 {
-  "skeleton": {
-    "spine": "3.3.07",
-    "images": "./static/img/dungeons/debug/"
-  },
   "skins": {
     "default": {
       "master_hand_idle": {
         "master_hand_idle": {
-          "width": 60,
+          "width": 100,
           "y": 1,
-          "height": 38,
+          "height": 100,
           "name": "master_hand_idle",
           "x": 2
         }
       }
     }
   },
+  "slots": [
+    {
+      "attachment": "master_hand_idle",
+      "name": "master_hand_idle",
+      "color": "ffffffff",
+      "bone": "root"
+    }
+  ],
   "ik": [],
   "animations": {
-    "attack_left": {
+    "attack": {
       "bones": {
         "root": {
           "translate": [
@@ -84,8 +88,18 @@
             }
           ]
         }
-      }
+      },
+      "events": [
+        {
+          "name": "contact",
+          "time": 0.2333
+        }
+      ]
     }
+  },
+  "skeleton": {
+    "images": "./static/img/dungeons/debug/",
+    "spine": "3.3.07"
   },
   "bones": [
     {
@@ -93,13 +107,7 @@
       "length": 0
     }
   ],
-  "slots": [
-    {
-      "bone": "root",
-      "name": "master_hand_idle",
-      "color": "ffffffff",
-      "attachment": "master_hand_idle"
-    }
-  ],
-  "events": {}
+  "events": {
+    "contact": {}
+  }
 }
