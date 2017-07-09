@@ -74,7 +74,6 @@ export default class DebugTools extends Component {
     });
   }
 
-
   selectSection(section, event) {
     event.preventDefault();
     this.setState({

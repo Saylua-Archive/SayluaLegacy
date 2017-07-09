@@ -11,10 +11,11 @@ import * as Debug from "../Core/debug";
 
 export function addAdditionalDebugParameters(state) {
   let debug = {
+    "enableUpdateTimers": false,
     "FOVEnabled": true,
     "keyboardInputEnabled": true,
     "queuedSummon": false,
-    "enableUpdateTimers": false
+    "showCollisions": false
   };
 
   return { ...state, debug };
@@ -66,6 +67,11 @@ export const DebugReducer = (state, action) => {
       var newDebug = { ...state.debug, queuedSummon: action.summon };
 
       return { ...state, 'entitySet': newEntitySet, 'tileSet': newTileSet, 'debug': newDebug };
+
+    case 'DEBUG_SHOW_COLLISIONS':
+      var newDebug = { ...state.debug, 'showCollisions': true };
+
+      return { ...state, 'debug': newDebug };
 
     default:
       return state;

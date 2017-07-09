@@ -32,6 +32,14 @@ function mapOptionsToInputs(props, state) {
       "value": state.debug.FOVEnabled
     },
     {
+      "name": "Show Collision Map",
+      "type": "toggle",
+      "options": {
+        "boundFunction": props.debugToggleOption.bind(this, 'showCollisions')
+      },
+      "value": state.debug.showCollisions
+    },
+    {
       "name": "Capture Keyboard Input",
       "type": "toggle",
       "options": {

@@ -79,6 +79,24 @@ export function renderTiles(baseData, tileSet, tileLayer, tileSprites) {
         sprite.texture = Graphics.getTexture('tile_fog');
       }
     }
+
+    // Show the debugging collision grid if necessary.
+    let state = window.getStoreState();
+    let showCollisions = state.debug.showCollisions;
+
+    if (showCollisions === true) {
+      if (tileVisible || tileSeen) {
+        let tileCell = state.nodeGraph.grid[x][y];
+
+        if (tileCell.weight === 0) {
+          sprite.tint = 0xF00F00;
+        } else {
+          sprite.tint = 0x1FB395;
+        }
+      }
+    } else {
+      sprite.tint = 0xFFFFFF;
+    }
   }
 }
 
