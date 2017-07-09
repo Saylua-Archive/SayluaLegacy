@@ -3,7 +3,7 @@
 }
 
 @mixin fast-color-trans {
-  transition: background 0.25s ease-in-out;
+  transition: background 0.25s ease-in-out, color 0.25s ease-in-out;
 }
 
 @mixin filter-trans {

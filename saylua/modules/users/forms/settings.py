@@ -1,32 +1,25 @@
 from saylua import app
 
-from wtforms import Form, RadioField
+from flask_wtf import FlaskForm
+from wtforms import BooleanField
 from saylua.utils.form import sl_validators, UserCheck
 from saylua.utils.form.fields import SlField, SlTextAreaField, SlPasswordField
 
 
-class GeneralSettingsForm(Form):
-    notified_on_pings = RadioField('Receive notifications for pings?',
-        choices=[('True', 'Yes'), ('False', 'No')])
-    autosubscribe_threads = RadioField('Autosubscribe to your own threads?',
-        choices=[('True', 'Yes'), ('False', 'No')])
-    autosubscribe_posts = RadioField('Autosubscribe to threads you post on?',
-        choices=[('True', 'Yes'), ('False', 'No')])
-
-    def populate_obj(self, obj):
-        obj.notified_on_pings = self.notified_on_pings.data == 'True'
-        obj.autosubscribe_threads = self.autosubscribe_threads.data == 'True'
-        obj.autosubscribe_posts = self.autosubscribe_posts.data == 'True'
+class GeneralSettingsForm(FlaskForm):
+    notified_on_pings = BooleanField('Receive notifications for pings?')
+    autosubscribe_threads = BooleanField('Autosubscribe to your own threads?')
+    autosubscribe_posts = BooleanField('Autosubscribe to threads you post on?')
 
 
-class DetailsForm(Form):
+class DetailsForm(FlaskForm):
     status = SlField('Status', [sl_validators.Max(app.config['MAX_USER_STATUS_LENGTH'])])
     gender = SlField('Gender')
     pronouns = SlField('Pronouns')
     bio = SlTextAreaField('About Me')
 
 
-class UsernameForm(Form):
+class UsernameForm(FlaskForm):
     IsNot = sl_validators.IsNot('',
             message='The username you entered is the same as your current username.')
     UsernameUnique = sl_validators.UsernameUnique()
@@ -44,7 +37,9 @@ class UsernameForm(Form):
         self.UsernameUnique.whitelist = user.usernames
 
 
-class EmailForm(Form):
+class EmailForm(FlaskForm):
+    password_check = UserCheck()
+
     IsNot = sl_validators.IsNot('',
             message='The email you entered is the same as your old email.')
 
@@ -54,11 +49,16 @@ class EmailForm(Form):
         IsNot,
         sl_validators.EmailUnique()])
 
+    password = SlPasswordField('Password', [
+        sl_validators.Required(),
+        password_check.PasswordValid])
+
     def setUser(self, user):
+        self.password_check.user = user
         self.IsNot.pattern = user.email
 
 
-class PasswordForm(Form):
+class PasswordForm(FlaskForm):
     password_check = UserCheck()
 
     old_password = SlPasswordField('Old Password', [

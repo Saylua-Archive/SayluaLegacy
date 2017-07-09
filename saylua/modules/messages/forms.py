@@ -1,12 +1,13 @@
 from saylua import app
-from wtforms import Form
+
+from flask_wtf import FlaskForm
 from saylua.utils.form import sl_validators, UserCheck
 from saylua.utils.form.fields import SlField, SlTextAreaField
 
 recipient_check = UserCheck()
 
 
-class ConversationForm(Form):
+class ConversationForm(FlaskForm):
     recipient = SlField('Recipient Name', [
         sl_validators.Required(),
         sl_validators.NotBlank(),
@@ -24,7 +25,7 @@ class ConversationForm(Form):
         sl_validators.Min(2)])
 
 
-class ConversationReplyForm(Form):
+class ConversationReplyForm(FlaskForm):
     text = SlTextAreaField('Reply', [
         sl_validators.Required(),
         sl_validators.NotBlank(),

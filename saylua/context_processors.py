@@ -1,10 +1,10 @@
 from saylua import app
-from saylua.models.user import User
+from saylua.modules.users.models.db import User
 from saylua.modules.messages.models.db import ConversationHandle
 from saylua.modules.messages.models.db import Notification
-from saylua.utils import get_static_version_id
+from saylua.utils import get_static_version_id, truncate
 
-from flask import g, url_for
+from flask import g, url_for, request
 from saylua import db
 
 from functools import partial
@@ -34,8 +34,9 @@ def inject_random_image():
     return dict(random_pet_image=partial(random_image, 'pets'),
         random_item_image=partial(random_image, 'items'),
         random_character_image=partial(random_image, 'characters'),
-        random_mini_image=partial(random_image, 'minis'),
+        random_mini_image=partial(random_image, 'items/minis'),
         random_background_image=partial(random_image, 'backgrounds'),
+        random_portrait_image=partial(random_image, 'portraits'),
         random_icon_image=partial(random_image, 'icons'))
 
 
@@ -54,10 +55,6 @@ def random_image_helper(folder):
 
 @app.context_processor
 def inject_truncate():
-    def truncate(s, maxlen=50):
-        if len(s) > maxlen:
-            return (s[:maxlen] + '...')
-        return s
     return dict(truncate=truncate)
 
 
@@ -66,6 +63,22 @@ def inject_truncate():
 @app.context_processor
 def inject_version_id():
     return dict(version_id=get_static_version_id())
+
+
+@app.context_processor
+def inject_theme_class():
+    themes = app.config.get('THEME_CLASSES')
+    if g.logged_in:
+        theme_id = g.user.theme_id
+    else:
+        try:
+            theme_id = int(request.cookies.get("theme_id"))
+        except:
+            return {}
+    theme_id = max(0, theme_id)
+    theme_id = min(len(themes) - 1, theme_id)
+    theme_class = themes[theme_id]
+    return dict(theme_class=theme_class)
 
 
 @app.context_processor

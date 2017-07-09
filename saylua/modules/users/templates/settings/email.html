@@ -9,6 +9,7 @@
 <form method="post" class="validated-form">
   <table class="form-table">
     {{ form_row(form.email) }}
+    {{ form_row(form.password, tip="For security, please enter your password.") }}
     <tr>
       <td></td>
       <td>
@@ -16,5 +17,6 @@
       </td>
     </tr>
   </table>
+  {{ form.csrf_token }}
 </form>
 {% endblock %}

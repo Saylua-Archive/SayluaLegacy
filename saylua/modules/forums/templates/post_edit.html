@@ -1,0 +1,39 @@
+{% from "_macros/forms.html" import form_errors %}
+{% extends "layout.html" %}
+{% set page_title = post.thread.title %}
+
+{% block header_scripts %}
+<link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Editing post in: {{ post.thread.title }}</h1>
+
+<span class="forum-breadcrumb">
+  <a href="/forums/">Forums</a> &#187;
+  <a href="{{ post.thread.board.category.url() }}">{{ post.thread.board.category.title }}</a> &#187;
+  <a href="{{ post.thread.board.url() }}"> {{ post.thread.board.title }}</a> &#187;
+  <a href="{{ post.thread.url() }}"> {{ truncate(post.thread.title, 40) }}</a>
+</span>
+
+<form method="post" class="validated-form" id="write-forum-reply">
+<h2>
+  <label for="{{ form.body.id }}">Edit Your Reply</label>
+</h2>
+  <table class="form-table">
+    <tr>
+      <td class="center">
+        {{ form.body(placeholder='Type your post content here') }}
+        {{ form_errors(form.body) }}
+      </td>
+    </tr>
+    <tr>
+      <td class="center">
+        <input type="submit" value="Save Reply" name="post">
+      </td>
+    </tr>
+  </table>
+  {{ form.csrf_token }}
+</form>
+
+{% endblock %}

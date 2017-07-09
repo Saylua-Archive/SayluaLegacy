@@ -122,7 +122,7 @@ a.navbar-link {
     color: $black;
     outline: none;
     background: $white;
-    box-shadow: -1px 1px 8px #eceb72, 1px -1px 8px #fff;
+    box-shadow: -1px 1px 8px hsl(60, 76%, 69%), 1px -1px 8px $white;
   }
 
   button {

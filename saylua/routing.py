@@ -48,7 +48,6 @@ class SayluaRouter(Blueprint):
 
 class SayluaLoader(DispatchingJinjaLoader):
     """Prevent template namespace collisions between modules.
-
     Additionally, prefer local templates to global templates.
     This means that global templates will no longer override local templates.
     """
@@ -57,11 +56,11 @@ class SayluaLoader(DispatchingJinjaLoader):
         if blueprint is not None and blueprint in self.app.blueprints:
             loader = self.app.blueprints[blueprint].jinja_loader
             if loader is not None:
-                yield loader, template
+                yield blueprint, loader
 
         loader = self.app.jinja_loader
         if loader is not None:
-                yield loader, template
+            yield self.app, loader
 
 
 def url(rule, view_func, name=None, methods=["GET"]):
@@ -71,10 +70,10 @@ def url(rule, view_func, name=None, methods=["GET"]):
     ```
     from . import views
 
-    url('/explore/', view_func=views.explore_home, name='explore_home', methods=['GET'])
-    url('/explore/', view_func=views.explore_home, name='explore_home')
-    url('/explore/', views.explore_home, 'explore_home')
-    url('/explore/', views.explore_home)
+    url('/adventure/', view_func=views.adventure_home, name='adventure_home', methods=['GET'])
+    url('/adventure/', view_func=views.adventure_home, name='adventure_home')
+    url('/adventure/', views.adventure_home, 'adventure_home')
+    url('/adventure/', views.adventure_home)
     ```
 
     # Note that 'endpoint' is now 'name'.

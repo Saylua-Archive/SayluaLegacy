@@ -1,0 +1,44 @@
+{% from "_macros/forms.html" import form_errors, form_row, form_checkbox %}
+
+{% extends "layout.html" %}
+{% set page_title = "Registration" %}
+{% block body %}
+<h1>Register a New Account on Saylua</h1>
+
+<form class="validated-form" method="post" id="register-form">
+  <table class="form-table">
+    {{ form_row(form.username, tip="Valid characters: letters, numbers, and +~._-") }}
+    {{ form_row(form.password) }}
+    {{ form_row(form.confirm_password) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.invite_code) }}
+    <tr>
+      <td></td>
+      <td>
+        {{ form_checkbox(form.at_least_13) }}
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        {{ form_checkbox(form.accept_tos) }}
+      </td>
+    </tr>
+    {{ form_row(form.recaptcha) }}
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" value="Register" name="register">
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="left">
+        <p><a href="/login/recover/">Lost username or password?</a></p>
+        <p><a href="/login/">Login to an existing account!</a></p>
+      </td>
+    </tr>
+  </table>
+  {{ form.csrf_token }}
+</form>
+{% endblock %}

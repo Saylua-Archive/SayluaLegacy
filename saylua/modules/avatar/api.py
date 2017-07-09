@@ -9,7 +9,7 @@ import imghdr
 import json
 
 
-@api_login_required
+@api_login_required()
 @app.route('/api/ha/wardrobe/')
 def wardrobe():
     image_url_base = os.path.join(app.static_folder, 'img/ha')
@@ -18,7 +18,7 @@ def wardrobe():
     return json.dumps(item_images)
 
 
-@api_login_required
+@api_login_required()
 @app.route('/api/ha/<base>/')
 def image_base(base):
     return image(base, '')
@@ -29,8 +29,8 @@ def image(base, items):
     items = items.split(',')
 
     # This will be replaced with calls to the database later
-    base = os.path.join(app.static_folder, 'img/ha.png')
-    image_url_base = os.path.join(app.static_folder, 'img/ha')
+    base = os.path.join(app.static_folder, 'img/avatar/m.png')
+    image_url_base = os.path.join(app.static_folder, 'img/avatar')
     item_images = os.listdir(image_url_base)
 
     result = Image.open(base, 'r')

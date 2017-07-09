@@ -40,7 +40,7 @@ If you are on Windows, it is heavily suggested you use Vagrant.
       `pip install -r requirements.txt -t lib`
 
 
-9. Install NodeJS dependencies.
+9. Install JavaScript dependencies.
 
       `npm install && npm install -g gulp eslint eslint-plugin-inferno mocha webpack`
 
@@ -94,10 +94,10 @@ Making the following change reduces startup time exponentially, and gets rid of 
 
                   _remove_pred(dirs, lambda d: d.startswith(_IGNORED_PREFIX) or d in _IGNORED_DIRS)
 
-- To deploy to production using gcloud
-gcloud app deploy --project saylua-1280
-- To deploy to staging using gcloud
-gcloud app deploy --project saylua-staging
+- To deploy to production
+npm run deploy-prod
+- To deploy to staging
+npm run deploy
 
 ## Authors
 

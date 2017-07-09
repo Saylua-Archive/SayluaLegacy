@@ -1,50 +1,57 @@
+{% from "_macros/user_link.html" import user_link %}
+{% from "_macros/forms.html" import form_row %}
+
 {% extends "settings/template.html" %}
 {% set section_title = "General" %}
 {% block section_body %}
 <form method="post">
-  <table class="form-table settings-toggle-form">
-    <tr>
-      <th class="label">
-        {{ form.notified_on_pings.label }}
-      </th>
-      <td>
-        <div class="switch">
-          {% for subfield in form.notified_on_pings %}
-            {{ subfield }} {{ subfield.label }}
-          {% endfor %}
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.autosubscribe_threads.label }}
-      </th>
-      <td>
-        <div class="switch">
-          {% for subfield in form.autosubscribe_threads %}
-            {{ subfield }} {{ subfield.label }}
-          {% endfor %}
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <th class="label">
-        {{ form.autosubscribe_posts.label }}
-      </th>
-      <td>
-        <div class="switch">
-          {% for subfield in form.autosubscribe_posts %}
-            {{ subfield }} {{ subfield.label }}
-          {% endfor %}
-        </div>
-      </td>
-    </tr>
+  <table class="form-table settings-checkbox-form">
+    {{ form_row(form.notified_on_pings) }}
+    {{ form_row(form.autosubscribe_threads) }}
+    {{ form_row(form.autosubscribe_posts) }}
     <tr>
       <td></td>
       <td>
-        <input type="submit" value="Save Settings" name="submit">
+        <input type="submit" value="Save Settings" name="settings" />
       </td>
     </tr>
   </table>
+  {{ form.csrf_token }}
 </form>
+
+<h2>Your Titles</h2>
+<table class="alternating-table">
+  <tr class="header h3">
+    <td>
+      Title
+    </td>
+    <td>
+      Preview
+    </td>
+    <td>
+      Action
+    </td>
+  </tr>
+  {% for title in titles %}
+  <tr>
+    <td>
+      {{ title.name }}
+    </td>
+    <td>
+      {{ user_link(g.user, title_class=title.css_class()) }}
+    </td>
+    <td>
+      {% if g.user.title_id == title.id %}
+      <em>Current title</em>
+      {% else %}
+      <form method="post">
+        <input type="hidden" name="title_id" value="{{ title.id }}" />
+        <button name="edit_title" value="switch" class="subtle-button">Switch Title</button>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      </form>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
 {% endblock %}

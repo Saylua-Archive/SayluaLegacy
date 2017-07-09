@@ -6,7 +6,7 @@
 
   <div class="navbar-block navbar-main-links">
     <a href="/" class="navbar-link" data-section="site-menu">
-      <i class="fa fa-fw fa-globe" aria-hidden="true"></i>
+      <i class="fa fa-fw fa-globe" aria-hidden="true" title="Site"></i>
       <label>Site</label>
     </a>
     <div class="left-menu dropdown-menu menu" id="site-menu">
@@ -18,93 +18,147 @@
   </div>
   <div class="navbar-block navbar-main-links">
     <a href="/games/" class="navbar-link" data-section="play-menu">
-      <i class="fa fa-fw fa-paw" aria-hidden="true"></i>
+      <i class="fa fa-fw fa-paw" aria-hidden="true" title="Play"></i>
       <label>Play</label>
     </a>
     <div class="left-menu dropdown-menu menu" id="play-menu">
       <h3>Games and Fun</h3>
-      <a href="/explore/"><img src="/static/img/icons/compass.png"> Explore</a>
-      <a href="/town/"><img src="/static/img/icons/group.png"> Town Square</a>
-      <a href="/arcade/"><img src="/static/img/icons/joystick.png"> The Arcade</a>
+      <a href="/adventure/">
+        <img src="/static/img/icons/compass.png" alt="compass" title="Adventure" aria-label="Adventure" />
+        Adventure
+      </a>
+      <a href="/town/">
+        <img src="/static/img/icons/group.png" alt="people" title="Town Square" aria-label="Town Square" />
+        Town Square
+      </a>
+      <a href="/arcade/">
+        <img src="/static/img/icons/joystick.png" alt="joystick" title="Games" aria-label="Games" />
+        The Arcade
+      </a>
     </div>
   </div>
   <div class="navbar-block navbar-main-links">
     <a href="/shops/" class="navbar-link" data-section="trade-menu">
-      <i class="fa fa-fw fa-suitcase" aria-hidden="true"></i>
+      <i class="fa fa-fw fa-suitcase" aria-hidden="true" title="Trade"></i>
       <label>Trade</label>
     </a>
     <div class="left-menu dropdown-menu menu" id="trade-menu">
       <h3>Buy and Sell</h3>
-      <a href="/shops/"><img src="/static/img/icons/tag_blue.png"> NPC Shops</a>
-      <a href="/bank/"><img src="/static/img/icons/coins.png"> Bank of Saylua</a>
-      <a href="/market/"><img src="/static/img/icons/direction.png"> Player Market</a>
+      <a href="/shop/general/">
+        <img src="/static/img/icons/tag_blue.png" alt="tag" title="Sales" aria-label="Sales" />
+        General Store
+      </a>
+      <a href="/bank/">
+        <img src="/static/img/icons/coins.png" alt="coins" title="Bank" aria-label="Bank" />
+        Bank of Saylua
+      </a>
+      <a href="/market/">
+        <img src="/static/img/icons/direction.png" alt="crossroads" title="Market" aria-label="Market" />
+         Player Market
+       </a>
       <span class="dropdown-separator"></span>
-      <a href="/starshards/"><img src="/static/img/icons/star_1.png"> Purchase Star Shards</a>
+      <a href="/starshards/">
+        <img src="/static/img/icons/star_1.png" alt="star" title="Star Shards" aria-label="Star Shards" />
+        Purchase Star Shards
+      </a>
     </div>
   </div>
   <div class="navbar-block navbar-main-links">
     <a href="/forums/" class="navbar-link" data-section="community-menu">
-      <i class="fa fa-fw fa-comments" aria-hidden="true"></i>
+      <i class="fa fa-fw fa-comments" aria-hidden="true" title="Community"></i>
       <label>Community</label>
     </a>
     <div class="left-menu dropdown-menu menu" id="community-menu">
       <h3>Interact with Others</h3>
-      <a href="/forums/"><img src="/static/img/icons/comment.png"> Forums</a>
-      <a href="https://discord.gg/CPet6aq" target="_blank"><img src="/static/img/icons/transmit.png"> Discord Server</a>
+      <a href="/forums/">
+        <img src="/static/img/icons/comment.png" alt="speech bubble" title="Forums" aria-label="Forums" />
+        Forums
+      </a>
+      <a href="https://discord.gg/CPet6aq" target="_blank">
+        <img src="/static/img/icons/transmit.png" alt="transmission" title="Chat" aria-label="Chat" />
+        Discord Server
+      </a>
       <span class="dropdown-separator"></span>
-      <a href="/reserve/"><img src="/static/img/icons/heart.png"> Pet Reserve</a>
+      <a href="/reserve/">
+        <img src="/static/img/icons/heart.png" alt="heart" title="Reserve" aria-label="Reserve" />
+        Pet Reserve
+      </a>
     </div>
   </div>
   <div class="navbar-block navbar-main-links">
     <a href="/help/" class="navbar-link" data-section="archives-menu">
-      <i class="fa fa-fw fa-book" aria-hidden="true"></i>
+      <i class="fa fa-fw fa-book" aria-hidden="true" title="Archives"></i>
       <label>Archives</label>
     </a>
     <div class="left-menu dropdown-menu menu" id="archives-menu">
       <h3>Learn About Saylua</h3>
-      <a href="/pets/"><img src="/static/img/icons/clipboard_text.png"> Species Guide</a>
-      <a href="/items/"><img src="/static/img/icons/drawer.png"> Item Database</a>
-      <a href="/knowledge/"><img src="/static/img/icons/find.png"> Knowledge Base</a>
+      <a href="/species/">
+        <img src="/static/img/icons/clipboard_text.png" alt="clipboard" title="Species Guide" aria-label="Species Guide" />
+        Species Guide
+      </a>
+      <a href="/items/">
+        <img src="/static/img/icons/drawer.png" alt="drawer" title="Item Database" aria-label="Item Database" />
+        Item Database
+      </a>
+      <a href="/knowledge/">
+        <img src="/static/img/icons/find.png" alt="magnifying glass" title="Knowledge Base" aria-label="Knowledge Base" />
+        Knowledge Base
+      </a>
       <span class="dropdown-separator"></span>
-      <a href="/museum/"><img src="/static/img/icons/palette.png"> The Museum</a>
+      <a href="/museum/">
+        <img src="/static/img/icons/palette.png" alt="palette" title="Museum" aria-label="Museum" />
+        The Museum
+      </a>
     </div>
   </div>
 
   <form class="search navbar-block" action="/search/">
-    <input type="text" placeholder="Search Saylua" name="q">
-    <button><i class="fa fa-fw fa-search" aria-hidden="true"></i></button>
+    <input type="text" placeholder="Search Saylua" name="q" />
+    <button><i class="fa fa-fw fa-search" aria-hidden="true" title="Search"></i></button>
   </form>
 
   {% if g.logged_in %}
     <div id="navbar-user-links" class="navbar-user-links navbar-block">
       <a href="{{ g.user.url() }}" class="navbar-link" data-section="user-menu">
-        <i class="fa fa-fw fa-user" aria-hidden="true"></i>
+        <i class="fa fa-fw fa-user" aria-hidden="true" title="User"></i>
       </a>
       <a href="/notifications/" class="navbar-link" data-section="notifications-menu">
-        <i class="fa fa-fw fa-bell" aria-hidden="true"></i>
+        <i class="fa fa-fw fa-bell" aria-hidden="true" title="Notifications"></i>
         {% if notifications_count > 99 %}
           <span class="alert-number">99+</span>
         {% elif notifications_count > 0 %}
-          <span class="alert-number">{{notifications_count}}</span>
+          <span class="alert-number">{{ notifications_count }}</span>
         {% endif %}
       </a>
       <a href="/messages/" class="navbar-link" data-section="messages-menu">
-        <i class="fa fa-fw fa-envelope" aria-hidden="true"></i>
+        <i class="fa fa-fw fa-envelope" aria-hidden="true" title="Messages"></i>
         {% if nav_messages_count > 99 %}
           <span class="alert-number">99+</span>
         {% elif nav_messages_count > 0 %}
-          <span class="alert-number">{{nav_messages_count}}</span>
+          <span class="alert-number">{{ nav_messages_count }}</span>
         {% endif %}
       </a>
       <div id="dropdown-user-menu" class="dropdown-menu">
         <div id="user-menu" class="menu">
-          <h3>Logged in as {{g.user.name}}</h3>
-          <a href="{{ g.user.url() }}"><img src="/static/img/icons/user.png"> My Profile</a>
-          <a href="/settings/"><img src="/static/img/icons/cog.png"> Account Settings</a>
+          <h3>Logged in as {{ g.user.name }}</h3>
+          <a href="{{ g.user.url() }}">
+            <img src="/static/img/icons/user.png" alt="user" title="My Profile" aria-label="My Profile" />
+            My Profile
+          </a>
+          <a href="/settings/">
+            <img src="/static/img/icons/cog.png" alt="cog" title="Settings" aria-label="Settings" />
+            Account Settings
+          </a>
           <span class="dropdown-separator"></span>
-          <a href="/achievements/{{g.user.name}}/"><img src="/static/img/icons/award_star_gold.png"> My Achievements</a>
+          <a href="/achievements/{{g.user.name}}/">
+            <img src="/static/img/icons/award_star_gold.png" alt="ribbon" title="Achievements" aria-label="Achievements" />
+            My Achievements
+          </a>
           <span class="dropdown-separator"></span>
-          <a href="/logout/"><img src="/static/img/icons/lock_unlock.png"> Logout</a>
+          <a href="/logout/">
+            <img src="/static/img/icons/lock_unlock.png" alt="unlock" title="Logout" aria-label="Logout" />
+            Logout
+          </a>
         </div>
         <div id="notifications-menu" class="menu">
           <h3>Latest Notifications</h3>
@@ -120,7 +174,10 @@
             {% endfor %}
           </ul>
           <span class="dropdown-separator"></span>
-          <a href="/notifications/"><img src="/static/img/icons/star_1.png"> View All Notifications</a>
+          <a href="/notifications/">
+            <img src="/static/img/icons/star_1.png" alt="star" title="All Notifications" aria-label="All Notifications" />
+            View All Notifications
+          </a>
         </div>
         <div id="messages-menu" class="menu">
           <h3>Latest Messages</h3>
@@ -136,14 +193,17 @@
             {% endfor %}
           </ul>
           <span class="dropdown-separator"></span>
-          <a href="/messages/"><img src="/static/img/icons/email.png"> View All Messages</a>
+          <a href="/messages/">
+            <img src="/static/img/icons/email.png" alt="mail" title="All Messages" aria-label="All Messages" />
+            View All Messages
+          </a>
         </div>
       </div>
     </div>
   {% else %}
     <div class="navbar-block">
       <a href="/login/" class="navbar-link">
-        <i class="fa fa-fw fa-user" aria-hidden="true"></i>
+        <i class="fa fa-fw fa-user" aria-hidden="true" title="User"></i>
       </a>
     </div>
   {% endif %}

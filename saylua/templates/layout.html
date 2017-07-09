@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="{% if use_admin_theme %}theme-admin{% else %}{{ theme_class }}{% endif %}{% if fullscreen %} hide-sidebar{% endif %}">
 <head>
   <meta charset="utf-8">
   <title>
@@ -9,9 +9,10 @@
       Saylua
     {% endif %}
   </title>
-  <meta name="description" content="A new virtual petsite.">
-  <meta name="author" content="Saylua">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0">
+  <meta name="description" content="A new virtual petsite." />
+  <meta name="author" content="Saylua" />
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
   <link rel="stylesheet" href="{{ include_static('css/styles.min.css') }}">
@@ -26,7 +27,7 @@
   <![endif]-->
 </head>
 
-<body class="{% if use_admin_theme %}theme-admin{% endif %} {% if fullscreen %}hide-sidebar{% endif %}">
+<body>
 <div id="banner" class="banner">
   <a id="logo" href="/" class="logo"><img id="logo-image" src="/static/img/logo.png" alt="Saylua" title="Saylua" /></a>
 </div>
@@ -39,20 +40,7 @@
 <div id="main-body" class="main-body">
   {% include "sidebar.html" %}
   <div id="main-body-column" class="main-body-column">
-    <div id="notifications-container" class="notifications-container">
-      {% with flashed_messages = get_flashed_messages(with_categories=true) %}
-        {% if flashed_messages %}
-          {% for category, flashed_message in flashed_messages %}
-            {% if category == 'error' %}
-              {% set className = ' error' %}
-            {% endif %}
-            <div class="notification{{ className }}">{{ flashed_message }}
-              <a class="close-button" href="#" title="close">&#x00d7;</a>
-            </div>
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
-    </div>
+    {% include "notifications.html" %}
     <div id="main-body-content" class="main-body-content">
       {% block body %}{% endblock %}
     </div>
@@ -60,17 +48,40 @@
 </div>
 {% endblock %}
 
+{% if self.moderation_actions() and g.logged_in and g.user.has_moderation_access() %}
+<div id="moderation-actions" class="moderation-actions">
+  <div class="sidebar-filler"></div>
+  <div class="moderation-actions-content">
+    <h3>Moderation actions</h3>
+    <div>
+      {% block moderation_actions %}{% endblock %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if self.admin_actions() and g.logged_in and g.user.has_admin_access() %}
+<div id="admin-actions" class="admin-actions">
+  <div class="sidebar-filler"></div>
+  <div class="admin-actions-content">
+    <h3>Admin actions</h3>
+    <div>
+      {% block admin_actions %}{% endblock %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
 <footer id="footer">
   <div class="sidebar-filler"></div>
   <div class="footer-content">
     <p>
       <a href="/online/">{{users_online_count|pluralize('User')}} Online</a> &bull;
       <a href="#">Back to Top</a> &bull;
-      <a href="#">About</a> &bull;
-      <a href="#">Credits</a> &bull;
-      <a href="#">Terms of Service</a> &bull;
-      <a href="#">Contact Us</a> &bull;
-      <a href="#">Staff</a> &bull;
+      <a href="/page/about/">About</a> &bull;
+      <a href="/page/credits/">Credits</a> &bull;
+      <a href="/page/terms/">Terms of Service</a> &bull;
+      <a href="/page/contact/">Contact Us</a> &bull;
       <span id="social-icons">
         <a href="https://www.facebook.com/officialsaylua/" target="_blank">
           <i class="fa fa-fw fa-facebook" aria-hidden="true"></i>
@@ -86,13 +97,23 @@
         </a>
       </span>
     </p>
-    <p>
-      <i class="fa fa-clock-o" aria-hidden="true"></i> <span id="site-time">{{saylua_time|show_time}}</span>
-    </p>
+    <form method="post" action="{{ url_for('general.change_theme') }}">
+      <i class="fa fa-clock-o" aria-hidden="true"></i>
+      <span id="site-time">{{ saylua_time|show_time }}</span>
+      &bull;
+      <button class="link-button" name="theme_id" value="0">
+        <i class="fa fa-fw fa-sun-o" aria-hidden="true"></i>
+      </button>
+      &bull;
+      <button class="link-button" name="theme_id" value="1">
+        <i class="fa fa-fw fa-moon-o" aria-hidden="true"></i>
+      </button>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    </form>
     <p>
       &copy; 2016 <a href="/">Saylua</a>
     </p>
-    {% if g.logged_in and g.user.get_role().can_access_admin %}
+    {% if g.logged_in and g.user.has_admin_access() %}
     <p>
       <a href="/admin/">Admin Panel</a>
     </p>

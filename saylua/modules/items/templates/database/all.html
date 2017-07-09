@@ -1,24 +1,22 @@
-{% from "_macros/pagination.html" import pagination %}
 {% extends "layout.html" %}
 {% set page_title = "Item Database" %}
-
 {% block header_scripts %}
   <link rel="stylesheet" type="text/css" href="{{ include_static('css/items.min.css') }}">
 {% endblock %}
 {% block body %}
 <h1>Item Database</h1>
 <div class="center">
-  {{ pagination() }}
+  {{ pagination.render() }}
 </div>
-{% for item in items %}
-<div>
-  <a href="{{ item.url() }}">
-    <img src="{{ item.image_url() }}" class="item">
+<div class="grid-container">
+{% for item in pagination.items %}
+  <a href="{{ item.url() }}" class="grid-element">
+    <img src="{{ item.image_url() }}" class="item" />
     {{ item.name }}
   </a>
-</div>
 {% endfor %}
+</div>
 <div class="center">
-  {{ pagination() }}
+  {{ pagination.render() }}
 </div>
 {% endblock %}

@@ -1,21 +1,15 @@
+{% from "_macros/user_link.html" import user_link %}
+{% from "_macros/pet_avatar_view.html" import pet_avatar_view %}
+
 <div id="sidebar" class="sidebar">
   {% if g.logged_in %}
   <div id="avatar-section" class="sidebar-section">
-    <div id="pet-avatar-view" class="pet-avatar-view">
-      <a href="/avatar/" id="avatar-view" class="avatar-view">
-        <img src="{{g.user.ha_url}}" id="avatar-image" />
-      </a>
-      {% if g.user.companion %}
-      <a href="/pet/{{ g.user.companion.soul_name }}/" id="active-pet-view" class="active-pet-view">
-        <img src="{{ g.user.companion.image() }}" id="active-pet-image">
-      </a>
-      {% endif %}
-    </div>
+    {{ pet_avatar_view(g.user) }}
   </div>
   <div id="user-info-section" class="sidebar-section">
-    <p>You are <a href="{{ g.user.url() }}">{{ g.user.name }}</a></p>
+    <p>You are {{ user_link(g.user) }}</p>
     {% if g.user.companion %}
-    <p>Your companion is <a href="/pet/{{ g.user.companion.soul_name }}/">{{ g.user.companion.name }}</a></p>
+    <p>Your companion is <a href="{{ g.user.companion.url() }}">{{ g.user.companion.name }}</a></p>
     {% endif %}
     <p>
       <img src="/static/img/icons/weather_clouds.png">
@@ -57,6 +51,7 @@
         </td>
       </tr>
     </table>
+    {{ sidebar_form.csrf_token }}
   </form>
   {% endif %}
 </div>

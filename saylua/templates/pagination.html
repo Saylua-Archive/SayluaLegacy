@@ -1,0 +1,54 @@
+{% if page_count > 1 %}
+
+  {% set start_page_range = current_page - page_buffer %}
+
+  {% set end_page_range = current_page + page_buffer %}
+
+  {% if start_page_range < 1 %}
+    {% set end_page_range = end_page_range - (start_page_range - 1) %}
+    {% set start_page_range = 1 %}
+  {% endif %}
+
+  {% if end_page_range > page_count %}
+    {% set start_page_range = start_page_range - (end_page_range - page_count) %}
+    {% if start_page_range < 1 %}
+      {% set start_page_range = 1 %}
+    {% endif %}
+    {% set end_page_range = page_count %}
+  {% endif %}
+
+
+  <div class="pagination">
+
+  {% if current_page > 1 %}
+    <a href="{{ url_base }}{{ current_page - 1 }}{{ url_end }}">&#8592; Prev</a>
+  {% else %}
+    <span>&#8592; Prev</span>
+  {% endif %}
+
+  {% if start_page_range > 1 %}
+    <a href="{{ url_base }}1{{ url_end }}">1</a>
+    <span>...</span>
+  {% endif %}
+
+  {% for i in range(start_page_range, end_page_range + 1) %}
+    {% if i == current_page %}
+    <span class="active">{{ i }}</span>
+    {% else %}
+    <a href="{{ url_base }}{{ i }}{{ url_end }}">{{ i }}</a>
+    {% endif %}
+  {% endfor %}
+
+  {% if end_page_range < page_count %}
+    <span>...</span>
+    <a href="{{ url_base }}{{ page_count }}{{ url_end }}">{{ page_count }}</a>
+  {% endif %}
+
+  {% if current_page < page_count %}
+    <a href="{{ url_base }}{{ current_page + 1 }}{{ url_end }}">Next &#8594;</a>
+  {% else %}
+    <span>Next &#8594;</span>
+  {% endif %}
+  </div>
+
+{% endif %}

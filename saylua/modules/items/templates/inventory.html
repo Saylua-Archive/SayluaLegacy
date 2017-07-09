@@ -1,4 +1,3 @@
-{% from "_macros/pagination.html" import pagination %}
 {% extends "layout.html" %}
 {% set page_title = "My Inventory" %}
 {% block header_scripts %}
@@ -6,19 +5,9 @@
 {% endblock %}
 {% block body %}
 <h1>My Inventory</h1>
-<div class="full">
-  {{ pagination() }}
-</div>
-<div class="inventory-container">
-  {% for entry in items %}
-    <div class="inventory-item">
-      <img src="{{ entry.item.image_url() }}" class="item">
-      <span class="full">{{ entry.item.name }}</span>
-      <small class="full">Count: {{ entry.count }}</small>
-    </div>
-  {% endfor %}
-</div>
-<div class="full">
-  {{ pagination() }}
-</div>
+<div id="inventory-mount"></div>
+{% endblock %}
+
+{% block footer_scripts %}
+<script src="{{ include_static('js/Inventory.min.js') }}"></script>
 {% endblock %}

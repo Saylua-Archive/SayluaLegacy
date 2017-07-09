@@ -1,0 +1,106 @@
+$newsBorderColor: $neutralDarkColor;
+
+.news-navigation {
+  font-size: 2rem;
+  line-height: 200%;
+  width: 100%;
+  margin-bottom: 1em;
+  text-align: center;
+  border-top: 4px $newsBorderColor double;
+  border-bottom: 4px $newsBorderColor double;
+}
+
+h1.news-header {
+  line-height: 150%;
+  margin: 1em 0 0.5em 0;
+  padding: 0;
+  word-spacing: 0.5rem;
+}
+
+.newspaper-body {
+  display: flex;
+  flex-direction: row;
+  padding: 1em 0.8rem;
+
+  align-items: baseline;
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .newspaper-main {
+    padding-right: 1.6rem;
+
+    flex-grow: 1;
+    flex-shrink: 1;
+
+    @media (max-width: 500px) {
+      padding-right: 0;
+    }
+
+    h2 {
+      margin-bottom: 0;
+      border-bottom: $newsBorderColor 1px solid;
+
+      .news-post-avatar {
+        float: left;
+        width: 6rem;
+        height: 6rem;
+        margin-right: 0.8rem;
+        border: $newsBorderColor 3px double;
+        background: $mainSoftestColor;
+      }
+    }
+
+    .news-post-attribution {
+      font-size: 1.2rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    article {
+      width: 100%;
+      margin: 2em 0;
+      padding: 0 0.8rem;
+    }
+  }
+
+  .newspaper-side {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 30%;
+
+    flex-grow: 0;
+    flex-shrink: 0;
+
+    @media (max-width: 500px) {
+      flex-direction: column-reverse;
+      width: 100%;
+    }
+
+    h3 {
+      margin: 0;
+      text-align: center;
+      border: 0;
+    }
+
+    button {
+      margin: 0.5em 0;
+    }
+
+    .newspaper-side-box {
+      width: 100%;
+      margin-bottom: 1em;
+      padding: 0.5em 0.8rem;
+      border: $newsBorderColor 4px double;
+
+      ul {
+        margin: 0.5em 0;
+        padding-left: 2.4rem;
+      }
+    }
+  }
+}

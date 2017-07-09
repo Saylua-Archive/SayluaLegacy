@@ -1,6 +1,8 @@
 from saylua import app, db
-from saylua.models.user import User, Username
+from saylua.modules.users.models.db import User, Username, Title
 from saylua.wrappers import login_required
+
+from saylua.utils.email import send_confirmation_email
 
 from flask import render_template, redirect, g, url_for, flash, request
 
@@ -10,40 +12,64 @@ from ..forms.settings import (GeneralSettingsForm, DetailsForm, UsernameForm,
 import datetime
 
 
+SETTINGS_ERROR_MESSAGE = "You must login to change your settings."
+
+
 # User Settings
-@login_required
+@login_required(error=SETTINGS_ERROR_MESSAGE)
 def user_settings():
-    form = GeneralSettingsForm(request.form, obj=g.user)
-    if request.method == "POST":
-        if form.validate():
+    form = GeneralSettingsForm(formdata=None, obj=g.user)
+    titles = [Title(name='User', canon_name='user', id=None)] + g.user.titles
+    if request.form.get('settings'):
+        form = GeneralSettingsForm(request.form, obj=g.user)
+        if form.validate_on_submit():
             form.populate_obj(g.user)
             db.session.commit()
             flash("Your settings have been saved.")
+    elif request.form.get('edit_title'):
+        title_id = request.form.get('title_id')
+        if title_id == 'None':
+            title_id = None
         else:
-            flash("You have tried to save invalid settings.", "error")
+            try:
+                title_id = int(title_id)
+            except ValueError:
+                flash('You have tried to change to an invalid title.', 'error')
+
+        found = False
+        for title in titles:
+            if title_id == title.id:
+                found = True
+                break
+
+        if not found:
+            flash("Sorry, you don't have access to that title.")
+        else:
+            g.user.title_id = title_id
+            db.session.commit()
 
     # Allows user to change general on/off settings
-    return render_template("settings/main.html", form=form)
+    return render_template("settings/main.html", form=form, titles=titles)
 
 
-@login_required
+@login_required(error=SETTINGS_ERROR_MESSAGE)
 def user_settings_details():
     form = DetailsForm(request.form, obj=g.user)
-    if request.method == "POST" and form.validate():
+    if form.validate_on_submit():
         form.populate_obj(g.user)
         db.session.commit()
         flash("Your user details have been saved.")
     return render_template("settings/details.html", form=form)
 
 
-@login_required
+@login_required(error=SETTINGS_ERROR_MESSAGE)
 def user_settings_username():
     form = UsernameForm(request.form, obj={"username": g.user.name})
     form.setUser(g.user)
 
     cutoff_time = datetime.datetime.now() - datetime.timedelta(days=1)
     can_change = g.user.last_username_change < cutoff_time
-    if request.method == "POST" and form.validate():
+    if form.validate_on_submit():
         username = form.username.data
         if username.lower() in g.user.usernames:
             # If the user is changing to a name they already own, change case
@@ -76,7 +102,7 @@ def user_settings_username():
     return render_template("settings/username.html", form=form)
 
 
-@login_required
+@login_required(error=SETTINGS_ERROR_MESSAGE)
 def user_settings_username_release():
     username = request.form.get("username")
     if not username or username not in g.user.usernames:
@@ -90,28 +116,29 @@ def user_settings_username_release():
     return redirect(url_for("users.settings_username"))
 
 
-@login_required
+@login_required(error=SETTINGS_ERROR_MESSAGE)
 def user_settings_email():
     form = EmailForm(request.form, obj=g.user)
     form.setUser(g.user)
-    if request.method == "POST" and form.validate():
+    if form.validate_on_submit():
         g.user.email = form.email.data
-        g.user.email_verified = False
+        g.user.email_confirmed = False
         db.session.commit()
-        flash("Your email has successfully been changed!")
+        flash("Your email address has been changed! A confirmation has been sent to your new email.")
 
-        # TODO Send new validation email here.
+        # Success! Send confirmation email.
+        send_confirmation_email(g.user)
 
     return render_template("settings/email.html", form=form)
 
 
-@login_required
+@login_required(error=SETTINGS_ERROR_MESSAGE)
 def user_settings_password():
     form = PasswordForm(request.form)
     form.setUser(g.user)
-    if request.method == "POST" and form.validate():
+    if form.validate_on_submit():
         password = form.new_password.data
-        g.user.phash = User.hash_password(password)
+        g.user.password_hash = User.hash_password(password)
         db.session.commit()
         flash("Your password has been changed.")
         return redirect(url_for("users.settings_password"))

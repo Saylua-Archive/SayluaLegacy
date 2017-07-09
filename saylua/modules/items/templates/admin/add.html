@@ -6,10 +6,12 @@
 <p>
   Add new items to the site here!
 </p>
-<form method="post" class="validated-form">
+<form method="post" class="validated-form" enctype="multipart/form-data">
   <table class="form-table">
     {{ form_row(form.name) }}
+    {{ form_row(form.canon_name) }}
     {{ form_row(form.image) }}
+    {{ form_row(form.category_id) }}
     {{ form_row(form.description) }}
     <tr>
       <td></td>
@@ -18,5 +20,6 @@
       </td>
     </tr>
   </table>
+  {{ form.csrf_token }}
 </form>
 {% endblock %}

@@ -1,0 +1,59 @@
+{% from "_macros/forms.html" import form_row, form_checkbox %}
+
+{% extends "admin/template.html" %}
+{% set section_title = "Manage Boards" %}
+{% block section_body %}
+
+<h2>Edit Existing Boards</h2>
+
+<table class="alternating-table">
+{% for category in categories %}
+  <tr class="h3 header">
+    <td>
+      {{ category.title }}
+    </td>
+    <td class="small">
+      (<a href="{{ category.url() }}">View Category</a> /
+      <a href="/admin/forums/categories/{{ category.canon_name }}/">Edit Category</a>)
+    </td>
+  </tr>
+  {% for board in category.boards %}
+  <tr>
+    <td>
+      {{ board.title }}
+      (<a href="{{ board.url() }}">View</a>)
+    </td>
+    <td>
+      <a href="/admin/forums/boards/{{ board.canon_name }}/">
+        Edit Board
+      </a>
+    </td>
+  </tr>
+{% endfor %}
+{% endfor %}
+</table>
+
+<h2>Create New Board</h2>
+<form method="post" class="validated-form">
+  <table class="form-table">
+    {{ form_row(form.title) }}
+    {{ form_row(form.canon_name, tip="A unique name used in the board's URL. Valid characters: a-z, 0-9, _") }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.order) }}
+    {{ form_row(form.category_id) }}
+    <tr>
+      <td></td>
+      <td>
+        {{ form_checkbox(form.moderators_only) }}
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" value="Add New Board" name="submit" />
+      </td>
+    </tr>
+  </table>
+  {{ form.csrf_token }}
+</form>
+{% endblock %}

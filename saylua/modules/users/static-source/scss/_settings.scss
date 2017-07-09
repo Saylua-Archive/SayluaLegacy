@@ -1,0 +1,22 @@
+@import 'assets/transitions';
+
+.settings-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: stretch;
+}
+
+.settings-body {
+  flex-grow: 1;
+}
+
+.settings-checkbox-form {
+  th.label {
+    width: 45%;
+
+    @media (max-width: 500px) {
+      width: 100%;
+    }
+  }
+}

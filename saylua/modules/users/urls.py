@@ -6,9 +6,11 @@ urlpatterns = [
     url('/login/', view_func=views.login.login, name='login', methods=['GET', 'POST']),
     url('/login/recover/', view_func=views.recover.recover_login, name='login_recover',
         methods=['GET', 'POST']),
-    url('/login/reset/<user>/<code>/', view_func=views.recover.reset_password, name='login_reset'),
+    url('/login/reset/<int:user_id>/<code>/', view_func=views.recover.reset_password,
+        name='login_reset', methods=['GET', 'POST']),
     url('/logout/', view_func=views.login.logout, name='logout'),
     url('/register/', view_func=views.register.register, name='register', methods=['GET', 'POST']),
+    url('/register/email/', view_func=views.register.register_email, name='register_email', methods=['GET', 'POST']),
 
     # Online users
     url('/online/', view_func=views.online.users_online, name='online'),
@@ -33,7 +35,11 @@ urlpatterns = [
 
     # Admin views
     url('/admin/user/', view_func=views.admin.user_manage,
-        name='user_manage', methods=['GET', 'POST']),
-    url('/admin/user/invite/', view_func=views.admin.user_invite,
-        name='user_invite', methods=['GET', 'POST']),
+        name='admin_manage', methods=['GET', 'POST']),
+    url('/admin/user/<username>/', view_func=views.admin.user_manage_single,
+        name='admin_manage_single', methods=['GET', 'POST']),
+    url('/admin/user/<username>/ban/', view_func=views.admin.user_ban,
+        name='admin_ban', methods=['GET', 'POST']),
+    url('/admin/invite/', view_func=views.admin.user_invite,
+        name='admin_invite', methods=['GET', 'POST']),
 ]

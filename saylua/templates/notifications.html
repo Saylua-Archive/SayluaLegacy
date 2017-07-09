@@ -1,0 +1,72 @@
+<div id="notifications-container" class="notifications-container">
+  {% with flashed_messages = get_flashed_messages(with_categories=true) %}
+    {% if flashed_messages %}
+      {% for category, flashed_message in flashed_messages %}
+        {% if category == 'error' %}
+          {% set className = ' error' %}
+        {% endif %}
+        <div class="notification{{ className }}">{{ flashed_message }}
+          <a class="close-button" href="#" title="close">&#x00d7;</a>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+{% if g.logged_in and not hide_reminders %}
+  {% if g.user.story_level == 0 %}
+  <div class="notification">
+    <img src="{{ random_portrait_image() }}" class="portrait" />
+    <div>
+      <p>
+        Wandering around Saylua can be pleasant, but it's nice to also have somewhere
+        to return.
+      </p>
+      <p>
+        <a href="{{ url_for('general.intro_side') }}">Pick which side you'll live on, so you can settle
+          down into your new home</a>.
+      </p>
+    </div>
+  </div>
+  {% elif g.user.story_level == 1 %}
+  <div class="notification">
+    <img src="{{ random_portrait_image() }}" class="portrait" />
+    <div>
+      <p>
+        Exploring Saylua alone can be dangerous. You should make sure to travel with a companion
+        by your side.
+      </p>
+      <p>
+        <a href="{{ url_for('general.intro_companion') }}">Bring your first companion with you.</a>
+      </p>
+    </div>
+  </div>
+  {% elif g.user.story_level == 2 %}
+  <div class="notification">
+    <img src="{{ random_portrait_image() }}" class="portrait" />
+    <div>
+      <p>
+        With your first companion beside you and a destination in sight, it
+        seems you're almost ready to get going!
+      </p>
+      <p>
+        <a href="{{ url_for('general.intro_avatar') }}">
+          Except... Don't forget to dress for your adventures.
+        </a>
+      </p>
+    </div>
+  </div>
+  {% elif not g.user.email_confirmed %}
+  <div class="notification">
+    <p>
+      Confirm your email address to get access to more features on Saylua.
+      We've sent a confirmation email to <strong>{{ g.user.email }}</strong>.
+      <a href="/settings/email/">Change Email Address?</a>
+    </p>
+
+    <form method="post" action="/register/email/">
+      <input type="submit" class="small" name="resend" value="Resend Confirmation?" />
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    </form>
+  </div>
+  {% endif %}
+{% endif %}

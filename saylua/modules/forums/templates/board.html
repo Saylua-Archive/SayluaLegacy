@@ -1,20 +1,27 @@
-{% from "_macros/pagination.html" import pagination %}
 {% from "_macros/forms.html" import form_row %}
+{% from "_macros/user_link.html" import user_link %}
+
 {% extends "layout.html" %}
 {% set page_title = board.title %}
+
 {% block header_scripts %}
-  <link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
 {% endblock %}
+
 {% block body %}
 <h1>Viewing Board: {{ board.title }}</h1>
-<span class="forum-breadcrumb center">
-  <a href="/forums/">Forums</a> &#187; {{ board.title }}
+<span class="forum-breadcrumb">
+  <a href="/forums/">Forums</a> &#187;
+  <a href="{{ board.category.url() }}">{{ board.category.title }}</a> &#187;
+  {{ board.title }}
 </span>
 
-<a class="write-thread-link" href="#write-thread">
-  <img src="/static/img/icons/pencil.png">
-  Make a New Thread
-</a>
+<div class="center">
+  <a class="subtle-button" href="#write-thread">
+    <img src="/static/img/icons/pencil.png" alt="pencil" title="Write" />
+    Make a New Thread
+  </a>
+</div>
 
 <h2 class="forum-board-header">
   <div class="forum-thread-icon">
@@ -32,25 +39,23 @@
     </div>
   </div>
 </h2>
-{% for thread in threads %}
-<div class="forum-thread">
+{% for thread in pagination.items %}
+<div class="forum-thread{% if thread.is_pinned %} highlight{% endif %}">
   <div class="forum-thread-icon">
-    <img src="/static/img/icons/lock.png" />
     {% if thread.is_pinned %}
-    <img src="/static/img/icons/pin.png">
+    <img src="/static/img/icons/pin.png" alt="pin" title="Pinned" aria-label="Pinned" />
     {% endif %}
     {% if thread.is_locked %}
-    <img src="/static/img/icons/lock.png">
+    <img src="/static/img/icons/lock.png" alt="lock" title="Locked" aria-label="Locked" />
     {% endif %}
   </div>
   <div class="forum-thread-content">
     <div class="forum-thread-info">
-      <a href="/forums/thread/{{ thread.id }}/" class="forum-thread-title">
+      <a href="{{ thread.url() }}" class="forum-thread-title">
         {{ thread.title }}
       </a>
       <small>
-        Started by <a href="{{ thread.author.url() }}">
-          {{ thread.author.name }}</a>
+        Started by {{ user_link(thread.author) }}
         <span class="line">({{ thread.date_created|relative_time }})</span>
       </small>
     </div>
@@ -61,11 +66,10 @@
       {% set last_post = thread.latest_post() %}
       {% if last_post is not none %}
       {% if last_post.author.companion %}
-      <img src="{{ last_post.author.companion.image() }}" />
+      <img src="{{ last_post.author.companion.image_url() }}" alt="{{ last_post.author.companion.name }}" />
       {% endif %}
       <p>
-        by <a href="/user/{{ last_post.author.name }}">
-          {{ last_post.author.name }}</a>
+        by {{ user_link(last_post.author) }}
         <span class="line">({{ last_post.date_created|relative_time }})</span>
       </p>
       {% endif %}
@@ -75,7 +79,7 @@
 {% endfor %}
 
 <div class="center">
-{{ pagination(page_count=page_count) }}
+{{ pagination.render() }}
 </div>
 
 <h2 class="forum-board-header" id="write-thread">
@@ -84,6 +88,29 @@
   </div>
   Make a New Thread
 </h2>
+{% if not g.logged_in %}
+<p>
+  Please <a href="/login/">login</a> before posting any forum threads.
+</p>
+{% elif not board.can_post(g.user) %}
+  {% if g.user.is_banned() %}
+  <p>
+    Sorry, you can't post threads while banned.
+  </p>
+  {% elif g.user.is_muted() %}
+  <p>
+    Sorry, you can't post threads while muted.
+  </p>
+  {% elif not g.user.email_confirmed %}
+  <p>
+    Please confirm your email address before making new forum threads.
+  </p>
+  {% else %}
+  <p>
+    Sorry, you don't have permission to post on this board.
+  </p>
+  {% endif %}
+{% else %}
 <form method="post" class="validated-form">
   <table class="form-table">
     {{ form_row(form.title) }}
@@ -96,5 +123,11 @@
       </td>
     </tr>
   </table>
+  {{ form.csrf_token }}
 </form>
+{% endif %}
+{% endblock %}
+
+{% block admin_actions %}
+<a href="/admin/forums/boards/{{ board.canon_name }}/" class="button">Edit Board</a>
 {% endblock %}

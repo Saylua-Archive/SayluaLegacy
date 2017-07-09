@@ -1,11 +1,11 @@
-from saylua.models.user import User
+from saylua.modules.users.models.db import User
 from saylua.wrappers import login_required
 
 from flask import render_template, redirect, g
 
 
 # User Profiles
-@login_required
+@login_required()
 def user_profile_default():
     return redirect(g.user.url(), code=302)
 
@@ -16,11 +16,11 @@ def user_profile(username):
     if g.logged_in and username.lower() is g.user.name.lower():
         user = g.user
     else:
-        user = User.from_username(username)
+        user = User.by_username(username)
 
     # User not found
     if user is None:
-        return render_template('notfound.html')
+        return render_template('notfound.html'), 404
 
     # Redirect the URL if this is not the main username for the user
     if user.name.lower() != username:

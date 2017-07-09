@@ -1,0 +1,14 @@
+{% macro pet_avatar_view(user) -%}
+<div class="pet-avatar-view">
+  <div class="avatar-view">
+    <a href="{{ user.url() }}">
+      <img src="{{ user.avatar_url() }}" alt="human avatar" title="{{ user.name }}'s Avatar'" aria-label="{{ user.name }}'s Avatar'" />
+    </a>
+  </div>
+  {% if user.companion %}
+  <a href="{{ user.companion.url() }}" class="active-pet-view">
+    <img src="{{ user.companion.image_url() }}" class="active-pet-image" alt="active companion" title="{{ user.companion.name }}" aria-label="{{ user.companion.name }}" />
+  </a>
+  {% endif %}
+</div>
+{%- endmacro %}

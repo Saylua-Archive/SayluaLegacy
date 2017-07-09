@@ -8,6 +8,14 @@
     @extend %alternating-item;
   }
 
+  tr.header.h3, tr.header.h2 {
+    td, th {
+      padding: 0.25em 0.8rem;
+      padding-top: 1em;
+      vertical-align: bottom;
+    }
+  }
+
   td {
     padding: 0.25em 1.6rem;
   }

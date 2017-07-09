@@ -1,4 +1,5 @@
 from flask import render_template
+from saylua.utils.pagination import Pagination
 
 
 def museum_main():
@@ -6,7 +7,7 @@ def museum_main():
 
 
 def book_shelf():
-    return render_template("shelf.html")
+    return render_template("shelf.html", pagination=Pagination())
 
 
 def book_read(book_id):

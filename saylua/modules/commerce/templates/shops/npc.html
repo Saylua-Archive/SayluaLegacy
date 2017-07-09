@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% set page_title = "The General Store" %}
+{% block body %}
+<h1>The General Store</h1>
+<div class="npc-bust">
+  <img src="{{ random_character_image() }}" />
+</div>
+<p>
+  Heh, welcome to the General Store. The most general store in all of Saylua.
+  We sell literally everything.
+</p>
+
+<div class="grid-container">
+{% for item in items %}
+  <div class="grid-element">
+    <a href="{{ item.url() }}">
+      <img src="{{ item.image_url() }}" class="item" />
+      {{ item.name }}
+    </a>
+    <p>
+      {{ (item.buyback_price)|format_number }} Cloud Coins
+    </p>
+    <form method="post">
+      <input type="number" name="amount" value="1" />
+      <button class="subtle-button" name="item_id" value="{{ item.id }}">
+        Buy
+      </button>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    </form>
+  </div>
+{% endfor %}
+</div>
+{% endblock %}

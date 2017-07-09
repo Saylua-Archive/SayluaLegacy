@@ -1,0 +1,82 @@
+@import '../assets/transitions';
+
+.grid-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+  .grid-element,
+  .grid-element-big,
+  .grid-element-half,
+  .grid-element-third {
+    @include fast-color-trans;
+    display: flex;
+    flex-direction: column;
+    padding: 1em 1.6rem;
+    text-align: center;
+
+    align-items: center;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+
+    &:hover {
+      background-color: $mainSoftestColor;
+    }
+
+    &.selected {
+      background-color: $accentSoftColor;
+    }
+  }
+
+  .grid-element {
+    width: 20%;
+  }
+
+  .grid-element-big {
+    width: 25%;
+  }
+
+  .grid-element-third {
+    width: 33%;
+    &:nth-child(3n + 1) {
+      width: 34%;
+    }
+  }
+
+  .grid-element-half {
+    width: 50%;
+  }
+}
+
+// A class for a view that contains a data table and an image.
+// Sort of like an id card.
+.data-card {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin: auto;
+  padding: 2em 1.6rem;
+
+  align-items: center;
+  justify-content: space-around;
+
+  .data-card-image {
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+
+  table {
+    min-width: 50%;
+    text-align: left;
+  }
+
+  @media(max-width: 500px) {
+    flex-direction: column;
+
+    align-items: center;
+  }
+}

@@ -1,0 +1,39 @@
+{% from "_macros/user_link.html" import user_link %}
+
+{% macro forum_post(post) -%}
+<div class="forum-post" id="post-{{ post.id }}">
+  <div class="forum-post-info">
+    {{ user_link(post.author) }}
+    Post Count: {{ post.author.post_count }}
+    <div class="pet-avatar-view">
+      <a href="{{ post.author.url() }}" class="avatar-view">
+        <img src="{{ post.author.avatar_url() }}" />
+      </a>
+      {% if post.author.companion %}
+      <a href="{{ post.author.companion.url() }}" class="active-pet-view">
+        <img src="{{ post.author.companion.image_url() }}">
+      </a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="forum-post-body">
+    <div class="forum-post-metadata">
+      {{ post.date_created|expanded_relative_time }}
+      <span class="forum-post-actions">
+        <a href="{{ post.anchor() }}">Link</a>
+        {% if post.can_edit(g.user) %}
+        | <a href="{{ url_for('forums.post_edit', post_id=post.id) }}">Edit Post</a>
+        {% endif %}
+      </span>
+    </div>
+
+    {{ post.body|markdown }}
+
+    {% if post.date_modified %}
+    <p class="small">
+      Last edited: {{ post.date_modified|expanded_relative_time }}
+    </p>
+    {% endif %}
+  </div>
+</div>
+{%- endmacro %}

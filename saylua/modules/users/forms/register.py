@@ -1,5 +1,6 @@
 from saylua import app
-from wtforms import Form
+
+from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import RecaptchaField, Recaptcha
 from saylua.utils.form import sl_validators, UserCheck
 from saylua.utils.form.fields import SlField, SlPasswordField, SlBooleanField
@@ -7,7 +8,7 @@ from saylua.utils.form.fields import SlField, SlPasswordField, SlBooleanField
 register_check = UserCheck()
 
 
-class RegisterForm(Form):
+class RegisterForm(FlaskForm):
     username = SlField('Username', [
         sl_validators.Required(),
         sl_validators.Min(app.config['MIN_USERNAME_LENGTH']),

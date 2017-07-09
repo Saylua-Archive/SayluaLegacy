@@ -24,7 +24,7 @@ class ConversationHandle(db.Model):
     title = db.Column(db.String(256))
     unread = db.Column(db.Boolean, default=False)
     hidden = db.Column(db.Boolean, default=False)
-    last_updated = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    last_updated = db.Column(db.DateTime, server_default=db.func.now())
 
     def url(self):
         if self.unread:
@@ -83,7 +83,7 @@ class Message(db.Model):
     author = db.relationship("User")
 
     text = db.Column(db.Text())
-    date_created = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    date_created = db.Column(db.DateTime, server_default=db.func.now())
 
 
 class Notification(db.Model):
@@ -91,7 +91,9 @@ class Notification(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    time = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+    user = db.relationship("User")
+
+    time = db.Column(db.DateTime, server_default=db.func.now())
     text = db.Column(db.Text())
     unread = db.Column(db.Boolean, default=True)
     link = db.Column(db.String(512))

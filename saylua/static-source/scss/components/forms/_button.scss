@@ -1,0 +1,47 @@
+@import '../../assets/transitions';
+
+input[type='submit'],
+button,
+a.button,
+a.subtle-button {
+  @include slow-color-trans;
+  font-size: 1em;
+  line-height: 150%;
+  display: block;
+  display: inline-block;
+  width: auto;
+  margin: 0.25em 0.4rem;
+  padding: 0.25em 1.6rem;
+  cursor: pointer;
+  color: $white;
+  border-radius: 15px;
+
+  &.small {
+    font-size: 0.8em;
+  }
+}
+
+input[type='submit'],
+button,
+a.button {
+  border: 1px solid $accentColor;
+  background-color: $accentColor;
+
+  &:hover {
+    text-decoration: none;
+    border: 1px solid $mainColor;
+    background-color: $mainColor;
+  }
+}
+
+.subtle-button, a.subtle-button, button.subtle-button {
+  color: $accentColor;
+  border: 1px solid $accentColor;
+  background-color: $white;
+
+  &:hover {
+    text-decoration: none;
+    background-color: $mainSofterColor;
+    border: 1px solid $accentColor;
+  }
+}

@@ -2,7 +2,7 @@ import re
 from wtforms import validators
 
 from saylua import app
-from saylua.models.user import User
+from saylua.modules.users.models.db import User
 
 
 # Base class for other validators. This is mostly used for two reasons:
@@ -81,10 +81,10 @@ class NotNegative(AtLeast):
 class NotBlank(SayluaValidator):
     def __init__(self, message=None):
         self.message = message
-        self.defaultMessage = '<field> cannot be blank!'
+        self.defaultMessage = '<field> cannot be only spaces.'
 
     def validate(self, form, field):
-        return field.data and not field.data.isspace()
+        return not field.data.isspace()
 
     def clientValidatorName(self):
         return 'notblank'
@@ -102,7 +102,7 @@ class EqualTo(SayluaValidator):
             raise validators.ValidationError(field.gettext(
                 "Invalid field name '%s'.") % self.fieldname)
 
-        self.defaultMessage = '<field> must match %s!' % other.label.text
+        self.defaultMessage = '<field> must match %s.' % other.label.text
         return field.data == other.data
 
     def clientValidatorName(self):
@@ -115,7 +115,7 @@ class EqualTo(SayluaValidator):
 class Min(SayluaValidator):
     def __init__(self, length, message=None):
         self.message = message
-        self.defaultMessage = '<field> must be at least %d characters long!' % length
+        self.defaultMessage = '<field> must be at least %d characters long.' % length
         self.length = length
 
     def validate(self, form, field):
@@ -131,7 +131,7 @@ class Min(SayluaValidator):
 class Max(SayluaValidator):
     def __init__(self, length, message=None):
         self.message = message
-        self.defaultMessage = '<field> cannot be greater than %d characters long!' % length
+        self.defaultMessage = '<field> cannot be more than %d characters long.' % length
         self.length = length
 
     def validate(self, form, field):
@@ -147,7 +147,7 @@ class Max(SayluaValidator):
 class IsNot(SayluaValidator):
     def __init__(self, pattern, message=None):
         self.pattern = pattern
-        self.defaultMessage = '<field> cannot be %s!' % pattern
+        self.defaultMessage = '<field> cannot be %s.' % pattern
         self.message = message
 
     def validate(self, form, field):
@@ -193,6 +193,16 @@ class MatchesRegex(SayluaValidator):
         return self.regex
 
 
+class CanonName(MatchesRegex):
+    def __init__(self, message=None):
+        self.regex = app.config['CANON_NAME_REGEX']
+        self.message = message
+        self.defaultMessage = 'Canon names may only contain lowercase letters, numbers, and _'
+
+    def clientValidatorMessage(self):
+        return self.message or self.defaultMessage
+
+
 class Email(MatchesRegex):
     def __init__(self, message=None):
         self.regex = app.config['EMAIL_REGEX']
@@ -236,7 +246,7 @@ class UsernameUnique(SayluaValidator):
         username = field.data.lower()
         if self.whitelist and username in self.whitelist:
             return True
-        return not User.from_username(username)
+        return not User.by_username(username)
 
 
 class EmailUnique(SayluaValidator):

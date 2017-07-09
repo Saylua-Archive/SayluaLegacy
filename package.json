@@ -11,7 +11,9 @@
     "py-test": "python -m pytest",
     "test": "npm run lint && npm run py-test && npm run js-test",
     "watch": "./node_modules/.bin/gulp run watch",
-    "deploy": "appcfg.py update ."
+    "py-deps": "pip install -r requirements.txt -t lib",
+    "deploy": "appcfg.py -A saylua-staging update .",
+    "deploy-prod": "appcfg.py -A saylua-1280 update ."
   },
   "repository": {
     "type": "git",

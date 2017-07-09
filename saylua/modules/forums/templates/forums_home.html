@@ -1,0 +1,71 @@
+{% from "_macros/user_link.html" import user_link %}
+
+{% extends "layout.html" %}
+{% set page_title = "Forums" %}
+
+{% block header_scripts %}
+<link rel="stylesheet" type="text/css" href="{{ include_static('css/forums.min.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="forum-main-header">
+  <h1>
+    <i class="fa fa-fw fa-comment" aria-hidden="true"></i>
+    The Saylua Forums
+  </h1>
+  <div class="forum-main-navigation">
+    <a href="/forums/">My Posts</a> |
+    <a href="/forums/">My Threads</a> |
+    <a href="/forums/">My Subscriptions</a> |
+    <a href="/forums/">My Mentions</a>
+  </div>
+</div>
+{% for category in categories %}
+{% set boards = category.get_boards(g.user) %}
+{% if boards %}
+<ul class="forum-main-list">
+  <li class="forum-category-header" id="{{ category.canon_name }}">
+    <div class="forum-board-icon">
+      <img src="{{ random_pet_image() }}" />
+    </div>
+    <div class="forum-category-text">
+      {{ category.title }}
+      <span class="latest-post-header">
+        Latest Post
+      </span>
+    </div>
+  </li>
+  {% for board in category.get_boards(g.user) %}
+  <li class="forum-board-row">
+    <img src="{{ random_item_image() }}" class="forum-board-icon faded" />
+    <div class="forum-row-content">
+      <a href="{{ board.url() }}" class="forum-board-text">
+        <span class="forum-board-link">{{ board.title }}</span>
+        <p>
+          {{ board.description }}
+        </p>
+      </a>
+      <div class="forum-latest-post">
+        {% set last_post = board.latest_post() %}
+        {% if last_post is not none %}
+        {% if last_post.author.companion %}
+        <img src="{{ last_post.author.companion.image_url() }}" alt="last_post.author.companion.name" />
+        {% endif %}
+        <p>
+          <a href="{{ last_post.url() }}">{{ last_post.thread.title }}
+          </a> by {{ user_link(last_post.author) }}
+          <span class="line">({{ last_post.date_created|relative_time }})</span>
+        </p>
+        {% endif %}
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endfor %}
+{% endblock %}
+
+{% block admin_actions %}
+<a href="/admin/forums/boards/" class="button">Manage Forum Boards</a>
+{% endblock %}

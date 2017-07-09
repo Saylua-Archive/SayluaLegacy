@@ -1,14 +1,14 @@
 from saylua import app, db
-from saylua.models.role import Role
-from saylua.utils import is_devserver
+from saylua.utils import is_devserver, canonize
 from saylua.modules.forums.models.db import Board, BoardCategory, ForumThread, ForumPost
-from saylua.models.user import User
-from saylua.modules.items.models.db import Item, InventoryItem
+from saylua.modules.users.models.db import User, Title
+from saylua.modules.items.models.db import Item, InventoryItem, ItemCategory
 from saylua.modules.pets.models.db import Pet, Species, SpeciesCoat
 from saylua.modules.pets.soul_names import soul_name
-from saylua.modules.explore.dungeons.provision import provision_dungeon_schema
+from saylua.modules.adventure.dungeons.provision import provision_dungeon_schema
 
 import os
+import random
 
 
 # To run this import setup in the interactive console and run it as such
@@ -20,41 +20,56 @@ import os
 
 def generate_admin_user():
     username = "admin"
-    role_name = "admin"
-    phash = User.hash_password("password")  # Yes, the default password is password.
+    password_hash = User.hash_password("password")  # Yes, the default password is password.
     email = "admin@saylua.wizards"
 
-    yield User(
+    titles = ['Moderator', 'Admin', 'Programmer', 'Artist', 'Writer', 'Contributor']
+    admin = User(
         username=username,
-        phash=phash,
+        password_hash=password_hash,
         email=email,
-        role_name=role_name,
         star_shards=15,
-        cloud_coins=50000
+        cloud_coins=50000,
+        can_moderate=True,
+        can_admin=True,
     )
+
+    for t in titles:
+        title = Title(name=t, canon_name=canonize(t))
+        admin.titles.append(title)
+        yield title
+
+    yield admin
 
 
 def generate_items():
     subpath = 'img' + os.sep + 'items' + os.sep
     path = os.path.join(app.static_folder, subpath)
     admin = db.session.query(User).filter(User.active_username == 'admin').one()
-    for img in os.listdir(path):
-        item_name, ext = os.path.splitext(img)
-        if ext.lower() == '.png':
-            item = Item(
-                name=item_name,
-                canon_name=item_name,
-                description='A lovely little ' + item_name + ' for you to much on,'
-            )
 
-            yield item
+    for category_name in os.listdir(path):
+        category_path = path + category_name + os.sep
+        if os.path.isdir(category_path):
+            category_id = ItemCategory(category_name).id
+            for img in os.listdir(category_path):
+                item_name, ext = os.path.splitext(img)
+                if ext.lower() == '.png':
+                    item = Item(
+                        name=item_name,
+                        canon_name=item_name,
+                        category_id=category_id,
+                        description='A lovely little ' + item_name + ' for you to munch on.',
+                        buyback_price=random.randint(1, 10000)
+                    )
 
-            # Give admin lots of items.
-            yield InventoryItem(
-                user=admin,
-                item=item,
-                count=99
-            )
+                    yield item
+
+                    # Give admin lots of items.
+                    yield InventoryItem(
+                        user=admin,
+                        item=item,
+                        count=99
+                    )
 
 
 def generate_pets():
@@ -69,16 +84,12 @@ def generate_pets():
                 coat_name, ext = os.path.splitext(img_name)
                 if ext.lower() == '.png':
                     new_coat = SpeciesCoat(
-                        name=coat_name,
-                        species_name=species_name,
+                        coat_name=coat_name,
+                        species=new_species,
                         description=("A beautiful " + species_name))
                     yield new_coat
-                    soul_name = Pet.new_soul_name()
                     new_pet = Pet(
-                        soul_name=soul_name,
-                        coat_id=new_coat.id,
-                        species_name=species_name,
-                        name=soul_name.capitalize()
+                        coat=new_coat
                     )
                     yield new_pet
 
@@ -87,18 +98,8 @@ def generate_boards():
     categories = ["Saylua Talk", "Help", "Real Life", "Your Pets"]
 
     for category in categories:
-        category = BoardCategory(title=category)
+        category = BoardCategory(title=category, canon_name=canonize(category))
         yield category
-
-        title = soul_name(7)
-        yield Board(
-            title=title + " announcements",
-            canon_name=title,
-            categories=[category],
-            description="Announcements for " + title,
-            is_news=True,
-            order=0
-        )
 
         for n in range(4):
             title = soul_name(7)
@@ -107,10 +108,19 @@ def generate_boards():
             yield Board(
                 title=title,
                 canon_name=title,
-                categories=[category],
+                category=category,
                 description=description,
                 order=(n + 1)
             )
+
+    title = soul_name(7)
+    yield Board(
+        title=title + " announcements",
+        canon_name='news',
+        category=category,
+        description="Announcements for " + title,
+        order=0
+    )
 
 
 def generate_threads():
@@ -156,12 +166,13 @@ def generate_posts():
 def generate_users():
     for i in range(4):
         username = soul_name(7)
-        phash = User.hash_password("password")  # Yes, the default password is password
+        password_hash = User.hash_password("password")  # Yes, the default password is password
+
         email = "{0}@dongs.{0}.biz".format(username)
 
         yield User(
             username=username,
-            phash=phash,
+            password_hash=password_hash,
             email=email,
             star_shards=15,
             cloud_coins=50000
@@ -170,82 +181,57 @@ def generate_users():
 
 def purge(absolutely_sure_about_this=False):
     """Removes existing models from the database."""
+    with app.app_context():
+        if is_devserver() or absolutely_sure_about_this:
+            db.drop_all()
+            db.session.commit()
+            db.session.flush()
+            db.create_all()
 
-    if is_devserver() or absolutely_sure_about_this:
-        db.drop_all()
-        db.session.commit()
-        db.session.flush()
-        db.create_all()
-
-    else:
-        raise Exception("Get out of here.")
+        else:
+            raise Exception("Get out of here.")
 
 
 def setup():
-    db.create_all()
+    with app.app_context():
+        db.create_all()
 
-    # Create the role "admin" with all privileges
-    admin_role = Role(name="admin")
-    role_columns = [column.key for column in admin_role.__table__.columns]
-
-    for key in role_columns:
-        if key.startswith("can"):
-            setattr(admin_role, key, True)
-
-    db.session.add(admin_role)
-    print("Admin Role Created")
-
-    # Add the "user" role
-    user_role = Role(name="user")
-    user_role.can_post_threads = True
-    user_role.can_comment = True
-    db.session.add(user_role)
-    print("User Role Created")
-
-    # Add the "moderator" role
-    moderator_role = Role(name="moderator")
-    moderator_role.can_post_threads = True
-    moderator_role.can_move_threads = True
-    moderator_role.can_comment = True
-    db.session.add(moderator_role)
-    print("Moderator Role Created")
-
-    # Turn dungeon schemas into models
-    for model in provision_dungeon_schema():
-        db.session.add(model)
-
-    db.session.commit()
-
-    # Add placeholders if on the dev server
-    if is_devserver():
-        print("Adding Initial Admin User")
-        for item in generate_admin_user():
-            db.session.add(item)
-
-        print("Adding Placeholder Users")
-        for item in generate_users():
-            db.session.add(item)
-
-        print("Adding Placeholder Boards")
-        for item in generate_boards():
-            db.session.add(item)
-
-        print("Adding Placeholder Threads")
-        for item in generate_threads():
-            db.session.add(item)
-
-        print("Adding Placeholder Posts")
-        for item in generate_posts():
-            db.session.add(item)
-
-        print("Adding Placeholder Items")
-        for item in generate_items():
-            db.session.add(item)
-
-        print("Adding Placeholder Pets, Coats, and Species")
-        for pet_coat_species in generate_pets():
-            db.session.add(pet_coat_species)
+        # Turn dungeon schemas into models
+        for model in provision_dungeon_schema():
+            db.session.add(model)
 
         db.session.commit()
 
-    print("Database Setup Complete")
+        # Add placeholders if on the dev server
+        if is_devserver():
+            print("Adding Initial Admin User")
+            for item in generate_admin_user():
+                db.session.add(item)
+
+            print("Adding Placeholder Users")
+            for item in generate_users():
+                db.session.add(item)
+
+            print("Adding Placeholder Boards")
+            for item in generate_boards():
+                db.session.add(item)
+
+            print("Adding Placeholder Threads")
+            for item in generate_threads():
+                db.session.add(item)
+
+            print("Adding Placeholder Posts")
+            for item in generate_posts():
+                db.session.add(item)
+
+            print("Adding Placeholder Items")
+            for item in generate_items():
+                db.session.add(item)
+
+            print("Adding Placeholder Pets, Coats, and Species")
+            for pet_coat_species in generate_pets():
+                db.session.add(pet_coat_species)
+
+            db.session.commit()
+
+        print("Database Setup Complete")

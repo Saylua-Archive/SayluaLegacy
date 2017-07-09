@@ -1,11 +1,12 @@
 from saylua import app, db
 
-from saylua.models.user import LoginSession
+from saylua.modules.users.models.db import LoginSession
 from saylua.wrappers import login_required
 
 from ..forms.login import LoginForm, login_check
 
-from flask import render_template, redirect, make_response, request, flash, g
+from flask import (render_template, make_response, request, redirect, flash,
+    g, url_for, abort)
 
 import datetime
 
@@ -26,30 +27,33 @@ def inject_sidebar_login_form():
 def login():
     form = LoginForm(request.form)
 
-    if request.method == 'POST' and form.validate():
-        found = login_check.user
-        found_id = found.id
+    if form.validate_on_submit():
+        user = login_check.user
+        user_id = user.id
 
         # Add a session to the datastore
         expires = datetime.datetime.utcnow()
         expires += datetime.timedelta(days=app.config['COOKIE_DURATION'])
-        new_session = LoginSession(user_id=found_id, expires=expires)
+        new_session = LoginSession(user_id=user_id, expires=expires)
 
-        # In case there is a session id collission, merge the session entries.
+        # In case there is a session id collision, merge the session entries.
         db.session.merge(new_session)
         db.session.commit()
 
-        # Generate a matching cookie and redirect
-        resp = make_response(redirect('/'))
-        resp.set_cookie("session_id", new_session.id, expires=expires)
-        resp.set_cookie("user_id", str(found_id), expires=expires)
+        # Generate a matching cookie and redirect.
+        redirect_path = form.redirect()
+        if user.story_route():
+            redirect_path = redirect(url_for(user.story_route()))
+        response = make_response(redirect_path)
+        response.set_cookie("session_id", new_session.id, expires=expires)
+        response.set_cookie("user_id", str(user_id), expires=expires)
 
-        return resp
+        return response
 
     return render_template('login/login.html', form=form)
 
 
-@login_required
+@login_required(error="You must be logged in before you can logout.")
 def logout():
     session_id = request.cookies.get('session_id')
     session = (
@@ -60,13 +64,13 @@ def logout():
 
     # Make sure people can't log each other out
     if not session or session.user_id != g.user.id:
-        return render_template("403.html"), 403
+        abort(403)
 
     if session:
         db.session.delete(session)
         db.session.commit()
 
-    resp = make_response(redirect('/'))
+    resp = make_response(redirect(url_for('general.home')))
     resp.set_cookie('session_id', '', expires=0)
     flash("Bye bye! We hope to see you again soon.")
     return resp

@@ -54,6 +54,7 @@
     <input type="submit" class="small" name="delete" value="Delete Selected Notifications" />
     <input type="submit" class="small" name="read" value="Mark Selected as Read" />
   </div>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 </form>
 <div class="padded full center">
   {{ simple_pagination(current_page=page, has_more_pages=more_pages) }}

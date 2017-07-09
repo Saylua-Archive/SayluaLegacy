@@ -1,126 +1,213 @@
-from flask import render_template, redirect, g, flash, request
-import flask_sqlalchemy
-from saylua import db
+from flask import render_template, redirect, g, flash, request, abort
 
-from .models.db import Board, BoardCategory, ForumThread, ForumPost
-from .forms import ForumThreadForm, ForumPostForm
+from saylua import db, app
 
+from saylua.wrappers import moderation_access_required, communication_access_required, login_required
+from saylua.utils.pagination import Pagination
 
-THREADS_PER_PAGE = 10
-POSTS_PER_PAGE = 10
+from .models.db import Board, BoardCategory, ForumThread, ForumPost, ForumSubscription
+from .forms.main import ForumThreadForm, ForumPostForm
 
 
 def forums_home():
-    categories = (db.session.query(BoardCategory)
-        .order_by(BoardCategory.order.asc())
-        .all())
-    return render_template("main.html", categories=categories)
+    categories = BoardCategory.get_categories()
+    return render_template("forums_home.html", categories=categories)
 
 
+# Viewing a forum board and adding new threads to it.
 def forums_board(canon_name):
+    board = Board.by_canon_name(canon_name)
+
+    if not board:
+        abort(404)
+
     form = ForumThreadForm(request.form)
+
+    if request.method == 'POST' and not board.can_post(g.user):
+        flash("You do not have permission to post a new thread.", 'error')
+    elif form.validate_on_submit():
+        title = request.form.get('title')
+        body = request.form.get('body')
+        author = g.user
+        board_id = board.id
+        new_thread = ForumThread(title=title, author_id=author.id, board_id=board_id)
+        new_post = ForumPost(author_id=author.id, thread=new_thread, body=body)
+
+        author.post_count += 1
+
+        # If the user wants to autosubscribe to threads they create.
+        if author.autosubscribe_threads:
+            subscription = ForumSubscription(user=author, thread=new_thread)
+            db.session.add(subscription)
+
+        db.session.add(new_thread)
+        db.session.add(new_post)
+        db.session.commit()
+
+        flash("You've posted a new thread.")
+        return redirect(new_thread.url())
+
+    threads_query = (
+        db.session.query(ForumThread)
+        .filter(ForumThread.board_id == board.id)
+        .order_by(ForumThread.is_pinned.desc(), ForumThread.date_modified.desc())
+    )
+
+    pagination = Pagination(per_page=app.config.get('THREADS_PER_PAGE'), query=threads_query)
+
+    return render_template("board.html", form=form, board=board, pagination=pagination)
+
+
+# Viewing a forum thread and adding new posts to it.
+def forums_thread(thread, page=1):
     try:
-        board = db.session.query(Board).filter(Board.canon_name == canon_name).one()
+        thread_id = int(thread.split('-', 1)[0])
+    except:
+        abort(404)
 
-        if request.method == 'POST' and form.validate():
-            title = request.form.get('title')
-            body = request.form.get('body')
-            author = g.user.id
-            board_id = board.id
-            new_thread = ForumThread(title=title, author_id=author, board_id=board_id)
-            new_post = ForumPost(author_id=author, thread=new_thread, body=body)
-            db.session.add(new_thread)
-            db.session.add(new_post)
-            db.session.commit()
-            return redirect(board.url())
-
-        page_number = request.args.get('page', 1)
-        page_number = int(page_number)
-
-        threads_query = (
-            db.session.query(ForumThread)
-            .filter(ForumThread.board_id == board.id)
-            .order_by(ForumThread.is_pinned.desc(), ForumThread.date_modified.desc())
-        )
-
-        threads = (
-            threads_query
-            .limit(THREADS_PER_PAGE)
-            .offset((page_number - 1) * THREADS_PER_PAGE)
-            .all()
-        )
-
-        threads_count = (
-            db.session.query(ForumThread)
-            .filter(ForumThread.board_id == board.id)
-            .count()
-        )
-
-        page_count = (THREADS_PER_PAGE + threads_count - 1) // THREADS_PER_PAGE
-
-        return render_template("board.html", form=form,
-            board=board, threads=threads, page_count=page_count)
-
-    except (flask_sqlalchemy.orm.exc.MultipleResultsFound, flask_sqlalchemy.orm.exc.NoResultFound):
-        return render_template('404.html'), 404
-
-
-def forums_thread(thread_id):
-    thread_id = int(thread_id)
     form = ForumPostForm(request.form)
 
-    try:
-        thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one()
-        board = thread.board
+    thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one_or_none()
 
-        if request.method == 'POST' and form.validate():
-            author = g.user.id
-            body = request.form.get('body')
-            new_post = ForumPost(author_id=author, thread_id=thread_id, body=body)
-            db.session.add(new_post)
-            db.session.commit()
-            return redirect("forums/thread/" + str(thread_id) + "/")
+    if not thread:
+        abort(404)
 
-        page_number = request.args.get('page', 1)
-        page_number = int(page_number)
+    if request.method == 'POST' and not thread.can_post(g.user):
+        flash("You do not have permission to reply to forum threads.", 'error')
+    elif form.validate_on_submit():
+        author = g.user
+        body = request.form.get('body')
+        new_post = ForumPost(author_id=author.id, thread_id=thread_id, body=body)
+        author.post_count += 1
 
-        post_query = (
-            db.session.query(ForumPost)
-            .filter(ForumPost.thread_id == thread_id)
-            .order_by(ForumPost.date_created)
-        )
+        # If the user wants to autosubscribe to threads they post on.
+        if author.autosubscribe_posts and not thread.subscription(author):
+            subscription = ForumSubscription(user=author, thread=thread)
+            db.session.add(subscription)
 
-        posts = (
-            post_query
-            .limit(POSTS_PER_PAGE)
-            .offset((page_number - 1) * POSTS_PER_PAGE)
-        )
+        db.session.add(new_post)
+        db.session.commit()
 
-        posts_count = (
-            db.session.query(ForumPost)
-            .filter(ForumPost.thread_id == thread_id)
-            .count()
-        )
+        # Notify all subscribed users about the new post. Note, this should be
+        # optimized later.
+        thread.notify_subscribers(new_post)
 
-        page_count = (POSTS_PER_PAGE + posts_count - 1) // POSTS_PER_PAGE
-        other_boards = db.session.query(Board).all()
+        flash("You've successfully made a new forum post.")
+        return redirect(new_post.url())
 
-        return render_template("thread.html", form=form, board=board, thread=thread,
-                posts=posts, page_count=page_count, other_boards=other_boards)
+    post_query = (
+        db.session.query(ForumPost)
+        .filter(ForumPost.thread_id == thread_id)
+        .order_by(ForumPost.date_created)
+    )
 
-    except (flask_sqlalchemy.orm.exc.MultipleResultsFound, flask_sqlalchemy.orm.exc.NoResultFound):
-        return render_template('404.html'), 404
+    pagination = Pagination(per_page=app.config.get('POSTS_PER_PAGE'), query=post_query,
+        current_page=page, url_base=thread.url(), url_end='/')
+
+    other_boards = db.session.query(Board).all()
+
+    return render_template("thread.html", form=form, thread=thread,
+            pagination=pagination, other_boards=other_boards)
 
 
+@moderation_access_required()
 def forums_thread_move(thread_id):
-    thread_id = int(thread_id)
-    try:
-        thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one()
-        if 'move' in request.form:
-            destination = int(request.form.get('destination'))
-            thread.board_id = destination
+    thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one_or_none()
+
+    if not thread:
+        abort(404)
+
+    if 'move' in request.form:
+        destination = int(request.form.get('destination'))
+        thread.board_id = destination
+        db.session.commit()
+        flash("Thread moved successfully!")
+    return redirect(thread.url())
+
+
+@moderation_access_required()
+def forums_thread_pin(thread_id):
+    thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one_or_none()
+    if not thread:
+        abort(404)
+
+    if 'pin' in request.form:
+        thread.is_pinned = True
+        db.session.commit()
+        flash("You've successfully pinned this thread.")
+    elif 'unpin' in request.form:
+        thread.is_pinned = False
+        db.session.commit()
+        flash("You've successfully unpinned this thread.")
+    else:
+        flash("Invalid pin state.", 'error')
+
+    return redirect(thread.url())
+
+
+@moderation_access_required()
+def forums_thread_lock(thread_id):
+    thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one_or_none()
+    if not thread:
+        abort(404)
+
+    if 'lock' in request.form:
+        thread.is_locked = True
+        db.session.commit()
+        flash("You've successfully locked this thread.")
+    elif 'unlock' in request.form:
+        thread.is_locked = False
+        db.session.commit()
+        flash("You've successfully unlocked this thread.")
+    else:
+        flash("Invalid pin state.", 'error')
+
+    return redirect(thread.url())
+
+
+@login_required()
+def forums_thread_subscribe(thread_id):
+    thread = db.session.query(ForumThread).filter(ForumThread.id == thread_id).one_or_none()
+    if not thread:
+        abort(404)
+
+    subscription = thread.subscription(g.user)
+    if 'subscribe' in request.form:
+        if subscription:
+            flash("You are already subscribed to this thread.")
+        else:
+            subscription = ForumSubscription(user=g.user, thread=thread)
+            db.session.add(subscription)
             db.session.commit()
-            flash("Thread moved successfully!")
-            return redirect(thread.url())
-    except (flask_sqlalchemy.orm.exc.MultipleResultsFound, flask_sqlalchemy.orm.exc.NoResultFound):
-        return render_template('404.html'), 404
+            flash("You've successfully subscribed to this thread.")
+    elif 'unsubscribe' in request.form:
+        if not subscription:
+            flash("You're not subscribed to this thread.")
+        else:
+            db.session.delete(subscription)
+            db.session.commit()
+            flash("You've successfully unsubscribed from this thread.")
+    else:
+        flash("Invalid subscription state.", 'error')
+    return redirect(thread.url())
+
+
+@communication_access_required()
+def forums_post_edit(post_id):
+    post = db.session.query(ForumPost).get(post_id)
+    if not post:
+        abort(404)
+
+    if not post.can_edit(g.user):
+        flash('You do not have permission to edit this post.', 'error')
+        return redirect(post.url())
+
+    form = ForumPostForm(request.form, obj=post)
+    if form.validate_on_submit():
+        form.populate_obj(post)
+        db.session.add(post)
+        db.session.commit()
+        flash("You've edited your post. ")
+        return redirect(post.url())
+
+    return render_template('post_edit.html', post=post, form=form)
