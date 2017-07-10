@@ -14,7 +14,7 @@ class BanLog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id", name="banned_user"))
     user = db.relationship("User", foreign_keys=[user_id])
 
     # 0 is a default ban.

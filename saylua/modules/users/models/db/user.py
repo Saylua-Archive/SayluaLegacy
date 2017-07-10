@@ -62,7 +62,7 @@ class User(db.Model):
         back_populates="guardian", lazy='dynamic', passive_deletes=True)
 
     # Ban Status
-    ban_id = db.Column(db.Integer, db.ForeignKey("ban_logs.id"))
+    ban_id = db.Column(db.Integer, db.ForeignKey("ban_logs.id", name="ban_id"))
     ban = db.relationship("BanLog", foreign_keys=[ban_id])
 
     # Currency

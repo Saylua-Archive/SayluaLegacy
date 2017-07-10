@@ -51,6 +51,7 @@ Vagrant.configure(2) do |config|
     echo "%% Installing Python . . ."
     echo "========================================"
     sudo apt-get --yes install python python-pip python-dev python-setuptools libffi-dev libmysqlclient-dev
+    sudo pip install --upgrade pip
     cd /vagrant/
 
 
