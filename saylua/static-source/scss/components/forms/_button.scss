@@ -4,6 +4,7 @@ input[type='submit'],
 button,
 a.button,
 a.subtle-button {
+  box-sizing: border-box;
   @include slow-color-trans;
   font-size: 1em;
   line-height: 150%;
@@ -24,12 +25,11 @@ a.subtle-button {
 input[type='submit'],
 button,
 a.button {
-  border: 1px solid $accentColor;
   background-color: $accentColor;
+  border: none;
 
   &:hover {
     text-decoration: none;
-    border: 1px solid $mainColor;
     background-color: $mainColor;
   }
 }
