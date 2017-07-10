@@ -9,6 +9,7 @@ node_modules
 .vagrant
 build
 npm-debug.log
+package-lock.json
 yarn.lock
 secure.py
 local_settings.py
