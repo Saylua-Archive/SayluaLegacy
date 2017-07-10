@@ -73,8 +73,9 @@ $debug-search-section-border: lighten($debug-search-section-background, 7%);
 
 $debug-button-color: hsl(0, 10%, 74%);
 $debug-button-color-hover: $white;
-$debug-button-background: hsl(0, 12%, 10%);
+$debug-button-background: hsl(0, 12%, 35%);
 $debug-button-background-hover: hsl(340, 82%, 52%);
+$debug-button-border: hsla(0, 0%, 100%, 0.04);
 
 /*****************************************************************
   -- #0.2a Main Layout
@@ -285,18 +286,21 @@ div.main-body.dungeons-body {
   ul li button {
     color: $debug-button-color;
     background: $debug-button-background;
-    border-radius: 0;
+    border: 0;
+    border-bottom: 1px solid $debug-button-border;
 
-    padding: 10px 30px;
     font-size: 1.4rem;
     text-transform: uppercase;
-
     font-weight: bold;
     letter-spacing: 2px;
+
+    margin: 0;
+    padding: 10px 30px;
 
     width: 100%;
 
     transition: background-color 200ms ease;
+    border-radius: 0;
 
     &:hover {
       color: $debug-button-color-hover;
