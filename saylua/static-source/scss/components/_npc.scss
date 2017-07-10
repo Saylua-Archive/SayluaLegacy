@@ -2,14 +2,13 @@
   display: flex;
   text-align: center;
 
-  align-items: center;
+  align-items: flex-end;
+  align-content: center;
   flex-flow: row wrap;
-  justify-content: center;
+  justify-content: space-around;
 }
 
-.npc-interaction img {
-  align-self: flex-end;
-}
+
 
 .dialogue-choice {
   font-size: 1em;
@@ -53,6 +52,8 @@ button.dialogue-choice {
   margin: auto;
   text-align: center;
   overflow-y: hidden;
+  flex-grow: 0;
+  flex-shrink: 0;
 
   align-items: center;
   justify-content: center;
@@ -100,4 +101,17 @@ button.dialogue-choice {
   border-width: 13px 13px 0;
   border-style: solid;
   border-color: $mainSoftestColor transparent;
+}
+
+@media (max-width: 734px) {
+  .npc-interaction {
+    flex-direction: column;
+  }
+  .speech-bubble:before {
+    left: 50%; /* controls horizontal position */
+  }
+
+  .speech-bubble:after {
+    left: calc(50% + 7px); /* value = (:before left) + (:before border-left) - (:after border-left) */
+  }
 }
