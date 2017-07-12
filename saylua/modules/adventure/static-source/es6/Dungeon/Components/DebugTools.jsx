@@ -30,9 +30,11 @@ export default class DebugTools extends Component {
   }
 
   forceReRender(component) {
-    this.setState({
-      "__forceReRender": !this.state.__forceReRender
-    });
+    setTimeout(() => {
+      this.setState({
+        "__forceReRender": !this.state.__forceReRender
+      });
+    }, 30);
   }
 
 
@@ -131,7 +133,7 @@ export default class DebugTools extends Component {
       }
 
       return (
-        <li className={ classes.join(' ') } onClick={ this.selectSection.bind(this, item) }>
+        <li key={ item } className={ classes.join(' ') } onClick={ this.selectSection.bind(this, item) }>
           <div className="icon"></div>
           <span>{ properName }</span>
         </li>
