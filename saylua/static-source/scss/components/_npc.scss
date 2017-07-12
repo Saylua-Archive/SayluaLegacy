@@ -84,3 +84,19 @@ button.dialogue-choice {
     left: calc(50% + 7px); /* value = (:before left) + (:before border-left) - (:after border-left) */
   }
 }
+
+.npc-overlay {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 50%;
+  background: hsla(0, 0, 10%, 0.5);
+  height: 10rem;
+
+  img {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: 20rem;
+  }
+}
