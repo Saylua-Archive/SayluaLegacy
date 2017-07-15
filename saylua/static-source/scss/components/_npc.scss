@@ -99,7 +99,7 @@ button.dialogue-choice {
   border-color: $mainSoftestColor transparent;
 }
 
-@media (max-width: 734px) {
+@media (max-width: 1000px) {
   .npc-interaction {
     flex-direction: column;
   }
