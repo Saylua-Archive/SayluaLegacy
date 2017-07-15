@@ -14,7 +14,7 @@ handlers:
 # App Engine serves and caches static files contained in the listed directories
 # (and subdirectories).
 - url: /static
-  static_dir: frontend
+  static_dir: frontend/static/
 
 # For the interactive console
 - url: /google_admin/.*

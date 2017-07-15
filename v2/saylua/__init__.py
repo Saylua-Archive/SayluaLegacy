@@ -1,7 +1,7 @@
 # Note: We don't need to call run() since our application is embedded within
 # the App Engine WSGI application server.
 
-from flask import Flask
+from flask import Flask, render_template
 from flask_wtf.csrf import CSRFProtect
 
 from flask_sqlalchemy import SQLAlchemy
@@ -22,3 +22,8 @@ csrf = CSRFProtect(app)
 
 with app.app_context():
     db.create_all()
+
+
+@app.route('/')
+def main():
+    return render_template('main.html')
