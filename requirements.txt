@@ -1,5 +1,5 @@
-# Run 'pip install -r requirements.txt -t lib/' to install these dependencies
-# in `lib/` subdirectory.
+# Run 'pip install -r requirements.txt -t lib/main/' to install these dependencies
+# in `lib/main/` subdirectory.
 #
 # Note: The `lib` directory is added to `sys.path` by `appengine_config.py`.
 #

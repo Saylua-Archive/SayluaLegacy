@@ -1,7 +1,0 @@
-{
-    "name":         "Fireproof",
-    "description":  "Immune to burn damage.",
-    "events": {
-        "$onDamaged": "script_burn_immune"
-    }
-}

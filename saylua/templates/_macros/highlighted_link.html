@@ -1,5 +1,0 @@
-{% macro highlighted_link(name, endpoint) -%}
-<a href="{{ url_for(endpoint) }}"{%- if request.url_rule.endpoint == endpoint %} class="active"{% endif %}>
-  {{ name }}
-</a>
-{%- endmacro %}

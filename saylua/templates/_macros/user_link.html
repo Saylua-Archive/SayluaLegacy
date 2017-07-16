@@ -1,9 +1,0 @@
-{% macro user_link(user, title_class=None) -%}
-{% if user %}
-  {% set title_class = title_class if title_class else user.title_class() %}
-  <a href="{{ user.url() }}" class="{{ title_class }}">{{ user.name }}</a>
-  {% if user.status is not none %}
-    <small>{{ user.status }}</small>
-  {% endif %}
-{% endif %}
-{%- endmacro %}
