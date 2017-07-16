@@ -5,7 +5,10 @@ from saylua.modules.items.models.db import Item
 from saylua.modules.users.models.db import InvalidCurrencyException
 from saylua.utils import int_or_none
 
+from saylua.wrappers import login_required
 
+
+@login_required()
 def npc_shop_view(name):
     items = db.session.query(Item).all()
 

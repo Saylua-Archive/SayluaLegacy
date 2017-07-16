@@ -7,7 +7,6 @@ a.subtle-button {
   @include slow-color-trans;
   font-size: 1em;
   line-height: 150%;
-  display: block;
   display: inline-block;
   width: auto;
   margin: 0.25em 0.4rem;
@@ -15,6 +14,7 @@ a.subtle-button {
   cursor: pointer;
   color: $white;
   border-radius: 15px;
+  border: 1px solid $accentColor;
 
   &.small {
     font-size: 0.8em;
@@ -24,7 +24,6 @@ a.subtle-button {
 input[type='submit'],
 button,
 a.button {
-  border: 1px solid $accentColor;
   background-color: $accentColor;
 
   &:hover {
@@ -36,12 +35,11 @@ a.button {
 
 .subtle-button, a.subtle-button, button.subtle-button {
   color: $accentColor;
-  border: 1px solid $accentColor;
   background-color: $white;
 
   &:hover {
     text-decoration: none;
-    background-color: $mainSofterColor;
     border: 1px solid $accentColor;
+    background-color: $mainSofterColor;
   }
 }

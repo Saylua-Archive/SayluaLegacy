@@ -16,6 +16,7 @@ secure_staging.py
 
 # Ignore all third party dependencies other than bcrypt.
 lib/*
+v2/lib/main/*
 !lib/bcrypt*
 
 # Vagrant nonsense

@@ -9,13 +9,13 @@ from saylua.modules.pets.models.db import SpeciesCoat, Pet, PetFriendship
 import datetime
 
 
-STARTER_COMPANIONS = ['arko_common', 'chirling_common', 'nylik_common']
+STARTER_COMPANIONS = ['arko_common', 'chirling_common', 'xochi_common']
 
 
 def home():
     try:
-        if is_devserver() or g.user:
-            return redirect('/news/', code=302)
+        if is_devserver() or g.logged_in:
+            return redirect('/house/', code=302)
         return landing()
     except AttributeError:
         return landing()
