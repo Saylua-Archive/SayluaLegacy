@@ -5,23 +5,25 @@
 {% endblock %}
 {% block body %}
 <h1>The Pet Reserve</h1>
-<div class="npc-interaction">
+<div class="npc-display">
   <div class="speech-bubble">{{ cute_text }}</div>
-  <div class="npc-bust">
+  <div class="interaction-bust">
     <img src="/static/img/characters/vera-everly.png"/>
   </div>
-  <img src="{{ adoptee.image_url() }}"/>
+  <img class="adoptee" src="{{ adoptee.image_url() }}"/>
+</div>
+<div class="choices">
   <form method="post">
     <input type="hidden" name="soul_name" value="{{ adoptee.soul_name }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <button class="dialogue-choice">
+    <button>
       Adopt {{ adoptee.name }}
     </button>
   </form>
-  <a href="{{ adoptee.url() }}" class="dialogue-choice" target="_blank">
+  <a href="{{ adoptee.url() }}" target="_blank" rel="noopener">
     Tell me about {{ adoptee.name }}
   </a>
-  <a href="/reserve/" class="dialogue-choice">
+  <a href="/reserve/">
     Another one, Vera?
   </a>
 </div>
