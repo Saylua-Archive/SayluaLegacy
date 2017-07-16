@@ -18,5 +18,5 @@ def free_items():
     amount = random.randint(1, 5)
     db.session.add(choice.give_items(g.user.id, amount))
     db.session.commit()
-    flash("Rufus gives you " + pluralize(amount, choice.name) + ", for \"free\".")
+    flash("Rufus gives you " + pluralize(amount, choice.name) + ", for \"free.\"")
     return redirect('/town/', code=302)
