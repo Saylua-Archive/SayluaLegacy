@@ -8,9 +8,6 @@ runtime: python27
 api_version: 1
 threadsafe: yes
 
-builtins:
-- remote_api: on
-
 # Handlers define how to route requests to your application.
 handlers:
 
