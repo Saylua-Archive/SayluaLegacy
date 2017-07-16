@@ -2,41 +2,22 @@
   display: flex;
   text-align: center;
 
-  align-items: flex-end;
+  align-items: center;
   align-content: center;
   flex-flow: row wrap;
-  justify-content: space-around;
+  justify-content: center;
 }
 
+.adoptee {
+  width: 30rem;
+  max-width: 100%;
+  height: 30rem;
+  max-height: 30rem;
 
+  align-self: flex-end;
 
-.dialogue-choice {
-  font-size: 1em;
-  line-height: 150%;
-  margin-bottom: 0.5rem;
-  margin-top: 1.25rem;
-  margin-right: .5rem;
-  padding: 0.25em 1.6rem;
-  color: $accentColor;
-  border: 1px solid $accentColor;
-  border-radius: 15px;
-  background-color: $white;
-
-  &:hover {
-    text-decoration: none;
-    border: 1px solid $mainColor;
-    background-color: $mainSofterColor;
-  }
-}
-
-button.dialogue-choice {
-  background-color: $accentColor;
-  color: $white;
-
-  &:hover {
-    text-decoration: none;
-    border: 1px solid $mainColor;
-    background-color: $mainColor;
+  @media (max-width: 500px) {
+    height: auto;
   }
 }
 
@@ -45,7 +26,6 @@ button.dialogue-choice {
   max-width: 100%;
   height: 40rem;
   max-height: 40rem;
-  margin: auto;
   text-align: center;
   overflow-y: hidden;
   flex-grow: 0;
@@ -76,7 +56,7 @@ button.dialogue-choice {
   content: '';
   position: absolute;
   bottom: -20px; /* value = - border-top-width - border-bottom-width */
-  left: 40px; /* controls horizontal position */
+  left: 20%; /* controls horizontal position */
   /* reduce the damage in FF3.0 */
   display: block;
   width: 0;
@@ -90,7 +70,7 @@ button.dialogue-choice {
   content: '';
   position: absolute;
   bottom: -13px; /* value = - border-top-width - border-bottom-width */
-  left: 47px; /* value = (:before left) + (:before border-left) - (:after border-left) */
+  left: calc(20% + 7px); /* value = (:before left) + (:before border-left) - (:after border-left) */
   /* reduce the damage in FF3.0 */
   display: block;
   width: 0;
@@ -99,15 +79,69 @@ button.dialogue-choice {
   border-color: $mainSoftestColor transparent;
 }
 
-@media (max-width: 1000px) {
-  .npc-interaction {
-    flex-direction: column;
+.solo-bubble:before {
+  left: calc(50% - 27px); /* controls horizontal position */
+}
+
+.solo-bubble:after {
+  left: calc(50% - 20px); /* value = (:before left) + (:before border-left) - (:after border-left) */
+}
+
+.choices {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.choices a, .choices button {
+  font-size: 1em;
+  line-height: 150%;
+  transition: 150ms color ease;
+  padding: 0.25em 1.6rem;
+  color: $accentColor;
+  border: 1px solid $accentColor;
+  border-radius: 15px;
+  background-color: $white;
+  margin: 1rem;
+  transition: background .5s ease-in-out, color .5s ease-in-out;
+
+  &:hover {
+    text-decoration: none;
+    border: 1px solid $accentColor;
+    background-color: $mainSofterColor;
   }
+}
+
+@media (max-width: 1000px) {
+  .npc-display {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .adoptee {
+    align-self: center;
+  }
+
+  .speech-bubble {
+    width: 40rem;
+  }
+  
   .speech-bubble:before {
-    left: 50%; /* controls horizontal position */
+    left: calc(50% - 27px); /* controls horizontal position */
   }
 
   .speech-bubble:after {
-    left: calc(50% + 7px); /* value = (:before left) + (:before border-left) - (:after border-left) */
+    left: calc(50% - 20px); /* value = (:before left) + (:before border-left) - (:after border-left) */
+  }
+
+  .choices {
+    flex-direction: column;
+  }
+
+  .choices a, .choices button {
+    width: 40rem;
   }
 }

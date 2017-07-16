@@ -10,19 +10,21 @@
   <div class="interaction-bust">
     <img src="/static/img/characters/vera-everly.png"/>
   </div>
-  <img src="{{ adoptee.image_url() }}"/>
+  <img class="adoptee" src="{{ adoptee.image_url() }}"/>
 </div>
-<form method="post">
-  <input type="hidden" name="soul_name" value="{{ adoptee.soul_name }}">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-  <button class="dialogue-choice">
-    Adopt {{ adoptee.name }}
-  </button>
-</form>
-<a href="{{ adoptee.url() }}" class="dialogue-choice" target="_blank" rel="noopener">
-  Tell me about {{ adoptee.name }}
-</a>
-<a href="/reserve/" class="dialogue-choice">
-  Another one, Vera?
-</a>
+<div class="choices">
+  <form method="post">
+    <input type="hidden" name="soul_name" value="{{ adoptee.soul_name }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <button>
+      Adopt {{ adoptee.name }}
+    </button>
+  </form>
+  <a href="{{ adoptee.url() }}" target="_blank" rel="noopener">
+    Tell me about {{ adoptee.name }}
+  </a>
+  <a href="/reserve/">
+    Another one, Vera?
+  </a>
+</div>
 {% endblock %}
