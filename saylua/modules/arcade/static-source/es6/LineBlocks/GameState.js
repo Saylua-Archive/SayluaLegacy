@@ -58,6 +58,7 @@ export default class GameState extends BaseModel {
     this.timeout = 800;
     this.gameOver = false;
     this.paused = false;
+    this.canDrop = true;
     this.fast = false;
     this.score = 0;
     this.gameMatrix = new Matrix(18, 10);
@@ -148,6 +149,8 @@ export default class GameState extends BaseModel {
     }
     // If moving down is invalid, the piece cannot fall anymore.
     this.placedPieces.addMatrix(p.matrix, p.r, p.c);
+    this.canDrop = false;
+    this.fast = false;
 
     if (this.checkGameOver()) {
       // GAME OVER.
@@ -239,12 +242,16 @@ export default class GameState extends BaseModel {
 
   drop() {
     if (!this.isRunning()) return;
-    while (this.movePieceDown());
-    this.draw();
+    if (this.canDrop) {
+      while (this.movePieceDown());
+      this.draw();
+    }
   }
 
   speedUp() {
-    this.fast = true;
+    if (this.canDrop) {
+      this.fast = true;
+    }
   }
 
   speedDown() {
