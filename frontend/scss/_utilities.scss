@@ -1,0 +1,56 @@
+/*
+ * A file for miscellaneous utility classes and declarations.
+ * These are things which arguably should be done with inline styles rather
+ * than with classes that are re-used, but are too useful to pass up on.
+ */
+
+small, .small {
+  font-size: $smallFontSize;
+}
+
+// This is a utility class used to specify where text should line break when needed.
+span.line {
+  display: inline-block;
+}
+
+.center {
+  margin: auto;
+  text-align: center;
+}
+
+.right {
+  float: right;
+  text-align: right;
+}
+
+.left {
+  float: left;
+  text-align: left;
+}
+
+.flipped {
+  transform: scaleX(-1);
+  filter: FlipH;
+}
+
+.faded {
+  opacity: 0.5;
+}
+
+.loader {
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  border: 12px solid $mainBgColor;
+  border-top: 12px solid $neutralDarkColor;
+  border-radius: 50%;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

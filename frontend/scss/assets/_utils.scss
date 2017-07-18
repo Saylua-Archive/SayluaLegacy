@@ -1,0 +1,21 @@
+@import 'transitions';
+
+%alternating-item {
+  @include fast-color-trans;
+  &:nth-child(odd) {
+    background: $mainSoftestColor;
+  }
+
+  &.highlight:nth-child(n) {
+    background-color: $highlightSoftColor;
+  }
+
+  &.highlight:nth-child(odd) {
+    background-color: $highlightColor;
+  }
+
+  // Note: We need the nth-child(n) to overwrite nth-child(even)
+  &:nth-child(n):hover {
+    background-color: $accentSoftColor;
+  }
+}

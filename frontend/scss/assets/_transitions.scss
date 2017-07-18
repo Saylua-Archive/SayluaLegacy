@@ -1,0 +1,11 @@
+@mixin slow-color-trans {
+  transition: background border 0.5s ease-in-out, color 0.5s ease-in-out;
+}
+
+@mixin fast-color-trans {
+  transition: background border 0.25s ease-in-out, color 0.25s ease-in-out;
+}
+
+@mixin filter-trans {
+  transition: 0.5s filter ease-in-out, 0.5s -webkit-filter ease-in-out;
+}

@@ -1,0 +1,9 @@
+Welcome to Saylua, {{ name }}!
+
+To finish up your registration, please confirm your email address by following the link below:
+
+{{ url }}
+
+Thanks,
+
+The Saylua Team

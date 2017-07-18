@@ -1,3 +1,5 @@
+# flake8: noqa
+
 # Note: We don't need to call run() since our application is embedded within
 # the App Engine WSGI application server.
 
@@ -24,6 +26,10 @@ with app.app_context():
     db.create_all()
 
 
+import context_processors
+
+
+# Serve the main  entry point.
 @app.route('/')
 def main():
     return render_template('main.html')

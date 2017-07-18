@@ -1,0 +1,11 @@
+@import '../assets/keyframes';
+
+.bounce {
+  @include bounce-up(5px, 1.5s);
+}
+
+.notification-fadeup {
+  position: absolute;
+
+  animation: notification-fadeup 300ms ease-in forwards;
+}

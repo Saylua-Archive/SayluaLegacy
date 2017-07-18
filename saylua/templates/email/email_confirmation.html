@@ -1,0 +1,21 @@
+{% from "email/_macros.html" import email_button %}
+<p>
+  Welcome to Saylua, {{ name }}!
+</p>
+<p>
+  To finish up your registration,
+  please confirm your email address by clicking
+  <a href="{{ url }}">this link</a> or the button below.
+</p>
+
+{{ email_button(url, "Confirm Email Address") }}
+
+<p>
+  Note: This link will expire in 24 hours.
+</p>
+<p>
+  Thanks,
+</p>
+<p>
+  The Saylua Team
+</p>

@@ -1,0 +1,15 @@
+@import 'assets/variables';
+@import 'assets/variables-luaria';
+
+.theme-luaria {
+  @import 'main';
+
+  .sidebar, footer {
+    color: $white;
+  }
+
+  .banner {
+    background-image: url('/static/img/backgrounds/luaria.jpg');
+    background-position: 0 40%;
+  }
+}
