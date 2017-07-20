@@ -131,7 +131,7 @@ export default class GameState extends BaseModel {
     this.frames++;
 
     let timeout = this.timeout;
-    if (this.fast) {
+    if (this.fast && this.canDrop) {
       timeout = LB_MIN_TIMEOUT;
     }
     if ((this.frames - this.lastDrop) / LB_FPS >= timeout / 1000) {
@@ -143,6 +143,9 @@ export default class GameState extends BaseModel {
 
   movePieceDown() {
     let p = this.piece;
+    if (!this.canDrop && p.r > -2) {
+      this.canDrop = true;
+    }
     if (this.validPlacement(p.matrix, p.r + 1, p.c)) {
       p.r++;
       return true;
@@ -150,7 +153,6 @@ export default class GameState extends BaseModel {
     // If moving down is invalid, the piece cannot fall anymore.
     this.placedPieces.addMatrix(p.matrix, p.r, p.c);
     this.canDrop = false;
-    this.fast = false;
 
     if (this.checkGameOver()) {
       // GAME OVER.
@@ -249,9 +251,7 @@ export default class GameState extends BaseModel {
   }
 
   speedUp() {
-    if (this.canDrop) {
-      this.fast = true;
-    }
+    this.fast = true;
   }
 
   speedDown() {
