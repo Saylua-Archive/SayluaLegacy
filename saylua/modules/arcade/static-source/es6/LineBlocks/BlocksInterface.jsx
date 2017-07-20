@@ -64,11 +64,12 @@ export default class BlocksInterface extends Component {
     if (tag == 'input' || tag == 'textarea') return;
 
     let key = event.keyCode;
-    this.props.model.canDrop = true;
     switch(key) {
       case 40: // Down
       case 83: // S
         this.props.model.speedDown();
+      case 32: // Space
+        this.props.model.canDrop = true;
         break;
       default:
         return;
