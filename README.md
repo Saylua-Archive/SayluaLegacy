@@ -42,7 +42,7 @@ If you are on Windows, it is heavily suggested you use Vagrant.
 
 9. Install JavaScript dependencies.
 
-      `npm install && npm install -g gulp eslint eslint-plugin-inferno mocha webpack`
+      `npm run js-deps`
 
 10. Create the file saylua/config/secure.py based on saylua/config/example_secure.py
 

@@ -1,14 +1,26 @@
 const path = require('path');
+const webpack = require('webpack');
+
 module.exports = {
-  entry: './frontend/components/Main.js',
+  entry: './frontend/source/Main.js',
   output: {
-    path: path.resolve('frontend/static'),
-    filename: 'saylua.min.js'
+    path: path.resolve('frontend/static/js'),
+    filename: './saylua.min.js'
   },
   module: {
-    loaders: [
-      { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
-      { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ }
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        use: 'babel-loader'
+      }
     ]
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      'Promise': 'es6-promise'
+    })
+  ],
+  resolve: {
+    extensions: ['.js', '.jsx']
   }
 }
