@@ -1,0 +1,60 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "globals": {
+    "PIXI": true,
+    "describe": true,
+    "it": true
+  },
+  "extends": ["eslint:recommended", "plugin:inferno/recommended"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
+      "jsx": true
+    },
+    "sourceType": "module"
+  },
+  "plugins": [
+    "inferno"
+  ],
+  "rules": {
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "inferno/prop-types": [
+      "off"
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "no-unused-vars" : [
+      "warn",
+      {
+        "varsIgnorePattern": "Inferno*",
+        "argsIgnorePattern": "_*"
+      }
+    ],
+    "no-warning-comments" : [
+      "warn",
+      {
+        "terms": [
+          "todo",
+          "fixme",
+          "hack"
+        ]
+      }
+    ],
+    "semi": [
+      "error",
+      "always"
+    ]
+  }
+}

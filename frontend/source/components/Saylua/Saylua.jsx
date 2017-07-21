@@ -1,5 +1,6 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
+import './Saylua.scss';
 
 // Renders an instance of the game matrix.
 export default class Saylua extends Component {
@@ -9,9 +10,8 @@ export default class Saylua extends Component {
 
   render() {
     return (
-      <table>
-        Hello world.
-      </table>
+      <div>
+      </div>
     );
   }
 }

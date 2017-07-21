@@ -1,4 +1,4 @@
-import { render } from 'inferno';
-import Saylua from './components/Saylua';
+import Inferno from 'inferno';
+import Saylua from './components/Saylua/Saylua';
 
-render(<Saylua />, document.getElementById('app'));
+Inferno.render(<Saylua />, document.getElementById('app'));
