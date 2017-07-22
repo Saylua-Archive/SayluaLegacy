@@ -16,6 +16,13 @@ export default class BlocksInterface extends Component {
     // Match keyboard presses to events.
     this.eventListener = window.addEventListener("keydown", this.handleKeydown.bind(this));
     this.eventListener = window.addEventListener("keyup", this.handleKeyup.bind(this));
+    var keyState = {};
+    window.addEventListener('keydown',function(e){
+      keyState[e.keyCode || e.which] = true;
+    },true);
+    window.addEventListener('keyup',function(e){
+      keyState[e.keyCode || e.which] = false;
+    },true);
   }
 
   handleKeydown(event) {
