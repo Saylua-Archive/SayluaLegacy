@@ -17,13 +17,13 @@ module.exports = {
         test: /\.scss$/,
         use: [
           {
-            loader: "style-loader"
+            loader: 'style-loader'
           }, {
-            loader: "css-loader"
+            loader: 'css-loader'
           }, {
-            loader: "sass-loader",
+            loader: 'sass-loader',
             options: {
-              includePaths: ["frontend/source/"]
+              includePaths: [path.resolve(__dirname, 'frontend/source/scss/')]
             }
           }
         ]
