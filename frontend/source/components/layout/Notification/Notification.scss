@@ -1,4 +1,9 @@
+@import 'assets/variables';
+@import 'assets/mixins';
+
 .notification {
+  @include variable(border-color, --highlightDarkColor, $highlightDarkColor);
+  @include variable(background-color, --highlightSoftColor, $highlightSoftColor);
   position: relative;
   display: flex;
   clear: both;
@@ -7,9 +12,8 @@
   width: 100%;
   margin: 0.25em 0 0.5em 0;
   padding: 0.25em 1%;
-  border: $highlightDarkColor 1px solid;
+  border: 1px solid;
   border-radius: 5px;
-  background: $highlightSoftColor;
 
   align-items: center;
   flex-wrap: nowrap;
@@ -47,6 +51,24 @@
   background: $errorLightColor;
 }
 
-.notifications-container {
-  position: relative;
+.notification-fadeup {
+  position: absolute;
+
+  animation: notification-fadeup 300ms ease-in forwards;
+
+  @keyframes notification-fadeup {
+    0% {
+      transform: translateY(0px);
+      opacity: 1;
+    }
+
+    70% {
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+  }
 }

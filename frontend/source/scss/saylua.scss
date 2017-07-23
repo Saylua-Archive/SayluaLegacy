@@ -26,6 +26,11 @@
   --mainDarkerColor: $mainDarkerColor;
 }
 
+.header {
+  background-image: url('/static/img/backgrounds/sayleus.jpg');
+  background-position: 0 80%;
+}
+
 .theme-luaria {
   --mainBgColor: hsl(220, 15%, 15%);
 
@@ -43,7 +48,7 @@
     color: $white;
   }
 
-  .banner {
+  .header {
     background-image: url('/static/img/backgrounds/luaria.jpg');
     background-position: 0 40%;
   }
@@ -60,7 +65,7 @@
   --mainDarkColor: hsl(0, 0%, 13%);
   --mainDarkerColor: hsl(0, 0%, 0%);
 
-  .banner {
+  .header {
     filter: grayscale(50%);
   }
 }

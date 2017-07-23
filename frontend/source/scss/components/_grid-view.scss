@@ -1,5 +1,3 @@
-@import '../assets/transitions';
-
 .grid-container {
   display: flex;
   flex-direction: row;
@@ -12,7 +10,6 @@
   .grid-element-big,
   .grid-element-half,
   .grid-element-third {
-    @include fast-color-trans;
     display: flex;
     flex-direction: column;
     padding: 1em 1.6rem;

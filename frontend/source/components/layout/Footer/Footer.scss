@@ -1,0 +1,36 @@
+@import 'assets/variables';
+@import 'assets/mixins';
+
+@import 'assets/layout/sizes';
+
+footer {
+  @extend %content-width;
+  font-size: 1.4rem;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+
+  flex-grow: 1;
+  flex-shrink: 0;
+
+  .footer-content {
+    padding: 0 1.6rem;
+    word-wrap: break-word;
+
+    flex-grow: 1;
+    flex-shrink: 1;
+
+    i {
+      font-size: 2rem;
+
+      &:hover {
+        @include variable(color, --mainColor, $mainColor);
+        text-decoration: none;
+      }
+    }
+  }
+
+  .social-icons a:hover {
+    text-decoration: none;
+  }
+}

@@ -1,5 +1,3 @@
-@import '../assets/transitions';
-
 .section-sidebar {
   width: 20%;
   padding: 1em 0;
@@ -8,7 +6,6 @@
   border-right: 1px solid $neutralColor;
 
   a {
-    @include fast-color-trans;
     line-height: 150%;
     display: block;
     width: 100%;

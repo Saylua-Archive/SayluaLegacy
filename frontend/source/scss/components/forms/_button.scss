@@ -1,10 +1,7 @@
-@import '../../assets/transitions';
-
 input[type='submit'],
 button,
 a.button,
 a.subtle-button {
-  @include slow-color-trans;
   font-size: 1em;
   line-height: 150%;
   display: inline-block;

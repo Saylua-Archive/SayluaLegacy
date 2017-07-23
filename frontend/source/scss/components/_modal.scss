@@ -1,5 +1,3 @@
-@import '../assets/transitions';
-
 .modal-overlay {
   position: fixed;
   z-index: 9999;
@@ -42,7 +40,6 @@
 
   .close,
   a.close {
-    @include fast-color-trans;
     font-size: 3rem;
     position: absolute;
     top: 0;
