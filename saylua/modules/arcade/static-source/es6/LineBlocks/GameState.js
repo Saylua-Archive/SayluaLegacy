@@ -59,6 +59,7 @@ export default class GameState extends BaseModel {
     this.gameOver = false;
     this.paused = false;
     this.canDrop = true;
+    this.keyState = {};
     this.fast = false;
     this.score = 0;
     this.gameMatrix = new Matrix(18, 10);

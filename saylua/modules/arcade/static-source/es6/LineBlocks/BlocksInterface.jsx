@@ -16,7 +16,6 @@ export default class BlocksInterface extends Component {
     // Match keyboard presses to events.
     this.eventListener = window.addEventListener("keydown", this.handleKeydown.bind(this));
     this.eventListener = window.addEventListener("keyup", this.handleKeyup.bind(this));
-    this.props.model.keyState = {};
     window.addEventListener('keydown',function(e){
       keyState[e.keyCode || e.which] = true;
     },true);
@@ -33,6 +32,8 @@ export default class BlocksInterface extends Component {
     if (tag == 'input' || tag == 'textarea') return;
 
     let key = event.keyCode;
+
+    this.props.model.keyState[event.keyCode || event.which] = true;
 
     switch(key) {
       case 13: // Enter
@@ -71,6 +72,7 @@ export default class BlocksInterface extends Component {
     if (tag == 'input' || tag == 'textarea') return;
 
     let key = event.keyCode;
+    this.props.model.keyState[event.keyCode || event.which] = true;
     switch(key) {
       case 40: // Down
       case 83: // S
