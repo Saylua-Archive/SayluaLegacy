@@ -8,6 +8,10 @@ export default class PetAvatarView extends Component {
   }
 
   render() {
+    let user = this.props.user;
+    if (!user) {
+      return;
+    }
     return (
       <div class="pet-avatar-view">
         <div class="avatar-view">

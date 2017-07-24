@@ -1,7 +1,4 @@
-@import 'transitions';
-
 %alternating-item {
-  @include fast-color-trans;
   &:nth-child(odd) {
     background: $mainSoftestColor;
   }

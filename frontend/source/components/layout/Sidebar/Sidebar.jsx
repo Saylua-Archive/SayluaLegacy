@@ -14,23 +14,19 @@ export default class Sidebar extends Component {
     let loggedIn = true;
     return (
       <div id="sidebar" className="sidebar">
+        <PetAvatarView id="avatar-section" className="sidebar-section" user={ true } />
         { loggedIn ? (
-          <div>
-            <div id="avatar-section" className="sidebar-section">
-              <PetAvatarView user={null} />
-            </div>
-            <div id="user-info-section" className="sidebar-section">
-              <p>You are User</p>
-              <p>Your companion is <a href="/companion">Companion Name</a></p>
-              <p>
-                <img src="/static/img/icons/weather_clouds.png" />
-                <a href="/bank/">Cloud Coin</a>
-              </p>
-              <p>
-                <img src="/static/img/icons/star_1.png" />
-                <a href="/bank/">Star Shard</a>
-              </p>
-            </div>
+          <div id="user-info-section" className="sidebar-section">
+            <p>You are User</p>
+            <p>Your companion is <a href="/companion">Companion Name</a></p>
+            <p>
+              <img src="/static/img/icons/weather_clouds.png" />
+              <a href="/bank/">Cloud Coin</a>
+            </p>
+            <p>
+              <img src="/static/img/icons/star_1.png" />
+              <a href="/bank/">Star Shard</a>
+            </p>
           </div>
         ) : (
         <form id="sidebar-login-form" className="sidebar-section sidebar-login-form validated-form" action="/login/"
