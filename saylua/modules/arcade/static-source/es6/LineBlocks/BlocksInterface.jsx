@@ -17,10 +17,18 @@ export default class BlocksInterface extends Component {
     this.eventListener = window.addEventListener("keydown", this.handleKeydown.bind(this));
     this.eventListener = window.addEventListener("keyup", this.handleKeyup.bind(this));
     window.addEventListener('keydown',function(e){
-      keyState[e.keyCode || e.which] = true;
+      //  Make sure keys can still be inputted if a form is focused.
+      if (tag == 'input' || tag == 'textarea') return;
+
+      this.props.model.keyState[e.keyCode || e.which] = true;
+      event.preventDefault();
     },true);
     window.addEventListener('keyup',function(e){
-      keyState[e.keyCode || e.which] = false;
+      //  Make sure keys can still be inputted if a form is focused.
+      if (tag == 'input' || tag == 'textarea') return;
+
+      this.props.model.keyState[e.keyCode || e.which] = false;
+      event.preventDefault();
     },true);
   }
 
@@ -32,8 +40,6 @@ export default class BlocksInterface extends Component {
     if (tag == 'input' || tag == 'textarea') return;
 
     let key = event.keyCode;
-
-    this.props.model.keyState[event.keyCode || event.which] = true;
 
     switch(key) {
       case 13: // Enter
