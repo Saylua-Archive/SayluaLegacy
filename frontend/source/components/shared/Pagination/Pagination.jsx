@@ -1,6 +1,8 @@
 import Inferno from "inferno";
 import Component from "inferno-component";
 
+import './Pagination.scss';
+
 export default class Pagination extends Component {
   constructor(props) {
     super(props);

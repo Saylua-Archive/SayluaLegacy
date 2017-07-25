@@ -2,6 +2,9 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 import './Footer.scss';
 
+import StaffActions from './StaffActions';
+import Clock from './Clock';
+
 // The main Saylua layout component.
 export default class Footer extends Component {
   constructor(props) {
@@ -9,18 +12,21 @@ export default class Footer extends Component {
   }
 
   render() {
+    let separator = ' \u2022 ';
     return (
       <footer id="footer">
         <div className="sidebar-filler"></div>
         <div className="footer-content">
+          <StaffActions level="moderation" />
+          <StaffActions level="admin" />
           <p>
-            <a href="/online/">1 Online</a> &bull;
-            <a href="#">Back to Top</a> &bull;
-            <a href="/page/about/">About</a> &bull;
-            <a href="/page/credits/">Credits</a> &bull;
-            <a href="/page/terms/">Terms of Service</a> &bull;
-            <a href="/page/rules/">Site Rules</a> &bull;
-            <a href="/page/contact/">Contact Us</a> &bull;
+            <a href="/online/">1 Online</a> { separator }
+            <a href="#">Back to Top</a> { separator }
+            <a href="/page/about/">About</a> { separator }
+            <a href="/page/credits/">Credits</a> { separator }
+            <a href="/page/terms/">Terms of Service</a> { separator }
+            <a href="/page/rules/">Site Rules</a> { separator }
+            <a href="/page/contact/">Contact Us</a> { separator }
             <span id="social-icons">
               <a href="https://www.facebook.com/officialsaylua/" target="_blank" rel="noopener">
                 <i className="fa fa-fw fa-facebook" aria-hidden="true"></i>
@@ -37,13 +43,12 @@ export default class Footer extends Component {
             </span>
           </p>
           <form method="post" action="">
-            <i className="fa fa-clock-o" aria-hidden="true"></i>
-            <span id="site-time"></span>
-            &bull;
+            <Clock />
+            { separator }
             <button className="link-button" name="theme_id" value="0">
               <i className="fa fa-fw fa-sun-o" aria-hidden="true"></i>
             </button>
-            &bull;
+            { separator }
             <button className="link-button" name="theme_id" value="1">
               <i className="fa fa-fw fa-moon-o" aria-hidden="true"></i>
             </button>

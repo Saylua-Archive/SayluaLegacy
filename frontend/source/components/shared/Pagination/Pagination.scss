@@ -1,3 +1,6 @@
+@import 'assets/variables';
+@import 'assets/mixins';
+
 .pagination {
   display: block;
   margin: 1em auto;
@@ -24,9 +27,9 @@
 }
 
 .pagination a:hover {
-  background-color: $accentSoftColor;
+  @include variable(background-color, --accentSoftColor, $accentSoftColor);
 }
 
 .pagination .active {
-  background-color: $mainSofterColor;
+  @include variable(background-color, --mainSofterColor, $mainSofterColor);
 }

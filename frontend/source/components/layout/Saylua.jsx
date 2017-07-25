@@ -20,7 +20,7 @@ export default class Saylua extends Component {
   }
 
   fixNavbar() {
-    let top = document.getElementById('banner').offsetHeight;
+    let top = document.getElementById('header').offsetHeight;
     if (document.body.scrollTop > top ||
       document.documentElement.scrollTop > top) {
       document.getElementById('navbar').classList.add('navbar-fixed');
@@ -33,8 +33,8 @@ export default class Saylua extends Component {
     let content = "Hello world";
     return (
       <div id="saylua">
-        <Header id="header" />
-        <Navbar id="navbar" />
+        <Header />
+        <Navbar />
 
         <div id="main-body" className="main-body">
           <Sidebar />

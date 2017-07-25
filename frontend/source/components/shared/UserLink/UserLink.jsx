@@ -12,10 +12,14 @@ export default class UserLink extends Component {
     if (!user) {
       return;
     }
+    let url = '/';
+    let titleClass = 'title-moderator';
+    let name = 'username';
+    let status = 'pies';
     return (
       <span>
         <a href={ url } className={ titleClass }>{ name }</a>
-          <small>{ status }</small>
+          { status && <small>{ status }</small> }
       </span>
     );
   }

@@ -1,0 +1,37 @@
+@import 'assets/variables';
+@import 'assets/mixins';
+
+.staff-actions {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1em;
+  padding: 0.5em 4px;
+  text-align: left;
+
+  align-items: center;
+  flex-grow: 1;
+  flex-shrink: 1;
+  justify-content: space-around;
+  border: 2px dotted;
+
+  &.moderation {
+    @include variable(background-color, --neutralColor, $neutralColor);
+    @include variable(border-color, --neutralDarkColor, $neutralDarkColor);
+  }
+
+  &.admin {
+    @include variable(background-color, --highlightSoftColor, $highlightSoftColor);
+    @include variable(border-color, --highlightDarkColor, $highlightDarkColor);
+  }
+
+  h3 {
+    width: 30%;
+    text-align: center;
+    border: 0;
+  }
+
+  @media(max-width: 500px) {
+    flex-direction: column;
+    text-align: center;
+  }
+}

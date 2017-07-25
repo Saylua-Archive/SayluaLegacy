@@ -9,7 +9,7 @@ export default class Header extends Component {
 
   render() {
     return (
-      <div className="header">
+      <div id="header" className="header">
         <a id="logo" href="/" className="logo"><img id="logo-image" src="/static/img/logo.png" alt="Saylua" title="Saylua" /></a>
       </div>
     );
