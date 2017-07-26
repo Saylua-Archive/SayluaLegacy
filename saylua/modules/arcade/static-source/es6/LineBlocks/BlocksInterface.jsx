@@ -16,14 +16,14 @@ export default class BlocksInterface extends Component {
     // Match keyboard presses to events.
     this.eventListener = window.addEventListener("keydown", this.handleKeydown.bind(this));
     this.eventListener = window.addEventListener("keyup", this.handleKeyup.bind(this));
-    window.addEventListener('keydown',function(e){
+    this.eventListener = window.addEventListener('keydown',function(e){
       //  Make sure keys can still be inputted if a form is focused.
       if (tag == 'input' || tag == 'textarea') return;
 
       this.props.model.keyState[e.keyCode || e.which] = true;
       event.preventDefault();
     },true);
-    window.addEventListener('keyup',function(e){
+    this.eventListener = window.addEventListener('keyup',function(e){
       //  Make sure keys can still be inputted if a form is focused.
       if (tag == 'input' || tag == 'textarea') return;
 
