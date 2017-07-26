@@ -47,6 +47,7 @@
     "npm-run-all": "^4.0.2",
     "path": "^0.12.7",
     "pseudomap": "^1.0.2",
+    "react-onclickoutside": "^6.4.0",
     "redux": "^3.7.2",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
