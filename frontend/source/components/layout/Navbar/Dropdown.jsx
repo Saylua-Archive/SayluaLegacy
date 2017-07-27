@@ -46,7 +46,7 @@ export default class Dropdown extends Component {
     return (
       <div className="navbar-block navbar-main-links">
         <a className="navbar-link" onClick={ clickLink }>
-          <i className={"fa fa-fw " + icon } aria-hidden="true" title={ name }></i>
+          <i className={ "fa fa-fw " + icon } aria-hidden="true" title={ name }></i>
           <label>{ name }</label>
         </a>
         <div className="dropdown-menu menu">
@@ -56,3 +56,9 @@ export default class Dropdown extends Component {
     );
   }
 }
+
+Dropdown.defaultProps = {
+  opened: false,
+  onOpen: null,
+  onClose: null,
+};
