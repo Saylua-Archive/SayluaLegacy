@@ -17,79 +17,23 @@ export default class BlocksInterface extends Component {
     this.eventListener = window.addEventListener("keydown", this.handleKeydown.bind(this));
     this.eventListener = window.addEventListener("keyup", this.handleKeyup.bind(this));
     this.eventListener = window.addEventListener('keydown',function(e){
+      if (!event) return;
+      let tag = event.target.tagName.toLowerCase();
       //  Make sure keys can still be inputted if a form is focused.
       if (tag == 'input' || tag == 'textarea') return;
-
       this.props.model.keyState[e.keyCode || e.which] = true;
       event.preventDefault();
     },true);
+
     this.eventListener = window.addEventListener('keyup',function(e){
+      if (!event) return;
+      let tag = event.target.tagName.toLowerCase();
       //  Make sure keys can still be inputted if a form is focused.
       if (tag == 'input' || tag == 'textarea') return;
 
       this.props.model.keyState[e.keyCode || e.which] = false;
       event.preventDefault();
     },true);
-  }
-
-  handleKeydown(event) {
-    if (!event) return;
-    let tag = event.target.tagName.toLowerCase();
-
-    //  Make sure keys can still be inputted if a form is focused.
-    if (tag == 'input' || tag == 'textarea') return;
-
-    let key = event.keyCode;
-
-    switch(key) {
-      case 13: // Enter
-      case 80: // P
-        this.props.model.pause();
-        break;
-      case 32: // Space
-        this.props.model.drop();
-        break;
-      case 38: // Up
-      case 87: // W
-        this.props.model.rotate();
-        break;
-      case 40: // Down
-      case 83: // S
-        this.props.model.speedUp();
-        break;
-      case 37: // Left
-      case 65: // A
-        this.props.model.moveLeft();
-        break;
-      case 39: // Right
-      case 68: // D
-        this.props.model.moveRight();
-        break;
-      default:
-        return;
-    }
-
-    event.preventDefault();
-  }
-
-  handleKeyup(event) {
-    if (!event) return;
-    let tag = event.target.tagName.toLowerCase();
-    if (tag == 'input' || tag == 'textarea') return;
-
-    let key = event.keyCode;
-    this.props.model.keyState[event.keyCode || event.which] = true;
-    switch(key) {
-      case 40: // Down
-      case 83: // S
-        this.props.model.speedDown();
-      case 32: // Space
-        this.props.model.canDrop = true;
-        break;
-      default:
-        return;
-    }
-    event.preventDefault();
   }
 
   render() {
