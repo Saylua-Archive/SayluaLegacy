@@ -5,20 +5,23 @@ import './Dropdown.scss';
 export default class Dropdown extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      opened: false,
+    };
   }
 
   componentDidMount() {
     document.body.addEventListener('click', closeOnOutsideClick);
     function closeOnOutsideClick (e) {
-      let target = e.target;
-      if (!menu.contains(target)) {
-        this.close();
-      }
+      // TODO
     }
   }
 
   open() {
-    this.props.opened = true;
+    this.setState({
+      opened: true,
+    });
     let onOpen = this.props.onOpen;
     if (onOpen) {
       onOpen();
@@ -26,14 +29,16 @@ export default class Dropdown extends Component {
   }
 
   close() {
-    this.props.opened = false;
+    this.setState({
+      opened: false,
+    });
   }
 
   render() {
     let icon = 'fa-globe';
     let name = 'Site';
     let title = 'General Saylua Stuff';
-    let active = this.props.opened;
+    let active = this.state.opened;
 
     let clickLink = (e) => {
       e.preventDefault();
@@ -49,7 +54,7 @@ export default class Dropdown extends Component {
           <i className={ "fa fa-fw " + icon } aria-hidden="true" title={ name }></i>
           <label>{ name }</label>
         </a>
-        <div className="dropdown-menu menu">
+        <div className={ (active ? "open " : "") +  "dropdown-menu menu" }>
           <h3>{ title }</h3>
         </div>
       </div>
@@ -58,7 +63,6 @@ export default class Dropdown extends Component {
 }
 
 Dropdown.defaultProps = {
-  opened: false,
   onOpen: null,
   onClose: null,
 };

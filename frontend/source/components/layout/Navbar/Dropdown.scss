@@ -68,10 +68,6 @@
   }
 }
 
-.dropdown-menu.shown {
+.dropdown-menu.open {
   display: flex;
-}
-
-.dropdown-menu.hidden {
-  display: none;
 }
