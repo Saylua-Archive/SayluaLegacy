@@ -30,7 +30,6 @@ export default class BlocksInterface extends Component {
       let tag = event.target.tagName.toLowerCase();
       //  Make sure keys can still be inputted if a form is focused.
       if (tag == 'input' || tag == 'textarea') return;
-
       this.props.model.keyState[e.keyCode || e.which] = false;
       event.preventDefault();
     },true);

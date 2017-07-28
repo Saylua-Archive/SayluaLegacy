@@ -132,6 +132,7 @@ export default class GameState extends BaseModel {
     this.frames++;
 
     let timeout = this.timeout;
+    // TODO: handle keys here
     if (this.fast && this.canDrop) {
       timeout = LB_MIN_TIMEOUT;
     }
