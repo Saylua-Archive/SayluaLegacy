@@ -16,23 +16,24 @@ export default class BlocksInterface extends Component {
     // Match keyboard presses to events.
     this.eventListener = window.addEventListener("keydown", this.handleKeydown.bind(this));
     this.eventListener = window.addEventListener("keyup", this.handleKeyup.bind(this));
-    this.eventListener = window.addEventListener('keydown',function(e){
-      if (!event) return;
-      let tag = event.target.tagName.toLowerCase();
-      //  Make sure keys can still be inputted if a form is focused.
-      if (tag == 'input' || tag == 'textarea') return;
-      this.props.model.keyState[e.keyCode || e.which] = true;
-      event.preventDefault();
-    },true);
+  }
 
-    this.eventListener = window.addEventListener('keyup',function(e){
-      if (!event) return;
-      let tag = event.target.tagName.toLowerCase();
-      //  Make sure keys can still be inputted if a form is focused.
-      if (tag == 'input' || tag == 'textarea') return;
-      this.props.model.keyState[e.keyCode || e.which] = false;
-      event.preventDefault();
-    },true);
+  handleKeydown(event) {
+    if (!event) return;
+    let tag = event.target.tagName.toLowerCase();
+    //  Make sure keys can still be inputted if a form is focused.
+    if (tag == 'input' || tag == 'textarea') return;
+    this.props.model.keyState[event.keyCode || event.which] = true;
+    event.preventDefault();
+  }
+
+  handleKeyup(event) {
+    if (!event) return;
+    let tag = event.target.tagName.toLowerCase();
+    //  Make sure keys can still be inputted if a form is focused.
+    if (tag == 'input' || tag == 'textarea') return;
+    this.props.model.keyState[event.keyCode || event.which] = false;
+    event.preventDefault();
   }
 
   render() {
