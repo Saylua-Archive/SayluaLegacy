@@ -75,10 +75,6 @@ a.navbar-link {
     @include variable(background-color, --mainDarkColor, $mainDarkColor);
     text-decoration: none;
   }
-
-  &.active {
-    @include variable(background-color, --mainDarkerColor, $mainDarkerColor);
-  }
 }
 
 .alert-number {

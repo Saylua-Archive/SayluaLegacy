@@ -14,7 +14,8 @@
   margin-top: $navHeight;
   padding-bottom: 0.5em;
   text-align: left;
-  border: 1px solid;
+  border-width: 1px;
+  border-style: solid;
   background: $white;
   box-shadow: 3px 8px 32px -13px $black;
 
@@ -58,7 +59,9 @@
     display: block;
     width: 96%;
     margin: 0.25em 2% 0.5em 2%;
-    border-bottom: 1px solid;
+    border-width: 0;
+    border-style: solid;
+    border-bottom-width: 1px;
   }
 
   h3 {
@@ -68,6 +71,12 @@
   }
 }
 
-.dropdown-menu.open {
-  display: flex;
+.navbar-block.active {
+  .dropdown-menu {
+    display: flex;
+  }
+
+  a.navbar-link {
+    @include variable(background-color, --mainDarkerColor, $mainDarkerColor);
+  }
 }

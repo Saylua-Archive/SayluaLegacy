@@ -49,12 +49,12 @@ export default class Dropdown extends Component {
       }
     };
     return (
-      <div className="navbar-block navbar-main-links">
+      <div className={ (active ? "active " : "") + "navbar-block navbar-main-links" }>
         <a className="navbar-link" onClick={ clickLink }>
           <i className={ "fa fa-fw " + icon } aria-hidden="true" title={ name }></i>
           <label>{ name }</label>
         </a>
-        <div className={ (active ? "open " : "") +  "dropdown-menu menu" }>
+        <div className="dropdown-menu menu">
           <h3>{ title }</h3>
         </div>
       </div>
