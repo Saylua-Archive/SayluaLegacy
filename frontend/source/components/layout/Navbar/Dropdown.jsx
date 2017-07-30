@@ -35,9 +35,9 @@ export default class Dropdown extends Component {
   }
 
   render() {
-    let icon = 'fa-globe';
-    let name = 'Site';
-    let title = 'General Saylua Stuff';
+    let icon = this.props.icon;
+    let name = this.props.name;
+    let title = this.props.title;
     let active = this.state.opened;
 
     let clickLink = (e) => {
@@ -49,13 +49,17 @@ export default class Dropdown extends Component {
       }
     };
     return (
-      <div className={ (active ? "active " : "") + "navbar-block navbar-main-links" }>
+      <div className={ (active ? "active " : "") + "navbar-block navbar-main-links" }
+          ref={ root => { this.root = root; } }>
         <a className="navbar-link" onClick={ clickLink }>
           <i className={ "fa fa-fw " + icon } aria-hidden="true" title={ name }></i>
           <label>{ name }</label>
         </a>
         <div className="dropdown-menu menu">
           <h3>{ title }</h3>
+          <a href="/"><img src="/static/img/icons/house.png" /> My House</a>
+          <a href="/news/"><img src="/static/img/icons/newspaper.png" /> Saylua News</a>
+          <a href="/inventory/"><img src="/static/img/icons/box.png" /> My Inventory</a>
         </div>
       </div>
     );

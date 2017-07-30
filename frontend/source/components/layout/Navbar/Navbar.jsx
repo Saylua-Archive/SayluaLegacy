@@ -23,20 +23,8 @@ export default class Navbar extends Component {
               <i className="fa fa-fw fa-home" aria-hidden="true"></i>
             </a>
 
-            <Dropdown />
+            <Dropdown icon="fa-globe" name="Site" title="General Saylua Stuff" />
 
-            <div className="navbar-block navbar-main-links">
-              <a href="/" className="navbar-link" data-section="site-menu">
-                <i className="fa fa-fw fa-globe" aria-hidden="true" title="Site"></i>
-                <label>Site</label>
-              </a>
-              <div className="left-menu dropdown-menu menu" id="site-menu">
-                <h3>General Saylua Stuff</h3>
-                <a href="/"><img src="/static/img/icons/house.png" /> My House</a>
-                <a href="/news/"><img src="/static/img/icons/newspaper.png" /> Saylua News</a>
-                <a href="/inventory/"><img src="/static/img/icons/box.png" /> My Inventory</a>
-              </div>
-            </div>
             <div className="navbar-block navbar-main-links">
               <a href="/games/" className="navbar-link" data-section="play-menu">
                 <i className="fa fa-fw fa-paw" aria-hidden="true" title="Play"></i>
