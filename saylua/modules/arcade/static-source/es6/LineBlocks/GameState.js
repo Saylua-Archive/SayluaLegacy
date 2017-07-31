@@ -55,10 +55,13 @@ export default class GameState extends BaseModel {
   clearGameState() {
     this.frames = 0;
     this.lastDrop = 0;
+    this.lastLR = 0;
     this.timeout = 800;
     this.gameOver = false;
     this.paused = false;
     this.canDrop = true;
+    this.canRotate = true;
+    this.canSpeed = true;
     this.keyState = {};
     this.fast = false;
     this.score = 0;
@@ -136,22 +139,38 @@ export default class GameState extends BaseModel {
     if (this.keyState[13] || this.keyState[80]) { // Enter, p
       this.pause();
     }
-    if (this.keyState[32]) { // Space
+    if (this.keyState[32] && this.canDrop) { // Space
       this.drop();
+      this.canDrop = false;
     }
-    if (this.keyState[38] || this.keyState[87]) { // Up, w
+    if (!this.keyState[32]) { // Space
+      this.canDrop = true;
+    }
+    if ((this.keyState[38] || this.keyState[87]) && this.canRotate) { // Up, w
       this.rotate();
+      this.canRotate = false;
     }
-    if (this.keyState[40] || this.keyState[83]) { // Down, s
+    if (!(this.keyState[38] || this.keyState[87])) { // Up, w
+      this.canRotate = true;
+    }
+    if ((this.keyState[40] || this.keyState[83]) && this.canSpeed) { // Down, s
       this.speedUp();
     }
-    if (this.keyState[37] || this.keyState[65]) { // Left, a
+    if (!(this.keyState[40] || this.keyState[83])) { // Down, s
+      this.canSpeed = true;
+    }
+    if (!(this.keyState[40] || this.keyState[83])) { // Down, s
+      this.speedDown();
+    }
+    if ((this.keyState[37] || this.keyState[65]) && this.frames - this.lastLR > 0) { // Left, a
+      this.lastLR = this.frames;
       this.moveLeft();
     }
-    if (this.keyState[39] || this.keyState[68]) { // Right, d
+    if ((this.keyState[39] || this.keyState[68]) && this.frames - this.lastLR > 0) { // Right, d
+      this.lastLR = this.frames;
       this.moveRight();
     }
-    if (this.fast && this.canDrop) {
+    if (this.fast && this.canSpeed) {
       timeout = LB_MIN_TIMEOUT;
     }
     if ((this.frames - this.lastDrop) / LB_FPS >= timeout / 1000) {
@@ -163,8 +182,8 @@ export default class GameState extends BaseModel {
 
   movePieceDown() {
     let p = this.piece;
-    if (!this.canDrop && p.r > -2) {
-      this.canDrop = true;
+    if (!this.canSpeed && p.r > -2) {
+      this.canSpeed = true;
     }
     if (this.validPlacement(p.matrix, p.r + 1, p.c)) {
       p.r++;
@@ -172,7 +191,7 @@ export default class GameState extends BaseModel {
     }
     // If moving down is invalid, the piece cannot fall anymore.
     this.placedPieces.addMatrix(p.matrix, p.r, p.c);
-    this.canDrop = false;
+    this.canSpeed = false;
 
     if (this.checkGameOver()) {
       // GAME OVER.
@@ -264,10 +283,8 @@ export default class GameState extends BaseModel {
 
   drop() {
     if (!this.isRunning()) return;
-    if (this.canDrop) {
-      while (this.movePieceDown());
-      this.draw();
-    }
+    while (this.movePieceDown());
+    this.draw();
   }
 
   speedUp() {
