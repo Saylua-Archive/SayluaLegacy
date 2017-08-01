@@ -45,6 +45,7 @@
     "mocha-webpack": "^0.7.0",
     "node-sass": "^4.5.3",
     "npm-run-all": "^4.0.2",
+    "page": "github:visionmedia/page.js",
     "path": "^0.12.7",
     "pseudomap": "^1.0.2",
     "react-onclickoutside": "^6.4.0",

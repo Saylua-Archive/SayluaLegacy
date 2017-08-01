@@ -30,6 +30,7 @@ import context_processors
 
 
 # Serve the main  entry point.
-@app.route('/')
-def main():
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def main(path):
     return render_template('main.html')

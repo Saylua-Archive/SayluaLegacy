@@ -30,7 +30,7 @@ export default class Saylua extends Component {
   }
 
   render() {
-    let content = "Hello world";
+    let content = this.props.content;
     return (
       <div id="saylua">
         <Header />
