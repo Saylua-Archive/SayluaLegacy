@@ -7,7 +7,8 @@ import { slFetch } from "saylua-fetch";
 
 const LB_FPS = 60;
 const LB_MIN_TIMEOUT = 10;
-const LB_LR_INTERVAL = 2;
+// const LB_LR_INTERVAL = 2;
+const LB_LR_INTERVAL = 0; // For testing the top bug
 const LB_PIECES = [[0, 1, 0, 0, // i
                     0, 1, 0, 0,
                     0, 1, 0, 0,
@@ -136,7 +137,6 @@ export default class GameState extends BaseModel {
     this.frames++;
 
     let timeout = this.timeout;
-    // TODO: handle keys here
     if (this.keyState[13] || this.keyState[80]) { // Enter, p
       this.pause();
     }
