@@ -7,8 +7,7 @@ import { slFetch } from "saylua-fetch";
 
 const LB_FPS = 60;
 const LB_MIN_TIMEOUT = 10;
-// const LB_LR_INTERVAL = 2;
-const LB_LR_INTERVAL = 0; // For testing the top bug
+const LB_LR_INTERVAL = 2;
 const LB_PIECES = [[0, 1, 0, 0, // i
                     0, 1, 0, 0,
                     0, 1, 0, 0,
@@ -243,7 +242,8 @@ export default class GameState extends BaseModel {
           // If the piece goes past the sides or the bottom.
           // (don't count the top)
           return false;
-        } else if (col < piece.width) {
+        } else if ((j < 1 || j > 10) && piece.get(i, j)) {
+          // If the piece goes past the sides (counting the top).
           return false;
         }
       }
