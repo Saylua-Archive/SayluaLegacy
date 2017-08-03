@@ -243,6 +243,8 @@ export default class GameState extends BaseModel {
           // If the piece goes past the sides or the bottom.
           // (don't count the top)
           return false;
+        } else if (col < piece.width) {
+          return false;
         }
       }
     }
