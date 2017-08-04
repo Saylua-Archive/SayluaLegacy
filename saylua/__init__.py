@@ -29,8 +29,11 @@ with app.app_context():
 import context_processors
 
 
-# Serve the main  entry point.
-@app.route('/', defaults={'path': ''})
+@app.route('/')
+def landing():
+    return render_template('landing.html')
+
+# Serve the main entry point.
 @app.route('/<path:path>')
 def main(path):
     return render_template('main.html')
