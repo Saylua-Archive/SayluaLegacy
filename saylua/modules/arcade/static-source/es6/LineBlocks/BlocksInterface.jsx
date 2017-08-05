@@ -83,8 +83,7 @@ export default class BlocksInterface extends Component {
               <BlockGrid matrix={ game.nextPiece } />
             </div>
             <div className='blocks-score'>
-              Score:
-              <br />{ game.score }
+              Score: { game.score }
             </div>
             <div className='blocks-controls'>
               &larr;&rarr; - Move
