@@ -31,6 +31,10 @@ export default class Saylua extends Component {
 
   render() {
     let content = this.props.children;
+    let title = this.props.title;
+
+    document.title = 'Saylua - ' + (title ? title : 'Adoptable Fantasy Pets');
+
     return (
       <div id="saylua">
         <Header />

@@ -2,9 +2,9 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 import './Newspaper.scss';
 
-import Saylua from '../../layout/Saylua';
+import Saylua from '../../../layout/Saylua';
 
-// The main Saylua layout component.
+
 export default class Newspaper extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +12,7 @@ export default class Newspaper extends Component {
 
   render() {
     return (
-      <Saylua>
+      <Saylua title="The Sayluan Gazette">
         <h1 class="news-header">The Sayluan Gazette</h1>
         <div class="news-navigation">
           <a href="/news/">Headlines</a> /
