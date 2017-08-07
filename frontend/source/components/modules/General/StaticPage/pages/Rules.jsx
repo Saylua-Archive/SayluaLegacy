@@ -1,7 +1,7 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
-import Saylua from '../../../../layout/Saylua';
+import Saylua from 'components/layout/Saylua';
 
 
 export default function() {
