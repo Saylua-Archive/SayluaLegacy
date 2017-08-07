@@ -27,6 +27,7 @@ def pet_reserve_post():
     adoptee = db.session.query(Pet).filter(Pet.soul_name == soul_name).one_or_none()
     youngest = (Pet.query.filter(Pet.guardian_id == g.user.id).join(PetFriendship)
             .order_by(PetFriendship.bonding_day.desc()).first())
+    # TODO: Fix bug where unlimited adoptions allowed
     if youngest and (datetime.datetime.now() - youngest.bonding_day).days < 1:
         wait = (24 - (datetime.datetime.now() - youngest.bonding_day).seconds / 3600)
         if wait > 20:
