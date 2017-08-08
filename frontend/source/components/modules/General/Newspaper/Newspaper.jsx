@@ -15,7 +15,7 @@ export default class Newspaper extends Component {
       <Saylua title="The Sayluan Gazette">
         <h1 class="news-header">The Sayluan Gazette</h1>
         <div class="news-navigation">
-          <a href="/news/">Headlines</a> /
+          <a href="/news/">Headlines</a>{ ' / ' }
           <a href="/news/puzzle/">Daily Puzzle</a>
         </div>
         <div class="newspaper-body">
