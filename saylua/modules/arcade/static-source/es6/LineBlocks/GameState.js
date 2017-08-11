@@ -269,11 +269,8 @@ export default class GameState extends BaseModel {
     let p = this.piece;
     if (p) {
       matrix.addMatrix(p.matrix, p.r, p.c);
-    }
-
-    // draw ghost piece
-    let g = cloneDeep(p);
-    if (g) {
+      // draw ghost piece
+      let g = cloneDeep(p);
       matrix.addMatrix(g.matrix, p.r + 2, p.c);
     }
 
