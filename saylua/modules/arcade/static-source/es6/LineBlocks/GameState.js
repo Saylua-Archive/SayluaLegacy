@@ -234,8 +234,8 @@ export default class GameState extends BaseModel {
         let col = c + j;
 
         if (matrix.withinBounds(row, col)) {
-          // If the piece intersects another piece.
-          if (piece.get(i, j) && matrix.get(row, col)) {
+          // If the piece intersects another piece. Ignore ghost pieces.
+          if (piece.get(i, j) && (matrix.get(row, col) && matrix.get(row, col) != -1)) {
             return false;
           }
         } else if (row >= 0 && piece.get(i, j)) {
