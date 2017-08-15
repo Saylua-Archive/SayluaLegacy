@@ -271,7 +271,6 @@ export default class GameState extends BaseModel {
       matrix.addMatrix(p.matrix, p.r, p.c);
       // draw ghost piece
       let g = cloneDeep(p);
-      matrix.addMatrix(g.matrix, g.r + 8, g.c);
     }
 
     // gameMatrix is bound to a BlockGrid, which should render this.
