@@ -272,7 +272,9 @@ export default class GameState extends BaseModel {
       // draw ghost piece
       let g = cloneDeep(p);
       for (var i = 0; i < g.length; i++) {
-        g[i]
+        if (g[i] != 0) {
+          g[i] = 8;
+        }
       }
     }
 
