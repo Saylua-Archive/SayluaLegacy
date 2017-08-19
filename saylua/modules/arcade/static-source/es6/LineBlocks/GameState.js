@@ -276,7 +276,7 @@ export default class GameState extends BaseModel {
           g[i] = 8;
         }
       }
-      matrix.addMatrix(g.matrix, g.r, g.c);
+      matrix.addMatrix(g.matrix, g.r + 8, g.c);
     }
 
     // gameMatrix is bound to a BlockGrid, which should render this.
