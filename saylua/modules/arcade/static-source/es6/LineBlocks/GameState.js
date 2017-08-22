@@ -276,7 +276,7 @@ export default class GameState extends BaseModel {
           g[i] = 8;
         }
       }
-      while (g.validPlacement) {
+      while (validPlacement(g, r, c)) {
         g.r++;
       }
       matrix.addMatrix(g.matrix, g.r, g.c);
