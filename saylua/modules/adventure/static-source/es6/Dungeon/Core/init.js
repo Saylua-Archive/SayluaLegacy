@@ -183,19 +183,34 @@ function generatePlayerStatusSprites() {
 export function generateNodeGraph(tileSet, tileLayer) {
   let nodeGraph = [];
 
-  // Our A* implementation uses [x][y] grids, so we must convert from our [y][x] grids.
-  // Weight based on whether or not they are obstructions.
+  // Generate x,y grid and set traversal cost based on whether or not they are obstructions.
   for (let tile of tileLayer) {
     nodeGraph[tile.location.x] = nodeGraph[tile.location.x] || [];
+
+    let node = {
+      'cost': undefined,
+      'priorCost': undefined
+    };
 
     let parentTileType = tileSet[tile.tile].type;
     let isObstruction = (OBSTRUCTIONS.indexOf(parentTileType) !== -1);
 
-    if (isObstruction) {
-      nodeGraph[tile.location.x].push(0);
+    // In the future, a more sophisticated cost derived from
+    // parent.meta attributes can be put here.
+    // --------------------------------------------------------
+    // While a cost of '0' is considered to be infinitely high,
+    // costs are otherwise considered "more preferable" the
+    // lower in cost they are (including negatives).
+
+    if (isObstruction === true) {
+      node.cost = 0;
+      node.priorCost = 1;
     } else {
-      nodeGraph[tile.location.x].push(1);
+      node.cost = 1;
+      node.priorCost = 1;
     }
+
+    nodeGraph[tile.location.x].push(node);
   }
 
   return nodeGraph;

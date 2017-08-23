@@ -54,7 +54,7 @@ export function placeSummon(summon, location, entityLayer, tileLayer, nodeGraph)
     // Dirty grid modification, for speed reasons
     // Ctrl+F: "Bug in the making"
     let isObstacle = (OBSTRUCTIONS.indexOf(summon.type) !== -1);
-    nodeGraph.grid[location.x][location.y].weight = (isObstacle === true) ? 0 : 1;
+    nodeGraph.graphs[0].node({ 'x': location.x, 'y': location.y }, true).cost = (isObstacle === true) ? 0 : 1;
 
   } else {
     window.specialEventQueue.summonEntity = summon;

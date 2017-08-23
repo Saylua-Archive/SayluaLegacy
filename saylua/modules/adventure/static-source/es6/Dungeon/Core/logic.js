@@ -109,7 +109,13 @@ export function translatePlayerLocation(player, tileLayer, tileSet, entityLayer,
   try {
     let linearPosition = ((g_y * mapWidth) + g_x);
     goalCell = tileLayer[linearPosition];
-    let validTile = (goalCell.location.x === g_x && goalCell.location.y === g_y);
+
+    let validTile = (
+      (goalCell !== undefined) &&
+      (goalCell.location.x === g_x) &&
+      (goalCell.location.y === g_y)
+    );
+
     if (!validTile) {
       throw("Invalid location");
     }
@@ -117,19 +123,14 @@ export function translatePlayerLocation(player, tileLayer, tileSet, entityLayer,
     return player.location;
   }
 
-  if (goalCell === undefined) {
-    return player.location;
-  }
-
   // Determine if we can go there, physically.
   goalTile = tileSet[goalCell.tile];
-  tileType = goalTile['type'];
 
-  if (OBSTRUCTIONS.indexOf(tileType) !== -1) {
+  if (OBSTRUCTIONS.indexOf(goalTile.type) !== -1) {
     return player.location;
   }
 
-  // One last check, is there an entity on this tile? (This should trigger an attack in the future)
+  // One last check, is there an entity on this tile?
   let targetEntity = entityLayer.filter((entity) => (
     (entity.location.x === g_x) &&
     (entity.location.y === g_y) &&

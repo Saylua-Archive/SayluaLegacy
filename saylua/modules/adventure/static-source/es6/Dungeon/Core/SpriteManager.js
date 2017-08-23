@@ -61,18 +61,33 @@ export default class SpriteManager {
   }
 
 
+  getEntity(entityID) {
+    let items = this.gameState.entityLayer.filter((entity) => {
+      return entity.id === entityID;
+    });
+
+    if (items.length === 1) {
+      return items[0];
+    } else if (items.length === 0) {
+      return false;
+    } else if (items.length > 1) {
+      throw("Attempting to find an entity returned more than one matching item.");
+    }
+  }
+
+
   getSprite(entityID) {
     let items = this.entityStage.children.filter((sprite) => {
       return sprite.entityID === entityID;
     });
 
-    if (items.length > 1) {
-      throw("Attempting to find a sprite returned more than one matching item.");
-    } else if (items.length === 1) {
+    if (items.length === 1) {
       return items[0];
+    } else if (items.length === 0) {
+      return false;
+    } else if (items.length > 1) {
+      throw("Attempting to find a sprite returned more than one matching item.");
     }
-
-    return false;
   }
 
 

@@ -27,6 +27,7 @@ const engage = () => {
   // Disengage when we've been chasing for too long.
   if (self.meta.chaseDistance > 16) {
     roam();
+    return;
   }
 
   // Returns an array of nodes to reach the player.
@@ -47,7 +48,7 @@ const engage = () => {
       self.location.x = newLocation[0].x;
       self.location.y = newLocation[0].y;
 
-      // This will weight the old location, and unweight the new location, in addition
+      // This will clear the old location, and occlude the new location, in addition
       // to adding it to an animation queue.
       __move(self.id, oldPosition, self.location);
     }
@@ -104,8 +105,7 @@ const roam = () => {
   self.meta.roamProgress = Math.floor(self.meta.roamDistance);
 
   if (newLocation !== undefined) {
-    self.location.x = newLocation.x;
-    self.location.y = newLocation.y;
+    __move(self.id, self.location, newLocation);
   }
 };
 

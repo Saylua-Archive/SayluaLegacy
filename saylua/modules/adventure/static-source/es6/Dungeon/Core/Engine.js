@@ -121,7 +121,7 @@ export default class Engine {
         let timeElapsed = now - data.timestamp;
         let sprite = this.entityManager.getSprite(actorID);
 
-        // Invisible sprites should not be animated.w
+        // Invisible sprites should not be animated.
         data.expired = (sprite.visible === false) ? true : (timeElapsed > temporaryAnimationDuration);
 
         // Calculate our goal coordinates.
@@ -154,6 +154,11 @@ export default class Engine {
 
           // Make sprite brighter.
           sprite.blendMode = PIXI.BLEND_MODES.SCREEN;
+
+          // Update entity location preemptively.
+          let entity = this.entityManager.getEntity(actorID);
+          entity.location.x = newPosition.x;
+          entity.location.y = newPosition.y;
         }
 
         // Use goal coordinates to set sprite position.

@@ -26,6 +26,11 @@ export function getBaseData(player, tileSet, tileLayer, dimensions, mapHeight, m
 
 
 export function renderTiles(baseData, tileSet, tileLayer, tileSprites) {
+  let state = window.getStoreState();
+
+  const showCollisions = state.debug.showCollisions;
+  const graph = state.nodeGraph.graphs[0];
+
   // There are MUCH prettier ways to do this.
   // This, however, is the fastest. Blame Javascript's expensive array operations.
   for (let tile of tileLayer) {
@@ -81,20 +86,36 @@ export function renderTiles(baseData, tileSet, tileLayer, tileSprites) {
     }
 
     // Show the debugging collision grid if necessary.
-    let state = window.getStoreState();
-    let showCollisions = state.debug.showCollisions;
-
     if (showCollisions === true) {
       if (tileVisible || tileSeen) {
-        let tileCell = state.nodeGraph.grid[x][y];
+        let tileCell = graph.node({ x, y }, true);
 
-        if (tileCell.weight === 0) {
+        if (sprite.meta.debugCollisionCost === undefined) {
+          sprite.meta.debugCollisionCost = new PIXI.Text('', {
+            'fontFamily': 'Arial',
+            'fontSize': 16,
+            'fill': 0xffffff,
+            'align': 'center'
+          });
+
+          sprite.addChild(sprite.meta.debugCollisionCost);
+        }
+
+        sprite.meta.debugCollisionCost.visible = true;
+        sprite.meta.debugCollisionCost.text = String(tileCell.cost);
+        sprite.meta.debugCollisionCost.x = (sprite.width - sprite.meta.debugCollisionCost.width) / 2;
+        sprite.meta.debugCollisionCost.y = (sprite.height - sprite.meta.debugCollisionCost.height) / 2;
+
+        if (tileCell.cost === 0) {
           sprite.tint = 0xF00F00;
         } else {
-          sprite.tint = 0x1FB395;
+          sprite.tint = 0xFFFFFF;
         }
       }
     } else {
+      if (sprite.meta.debugCollisionCost !== undefined) {
+        sprite.meta.debugCollisionCost.visible = false;
+      }
       sprite.tint = 0xFFFFFF;
     }
   }
