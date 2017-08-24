@@ -276,6 +276,7 @@ export default class GameState extends BaseModel {
           g[i] = 8;
         }
       }
+      // advance the ghost piece
       while (validPlacement(g, g.r, g.c)) {
         g.r++;
       }
