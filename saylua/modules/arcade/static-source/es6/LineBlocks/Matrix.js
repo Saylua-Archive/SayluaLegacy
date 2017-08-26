@@ -22,7 +22,7 @@ export default class Matrix {
       for (let j = 0; j < other.width; j++) {
         let row = r + i;
         let col = c + j;
-        if (this.withinBounds(row, col)) {
+        if (this.withinBounds(row, col) && !this.data[row * this.width + col]) {
           this.add(row, col, other.get(i, j));
         }
       }
