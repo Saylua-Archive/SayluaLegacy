@@ -190,21 +190,20 @@ export default class GameState extends BaseModel {
       return true;
     }
     // If moving down is invalid, the piece cannot fall anymore.
+    if (this.overTop(p.matrix, p.r, p.c)) {
+      this.endGame();
+    }
     this.placedPieces.addMatrix(p.matrix, p.r, p.c);
     this.canSpeed = false;
 
-    if (this.checkGameOver()) {
-      // GAME OVER.
-      this.endGame();
-    } else {
-      this.getNextPiece();
+    this.getNextPiece();
 
-      // Check if a line was made.
-      if (this.clearLines(p.r, p.r + 4).length > 0) {
-        this.score += 50;
-        this.timeout -= 3;
-      }
+    // Check if a line was made.
+    if (this.clearLines(p.r, p.r + 4).length > 0) {
+      this.score += 50;
+      this.timeout -= 3;
     }
+
     return false;
   }
 
@@ -226,6 +225,22 @@ export default class GameState extends BaseModel {
     return deleted;
   }
 
+  overTop(piece, r, c) {
+    let matrix = this.placedPieces;
+    for (let i = 0; i < piece.height; i++) {
+      for (let j = 0; j < piece.width; j++) {
+        let row = r + i;
+        let col = c + j;
+
+        if (row < 0 && piece.get(i, j)) {
+          // If the piece goes over the top.
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   validPlacement(piece, r, c) {
     let matrix = this.placedPieces;
     for (let i = 0; i < piece.height; i++) {
@@ -234,15 +249,15 @@ export default class GameState extends BaseModel {
         let col = c + j;
 
         if (matrix.withinBounds(row, col)) {
-          // If the piece intersects another piece. Ignore ghost pieces with value 8.
-          if (piece.get(i, j) && (matrix.get(row, col) && matrix.get(row, col) != 8)) {
+          // If the piece intersects another piece. Ignore ghost pieces with value >= 10.
+          if (piece.get(i, j) && (matrix.get(row, col) && matrix.get(row, col) < 10)) {
             return false;
           }
         } else if (row >= 0 && piece.get(i, j)) {
           // If the piece goes past the sides or the bottom.
           // (don't count the top)
           return false;
-        } else if ((j < 1 || j > 10) && piece.get(i, j)) {
+        } else if ((col < 0 || col > 9) && piece.get(i, j)) {
           // If the piece goes past the sides (counting the top).
           return false;
         }
@@ -271,13 +286,13 @@ export default class GameState extends BaseModel {
       matrix.addMatrix(p.matrix, p.r, p.c);
       // draw ghost piece
       let g = cloneDeep(p);
-      for (var i = 0; i < g.length; i++) {
-        if (g[i] != 0) {
-          g[i] = 8;
+      for (var i = 0; i < g.matrix.data.length; i++) {
+        if (g.matrix.data[i] != 0) {
+          g.matrix.data[i] += 10;
         }
       }
       // advance the ghost piece
-      while (validPlacement(g, g.r, g.c)) {
+      while (this.validPlacement(g.matrix, g.r + 1, g.c)) {
         g.r++;
       }
       matrix.addMatrix(g.matrix, g.r, g.c);

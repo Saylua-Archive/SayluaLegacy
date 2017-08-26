@@ -171,10 +171,40 @@ $textShadowDark: hsl(207, 32%, 25%);
   background: hsl(36, 100%, 57%);
 }
 
-/* For ghost pieces */ 
-.grid-square-8 {
-  border: hsl(212, 3%, 50%) 1px solid;
-  background: hsl(214, 3%, 67%);
+/* For ghost pieces */
+.grid-square-11 {
+  border: hsla(289, 100%, 39%, 0.3) 1px solid;
+  background: hsla(291, 100%, 49%, 0.3);
+}
+
+.grid-square-12 {
+  border: hsla(340, 87%, 39%, 0.3) 1px solid;
+  background: hsla(340, 82%, 59%, 0.3);
+}
+
+.grid-square-13 {
+  border: hsla(231, 91%, 42%, 0.3) 1px solid;
+  background: hsla(231, 99%, 62%, 0.3);
+}
+
+.grid-square-14 {
+  border: hsla(200, 100%, 38%, 0.3) 1px solid;
+  background: hsla(199, 92%, 56%, 0.3);
+}
+
+.grid-square-15 {
+  border: hsla(4, 97%, 38%, 0.3) 1px solid;
+  background: hsla(4, 90%, 58%, 0.3);
+}
+
+.grid-square-16 {
+  border: hsla(133, 100%, 29%, 0.3) 1px solid;
+  background: hsla(145, 100%, 39%, 0.3);
+}
+
+.grid-square-17 {
+  border: hsla(34, 100%, 40%, 0.3) 1px solid;
+  background: hsla(36, 100%, 57%, 0.3);
 }
 
 .game-buttons {
