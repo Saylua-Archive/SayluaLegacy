@@ -7,7 +7,7 @@ import { slFetch } from "saylua-fetch";
 
 const LB_FPS = 60;
 const LB_MIN_TIMEOUT = 10;
-const LB_LR_INTERVAL = 2;
+const LB_LR_INTERVAL = 3;
 const LB_PIECES = [[0, 1, 0, 0, // i
                     0, 1, 0, 0,
                     0, 1, 0, 0,
