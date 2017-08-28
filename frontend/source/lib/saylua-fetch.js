@@ -4,7 +4,7 @@ var token = null;
 
 export function slFetch(url, request) {
   token = getCsrfToken();
-  
+
   if (request) {
     if (request.headers) {
       request.headers['X-CSRF-Token'] = token;

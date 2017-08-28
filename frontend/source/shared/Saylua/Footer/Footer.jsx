@@ -1,5 +1,7 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
+import { Link } from 'inferno-router';
+
 import './Footer.scss';
 
 import StaffActions from './StaffActions';
@@ -20,13 +22,13 @@ export default class Footer extends Component {
           <StaffActions level="moderation" />
           <StaffActions level="admin" />
           <p>
-            <a href="/online/">1 Online</a> { separator }
-            <a href="#">Back to Top</a> { separator }
-            <a href="/page/about/">About</a> { separator }
-            <a href="/page/credits/">Credits</a> { separator }
-            <a href="/page/terms/">Terms of Service</a> { separator }
-            <a href="/page/rules/">Site Rules</a> { separator }
-            <a href="/page/contact/">Contact Us</a> { separator }
+            <Link to="/online/">1 Online</Link> { separator }
+            <Link to="#">Back to Top</Link> { separator }
+            <Link to="/page/about/">About</Link> { separator }
+            <Link to="/page/credits/">Credits</Link> { separator }
+            <Link to="/page/terms/">Terms of Service</Link> { separator }
+            <Link to="/page/rules/">Site Rules</Link> { separator }
+            <Link to="/page/contact/">Contact Us</Link> { separator }
             <span id="social-icons">
               <a href="https://www.facebook.com/officialsaylua/" target="_blank" rel="noopener">
                 <i className="fa fa-fw fa-facebook" aria-hidden="true"></i>
@@ -54,10 +56,10 @@ export default class Footer extends Component {
             </button>
           </form>
           <p>
-            &copy; 2016 <a href="/">Saylua</a>
+            &copy; 2016 <Link to="/">Saylua</Link>
           </p>
           <p>
-            <a href="/admin/">Admin Panel</a>
+            <Link to="/admin/">Admin Panel</Link>
           </p>
         </div>
       </footer>

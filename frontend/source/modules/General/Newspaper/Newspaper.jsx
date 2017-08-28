@@ -2,7 +2,7 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 import './Newspaper.scss';
 
-import Saylua from 'components/layout/Saylua';
+import Saylua from 'shared/Saylua/Saylua';
 
 
 export default class Newspaper extends Component {

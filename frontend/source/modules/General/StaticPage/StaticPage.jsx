@@ -1,6 +1,8 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
+import Error404 from 'modules/Error/Error404';
+
 import * as pages from './Pages'
 
 export default class StaticPage extends Component {
@@ -13,7 +15,6 @@ export default class StaticPage extends Component {
     if (pageName in pages) {
       return pages[pageName]();
     }
-    // TODO(tiff): replace this with a 404 component.
-    return "Not Found";
+    return <Error404 />;
   }
 }

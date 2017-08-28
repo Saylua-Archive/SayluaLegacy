@@ -2,7 +2,7 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 import './Sidebar.scss';
 
-import PetAvatarView from '../../shared/PetAvatarView/PetAvatarView';
+import PetAvatarView from 'shared/PetAvatarView/PetAvatarView';
 
 // The main Saylua layout component.
 export default class Sidebar extends Component {
