@@ -25,7 +25,7 @@ def pet_reserve_post():
     adopter = g.user
     soul_name = request.form.get('soul_name')
     adoptee = db.session.query(Pet).filter(Pet.soul_name == soul_name).one_or_none()
-    youngest = (Pet.query.filter(Pet.guardian_id == g.user.id).join(PetFriendship)
+    youngest = (db.session.query(Pet).filter(Pet.guardian_id == g.user.id).join(PetFriendship)
             .order_by(PetFriendship.bonding_day.desc()).first())
     # TODO: Fix bug where unlimited adoptions allowed
     if youngest and (datetime.datetime.now() - youngest.bonding_day).days < 1:
@@ -44,7 +44,7 @@ def pet_reserve_post():
     elif adoptee.guardian_id is not None:
         flash("I'm afraid {} already has a companion.".format(adoptee.name))
     else:
-        adoptee.guardian_id = adopter.id
+        adoptee.transfer_guardian(adopter.id)
         adoptee.bonding_day = db.func.now()
         db.session.add(adoptee)
         if adopter.companion is None:

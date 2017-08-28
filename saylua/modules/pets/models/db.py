@@ -142,6 +142,17 @@ class Pet(db.Model):
         if not self.name:
             self.name = self.soul_name.capitalize()
 
+        if self.guardian_id:
+            new_friendship = PetFriendship(pet_id=self.id, guardian_id=self.guardian_id)
+            db.session.add(new_friendship)
+            db.session.commit()
+
+    def transfer_guardian(self, guardian_id):
+        self.guardian_id = guardian_id
+        new_friendship = PetFriendship(pet_id=self.id, guardian_id=guardian_id)
+        db.session.add(new_friendship)
+        db.session.commit()
+
     @hybrid_property
     def bonding_day(self):
         if not self.friendship:
