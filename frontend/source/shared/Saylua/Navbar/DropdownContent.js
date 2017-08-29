@@ -1,6 +1,6 @@
 import Inferno from 'inferno';
 
-import { Link } from 'inferno-router';
+import { Link } from 'react-router';
 
 export const dropdownContent = [
   {
@@ -9,7 +9,7 @@ export const dropdownContent = [
     'content': (
       <div className="dropdown-menu menu">
         <h3>General Saylua Stuff</h3>
-        <Link to="/">
+        <Link to="/home">
           <img src="/static/img/icons/house.png" alt="house" title="My House" aria-label="My House" />
           My House
         </Link>

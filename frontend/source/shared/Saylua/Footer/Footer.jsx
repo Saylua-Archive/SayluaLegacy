@@ -1,6 +1,6 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
-import { Link } from 'inferno-router';
+import { Link } from 'react-router';
 
 import './Footer.scss';
 

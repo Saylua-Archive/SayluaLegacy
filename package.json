@@ -27,6 +27,7 @@
     "url": "git+https://bitbucket.org/saylua/saylua.git"
   },
   "dependencies": {
+    "aliasify": "^2.1.0",
     "autoprefixer": "^7.1.2",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
@@ -39,9 +40,8 @@
     "eslint": "^4.2.0",
     "eslint-plugin-inferno": "^7.0.1",
     "inferno": "^3.6.4",
+    "inferno-compat": "^3.8.0",
     "inferno-component": "^3.6.4",
-    "inferno-router": "^3.7.1",
-    "inferno-test-utils": "^3.6.4",
     "mocha": "^3.4.2",
     "mocha-webpack": "^0.7.0",
     "node-sass": "^4.5.3",
@@ -49,6 +49,7 @@
     "path": "^0.12.7",
     "pseudomap": "^1.0.2",
     "react-onclickoutside": "^6.4.0",
+    "react-router": "^4.2.0",
     "redux": "^3.7.2",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
