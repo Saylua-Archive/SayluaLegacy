@@ -7,7 +7,7 @@ import { slFetch } from "saylua-fetch";
 
 const LB_FPS = 60;
 const LB_MIN_TIMEOUT = 10;
-const LB_LR_INTERVAL = 2;
+const LB_LR_INTERVAL = 4;
 const LB_PIECES = [[0, 1, 0, 0, // i
                     0, 1, 0, 0,
                     0, 1, 0, 0,
@@ -63,6 +63,7 @@ export default class GameState extends BaseModel {
     this.canDrop = true;
     this.canRotate = true;
     this.canSpeed = true;
+    this.canPause = true;
     this.keyState = {};
     this.fast = false;
     this.score = 0;
@@ -131,14 +132,22 @@ export default class GameState extends BaseModel {
   }
 
   timeStep() {
-    if (!this.isRunning()) return;
+    if ((this.keyState[13] || this.keyState[80]) && (this.gameOver || !this.frames)) { // Enter, p
+      this.start();
+      this.canPause = false;
+    }
+    if ((this.keyState[13] || this.keyState[80]) && this.canPause) { // Enter, p
+      this.pause();
+      this.canPause = false;
+    }
+    if (!(this.keyState[13] || this.keyState[80])) { // Enter, p
+      this.canPause = true;
+    }
 
+    if (!this.isRunning()) return;
     this.frames++;
 
     let timeout = this.timeout;
-    if (this.keyState[13] || this.keyState[80]) { // Enter, p
-      this.pause();
-    }
     if (this.keyState[32] && this.canDrop) { // Space
       this.drop();
       this.canDrop = false;
