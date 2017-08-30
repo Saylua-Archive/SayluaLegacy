@@ -10,7 +10,7 @@ export default class StaticPage extends Component {
   }
 
   render() {
-    let pageName = this.props.pageName.toLowerCase();
+    let pageName = this.props.match.params.pageName.toLowerCase();
     if (pageName in pages) {
       return pages[pageName]();
     }

@@ -3,6 +3,12 @@
 
 @import 'assets/layout/sizes';
 
+#saylua {
+  @include variable(background-color, --mainBgColor, $mainBgColor);
+  width: 100%;
+  min-height: 100%;
+}
+
 .notifications-container {
   position: relative;
 }

@@ -13,14 +13,14 @@ export default class PetAvatarView extends Component {
       return;
     }
     return (
-      <div class="pet-avatar-view">
-        <div class="avatar-view">
+      <div className="pet-avatar-view">
+        <div className="avatar-view">
           <a href="">
             <img src="" alt="human avatar" title="'s Avatar'" aria-label="'s Avatar'" />
           </a>
         </div>
-        <a href="" class="active-pet-view">
-          <img src="" class="active-pet-image" alt="active companion" title="" aria-label="" />
+        <a href="" className="active-pet-view">
+          <img src="" className="active-pet-image" alt="active companion" title="" aria-label="" />
         </a>
       </div>
     );
