@@ -180,7 +180,7 @@ export default class GameState extends BaseModel {
       this.moveRight();
     }
     if (this.fast && this.canSpeed) {
-      timeout = LB_MIN_TIMEOUT;
+      timeout = Math.min(LB_MIN_TIMEOUT * 3, timeout);
     }
     if ((this.frames - this.lastDrop) / LB_FPS >= timeout / 1000) {
       this.lastDrop = this.frames;
