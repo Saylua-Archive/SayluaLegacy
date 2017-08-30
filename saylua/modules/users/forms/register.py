@@ -35,6 +35,6 @@ class RegisterForm(FlaskForm):
         'I certify that I am at least 13 years old.',
         [sl_validators.Required(message='You must be at least 13 to join Saylua.')])
     accept_tos = SlBooleanField(
-        'I agree to the <a href="/terms/" target="_blank">Terms of Service</a>',
+        'I agree to the <a href="/terms/" target="_blank" rel="noopener">Terms of Service</a>',
         [sl_validators.Required(message='You must agree to the Terms of Service!')])
     recaptcha = RecaptchaField(validators=[Recaptcha(message='Please check the CAPTCHA.')])

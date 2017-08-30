@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% set page_title = "Your House" %}
+{% set fullscreen = True %}
+{% block body %}
+
+<h1>Your Home in {{ g.user.side_name() }}</h1>
+
+
+<div style="position: relative; backgroun: black;">
+<img src="{{ include_static('img/backgrounds/luaria.jpg') }}" />
+{% for i in range(5) %}
+<img src="{{ random_pet_image() }}" style="position: absolute; top: {{ range(250, 400) | random }}px; left: {{ i * 180 }}px;" class="mini" />
+{% endfor %}
+</div>
+
+{% endblock %}

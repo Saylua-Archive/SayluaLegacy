@@ -14,8 +14,8 @@ STARTER_COMPANIONS = ['arko_common', 'chirling_common', 'nylik_common']
 
 def home():
     try:
-        if is_devserver() or g.user:
-            return redirect('/news/', code=302)
+        if is_devserver() or g.logged_in:
+            return redirect('/house/', code=302)
         return landing()
     except AttributeError:
         return landing()

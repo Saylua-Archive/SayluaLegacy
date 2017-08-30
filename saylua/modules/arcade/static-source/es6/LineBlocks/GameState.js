@@ -7,6 +7,7 @@ import { slFetch } from "saylua-fetch";
 
 const LB_FPS = 60;
 const LB_MIN_TIMEOUT = 10;
+const LB_LR_INTERVAL = 4;
 const LB_PIECES = [[0, 1, 0, 0, // i
                     0, 1, 0, 0,
                     0, 1, 0, 0,
@@ -55,9 +56,15 @@ export default class GameState extends BaseModel {
   clearGameState() {
     this.frames = 0;
     this.lastDrop = 0;
+    this.lastLR = 0;
     this.timeout = 800;
     this.gameOver = false;
     this.paused = false;
+    this.canDrop = true;
+    this.canRotate = true;
+    this.canSpeed = true;
+    this.canPause = true;
+    this.keyState = {};
     this.fast = false;
     this.score = 0;
     this.gameMatrix = new Matrix(18, 10);
@@ -125,12 +132,54 @@ export default class GameState extends BaseModel {
   }
 
   timeStep() {
-    if (!this.isRunning()) return;
+    if ((this.keyState[13] || this.keyState[80]) && (this.gameOver || !this.frames)) { // Enter, p
+      this.start();
+      this.canPause = false;
+    }
+    if ((this.keyState[13] || this.keyState[80]) && this.canPause) { // Enter, p
+      this.pause();
+      this.canPause = false;
+    }
+    if (!(this.keyState[13] || this.keyState[80])) { // Enter, p
+      this.canPause = true;
+    }
 
+    if (!this.isRunning()) return;
     this.frames++;
 
     let timeout = this.timeout;
-    if (this.fast) {
+    if (this.keyState[32] && this.canDrop) { // Space
+      this.drop();
+      this.canDrop = false;
+    }
+    if (!this.keyState[32]) { // Space
+      this.canDrop = true;
+    }
+    if ((this.keyState[38] || this.keyState[87]) && this.canRotate) { // Up, w
+      this.rotate();
+      this.canRotate = false;
+    }
+    if (!(this.keyState[38] || this.keyState[87])) { // Up, w
+      this.canRotate = true;
+    }
+    if ((this.keyState[40] || this.keyState[83]) && this.canSpeed) { // Down, s
+      this.speedUp();
+    }
+    if (!(this.keyState[40] || this.keyState[83])) { // Down, s
+      this.canSpeed = true;
+    }
+    if (!(this.keyState[40] || this.keyState[83])) { // Down, s
+      this.speedDown();
+    }
+    if ((this.keyState[37] || this.keyState[65]) && this.frames - this.lastLR > LB_LR_INTERVAL) { // Left, a
+      this.lastLR = this.frames;
+      this.moveLeft();
+    }
+    if ((this.keyState[39] || this.keyState[68]) && this.frames - this.lastLR > LB_LR_INTERVAL) { // Right, d
+      this.lastLR = this.frames;
+      this.moveRight();
+    }
+    if (this.fast && this.canSpeed) {
       timeout = LB_MIN_TIMEOUT;
     }
     if ((this.frames - this.lastDrop) / LB_FPS >= timeout / 1000) {
@@ -142,25 +191,28 @@ export default class GameState extends BaseModel {
 
   movePieceDown() {
     let p = this.piece;
+    if (!this.canSpeed && p.r > -2) {
+      this.canSpeed = true;
+    }
     if (this.validPlacement(p.matrix, p.r + 1, p.c)) {
       p.r++;
       return true;
     }
     // If moving down is invalid, the piece cannot fall anymore.
-    this.placedPieces.addMatrix(p.matrix, p.r, p.c);
-
-    if (this.checkGameOver()) {
-      // GAME OVER.
+    if (this.overTop(p.matrix, p.r, p.c)) {
       this.endGame();
-    } else {
-      this.getNextPiece();
-
-      // Check if a line was made.
-      if (this.clearLines(p.r, p.r + 4).length > 0) {
-        this.score += 50;
-        this.timeout -= 3;
-      }
     }
+    this.placedPieces.addMatrix(p.matrix, p.r, p.c);
+    this.canSpeed = false;
+
+    this.getNextPiece();
+
+    // Check if a line was made.
+    if (this.clearLines(p.r, p.r + 4).length > 0) {
+      this.score += 50;
+      this.timeout -= 3;
+    }
+
     return false;
   }
 
@@ -182,6 +234,22 @@ export default class GameState extends BaseModel {
     return deleted;
   }
 
+  overTop(piece, r, c) {
+    let matrix = this.placedPieces;
+    for (let i = 0; i < piece.height; i++) {
+      for (let j = 0; j < piece.width; j++) {
+        let row = r + i;
+        let col = c + j;
+
+        if (row < 0 && piece.get(i, j)) {
+          // If the piece goes over the top.
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   validPlacement(piece, r, c) {
     let matrix = this.placedPieces;
     for (let i = 0; i < piece.height; i++) {
@@ -190,13 +258,16 @@ export default class GameState extends BaseModel {
         let col = c + j;
 
         if (matrix.withinBounds(row, col)) {
-          // If the piece intersects another piece.
-          if (piece.get(i, j) && matrix.get(row, col)) {
+          // If the piece intersects another piece. Ignore ghost pieces with value >= 10.
+          if (piece.get(i, j) && (matrix.get(row, col) && matrix.get(row, col) < 10)) {
             return false;
           }
         } else if (row >= 0 && piece.get(i, j)) {
           // If the piece goes past the sides or the bottom.
           // (don't count the top)
+          return false;
+        } else if ((col < 0 || col > 9) && piece.get(i, j)) {
+          // If the piece goes past the sides (counting the top).
           return false;
         }
       }
@@ -222,6 +293,18 @@ export default class GameState extends BaseModel {
     let p = this.piece;
     if (p) {
       matrix.addMatrix(p.matrix, p.r, p.c);
+      // draw ghost piece
+      let g = cloneDeep(p);
+      for (var i = 0; i < g.matrix.data.length; i++) {
+        if (g.matrix.data[i] != 0) {
+          g.matrix.data[i] += 10;
+        }
+      }
+      // advance the ghost piece
+      while (this.validPlacement(g.matrix, g.r + 1, g.c)) {
+        g.r++;
+      }
+      matrix.addMatrix(g.matrix, g.r, g.c);
     }
 
     // gameMatrix is bound to a BlockGrid, which should render this.
