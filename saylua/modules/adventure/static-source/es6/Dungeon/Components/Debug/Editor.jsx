@@ -1,4 +1,5 @@
 /* global ace */
+/* eslint { "inferno/no-unescaped-entities": 0 } */
 // Editor -> Required by DebugTools
 // --------------------------------------
 // Allows developers to edit entity / tile
@@ -158,8 +159,8 @@ export default class DebugEditor extends Component {
 
     let items = scriptNames.map((name) => {
       return (
-        <li>
-          <button onClick={ this.handleBrowserSelect.bind(this) } data-scriptName={ name } key={ name }>{ name }</button>
+        <li key={ name }>
+          <button onClick={ this.handleBrowserSelect.bind(this) } data-scriptName={ name }>{ name }</button>
         </li>
       );
     });

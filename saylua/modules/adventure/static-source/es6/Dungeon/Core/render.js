@@ -25,22 +25,12 @@ export function getBaseData(player, tileSet, tileLayer, dimensions, mapHeight, m
 }
 
 
-export function generateEntitySprite(dimensions, entityParentID) {
-  let spriteHeight = (TILE_SIZE * 0.8);
-  let spriteWidth = (TILE_SIZE * 0.8);
-
-  let spriteTexture = Graphics.getTexture(entityParentID);
-  let sprite = new PIXI.Sprite(spriteTexture);
-
-  sprite.visible = false;
-  sprite.height = spriteHeight;
-  sprite.width = spriteWidth;
-
-  return sprite;
-}
-
-
 export function renderTiles(baseData, tileSet, tileLayer, tileSprites) {
+  let state = window.getStoreState();
+
+  const showCollisions = state.debug.showCollisions;
+  const graph = state.nodeGraph.graphs[0];
+
   // There are MUCH prettier ways to do this.
   // This, however, is the fastest. Blame Javascript's expensive array operations.
   for (let tile of tileLayer) {
@@ -94,16 +84,50 @@ export function renderTiles(baseData, tileSet, tileLayer, tileSprites) {
         sprite.texture = Graphics.getTexture('tile_fog');
       }
     }
+
+    // Show the debugging collision grid if necessary.
+    if (showCollisions === true) {
+      if (tileVisible || tileSeen) {
+        let tileCell = graph.node({ x, y }, true);
+
+        if (sprite.meta.debugCollisionCost === undefined) {
+          sprite.meta.debugCollisionCost = new PIXI.Text('', {
+            'fontFamily': 'Arial',
+            'fontSize': 16,
+            'fill': 0xffffff,
+            'align': 'center'
+          });
+
+          sprite.addChild(sprite.meta.debugCollisionCost);
+        }
+
+        sprite.meta.debugCollisionCost.visible = true;
+        sprite.meta.debugCollisionCost.text = String(tileCell.cost);
+        sprite.meta.debugCollisionCost.x = (sprite.width - sprite.meta.debugCollisionCost.width) / 2;
+        sprite.meta.debugCollisionCost.y = (sprite.height - sprite.meta.debugCollisionCost.height) / 2;
+
+        if (tileCell.cost === 0) {
+          sprite.tint = 0xF00F00;
+        } else {
+          sprite.tint = 0xFFFFFF;
+        }
+      }
+    } else {
+      if (sprite.meta.debugCollisionCost !== undefined) {
+        sprite.meta.debugCollisionCost.visible = false;
+      }
+      sprite.tint = 0xFFFFFF;
+    }
   }
 }
 
 
-export function renderEntities(baseData, entityLayer, entitySprites, generateEntitySprite) {
+export function renderEntities(baseData, entityLayer, entitySprites) {
   entityLayer.map((entity, i) => {
     let x = entity.location.x;
     let y = entity.location.y;
 
-    let sprite = entitySprites[i] || generateEntitySprite(entity.parent);
+    let sprite = entitySprites[i];
 
     let tileHeight = TILE_SIZE;
     let tileWidth = TILE_SIZE;
@@ -119,6 +143,7 @@ export function renderEntities(baseData, entityLayer, entitySprites, generateEnt
 
     // Check whether or not the current entity falls within the player's FOV.
     let FOVEnabled = window.getStoreState().debug.FOVEnabled;
+    let entityAnimated = (entity.meta.animated === undefined) ? false : entity.meta.animated;
     let entitySeen = (entity.meta.seen === true);
     let entityVisible = false;
 
@@ -126,6 +151,7 @@ export function renderEntities(baseData, entityLayer, entitySprites, generateEnt
       entityVisible = baseData.validTiles[y][x];
     }
 
+    // Override visibility with the FOVEnabled debug option if possible.
     entityVisible = entityVisible || (FOVEnabled === false);
 
     // Prevent non-visible entities from rendering,
@@ -135,9 +161,14 @@ export function renderEntities(baseData, entityLayer, entitySprites, generateEnt
       entity.location.lastSeen = {x, y};
 
       sprite.alpha = 1;
-      sprite.x = Math.round((x * tileWidth) + horizontalOffset);
-      sprite.y = Math.round((y * tileHeight) + verticalOffSet);
       sprite.visible = true;
+
+      // We will only set sprite positions for entities that -cannot- move
+      // or -have not- been moved via the scripting engine.
+      if (entityAnimated === false) {
+        sprite.x = Math.round((x * tileWidth) + horizontalOffset);
+        sprite.y = Math.round((y * tileHeight) + verticalOffSet);
+      }
     } else {
       if (entitySeen === true) {
         // One last check. Is the last known location currently visible?
@@ -193,9 +224,11 @@ export function renderMinimap(baseData, tileSet, tileLayer, minimapSprites) {
   }
 }
 
+
 export function renderHUD(player, HUDSprites) {
   renderHealth(player, HUDSprites);
 }
+
 
 function renderHealth(player, HUDSprites) {
   // Set proper hearts percentage.

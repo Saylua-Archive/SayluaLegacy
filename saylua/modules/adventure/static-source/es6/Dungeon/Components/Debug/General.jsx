@@ -13,7 +13,7 @@ function mapActionsToButtons(props, state) {
   ];
 
   let items = actions.map((action) => (
-    <li>
+    <li key={ action[0].toLowerCase().replace(/\s/gi, "-") }>
       <button onClick={ action[1] }>{ action[0] }</button>
     </li>
   ));
@@ -30,6 +30,14 @@ function mapOptionsToInputs(props, state) {
         "boundFunction": props.debugToggleOption.bind(this, 'FOVEnabled')
       },
       "value": state.debug.FOVEnabled
+    },
+    {
+      "name": "Show Collision Map",
+      "type": "toggle",
+      "options": {
+        "boundFunction": props.debugToggleOption.bind(this, 'showCollisions')
+      },
+      "value": state.debug.showCollisions
     },
     {
       "name": "Capture Keyboard Input",
@@ -51,13 +59,14 @@ function mapOptionsToInputs(props, state) {
 
   let items = actions.map((action) => {
     if (action.type === "toggle") {
-      let sanitizedName = action.name.toLowerCase().replace(" ", "_");
+      let sanitizedName = action.name.toLowerCase().replace(/\s/gi, "_");
       let elementID = `toggle-${sanitizedName}`;
 
       return (
-        <li>
+        <li key={ `key-li-${ elementID }` }>
           <input
             id={ elementID }
+            class={ `state-${ action.value }` }
             type="checkbox"
             checked={ action.value }
           />

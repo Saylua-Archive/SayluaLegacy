@@ -103,7 +103,7 @@ class Pet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     soul_name = db.Column(db.String(80), unique=True)
 
-    guardian_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    guardian_id = db.Column(db.Integer, db.ForeignKey("users.id", name="guardian_id"))
     guardian = db.relationship("User", foreign_keys=[guardian_id], back_populates="pets")
 
     favorites = db.relationship("Item", secondary="pet_favorites")

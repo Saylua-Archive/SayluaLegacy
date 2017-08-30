@@ -3,6 +3,7 @@
     "description": "Sluggish beastie. Nasty things.",
     "type":        "enemy",
     "events":       {
+        "$doAttack": "script_default_enemy_attack",
         "$onIdle": "script_default_enemy_idle"
     },
     "meta":        {

@@ -1,0 +1,3 @@
+function main(args) {
+  // no
+}

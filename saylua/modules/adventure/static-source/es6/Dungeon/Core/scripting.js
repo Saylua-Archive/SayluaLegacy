@@ -2,8 +2,6 @@
 // --------------------------------------
 // The heart of Dungeons' game scripting.
 
-import astar from "astar";
-
 import * as MathUtils from "../Utils/math";
 import * as EngineUtils from "../Utils/engine";
 
@@ -11,23 +9,23 @@ import { OBSTRUCTIONS } from "./logic";
 
 
 const ENABLED_SPECIAL_VARIABLES = [
-  '$this',
-  '$tileLayer',
-  '$entityLayer',
-  '$tiles',
-  '$player',
-  '$entities',
   '$entity_nearest',
   '$entity_nearest_@type',
+  '$entityLayer',
+  '$entitySet',
   '$location',
+  '$player',
+  '$this',
+  '$tileLayer',
+  '$tileSet',
+  '__attack',
   '__distance',
   '__isObstacle',
   '__log',
-  '__moveTo',
-  '__rand',
-  // Temporary
-  '__debugMove',
-  '__debugAttack'
+  '__move',
+  '__pathTo',
+  '__queueEvent',
+  '__rand'
 ];
 
 //const WORKERS_ENABLED = (window.Worker !== undefined);
@@ -100,6 +98,8 @@ export function compileScript(id, payload, event, recompile=false) {
 
   window.scriptEngineFunctions[id][event]['requires'] = requires;
   window.scriptEngineFunctions[id][event]['function'] = window.__tfunc;
+  window.scriptEngineFunctions[id][event]['function'].__owner__ = id;
+  window.scriptEngineFunctions[id][event]['function'].__event__ = event;
   window.scriptEngineFunctions[id][event]['payload'] = payload;
   //window.scriptEngineFunctions[id][event]['functionString'] = functionString;
 
@@ -133,7 +133,7 @@ function executeScript(scriptFunction, meta) {
   try {
     scriptFunction.function.apply(this, args);
   } catch(e) {
-    console.log(`Script ${scriptFunction.id} failed: `); // eslint-disable-line no-console
+    console.log(`Script ${scriptFunction.__owner__}.${scriptFunction.__event__} failed: `); // eslint-disable-line no-console
     console.log(e); // eslint-disable-line no-console
   }
 }
@@ -223,19 +223,20 @@ export function interpretGameEvents(data) {
     baseData.location = data.actionLocation;
 
     // Entities first
-    newEntityLayer.filter((entity) => {
-      // Filter to matching non-player, non-self entities.
-      let isNotPlayer = (entity.parent !== '0x1000');
-      let isSameLocation = ((entity.location.x == data.actionLocation.x) && (entity.location.y == data.actionLocation.y));
-      let hasScripts = (entity.meta.noScripts !== true);
-      let isAlive = (entity.meta.dead !== true);
+    newEntityLayer
+      .filter((entity) => {
+        // Filter to matching non-player, non-self entities.
+        let isNotPlayer = (entity.parent !== '0x1000');
+        let isSameLocation = ((entity.location.x == data.actionLocation.x) && (entity.location.y == data.actionLocation.y));
+        let hasScripts = (entity.meta.noScripts !== true);
+        let isAlive = (entity.meta.dead !== true);
 
-      return (isNotPlayer && isSameLocation && hasScripts && isAlive);
-    })
-    .map((entity) => {
-      baseData.this = entity;
-      resolveActorScripts(event, entity, baseData);
-    });
+        return (isNotPlayer && isSameLocation && hasScripts && isAlive);
+      })
+      .map((entity) => {
+        baseData.this = entity;
+        resolveActorScripts(event, entity, baseData);
+      });
 
     // Now the tile.
     let linearPosition = ((data.actionLocation.y * data.mapWidth) + data.actionLocation.x);
@@ -253,6 +254,7 @@ export function interpretGameEvents(data) {
 
   return [newEntityLayer, newTileLayer];
 }
+
 
 function resolveSpecialVariable(id, specialVariable, meta) {
   let splitVar = specialVariable.split('_');
@@ -336,35 +338,69 @@ function resolveSpecialVariable(id, specialVariable, meta) {
     return nearestEntity;
   }
 
-  if (specialVariable === '__debugAttack') {
-    let debugAttack = (id, damage) => {
-      window.queue['attack'].push([id, damage]);
+  if (specialVariable === '__attack') {
+    let actorAttack = (id, args={}) => {
+      window.queue['actorAttack'].push([id, args]);
     };
 
-    return debugAttack;
+    return actorAttack;
   }
 
-  if (specialVariable === '__debugMove') {
-    let debugMove = (nodeGraph) => (id, oldPosition, newPosition) => {
-      // Add weight to our old location
-      let oldNode = nodeGraph.grid[oldPosition.x][oldPosition.y];
+  if (specialVariable === '__move') {
+    let move = (nodeGraph, entityLayer, mapWidth) => (id, oldPosition, newPosition) => {
+      const graph = nodeGraph.graphs[0];
+      const cost = nodeGraph.options.cost;
+      const lineate = (x, y) => (x + (y * mapWidth));
+      const potentialNeighbors = (location) => {
+        let o_x = location.x;
+        let o_y = location.y;
 
-      if (oldNode.priorWeight !== undefined) {
-        oldNode.weight = oldNode.priorWeight;
-      }
+        return [
+          [o_x-1, o_y],   // Cardinal Left
+          [o_x+1, o_y],   // Cardinal Right
+          [o_x, o_y-1],   // Cardinal Up
+          [o_x, o_y+1],   // Cardinal Down
+          [o_x-1, o_y-1], // Diagonal Upper-Left
+          [o_x-1, o_y+1], // Diagonal Lower-Left
+          [o_x+1, o_y-1], // Diagonal Upper-Right
+          [o_x+1, o_y+1]  // Diagonal Lower-Right
+        ];
+      };
 
-      // Unweight our new location
-      let newNode = nodeGraph.grid[newPosition.x][newPosition.y];
-      newNode.priorWeight = newNode.weight;
+      // Decrease the cost of our old location
+      let oldNode = graph.node({ 'x': oldPosition.x, 'y': oldPosition.y }, true);
+      oldNode.cost = oldNode.priorCost;
 
-      let newWeight = Math.max(0, (newNode.weight - 1));
-      newNode.weight = newWeight;
+      // Occlude our new location
+      let newNode = graph.node({ 'x': newPosition.x, 'y': newPosition.y }, true);
+      newNode.priorCost = newNode.cost;
+      newNode.cost = 0;
+
+      // Forge / update / remove edge connections as necessary in our old location
+      potentialNeighbors(oldPosition)
+        .map(n => graph.nodes.get(lineate(n[0], n[1])))
+        .filter(n => n)
+        .map(neighbor =>
+          graph.edge(oldNode, neighbor, cost(oldNode, neighbor), cost(neighbor, oldNode))
+        );
+
+      // Forge / update / remove edge connections at our new location
+      potentialNeighbors(newPosition)
+        .map(n => graph.nodes.get(lineate(n[0], n[1])))
+        .filter(n => n)
+        .map(neighbor =>
+          graph.edge(newNode, neighbor, cost(newNode, neighbor), cost(neighbor, newNode))
+        );
+
+      // Mark our actor as 'animated'.
+      let matchingEntity = entityLayer.filter((entity) => entity.id === id)[0];
+      matchingEntity.meta.animated = true;
 
       // Log move event to a global queue used for animation.
-      window.queue['move'].push([id, oldPosition, newPosition]);
+      window.queue['actorMove'].push([id, { oldPosition, newPosition }]);
     };
 
-    return debugMove(meta.nodeGraph);
+    return move(meta.nodeGraph, meta.entityLayer, meta.mapWidth);
   }
 
   if (specialVariable === '__distance') {
@@ -401,18 +437,26 @@ function resolveSpecialVariable(id, specialVariable, meta) {
     return curry(meta.tileSet, meta.tileLayer, meta.mapWidth, OBSTRUCTIONS);
   }
 
-  if (specialVariable === '__moveTo') {
+  if (specialVariable === '__pathTo') {
     let curry = (nodeGraph) => (data) => {
-      let start, end;
+      let result = nodeGraph.path(data.location, data.target);
 
-      start = nodeGraph.grid[data.location.x][data.location.y];
-      end = nodeGraph.grid[data.target.x][data.target.y];
+      if (result.length !== 0) {
+        result.shift();
+      }
 
-      let result = astar.astar.search(nodeGraph, start, end, { 'heuristic': astar.astar.heuristics.diagonal });
       return result;
     };
 
     return curry(meta.nodeGraph);
+  }
+
+  if (specialVariable === '__queueEvent') {
+    let queueEvent = (id, args={}, blocking=false) => {
+      window.queue['actorEvent'].push([id, { args, blocking }]);
+    };
+
+    return queueEvent;
   }
 
   if (specialVariable === '__rand') {

@@ -22,7 +22,7 @@ class RedirectForm(FlaskForm):
 
     def redirect(self, endpoint='general.home', **values):
         target = get_redirect_target()
-        print target
+        print(target)
         if request.url_rule.rule in target:
             target = None
         return redirect(target or url_for(endpoint, **values))

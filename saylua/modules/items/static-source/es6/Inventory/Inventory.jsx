@@ -36,7 +36,7 @@ export default class Inventory extends Component {
 
     let categories = model.categories.map(function(category) {
       return (
-        <a className="subtle-button" onClick={ model.setCategory.bind(model, category.id) }>
+        <a className="subtle-button" onClick={ model.setCategory.bind(model, category.id) } key={ category.id }>
           { category.name }
         </a>
       );
@@ -48,7 +48,7 @@ export default class Inventory extends Component {
         gridClass += " selected";
       }
       return (
-        <div className={ gridClass }>
+        <div className={ gridClass } key={ item.name }>
           <span className="link" onClick={ model.setIndex.bind(model, i) }>
             <img src={ item.image_url } className="item" alt={ item.name }
               title={ item.name } aria-label={ item.name } />
@@ -64,7 +64,7 @@ export default class Inventory extends Component {
     }
 
     let pagination = <Pagination currentPage={ model.currentPage }
-        pageCount={ model.pageCount } onPageChange={ model.setCurrentPage.bind(model) } />;
+      pageCount={ model.pageCount } onPageChange={ model.setCurrentPage.bind(model) } />;
     let itemModal = null;
     let item = model.getItem();
     if (item) {
@@ -72,7 +72,7 @@ export default class Inventory extends Component {
         model.setIndex(-1);
       };
       itemModal = <ItemModal item={ item } companion={ model.companion }
-          onClose={ onModalClose } />;
+        onClose={ onModalClose } />;
     }
     return (
       <div>

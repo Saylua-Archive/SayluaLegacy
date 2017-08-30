@@ -1,0 +1,113 @@
+{
+  "skins": {
+    "default": {
+      "master_hand_idle": {
+        "master_hand_idle": {
+          "width": 100,
+          "y": 1,
+          "height": 100,
+          "name": "master_hand_idle",
+          "x": 2
+        }
+      }
+    }
+  },
+  "slots": [
+    {
+      "attachment": "master_hand_idle",
+      "name": "master_hand_idle",
+      "color": "ffffffff",
+      "bone": "root"
+    }
+  ],
+  "ik": [],
+  "animations": {
+    "attack": {
+      "bones": {
+        "root": {
+          "translate": [
+            {
+              "y": 0,
+              "time": 0,
+              "x": 0
+            },
+            {
+              "y": 69.95,
+              "time": 0.15,
+              "x": -75.525
+            },
+            {
+              "y": 0,
+              "time": 0.2666,
+              "x": -153.5
+            },
+            {
+              "y": 0,
+              "time": 0.3332,
+              "x": 0
+            }
+          ],
+          "scale": [
+            {
+              "y": 1,
+              "time": 0,
+              "x": 1
+            },
+            {
+              "y": 1,
+              "time": 0.15,
+              "x": 1
+            },
+            {
+              "y": 1,
+              "time": 0.2666,
+              "x": 1
+            },
+            {
+              "y": 1,
+              "time": 0.3332,
+              "x": 1
+            }
+          ],
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 0.15,
+              "angle": -116.4906
+            },
+            {
+              "time": 0.2666,
+              "angle": 0
+            },
+            {
+              "time": 0.3332,
+              "angle": 0
+            }
+          ]
+        }
+      },
+      "events": [
+        {
+          "name": "contact",
+          "time": 0.2333
+        }
+      ]
+    }
+  },
+  "skeleton": {
+    "images": "./static/img/dungeons/debug/",
+    "spine": "3.3.07"
+  },
+  "bones": [
+    {
+      "name": "root",
+      "length": 0
+    }
+  ],
+  "events": {
+    "contact": {}
+  }
+}

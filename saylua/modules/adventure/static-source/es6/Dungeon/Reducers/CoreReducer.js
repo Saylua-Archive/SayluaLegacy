@@ -4,8 +4,10 @@
 // Produces outputs from various inputs.
 // Holds the actual data that makes up Dungeons.
 
+import "lowlight.astar"; // This injects itself into the window object
+window.astar = window.Lowlight.Astar;
+
 import cloneDeep from "lodash.clonedeep";
-import astar from "astar";
 import { slFetch } from "saylua-fetch";
 
 import * as Scripting from "../Core/scripting";
@@ -23,41 +25,61 @@ export function getInitialGameState() {
       'Content-Type': 'application/json',
     }
   })
-  .then(response => response.json())
-  .then((result) => {
-    let newTileSet = {};
-    result.tileSet.map((tile) => {
-      newTileSet[tile.id] = tile;
+    .then(response => response.json())
+    .then((result) => {
+      let newTileSet = {};
+      result.tileSet.map((tile) => {
+        newTileSet[tile.id] = tile;
+      });
+
+      let newEntitySet = {};
+      result.entitySet.map((entity) => {
+        newEntitySet[entity.id] = entity;
+      });
+
+      // Normalize our tileLayer into a shallow array.
+      let [mapHeight, mapWidth, newTileLayer] = GameInit.normalizeTileLayer(result.tileLayer);
+
+      // Initialize entity HP
+      let newEntityLayer = GameInit.initializeEntityHP(newEntitySet, result.entityLayer);
+
+      result.mapHeight = mapHeight;
+      result.mapWidth = mapWidth;
+      result.tileLayer = newTileLayer;
+      result.tileSet = newTileSet;
+      result.entityLayer = newEntityLayer;
+      result.entitySet = newEntitySet;
+
+      let rawNodeGraph = GameInit.generateNodeGraph(result.tileSet, result.tileLayer);
+      let graphOptions = {
+        'order': "xy",
+        'torus': false,     // No grid wrapping
+        'diagonals': true,
+        'heuristic': 'manhattan',
+        'cutting': false,   // No diagonal jumping through walls
+        'cost': (a, b) => {
+          // Prevent units from being trapped within obstacles.
+          if (a.id === b.id) {
+            return 0;
+          }
+
+          return (b.cost === 0) ? null : b.cost;
+        },
+        'thread': false
+      };
+
+      result.nodeGraph = new window.astar.Configuration(rawNodeGraph, graphOptions);
+
+      result.gameClock = 0;
+      result.UI = {
+        "canMove": true,
+        "showMinimap": false,
+        "waitingOnDungeonRequest": false
+      };
+      result.log = [];
+
+      return result;
     });
-
-    let newEntitySet = {};
-    result.entitySet.map((entity) => {
-      newEntitySet[entity.id] = entity;
-    });
-
-    // Normalize our tileLayer into a shallow array.
-    let [mapHeight, mapWidth, newTileLayer] = GameInit.normalizeTileLayer(result.tileLayer);
-
-    // Initialize entity HP
-    let newEntityLayer = GameInit.initializeEntityHP(newEntitySet, result.entityLayer);
-
-    result.mapHeight = mapHeight;
-    result.mapWidth = mapWidth;
-    result.tileLayer = newTileLayer;
-    result.tileSet = newTileSet;
-    result.entityLayer = newEntityLayer;
-    result.entitySet = newEntitySet;
-    result.nodeGraph = new astar.Graph(GameInit.generateNodeGraph(result.tileSet, result.tileLayer), { diagonal: true });
-    result.gameClock = 0;
-    result.UI = {
-      "canMove": true,
-      "showMinimap": false,
-      "waitingOnDungeonRequest": false
-    };
-    result.log = [];
-
-    return result;
-  });
 
   return request;
 }
@@ -130,6 +152,7 @@ export const CoreReducer = (state, action) => {
       var translation = GameLogic.translatePlayerLocation(player, state.tileLayer, state.tileSet, state.entityLayer, action.direction, state.mapWidth);
       var playerMoved = ((player.location != translation) || (player.target !== undefined));
 
+      // Update our entityLayer copy with the player's new position.
       player.location.x = translation.x;
       player.location.y = translation.y;
       entities[0] = player;
@@ -168,7 +191,7 @@ export const CoreReducer = (state, action) => {
       var newState = { ...state, 'entityLayer': entities, 'gameClock': newGameClock };
 
       // Make sure we trigger any entity / tile we collide with
-      newState = CoreReducer(newState, { 'type': 'TRIGGER_EVENT_ENTER', 'location': player.location });
+      // newState = CoreReducer(newState, { 'type': 'TRIGGER_EVENT_ENTER', 'location': player.location });
 
       // Step the game forward one time unit
       newState = CoreReducer(newState, { 'type': 'PROCESS_AI' });
@@ -193,17 +216,22 @@ export const CoreReducer = (state, action) => {
 
       return { ...state, 'entityLayer': entities };
 
+    case 'DISABLE_MOVEMENT':
+
+      var newUIState = { ...state.UI, 'canMove': false };
+
+      return { ...state, 'UI': newUIState };
+
+    case 'ENABLE_MOVEMENT':
+
+      var newUIState = { ...state.UI, 'canMove': true };
+
+      return { ...state, 'UI': newUIState };
+
     case 'TOGGLE_MINIMAP':
 
       var showMinimap = !state.UI.showMinimap;
       var newUIState = { ...state.UI, showMinimap };
-
-      return { ...state, 'UI': newUIState };
-
-    case 'TOGGLE_MOVEMENT':
-
-      var canMove = !state.UI.canMove;
-      var newUIState = { ...state.UI, canMove };
 
       return { ...state, 'UI': newUIState };
 

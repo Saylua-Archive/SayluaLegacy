@@ -6,34 +6,41 @@ import { addAdditionalDebugParameters } from "./Reducers/DebugReducer";
 import DungeonClient from "./Components/DungeonClient";
 import DebugTools from "./Components/DebugTools";
 
+// Common events that will be ingested by the Engine every loop.
+window.queue = {
+  'log': [],
+  'actorAttack': [],
+  'actorEvent': [],
+  'actorMove': [],
+  'playerMove': []
+};
+
+// Does what you think it does. Handles rare, hookable events.
+window.specialEventQueue = {
+  'nextGameState': undefined,
+  'summonEntity': undefined
+};
+
+// This is here primarily so that random sections of code know debug values.
+window._getStoreState = (store) => () => store.getState();
+window.getStoreState = () => false;
+
 
 export default function Main() {
-  // We're bad people, so let's establish some globals that we'll need.
-  window.queue = {
-    'log': [],
-    'attack': [],
-    'move': []
-  };
-
-  // Consider replacing with a window.specialEventQueue that is cleared on every DungeonClient.loop() ?
-  window.nextGameState = undefined;
-
-  // This is here primarily so that random sections of code know debug values.
-  window.getStoreState = (store) => () => store.getState();
-
   getInitialGameState().then((initialState) => {
     initialState = addAdditionalDebugParameters(initialState);
 
-    // We do this for the Redux chrome extension.
-    let composeEnhancers =  compose;
-    if (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
-      composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ "shouldRecordChanges": false });
-    }
+    // Initialize the Redux developer tools, if possible.
+    const reduxCompose = (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ "shouldRecordChanges": false }) : false;
+    const composeEnhancers = reduxCompose || compose;
+
     let store = createStore(CoreReducer, initialState, composeEnhancers(
       applyMiddleware(logState)
     ));
 
-    window.getStoreState = window.getStoreState(store);
+    // Initialize getStoreState with our store so that
+    // the game can query for debug values.
+    window.getStoreState = window._getStoreState(store);
 
     Inferno.render(
       <DungeonClient store={ store } />,

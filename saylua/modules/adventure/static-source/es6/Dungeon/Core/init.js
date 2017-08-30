@@ -1,11 +1,12 @@
 /* eslint { no-unused-vars: 0 } */
-// init -> Required by Core/GameRenderer
+// init -> Required by Core/GameRenderer, Core/SpriteManager
 // --------------------------------------
 // Primal functions that generate initial game data.
 // Only run once.
 
 import * as Graphics from "./graphics";
 
+import { generateSprite } from "./SpriteManager";
 import { OBSTRUCTIONS } from "./logic";
 import { TILE_SIZE } from "./GameRenderer";
 
@@ -17,20 +18,11 @@ window.textures['null'] = PIXI.Texture.fromImage("/static/img/dungeons/tiles/tes
 
 /******************************** RENDERER INIT ***********************************/
 
-export function generateEntitySprites(entityLayer, entitySet) {
+export function generateEntitySprites(entityLayer) {
   let spriteLayer = [];
-  let spriteHeight = (TILE_SIZE * 0.8);
-  let spriteWidth = (TILE_SIZE * 0.8);
 
   for (let entity of entityLayer) {
-    let entityParent = entitySet[entity.parent];
-    let spriteTexture = Graphics.getTexture(entityParent.id);
-    let sprite = new PIXI.Sprite(spriteTexture);
-
-    sprite.visible = false;
-    sprite.height = spriteHeight;
-    sprite.width = spriteWidth;
-
+    let sprite = generateSprite(entity);
     spriteLayer.push(sprite);
   }
 
@@ -191,19 +183,34 @@ function generatePlayerStatusSprites() {
 export function generateNodeGraph(tileSet, tileLayer) {
   let nodeGraph = [];
 
-  // Our A* implementation uses [x][y] grids, so we must convert from our [y][x] grids.
-  // Weight based on whether or not they are obstructions.
+  // Generate x,y grid and set traversal cost based on whether or not they are obstructions.
   for (let tile of tileLayer) {
     nodeGraph[tile.location.x] = nodeGraph[tile.location.x] || [];
+
+    let node = {
+      'cost': undefined,
+      'priorCost': undefined
+    };
 
     let parentTileType = tileSet[tile.tile].type;
     let isObstruction = (OBSTRUCTIONS.indexOf(parentTileType) !== -1);
 
-    if (isObstruction) {
-      nodeGraph[tile.location.x].push(0);
+    // In the future, a more sophisticated cost derived from
+    // parent.meta attributes can be put here.
+    // --------------------------------------------------------
+    // While a cost of '0' is considered to be infinitely high,
+    // costs are otherwise considered "more preferable" the
+    // lower in cost they are (including negatives).
+
+    if (isObstruction === true) {
+      node.cost = 0;
+      node.priorCost = 1;
     } else {
-      nodeGraph[tile.location.x].push(1);
+      node.cost = 1;
+      node.priorCost = 1;
     }
+
+    nodeGraph[tile.location.x].push(node);
   }
 
   return nodeGraph;
@@ -221,6 +228,11 @@ export function initializeEntityHP(entitySet, entityLayer) {
           candidate.meta.health = parent.meta.maxHP;
         }
       }
+    }
+
+    // FIXME: Decide if this should be an initialized as an arbitrary integer or if it should be derived from something.
+    if (key === 'entity_default_player') {
+      entityLayer[0].meta.health = 100;
     }
   }
 

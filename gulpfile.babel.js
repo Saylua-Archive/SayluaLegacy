@@ -10,6 +10,7 @@ import autoprefixer from 'gulp-autoprefixer';
 import glob from 'glob';
 import stream from 'stream';
 import webpack from 'webpack';
+import cloneDeep from 'lodash.clonedeep';
 
 import webpackConfig from './webpack.config.js';
 import tempConfig from './temporary.config.js';
@@ -17,14 +18,14 @@ import tempConfig from './temporary.config.js';
 const paths = tempConfig.paths;
 const dests = tempConfig.dests;
 
+
 gulp.task('build-css', ['build-sass']);
 gulp.task('build-sass', () => {
   // Compile our initial, root level styles
   let rootGlob = "saylua/static-source/scss/**/*.scss";
 
   gulp.src(rootGlob)
-    .pipe(sass())
-    .on('error', sass.logError)
+    .pipe(sass().on('error', sass.logError))
     .pipe(concat('styles.min.css'))
     .pipe(sourcemaps.init())
     .pipe(autoprefixer())
@@ -64,10 +65,9 @@ gulp.task('build-js', ['build-es']);
 gulp.task('build-es6', ['build-es']);
 gulp.task('build-es', (callback) => {
   // Create a local copy of the config.
-  let config = webpackConfig;
+  let config = cloneDeep(webpackConfig);
 
-  process.env.NODE_ENV = process.env.NODE_ENV || "production";
-  const DEVELOPMENT = (process.env.NODE_ENV === "development");
+  process.env.NODE_ENV = "production";
 
   // Set our webpack environs
   config['plugins'].push(
@@ -76,24 +76,17 @@ gulp.task('build-es', (callback) => {
     })
   );
 
-
-  // Set additional dev options
-  if (DEVELOPMENT) {
-    config['devtool'] = 'inline-source-map';
-    config.watch = true;
-  } else {
-    // Minify output in production.
-    config['plugins'].push(
-      new webpack.optimize.UglifyJsPlugin({
-        "compress": {
-          "warnings": false
-        }
-      })
-    );
-  }
+  // Minify output in production.
+  config['plugins'].push(
+    new webpack.optimize.UglifyJsPlugin({
+      "compress": {
+        "warnings": false
+      }
+    })
+  );
 
   // Pre-configure compiler, stream.
-  let compiler = webpack(webpackConfig);
+  let compiler = webpack(config);
   let _stream = new stream.Stream();
 
   // Build info config
@@ -104,25 +97,53 @@ gulp.task('build-es', (callback) => {
     "chunkModules": false
   };
 
-  // Determine whether or not to 'watch'
-  if (DEVELOPMENT) {
-    compiler.watch({}, (err, stats) => {
-      statsConfig.assets = false;
+  compiler.run((err, stats) => {
+    if (err || stats.hasErrors()) {
+      gutil.log(err);
+      _stream.emit('end');
+    } else {
       gutil.log(stats.toString(statsConfig));
-    });
-  } else {
-    compiler.run((err, stats) => {
-      if (err || stats.hasErrors()) {
-        gutil.log(err);
-        _stream.emit('end');
-      } else {
-        gutil.log(stats.toString(statsConfig));
-        callback();
-      }
-    });
+      callback();
+    }
+  });
 
-    return _stream;
-  }
+  return _stream;
+});
+
+gulp.task('watch-js', ['watch-es']);
+gulp.task('watch-es6', ['watch-es']);
+gulp.task('watch-es', (callback) => {
+  // Create a local copy of the config.
+  let config = cloneDeep(webpackConfig);
+
+  process.env.NODE_ENV = "development";
+
+  // Set our webpack environs
+  config['plugins'].push(
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    })
+  );
+
+  // Set additional dev options
+  config['devtool'] = 'inline-source-map';
+  config.watch = true;
+
+  // Pre-configure compiler.
+  let compiler = webpack(config);
+
+  // Build info config
+  let statsConfig = {
+    "assetsSort": "name",
+    "colors": true,
+    "chunks": false,
+    "chunkModules": false
+  };
+
+  compiler.watch({}, (err, stats) => {
+    statsConfig.assets = false;
+    gutil.log(stats.toString(statsConfig));
+  });
 });
 
 
@@ -132,10 +153,6 @@ gulp.task('build', ['build-es', 'build-sass']);
 
 // Rerun the task when a file changes
 gulp.task('watch', ['build-sass', 'build-es'], () => {
-  // Our Build Tasks are context sensitive. Switch to dev environment
-  // so that they use different plugin sets.
-  process.env.NODE_ENV = "development";
-
   // Special treatment for sass files.
   const reportChange = (vinyl) => {
     let event = vinyl.event;
@@ -149,12 +166,12 @@ gulp.task('watch', ['build-sass', 'build-es'], () => {
     gulp.start('build-sass');
   });
 
-
-  // Watch is automatically determined by using the node-env in `build-es`, so we can continue as usual.
+  // We prefer to use Webpack's built in 'watch' for speed reasons, but still want to report
+  // file changes.
   watch([paths.es6 + "/**/*"], { 'usePolling': true }, (vinyl) => {
     reportChange(vinyl);
   });
-  gulp.start('build-es');
+  gulp.start('watch-es');
 
 
   // Print the paths we're watching, because we're nice.

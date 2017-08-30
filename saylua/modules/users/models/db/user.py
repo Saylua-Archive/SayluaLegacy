@@ -53,13 +53,16 @@ class User(db.Model):
     post_count = db.Column(db.Integer, default=0)
 
     # Active Companion
-    companion_id = db.Column(db.Integer, db.ForeignKey("pets.id"))
+    companion_id = db.Column(db.Integer, db.ForeignKey("pets.id", name="companion_id"))
     companion = db.relationship("Pet", foreign_keys=[companion_id])
+
+    # Human Avatar
+    ha_url = db.Column(db.String(100), default="/api/ha/m/")
     pets = db.relationship("Pet", primaryjoin='Pet.guardian_id == User.id',
-        back_populates="guardian", lazy='dynamic')
+        back_populates="guardian", lazy='dynamic', passive_deletes=True)
 
     # Ban Status
-    ban_id = db.Column(db.Integer, db.ForeignKey("ban_logs.id"))
+    ban_id = db.Column(db.Integer, db.ForeignKey("ban_logs.id", name="ban_id"))
     ban = db.relationship("BanLog", foreign_keys=[ban_id])
 
     # Currency

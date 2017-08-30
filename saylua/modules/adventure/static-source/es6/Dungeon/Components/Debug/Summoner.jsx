@@ -117,6 +117,7 @@ export default class DebugSummoner extends Component {
 
       return (
         <li
+          key={ item.id }
           onClick={ this.handleItemClick.bind(this) }
           onMouseEnter={ this.handleItemHover.bind(this) }
           onMouseLeave={ this.handleItemHoverOut.bind(this) }

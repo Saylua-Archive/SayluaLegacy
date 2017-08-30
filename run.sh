@@ -20,7 +20,8 @@ else
   echo " "
   echo "%% Updating Python Dependencies . . ."
   echo "========================================"
-  pip install -r requirements.txt -t lib -q --cache-dir lib/cache
+  pip install -r requirements.txt -t lib -q --cache-dir lib/cache --upgrade
+  pip install -r requirements-dev.txt -q --upgrade
   echo "Done."
 
   # Run gulp

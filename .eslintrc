@@ -28,6 +28,9 @@
         "SwitchCase": 1
       }
     ],
+    "inferno/no-string-refs": [
+      "off"
+    ],
     "inferno/prop-types": [
       "off"
     ],

@@ -10,7 +10,7 @@ class ItemCategory:
     categories = ["all", "treats", "toys", "gifts", "materials", "minis", "clothes"]
 
     def __init__(self, category):
-        if isinstance(category, basestring):
+        if isinstance(category, basestring): # noqa
             self.id = ItemCategory.categories.index(category)
         else:
             self.id = category

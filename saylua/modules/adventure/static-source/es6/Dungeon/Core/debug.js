@@ -54,10 +54,10 @@ export function placeSummon(summon, location, entityLayer, tileLayer, nodeGraph)
     // Dirty grid modification, for speed reasons
     // Ctrl+F: "Bug in the making"
     let isObstacle = (OBSTRUCTIONS.indexOf(summon.type) !== -1);
-    nodeGraph.grid[location.x][location.y].weight = (isObstacle === true) ? 0 : 1;
+    nodeGraph.graphs[0].node({ 'x': location.x, 'y': location.y }, true).cost = (isObstacle === true) ? 0 : 1;
 
   } else {
-    entityLayer.push({
+    let newEntity = {
       "id": uuid(),
       "meta": {
         "health": (summon.meta.maxHP !== undefined) ? summon.meta.maxHP : 100
@@ -67,7 +67,10 @@ export function placeSummon(summon, location, entityLayer, tileLayer, nodeGraph)
         "x": location.x,
         "y": location.y
       }
-    });
+    };
+
+    window.specialEventQueue.summonEntity = newEntity;
+    entityLayer.push(newEntity);
   }
 
   return [entityLayer, tileLayer];
