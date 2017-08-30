@@ -231,7 +231,7 @@ export default class GameRenderer {
 
 
   test() {
-    console.log("Hello! I am the test!");
+    console.log("Hello! I am the test!"); // eslint-disable-line
   }
 
 

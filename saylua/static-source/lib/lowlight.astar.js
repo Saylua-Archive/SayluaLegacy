@@ -1,3 +1,4 @@
+/*eslint-disable*/
 /**
  * Copyright 2017, Lecoq Simon (lowlight.fr)
  *

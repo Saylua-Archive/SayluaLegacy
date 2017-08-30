@@ -11,8 +11,8 @@ export default class BlockGrid extends Component {
     let model = this.props.matrix;
     let rows = model.rows().map(function(col) {
       return (
-        <tr>{col.map(function(num) {
-          return <td className={"grid-square-" + num} />;
+        <tr key={ col }>{col.map(function(num) {
+          return <td key={ num } className={"grid-square-" + num} />;
         })}</tr>
       );
     });
