@@ -96,8 +96,8 @@ export default class GameRenderer {
     stages.testing.on('click', this.test.bind(this));
     stages.testing.on('tap', this.test.bind(this));
 
-    // Start our miniMap off hidden.
-    stages.HUD.miniMap.visible = false;
+    // Start our miniMap off SHOWN, SUCKA.
+    stages.HUD.miniMap.visible = true;
 
     // Generate the various sprite layers necessary.
     let tileSprites = GameInit.generateTileSprites(
@@ -192,11 +192,21 @@ export default class GameRenderer {
     };
   }
 
+
   /******************************** META FUNCTIONS ***********************************/
 
   cleanup() {
+    // Wipe and re-generate our entity sprites. Tile sprites are already reusable,
+    // as all maps currently possess the same dimensions.
     this.entityManager.cleanup();
-    this.entityManager.addSprite(this.gameState.entityLayer);
+    this.state.stages.world.entities.removeChildren();
+
+    let entitySprites = GameInit.generateEntitySprites(
+      this.gameState.entityLayer
+    );
+
+    this.entityManager.addSprite(entitySprites);
+    entitySprites.map(e => this.state.stages.world.entities.addChild(e));
   }
 
 
@@ -322,7 +332,7 @@ export default class GameRenderer {
       let newEntity = window.specialEventQueue.summonEntity;
       let newSprite = this.entityManager.generateSprite(newEntity);
 
-      this.entityManager.push(newSprite);
+      this.entityManager.addSprite(newSprite);
 
       window.specialEventQueue.summonEntity = undefined;
     }
