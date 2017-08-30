@@ -1,5 +1,4 @@
-import Inferno from 'inferno';
-import Component from 'inferno-component';
+import React, { Component } from 'react';
 
 export default class RightMenu extends Component {
   constructor(props) {

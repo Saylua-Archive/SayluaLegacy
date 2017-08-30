@@ -33,18 +33,10 @@ module.exports = {
   plugins: [
     new webpack.ProvidePlugin({
       'Promise': 'es6-promise'
-    }),
-    new webpack.ProvidePlugin({
-        'Inferno': 'react'
     })
   ],
   resolve: {
     extensions: ['.js', '.jsx'],
     modules: ['./node_modules', './frontend/source'],
-    alias: {
-			'react': 'inferno-compat',
-			'react-dom': 'inferno-compat',
-      'react-dom/server': 'inferno-compat',
-		},
   }
 }

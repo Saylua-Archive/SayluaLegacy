@@ -1,5 +1,4 @@
-import Inferno from 'inferno';
-import Component from 'inferno-component';
+import React from 'react';
 
 import Saylua from 'shared/Saylua/Saylua';
 

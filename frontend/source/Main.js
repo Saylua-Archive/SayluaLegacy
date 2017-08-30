@@ -16,13 +16,16 @@ const browserHistory = createBrowserHistory();
 
 const routes = (
   <Router history={ browserHistory }>
-    <Route path="/home" component={ Saylua } title="Home">
-      <div>Hello world</div>
+    <Route path="/" title="Home">
+      <Saylua title="Home">Hello world</Saylua>
     </Route>
-    <Route path="/page/:page" component={ StaticPage } pageName="about" />
-    <Route path="/news" component={ Newspaper} />
-    <Route path="*" component={ Error404 } />
   </Router>
 );
+
+/*
+<Route path="/page/:page" component={ StaticPage } pageName="about" />
+<Route path="/news" component={ Newspaper} />
+<Route path="*" component={ Error404 } />
+*/
 
 ReactDOM.render(routes, document.getElementById('app'));

@@ -1,5 +1,5 @@
-import Inferno from 'inferno';
-import Component from 'inferno-component';
+import React, { Component } from 'react';
+
 import './Sidebar.scss';
 
 import PetAvatarView from 'shared/PetAvatarView/PetAvatarView';

@@ -1,5 +1,5 @@
-import Inferno from 'inferno';
-import Component from 'inferno-component';
+import React, { Component } from 'react';
+
 import './Dropdown.scss';
 
 export default class Dropdown extends Component {

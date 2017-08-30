@@ -1,5 +1,4 @@
-import Inferno from 'inferno';
-import Component from 'inferno-component';
+import React, { Component } from 'react';
 
 // The main Saylua layout component.
 export default class Footer extends Component {

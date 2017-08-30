@@ -1,5 +1,4 @@
-import Inferno from 'inferno';
-import Component from 'inferno-component';
+import React, { Component } from 'react';
 
 import './Navbar.scss';
 
@@ -26,8 +25,9 @@ export default class Navbar extends Component {
             </a>
 
             {
-              dropdownContent.map((menu) => {
-                return <Dropdown icon={ menu.icon }name={ menu.name } content={ menu.content } />
+              dropdownContent.map((menu, i) => {
+                return <Dropdown key={ i.toString() } icon={ menu.icon }
+                  name={ menu.name } content={ menu.content } />
               })
             }
 

@@ -1,6 +1,6 @@
-import Inferno from 'inferno';
+import React from 'react';
 
-import { Link } from 'react-router';
+import Link from 'react-router';
 
 export const dropdownContent = [
   {

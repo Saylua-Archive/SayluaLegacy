@@ -1,4 +1,4 @@
-// BaseModel -> Required by various Inferno UIs.
+// BaseModel -> Required by various React UIs.
 // --------------------------------------
 // Gives some component binding magic to models by default.
 // Necessary so that components will update when models do.
