@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import onClickOutside from 'react-onclickoutside'
 
 import './Dropdown.scss';
 
-export default class Dropdown extends Component {
+class Dropdown extends Component {
   constructor(props) {
     super(props);
 
@@ -11,11 +12,8 @@ export default class Dropdown extends Component {
     };
   }
 
-  componentDidMount() {
-    document.body.addEventListener('click', closeOnOutsideClick);
-    function closeOnOutsideClick (e) {
-      // TODO
-    }
+  handleClickOutside() {
+    this.close();
   }
 
   open() {
@@ -61,3 +59,5 @@ export default class Dropdown extends Component {
     );
   }
 }
+
+export default onClickOutside(Dropdown);
