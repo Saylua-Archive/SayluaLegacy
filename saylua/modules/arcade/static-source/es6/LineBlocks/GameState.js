@@ -172,11 +172,11 @@ export default class GameState extends BaseModel {
     if (!(this.keyState[40] || this.keyState[83])) { // Down, s
       this.speedDown();
     }
-    if ((this.keyState[37] || this.keyState[65]) && this.frames - this.lastLR > LB_LR_INTERVAL) { // Left, a
+    if ((this.keyState[37] || this.keyState[65]) && (this.frames - this.lastLR > LB_LR_INTERVAL)) { // Left, a
       this.lastLR = this.frames;
       this.moveLeft();
     }
-    if ((this.keyState[39] || this.keyState[68]) && this.frames - this.lastLR > LB_LR_INTERVAL) { // Right, d
+    if ((this.keyState[39] || this.keyState[68]) && (this.frames - this.lastLR > LB_LR_INTERVAL)) { // Right, d
       this.lastLR = this.frames;
       this.moveRight();
     }
