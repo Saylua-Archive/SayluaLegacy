@@ -7,7 +7,9 @@ export default class Footer extends Component {
   }
 
   componentDidMount() {
-    setInterval(this.render, 1000);
+    setInterval(() => {
+      this.forceUpdate();
+    }, 1000);
   }
 
   render() {

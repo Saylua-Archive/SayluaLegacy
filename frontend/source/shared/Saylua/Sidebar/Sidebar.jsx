@@ -21,11 +21,11 @@ export default class Sidebar extends Component {
             <p>Your companion is <a href="/companion">Companion Name</a></p>
             <p>
               <img src="/static/img/icons/weather_clouds.png" />
-              <a href="/bank/">Cloud Coin</a>
+              <a href="/bank/"> 5 Cloud Coin</a>
             </p>
             <p>
               <img src="/static/img/icons/star_1.png" />
-              <a href="/bank/">Star Shard</a>
+              <a href="/bank/"> 5 Star Shard</a>
             </p>
           </div>
         ) : (

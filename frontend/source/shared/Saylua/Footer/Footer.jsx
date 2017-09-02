@@ -23,7 +23,7 @@ export default class Footer extends Component {
           <StaffActions level="admin" />
           <p>
             <Link to="/online/">1 Online</Link> { separator }
-            <Link to="#">Back to Top</Link> { separator }
+            <Link to="#" onClick={ window.scrollTo(0, 0) }>Back to Top</Link> { separator }
             <Link to="/page/about/">About</Link> { separator }
             <Link to="/page/credits/">Credits</Link> { separator }
             <Link to="/page/terms/">Terms of Service</Link> { separator }
