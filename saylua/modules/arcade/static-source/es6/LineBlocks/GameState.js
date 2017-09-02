@@ -58,6 +58,7 @@ export default class GameState extends BaseModel {
     this.frames = 0;
     this.lastDrop = 0;
     this.lastLR = 0;
+    this.LRCount = 0;
     this.timeout = 800;
     this.gameOver = false;
     this.paused = false;
@@ -175,10 +176,15 @@ export default class GameState extends BaseModel {
     if ((this.keyState[37] || this.keyState[65]) && (this.frames - this.lastLR > LB_LR_INTERVAL)) { // Left, a
       this.lastLR = this.frames;
       this.moveLeft();
+      this.LRCount++;
     }
     if ((this.keyState[39] || this.keyState[68]) && (this.frames - this.lastLR > LB_LR_INTERVAL)) { // Right, d
       this.lastLR = this.frames;
       this.moveRight();
+      this.LRCount++;
+    }
+    if (!(this.keyState[39] || this.keyState[68])) {
+      this.LRCount = 0;
     }
     if (this.fast && this.canSpeed) {
       timeout = Math.min(LB_MIN_TIMEOUT * 3, timeout);
