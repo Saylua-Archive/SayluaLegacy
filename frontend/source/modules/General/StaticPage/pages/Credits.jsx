@@ -13,8 +13,8 @@ export default function() {
         individuals.
       </p>
       <p>
-        Most of the art for Saylua, including the pet art, was wonderfully drawn by
-        <a href="http://www.chutkat.com/">Chutkat</a> who also designed the overall
+        Most of the art for Saylua, including the pet art, was wonderfully drawn
+        by <a href="http://www.chutkat.com/">Chutkat</a> who also designed the overall
         visual style for the site.
       </p>
       <p>
@@ -26,17 +26,17 @@ export default function() {
         IrianWhitefox</a>.
       </p>
       <p>
-        Many early programming contributions to the project were created by
-        <a href="http://noisek.com/">Noi Sek</a> who particularly helped with
+        Many early programming contributions to the project were
+        created by <a href="http://noisek.com/">Noi Sek</a> who particularly helped with
         getting our Adventure feature off the ground.
       </p>
       <p>
-        Several additional artists including <a href="http://fyne.deviantart.com/">Fyne</a>,
-        <a href="https://synthaphonograph.tumblr.com/">Synthaphonograph</a>,
-        <a href="http://dawnf1re.tumblr.com/">Dawnfire</a>,
-        <a href="http://lastlabyrinth.tumblr.com/">Lastlabyrinth</a>,
-        <a href="https://cheetahtrout.tumblr.com/">Cheetahtrout</a>,
-        <a href="http://ravna-resta.deviantart.com/">Ravna-Resta</a>,
+        Several additional artists including <a href="http://fyne.deviantart.com/">Fyne</a>
+        , <a href="https://synthaphonograph.tumblr.com/">Synthaphonograph</a>
+        , <a href="http://dawnf1re.tumblr.com/">Dawnfire</a>
+        , <a href="http://lastlabyrinth.tumblr.com/">Lastlabyrinth</a>
+        , <a href="https://cheetahtrout.tumblr.com/">Cheetahtrout</a>
+        , <a href="http://ravna-resta.deviantart.com/">Ravna-Resta</a>,
         and <a href="http://fasius.deviantart.com/">Fasius</a> contributed artwork
         early on in the project's life.
       </p>

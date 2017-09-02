@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 
-import './Newspaper.scss';
+import ScrollToTopOnMount from 'shared/ScrollToTopOnMount';
 
 import Saylua from 'shared/Saylua/Saylua';
 
+import './Newspaper.scss';
 
 export default class Newspaper extends Component {
   constructor(props) {
@@ -13,15 +14,15 @@ export default class Newspaper extends Component {
   render() {
     return (
       <Saylua title="The Sayluan Gazette">
-        <h1 class="news-header">The Sayluan Gazette</h1>
-        <div class="news-navigation">
-          <a href="/news/">Headlines</a>{ ' / ' }
-          <a href="/news/puzzle/">Daily Puzzle</a>
+        <ScrollToTopOnMount />
+        <h1 className="news-header">The Sayluan Gazette</h1>
+        <div className="news-navigation">
+          <a href="/news/">Headlines</a> / <a href="/news/puzzle/">Daily Puzzle</a>
         </div>
-        <div class="newspaper-body">
-          <div class="newspaper-main">
+        <div className="newspaper-body">
+          <div className="newspaper-main">
           </div>
-          <div class="newspaper-side">
+          <div className="newspaper-side">
           </div>
         </div>
       </Saylua>
