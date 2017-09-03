@@ -33,6 +33,10 @@ import context_processors
 def landing():
     return render_template('landing.html')
 
+@app.route('/api/<path:path>')
+def api(path):
+    return 'API'
+
 # Serve the main entry point.
 @app.route('/<path:path>')
 def main(path):

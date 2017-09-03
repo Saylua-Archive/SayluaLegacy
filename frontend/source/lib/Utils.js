@@ -1,3 +1,18 @@
+export function canonize(name) {
+  name = name.replace(/(\s|\W)+/, '_');
+  return name.toLowerCase();
+}
+
+export function pluralize(count, singular_noun, plural_noun) {
+  if (!plural_noun) {
+    plural_noun = singular_noun + 's';
+  }
+  if (count == 1) {
+    return formatNumber(count) + ' ' + singular_noun
+  }
+  return formatNumber(count) + ' ' + plural_noun
+}
+
 // https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
 export function formatNumber(n) {
   return n.toLocaleString('en-IN');
@@ -6,13 +21,6 @@ export function formatNumber(n) {
 // http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript
 export function capitalizeFirst(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-// http://stackoverflow.com/questions/8830839/javascript-dom-remove-element
-export function removeElement(el) {
-  if (el) {
-    el.parentNode.removeChild(el);
-  }
 }
 
 // http://stackoverflow.com/questions/5767325/how-to-remove-a-particular-element-from-an-array-in-javascript

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { pluralize } from 'lib/Utils';
+
 import './Sidebar.scss';
 
 import PetAvatarView from 'shared/PetAvatarView/PetAvatarView';
@@ -21,11 +23,11 @@ export default class Sidebar extends Component {
             <p>Your companion is <a href="/companion">Companion Name</a></p>
             <p>
               <img src="/static/img/icons/weather_clouds.png" />
-              <a href="/bank/"> 5 Cloud Coin</a>
+              <a href="/bank/"> { pluralize(5, 'Cloud Coin') } </a>
             </p>
             <p>
               <img src="/static/img/icons/star_1.png" />
-              <a href="/bank/"> 5 Star Shard</a>
+              <a href="/bank/"> { pluralize(1, 'Star Shard') } </a>
             </p>
           </div>
         ) : (

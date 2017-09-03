@@ -1,0 +1,22 @@
+{
+  "user": {
+    "name": "USER",
+    "themeId": 0,
+    "status": "Saving the world",
+    "title": {
+      "name": "Artist",
+      "canonName": "artist"
+    },
+    "companion": {
+      "soulName": "calvin",
+      "name": "Calvin",
+      "imageUrl": "/static/img/pets/loxi/common.png",
+    }
+  },
+  "messages": [
+
+  ],
+  "notifications": [
+
+  ]
+}
