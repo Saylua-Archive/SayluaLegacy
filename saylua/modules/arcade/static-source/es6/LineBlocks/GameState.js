@@ -179,7 +179,8 @@ export default class GameState extends BaseModel {
       this.moveLeft();
       this.LRCount++;
     }
-    if ((this.keyState[39] || this.keyState[68]) && (this.frames - this.lastLR > LB_LR_INTERVAL)) { // Right, d
+    if ((this.keyState[39] || this.keyState[68]) && (this.frames - this.lastLR > LB_LR_INTERVAL)
+          && !(this.LRCount == 1 && this.frames - this.lastLR < LB_FIRST_LR_INTERVAL)) { // Right, d
       this.lastLR = this.frames;
       this.moveRight();
       this.LRCount++;
