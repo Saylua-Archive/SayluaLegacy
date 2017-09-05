@@ -1,10 +1,10 @@
 import React from 'react';
 
-import Saylua from 'shared/Saylua/Saylua';
+import SayluaView from 'shared/SayluaView';
 
 export default function() {
   return (
-    <Saylua title="404 Page Not Found">
+    <SayluaView title="404 Page Not Found">
       <h1>404 Page Not Found</h1>
       <img src="/static/img/pets/loxi/common.png" className="pet" alt="Random pet" title="Random pet" />
       <p>
@@ -13,6 +13,6 @@ export default function() {
       <p>
         <a href="/">Go back home?</a>
       </p>
-    </Saylua>
+    </SayluaView>
   );
 }

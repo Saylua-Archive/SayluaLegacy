@@ -4,7 +4,7 @@ import { pluralize } from 'lib/Utils';
 
 import './Sidebar.scss';
 
-import PetAvatarView from 'shared/PetAvatarView/PetAvatarView';
+import PetAvatarView from 'shared/PetAvatarView';
 
 // The main Saylua layout component.
 export default class Sidebar extends Component {

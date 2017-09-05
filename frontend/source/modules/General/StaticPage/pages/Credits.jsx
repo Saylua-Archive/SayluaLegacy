@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-import Saylua from 'shared/Saylua/Saylua';
+import SayluaView from 'shared/SayluaView';
 
 
 export default function() {
   return (
-    <Saylua title="Site Credits">
+    <SayluaView title="Site Credits">
       <h1>Saylua Credits</h1>
       <p>
         Although Saylua was primarily created by Mike and Tiff, the game would not
@@ -49,6 +49,6 @@ export default function() {
         shape the direction of Saylua with their feedback, ideas, and encouragement:
         Namine, Gam, Tears, Inu, Vik, and Queenie.
       </p>
-    </Saylua>
+    </SayluaView>
   );
 }

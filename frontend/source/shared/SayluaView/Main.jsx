@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 
-import './Saylua.scss';
+import './SayluaView.scss';
 
-import Header from './Header/Header';
-import Footer from './Footer/Footer';
-import Navbar from './Navbar/Navbar';
-import Sidebar from './Sidebar/Sidebar';
+import Header from './Header';
+import Footer from './Footer';
+import Navbar from './Navbar';
+import Sidebar from './Sidebar';
 
 // The main Saylua layout component.
-export default class Saylua extends Component {
+export default class SayluaView extends Component {
   constructor(props) {
     super(props);
   }

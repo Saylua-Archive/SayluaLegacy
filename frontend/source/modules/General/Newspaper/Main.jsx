@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import ScrollToTopOnMount from 'shared/ScrollToTopOnMount';
 
-import Saylua from 'shared/Saylua/Saylua';
+import SayluaView from 'shared/SayluaView';
 
 import './Newspaper.scss';
 
@@ -13,7 +13,7 @@ export default class Newspaper extends Component {
 
   render() {
     return (
-      <Saylua title="The Sayluan Gazette">
+      <SayluaView title="The Sayluan Gazette">
         <ScrollToTopOnMount />
         <h1 className="news-header">The Sayluan Gazette</h1>
         <div className="news-navigation">
@@ -25,7 +25,7 @@ export default class Newspaper extends Component {
           <div className="newspaper-side">
           </div>
         </div>
-      </Saylua>
+      </SayluaView>
     );
   }
 }
