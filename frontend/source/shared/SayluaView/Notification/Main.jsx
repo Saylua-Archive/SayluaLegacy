@@ -16,15 +16,15 @@ export default class Notification extends Component {
 
     setTimeout(function() {
       notification.parentElement.removeChild(notification);
-    }
+    });
   }
 
   render() {
     let message = this.props.message || "Test Message";
     return (
-      <div class="notification">
+      <div className="notification">
         { message }
-        <a class="close-button" href="#" title="close"
+        <a className="close-button" href="#" title="close"
           onClick={ this.close.bind(this) }>&#x00d7;</a>
       </div>
     );

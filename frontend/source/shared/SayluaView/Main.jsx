@@ -7,6 +7,8 @@ import Footer from './Footer';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 
+import Notification from './Notification';
+
 // The main Saylua layout component.
 export default class SayluaView extends Component {
   constructor(props) {
@@ -43,6 +45,7 @@ export default class SayluaView extends Component {
         <div id="main-body" className="main-body">
           <Sidebar />
           <div id="main-body-column" className="main-body-column">
+            <Notification message="Test" />
             <div id="main-body-content" className="main-body-content">
               { content }
             </div>

@@ -21,6 +21,8 @@
   flex-grow: 1;
   flex-shrink: 0;
 
+  filter: drop-shadow(0px 1px 2px hsla(0, 0%, 0%, 0.3));
+
   img {
     transition: 0.5s filter ease-in-out, 0.5s -webkit-filter ease-in-out;
     height: 4rem;
