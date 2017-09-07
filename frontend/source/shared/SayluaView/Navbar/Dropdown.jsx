@@ -47,6 +47,7 @@ class Dropdown extends Component {
         this.open();
       }
     };
+    
     return (
       <div className={ (opened ? "active " : "") + "navbar-block navbar-main-links" }
           ref={ root => { this.root = root; } }>

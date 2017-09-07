@@ -4,6 +4,8 @@ import ScrollToTopOnMount from 'shared/ScrollToTopOnMount';
 
 import SayluaView from 'shared/SayluaView';
 
+import Saydoku from './Saydoku';
+
 import './Newspaper.scss';
 
 export default class Newspaper extends Component {
@@ -21,6 +23,7 @@ export default class Newspaper extends Component {
         </div>
         <div className="newspaper-body">
           <div className="newspaper-main">
+            <Saydoku />
           </div>
           <div className="newspaper-side">
           </div>
