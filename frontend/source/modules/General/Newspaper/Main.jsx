@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 
-import ScrollToTopOnMount from 'shared/ScrollToTopOnMount';
+import { Route, Switch } from 'react-router-dom';
 
-import SayluaView from 'shared/SayluaView';
+import NewspaperTemplate from './NewspaperTemplate';
 
 import Saydoku from './Saydoku';
-
-import './Newspaper.scss';
 
 export default class Newspaper extends Component {
   constructor(props) {
@@ -15,20 +13,14 @@ export default class Newspaper extends Component {
 
   render() {
     return (
-      <SayluaView title="The Sayluan Gazette">
-        <ScrollToTopOnMount />
-        <h1 className="news-header">The Sayluan Gazette</h1>
-        <div className="news-navigation">
-          <a href="/news/">Headlines</a> / <a href="/news/puzzle/">Daily Puzzle</a>
-        </div>
-        <div className="newspaper-body">
-          <div className="newspaper-main">
-            <Saydoku />
-          </div>
-          <div className="newspaper-side">
-          </div>
-        </div>
-      </SayluaView>
+      <Switch>
+        <Route path="/news/puzzle" component={ Saydoku } />
+        <Route path="/news">
+          <NewspaperTemplate>
+            Hello world
+          </NewspaperTemplate>
+        </Route>
+      </Switch>
     );
   }
 }

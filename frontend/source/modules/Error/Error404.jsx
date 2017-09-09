@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
 import SayluaView from 'shared/SayluaView';
 
 export default function() {
@@ -11,7 +13,7 @@ export default function() {
         The page you are looking for has not been found!
       </p>
       <p>
-        <a href="/">Go back home?</a>
+        <Link to="/">Go back home?</Link>
       </p>
     </SayluaView>
   );
