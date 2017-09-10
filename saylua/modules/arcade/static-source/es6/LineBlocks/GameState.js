@@ -92,15 +92,6 @@ export default class GameState extends BaseModel {
     return this.timer && !(this.gameOver || this.paused);
   }
 
-  checkGameOver() {
-    // If the first row has any pieces, there is a game over.
-    let matrix = this.placedPieces;
-    for (let i = 0; i < matrix.width; i++) {
-      if (matrix.get(0, i)) return true;
-    }
-    return false;
-  }
-
   endGame() {
     this.piece = null;
     this.gameOver = true;
