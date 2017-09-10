@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export function canonize(name) {
   name = name.replace(/(\s|\W)+/, '_');
   return name.toLowerCase();
@@ -8,9 +10,19 @@ export function pluralize(count, singular_noun, plural_noun) {
     plural_noun = singular_noun + 's';
   }
   if (count == 1) {
-    return formatNumber(count) + ' ' + singular_noun
+    return formatNumber(count) + ' ' + singular_noun;
   }
-  return formatNumber(count) + ' ' + plural_noun
+  return formatNumber(count) + ' ' + plural_noun;
+}
+
+export function datetime(time) {
+  time = moment(time);
+  return time.format('MMM DD, Y hh:mm A') + ' SMT';
+}
+
+export function expandedRelativeTime(time) {
+  time = moment(time);
+  return datetime(time) + ` (${time.fromNow()})`;
 }
 
 // https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { pluralize } from 'lib/Utils';
+import { pluralize } from 'utils';
 
 import './Sidebar.scss';
 
