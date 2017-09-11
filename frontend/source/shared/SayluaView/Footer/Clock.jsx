@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import moment from 'moment';
+
 // The main Saylua layout component.
 export default class Footer extends Component {
   constructor(props) {
@@ -13,11 +15,11 @@ export default class Footer extends Component {
   }
 
   render() {
-    let date = new Date();
+    let date = moment();
     return (
       <span>
         <i className="fa fa-clock-o" aria-hidden="true"></i>
-        { ' ' + date.toUTCString() }
+        { ' ' + date.format('ddd, MMM DD, Y hh:mm:ss A') + ' SMT' }
       </span>
     );
   }

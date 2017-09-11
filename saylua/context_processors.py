@@ -2,11 +2,6 @@ from saylua import app
 
 from saylua.utils import get_static_version_id
 
-from flask import url_for
-
-from functools import partial
-
-import os
 import random
 
 
