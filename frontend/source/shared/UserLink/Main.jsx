@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { Link } from 'react-router-dom';
+
 import './UserLink.scss';
 
 export default class UserLink extends Component {
@@ -18,7 +20,7 @@ export default class UserLink extends Component {
     let status = 'pies';
     return (
       <span>
-        <a href={ url } className={ titleClass }>{ name }</a>
+        <Link to={ url } className={ titleClass }>{ name }</Link>
           { status && <small>{ status }</small> }
       </span>
     );

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import { pluralize } from 'utils';
 
@@ -20,14 +21,14 @@ export default class Sidebar extends Component {
         { loggedIn ? (
           <div id="user-info-section" className="sidebar-section">
             <p>You are User</p>
-            <p>Your companion is <a href="/companion">Companion Name</a></p>
+            <p>Your companion is <Link to="/companion">Companion Name</Link></p>
             <p>
               <img src="/static/img/icons/weather_clouds.png" />
-              <a href="/bank/"> { pluralize(5, 'Cloud Coin') } </a>
+              <Link to="/bank/"> { pluralize(5, 'Cloud Coin') } </Link>
             </p>
             <p>
               <img src="/static/img/icons/star_1.png" />
-              <a href="/bank/"> { pluralize(1, 'Star Shard') } </a>
+              <Link to="/bank/"> { pluralize(1, 'Star Shard') } </Link>
             </p>
           </div>
         ) : (
@@ -52,8 +53,8 @@ export default class Sidebar extends Component {
             </tr>
             <tr>
               <td>
-                <p><a href="/login/recover/">Lost credentials?</a></p>
-                <p><a href="/register/">Register!</a></p>
+                <p><Link to="/login/recover/">Lost credentials?</Link></p>
+                <p><Link to="/register/">Register!</Link></p>
               </td>
             </tr>
           </table>

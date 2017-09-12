@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Newspaper from 'modules/General/Newspaper';
 import StaticPage from 'modules/General/StaticPage';
+import Login from 'modules/Users/Login';
 
 import Error404 from 'modules/Error/Error404';
 
@@ -19,6 +20,7 @@ const routes = (
           Hello world
         </SayluaView>
       </Route>
+      <Route path="/login" component={ Login } />
       <Route path="/page/:pageName" component={ StaticPage } />
       <Route path="/news" component={ Newspaper} />
       <Route path="*" component={ Error404 } />

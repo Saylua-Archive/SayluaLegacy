@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { Link } from 'react-router-dom';
+
 import './Navbar.scss';
 
 import Dropdown from './Dropdown';
@@ -20,9 +22,9 @@ export default class Navbar extends Component {
         <div id="navbar" className="navbar">
           <div id="navbar-inner-container" className="navbar-inner-container">
             <div className="sidebar-filler"></div>
-            <a href="/" className="navbar-block navbar-link" title="Home">
+            <Link to="/" className="navbar-block navbar-link" title="Home">
               <i className="fa fa-fw fa-home" aria-hidden="true"></i>
-            </a>
+            </Link>
 
             {
               dropdownContent.map((menu, i) => {

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 
+import { Link } from 'react-router-dom';
+
 import './PetAvatarView.scss';
+
 
 export default class PetAvatarView extends Component {
   constructor(props) {
@@ -15,13 +18,13 @@ export default class PetAvatarView extends Component {
     return (
       <div className="pet-avatar-view">
         <div className="avatar-view">
-          <a href="">
+          <Link to="">
             <img src="/static/img/avatar/base.png" alt="human avatar" title="'s Avatar'" aria-label="'s Avatar'" />
-          </a>
+          </Link>
         </div>
-        <a href="" className="active-pet-view">
+        <Link to="" className="active-pet-view">
           <img src="/static/img/pets/loxi/common.png" className="active-pet-image" alt="active companion" title="" aria-label="" />
-        </a>
+        </Link>
       </div>
     );
   }
