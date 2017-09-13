@@ -234,6 +234,7 @@ export default class GameState extends BaseModel {
     return deleted;
   }
 
+  // Check if a piece goes over the top and can't move
   overTop(piece, r, c) {
     let matrix = this.placedPieces;
     for (let i = 0; i < piece.height; i++) {
