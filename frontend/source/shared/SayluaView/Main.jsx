@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import DocumentTitle from 'react-document-title';
 
 import './SayluaView.scss';
 
@@ -35,25 +36,27 @@ export default class SayluaView extends Component {
     let content = this.props.children;
     let title = this.props.title;
 
-    document.title = 'Saylua - ' + (title ? title : 'Adoptable Fantasy Pets');
+    let fullTitle = 'Saylua - ' + (title ? title : 'Adoptable Fantasy Pets');
 
     return (
-      <div id="saylua">
-        <Header />
-        <Navbar />
+      <DocumentTitle id="saylua" title={ fullTitle }>
+        <div id="saylua">
+          <Header />
+          <Navbar />
 
-        <div id="main-body" className="main-body">
-          <Sidebar />
-          <div id="main-body-column" className="main-body-column">
-            <Notification message="Test" />
-            <div id="main-body-content" className="main-body-content">
-              { content }
+          <div id="main-body" className="main-body">
+            <Sidebar />
+            <div id="main-body-column" className="main-body-column">
+              <Notification message="Test" />
+              <div id="main-body-content" className="main-body-content">
+                { content }
+              </div>
             </div>
           </div>
+          
+          <Footer />
         </div>
-
-        <Footer />
-      </div>
+      </DocumentTitle>
     );
   }
 }
