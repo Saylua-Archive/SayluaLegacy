@@ -11,6 +11,7 @@
 .sidebar-login-form {
   table.form-table {
     width: 100%;
+    text-align: center;
     td {
       padding: 0.1em 0.8rem;
       text-align: center;
@@ -21,7 +22,7 @@
     @include variable(border-color, --neutralDarkColor, $neutralDarkColor);
     margin-bottom: 0;
     text-align: center;
-    border-bottom: 1px dotted;
+    border-bottom-style: dotted;
   }
 }
 

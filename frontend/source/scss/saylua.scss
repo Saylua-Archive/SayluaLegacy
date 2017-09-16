@@ -2,6 +2,12 @@
 
 @import 'global';
 
+@import 'forms/base';
+@import 'forms/button';
+@import 'forms/checkbox';
+@import 'forms/table';
+
+
 :root {
   --accentSoftColor: $accentSoftColor;
   --accentColor: $accentColor;
