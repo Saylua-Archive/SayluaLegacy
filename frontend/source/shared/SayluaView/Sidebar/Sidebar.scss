@@ -12,7 +12,15 @@
   table.form-table {
     width: 100%;
     text-align: center;
+    display: block;
+
+    tr {
+      display: flex;
+      flex-direction: column;
+    }
+
     td {
+      width: 100%;
       padding: 0.1em 0.8rem;
       text-align: center;
     }

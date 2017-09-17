@@ -2,9 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
 
-import sayluaApp from 'services/reducers';
+import sayluaStore from 'services/store';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
@@ -35,6 +34,4 @@ const Root = ({ store }) => (
   </Provider>
 );
 
-let store = createStore(sayluaApp);
-
-ReactDOM.render(<Root store={ store } />, document.getElementById('app'));
+ReactDOM.render(<Root store={ sayluaStore } />, document.getElementById('app'));

@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import { pluralize } from 'utils';
+import PetAvatarView from 'shared/PetAvatarView';
+import LoginForm from 'modules/Users/forms/LoginForm';
 
 import './Sidebar.scss';
-import SidebarLoginForm from './SidebarLoginForm';
-
-import PetAvatarView from 'shared/PetAvatarView';
 
 
 export default class Sidebar extends Component {
@@ -19,7 +18,10 @@ export default class Sidebar extends Component {
     if (!loggedIn) {
       return (
         <div id="sidebar" className="sidebar">
-          <SidebarLoginForm className="sidebar-section" />
+          <div className="sidebar-section sidebar-login-form">
+            <h3>Login to Saylua</h3>
+            <LoginForm id="sidebar-login-form" compact />
+          </div>
         </div>
       );
     }

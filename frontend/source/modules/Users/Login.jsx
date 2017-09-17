@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import SayluaView from 'shared/SayluaView';
 
+import LoginForm from './forms/LoginForm';
+
 
 export default class Login extends Component {
   constructor(props) {
@@ -12,6 +14,7 @@ export default class Login extends Component {
     return (
       <SayluaView title="Login">
         <h1>Login</h1>
+        <LoginForm />
       </SayluaView>
     );
   }

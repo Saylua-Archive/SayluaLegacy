@@ -22,10 +22,11 @@ export default class Navbar extends Component {
         <div id="navbar" className="navbar">
           <div id="navbar-inner-container" className="navbar-inner-container">
             <div className="sidebar-filler"></div>
-            <Link to="/" className="navbar-block navbar-link" title="Home">
-              <i className="fa fa-fw fa-home" aria-hidden="true"></i>
-            </Link>
-
+            <div className="navbar-block">
+              <Link to="/" className="navbar-link" title="Home">
+                <i className="fa fa-fw fa-home" aria-hidden="true"></i>
+              </Link>
+            </div>
             {
               dropdownContent.map((menu, i) => {
                 return <Dropdown key={ i.toString() } icon={ menu.icon }
