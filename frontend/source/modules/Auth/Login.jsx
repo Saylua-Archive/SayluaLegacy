@@ -13,7 +13,7 @@ export default class Login extends Component {
   render() {
     return (
       <SayluaView title="Login">
-        <h1>Login</h1>
+        <h1>Login to Saylua</h1>
         <LoginForm />
       </SayluaView>
     );

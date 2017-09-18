@@ -11,7 +11,8 @@ import SayluaView from 'shared/SayluaView';
 
 import Newspaper from 'modules/General/Newspaper';
 import StaticPage from 'modules/General/StaticPage';
-import Login from 'modules/Users/Login';
+import Login from 'modules/Auth/Login';
+import Register from 'modules/Auth/Register';
 
 import Error404 from 'modules/Error/Error404';
 
@@ -26,6 +27,7 @@ const Root = ({ store }) => (
           </SayluaView>
         </Route>
         <Route path="/login" component={ Login } />
+        <Route path="/register" component={ Register } />
         <Route path="/page/:pageName" component={ StaticPage } />
         <Route path="/news" component={ Newspaper} />
         <Route path="*" component={ Error404 } />
