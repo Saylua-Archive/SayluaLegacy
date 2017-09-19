@@ -9,10 +9,13 @@
 }
 
 .sidebar-login-form {
-  table.form-table {
+  table.form-table, form, tbody {
     width: 100%;
-    text-align: center;
     display: block;
+  }
+
+  table.form-table {
+    text-align: center;
 
     tr {
       display: flex;

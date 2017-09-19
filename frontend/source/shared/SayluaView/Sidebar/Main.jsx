@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { pluralize } from 'utils';
 import PetAvatarView from 'shared/PetAvatarView';
-import LoginForm from 'modules/Users/forms/LoginForm';
+import LoginForm from 'modules/Auth/forms/LoginForm';
 
 import './Sidebar.scss';
 
@@ -20,7 +20,7 @@ export default class Sidebar extends Component {
         <div id="sidebar" className="sidebar">
           <div className="sidebar-section sidebar-login-form">
             <h3>Login to Saylua</h3>
-            <LoginForm id="sidebar-login-form" compact />
+            <LoginForm identifier="sidebar" compact />
           </div>
         </div>
       );
