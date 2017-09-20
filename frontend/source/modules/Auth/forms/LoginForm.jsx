@@ -8,9 +8,11 @@ import FormTable from 'shared/Forms/FormTable';
 import InputRow from 'shared/Forms/FormTable/InputRow';
 import FormRow from 'shared/Forms/FormTable/FormRow';
 
+import { Required, NotBlank } from 'shared/Forms/Validators';
+
 
 let LoginForm = (props) =>  {
-  const { handleSubmit, compact, identifier } = props;
+  const { handleSubmit, submitting, compact, identifier } = props;
 
   let idSuffix = '-login';
   if (identifier) {
@@ -20,11 +22,13 @@ let LoginForm = (props) =>  {
   return (
     <FormTable handleSubmit={ handleSubmit }>
       <Field name="username" fieldId={ "username" + idSuffix }
-        component={ InputRow } label="Username/Email" type="text" />
+        component={ InputRow } label="Username/Email" type="text"
+        validate={[Required('Username/Email'), NotBlank('Username/Email')]} />
       <Field name="password" fieldId={ "password" + idSuffix }
-        component={ InputRow } label="Password" type="password" />
+        component={ InputRow } label="Password" type="password"
+        validate={[Required('Password')]} />
       <FormRow>
-        <button className={ compact ? 'small' : ''}
+        <button className={ compact ? 'small' : ''} disabled={submitting}
             type="submit" name="login">Login!</button>
       </FormRow>
       <FormRow>
