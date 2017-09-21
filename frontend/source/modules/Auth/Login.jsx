@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import SayluaView from 'shared/SayluaView';
 
-import LoginForm from './forms/LoginForm';
+import LoginForm from './Forms/LoginForm';
 
 
 export default class Login extends Component {

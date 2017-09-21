@@ -16,11 +16,6 @@ export default class SayluaView extends Component {
     super(props);
   }
 
-  componentDidMount() {
-    this.fixNavbar();
-
-    window.addEventListener('scroll', this.fixNavbar);
-  }
 
   fixNavbar() {
     let top = document.getElementById('header').offsetHeight;
@@ -35,7 +30,6 @@ export default class SayluaView extends Component {
   render() {
     let content = this.props.children;
     let title = this.props.title;
-
     let fullTitle = 'Saylua - ' + (title ? title : 'Adoptable Fantasy Pets');
 
     return (
@@ -53,7 +47,7 @@ export default class SayluaView extends Component {
               </div>
             </div>
           </div>
-          
+
           <Footer />
         </div>
       </DocumentTitle>

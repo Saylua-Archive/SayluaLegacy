@@ -16,7 +16,7 @@ let LoginForm = (props) =>  {
 
   let idSuffix = '-login';
   if (identifier) {
-    idSuffix += identifier;
+    idSuffix += '-' + identifier;
   }
 
   return (
@@ -28,7 +28,7 @@ let LoginForm = (props) =>  {
         component={ InputRow } label="Password" type="password"
         validate={[Required('Password')]} />
       <FormRow>
-        <button className={ compact ? 'small' : ''} disabled={submitting}
+        <button className={ compact ? 'small' : '' } disabled={submitting}
             type="submit" name="login">Login!</button>
       </FormRow>
       <FormRow>
@@ -47,14 +47,9 @@ let LoginForm = (props) =>  {
   );
 };
 
-LoginForm.propTypes = {
-  handleSubmit: PropTypes.func,
-  compact: PropTypes.bool,
-  identifier: PropTypes.string
-};
-
 LoginForm = reduxForm({
-  form: 'login'
+  form: 'login',
+  destroyOnUnmount: false,
 })(LoginForm);
 
 export default LoginForm;

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { pluralize } from 'utils';
 import PetAvatarView from 'shared/PetAvatarView';
-import LoginForm from 'modules/Auth/forms/LoginForm';
+import LoginForm from 'modules/Auth/Forms/LoginForm';
 
 import './Sidebar.scss';
 
@@ -29,8 +29,8 @@ export default class Sidebar extends Component {
       <div id="sidebar" className="sidebar">
         <PetAvatarView id="avatar-section" className="sidebar-section" user={ true } />
         <div id="user-info-section" className="sidebar-section">
-          <p>You are User</p>
-          <p>Your companion is <Link to="/companion">Companion Name</Link></p>
+          <p>You are <Link to="/user/tiff/">Tiff</Link></p>
+          <p>Your companion is <Link to="/companion/">Companion Name</Link></p>
           <p>
             <img src="/static/img/icons/weather_clouds.png" />
             <Link to="/bank/"> { pluralize(5, 'Cloud Coin') } </Link>

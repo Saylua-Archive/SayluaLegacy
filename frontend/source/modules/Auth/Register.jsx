@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import SayluaView from 'shared/SayluaView';
 
-import RegisterForm from './forms/RegisterForm';
+import RegisterForm from './Forms/RegisterForm';
 
 
 export default class Register extends Component {

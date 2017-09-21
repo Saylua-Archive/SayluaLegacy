@@ -1,7 +1,6 @@
 export const Required = (name='Field') => {
   return (value) => {
-    console.log(value);
-    return value ? undefined : `${name} is required.`;
+    return !!value ? undefined : `${name} is required.`;
   };
 };
 
