@@ -12,7 +12,7 @@ from ..forms.settings import (GeneralSettingsForm, DetailsForm, UsernameForm,
 import datetime
 
 
-SETTINGS_ERROR_MESSAGE = "You must login to change your settings."
+SETTINGS_ERROR_MESSAGE = "You must log in to change your settings."
 
 
 # User Settings
