@@ -14,9 +14,8 @@ secure.py
 local_settings.py
 secure_staging.py
 
-# Ignore all third party dependencies other than bcrypt.
-lib/*
-!lib/bcrypt*
+# Ignore third party dependencies.
+lib/main/*
 
 # Vagrant nonsense
 ubuntu*.log

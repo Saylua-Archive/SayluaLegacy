@@ -1,0 +1,38 @@
+a {
+  &.title-banned {
+    text-decoration: line-through;
+  }
+
+  &.title-banned,
+  &.title-muted {
+    color: hsl(0, 0%, 53%);
+  }
+
+  &.title-user {
+    color: hsl(4, 72%, 62%);
+  }
+
+  &.title-moderator {
+    color: hsl(190, 95%, 45%);
+  }
+
+  &.title-admin {
+    color: hsl(30, 100%, 50%);
+  }
+
+  &.title-writer {
+    color: hsl(270, 90%, 45%);
+  }
+
+  &.title-artist {
+    color: hsl(150, 100%, 40%);
+  }
+
+  &.title-programmer {
+    color: hsl(231, 99%, 62%);
+  }
+
+  &.title-contributor {
+    color: hsl(320, 90%, 43%);
+  }
+}

@@ -1,8 +1,7 @@
 {
-    "presets": ["es2015"],
+    "presets": ["es2015", "react"],
     "plugins": [
       "babel-plugin-syntax-jsx",
-      "babel-plugin-inferno",
       "transform-object-rest-spread"
     ]
 }

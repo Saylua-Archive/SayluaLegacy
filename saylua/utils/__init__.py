@@ -18,10 +18,9 @@ def get_gae_version():
 
 
 def get_static_version_id():
-    version = time.time()
     if not is_devserver():
-        version = get_gae_version()
-    return version
+        return get_gae_version()
+    return time.time()
 
 
 def format_number(n):

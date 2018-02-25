@@ -1,18 +1,16 @@
 # flake8: noqa
-from .routing import SayluaApp
 
 # Note: We don't need to call run() since our application is embedded within
 # the App Engine WSGI application server.
 
-from os.path import join
-from flask import send_from_directory, render_template
+from flask import Flask, render_template
 from flask_wtf.csrf import CSRFProtect
 
 from flask_sqlalchemy import SQLAlchemy
 from saylua.utils import is_devserver
 from google.appengine.api import app_identity
 
-app = SayluaApp(__name__)
+app = Flask(__name__)
 app.config.from_pyfile('config/secure.py')
 app.config.from_pyfile('config/settings.py')
 
@@ -24,49 +22,22 @@ if is_devserver():
 db = SQLAlchemy(app)
 csrf = CSRFProtect(app)
 
-import context_processors
-import request_hooks
-import routing
-import template_filters
-import wrappers
-
-# Populate app with blueprints
-enabled_modules = [
-    'admin',
-    'adventure',
-    'arcade',
-    'avatar',
-    'characters',
-    'commerce',
-    'forums',
-    'general',
-    'house',
-    'items',
-    'messages',
-    'museum',
-    'pets',
-    'search',
-    'users',
-    'world'
-]
-
-routing.register_urls(app, enabled_modules)
-
 with app.app_context():
     db.create_all()
 
 
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(join(app.root_path, 'static'), 'favicon.ico',
-        mimetype='image/vnd.microsoft.icon')
+import context_processors
 
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template("404.html"), 404
+@app.route('/')
+def landing():
+    return render_template('landing.html')
 
+@app.route('/api/<path:path>')
+def api(path):
+    return 'API'
 
-@app.errorhandler(500)
-def application_error(e):
-    return render_template("500.html"), 500
+# Serve the main entry point.
+@app.route('/<path:path>')
+def main(path):
+    return render_template('main.html')

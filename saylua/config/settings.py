@@ -2,7 +2,7 @@ DEBUG = True
 SESSION_LIMIT = 5
 COOKIE_DURATION = 30
 MAIN_URL_ROOT = 'https://saylua.com'
-IMAGE_BUCKET_ROOT = 'https://storage.cloud.google.com/saylua-images'
+IMAGE_BUCKET_ROOT = 'https://storage.googleapis.com/saylua-images'
 IMAGE_BUCKET_NAME = '/saylua-images'
 
 THEME_CLASSES = ['theme-sayleus', 'theme-luaria']

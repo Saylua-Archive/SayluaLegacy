@@ -1,5 +1,5 @@
 # Default requirements
-#-r requirements.txt
+# -r requirements.txt
 
 # Local dependencies (Stuff we don't need in prod)
 pillow

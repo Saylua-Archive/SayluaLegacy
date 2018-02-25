@@ -8,16 +8,13 @@ runtime: python27
 api_version: 1
 threadsafe: yes
 
-builtins:
-- remote_api: on
-
 # Handlers define how to route requests to your application.
 handlers:
 
 # App Engine serves and caches static files contained in the listed directories
-# (and subdirectories). Uncomment and set the directory as needed.
-#- url: /client
-#  static_dir: client
+# (and subdirectories).
+- url: /static
+  static_dir: frontend/static/
 
 # For the interactive console
 - url: /google_admin/.*

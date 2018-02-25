@@ -1,0 +1,5 @@
+// For supporting CSS variables in older browsers.
+@mixin variable($property, $variable, $fallback) {
+  #{$property}: $fallback;
+  #{$property}: var($variable);
+}

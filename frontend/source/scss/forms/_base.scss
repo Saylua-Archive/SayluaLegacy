@@ -1,0 +1,14 @@
+input, textarea, select {
+  font-size: 1.6rem;
+  line-height: 150%;
+  padding: 0.25em 0.8rem;
+  border: 1px solid #ddd;
+
+  &.error {
+    border-color: $errorColor;
+  }
+}
+
+input[type='checkbox'].error {
+  outline: 1px solid $errorColor;
+}
